@@ -1,0 +1,9 @@
+# -------------------------------------------------------------------------------------------------- #
+# ----------------------------------- Set module and extlibs path ---------------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+get_filename_component(EGNIM_CMAKE_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
+include(CMakeFindDependencyMacro)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${EGNIM_CMAKE_DIR}/modules)
+set(EGNIM_EXTLIBS_DIR ${EGNIM_CMAKE_DIR}/../../extlibs)
+# -------------------------------------------------------------------------------------------------- #

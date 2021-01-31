@@ -1,0 +1,15 @@
+#ifndef EGNIM_UTILITY_EXPORT_H
+#define EGNIM_UTILITY_EXPORT_H
+
+
+#include <egnim/config.h>
+
+
+#if defined(EGNIM_UTILITY_EXPORTS)
+  #define EGNIM_UTILITY_API EGNIM_API_EXPORT
+#else
+  #define EGNIM_UTILITY_API EGNIM_API_IMPORT
+#endif
+
+
+#endif //EGNIM_UTILITY_EXPORT_H

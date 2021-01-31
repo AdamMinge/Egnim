@@ -1,0 +1,37 @@
+# -------------------------------------------------------------------------------------------------- #
+# -------------------------------------- Set CMake Version ----------------------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+cmake_minimum_required(VERSION 3.11)
+# -------------------------------------------------------------------------------------------------- #
+# -------------------------------------- Set files variable ---------------------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+set(source_root ${EGNIM_SOURCE_DIR}/src/egnim/engine)
+set(include_root ${EGNIM_SOURCE_DIR}/include/egnim/engine)
+set(resources_root ${EGNIM_SOURCE_DIR}/resources)
+
+set(sources
+        ${source_root}/core/state.cpp
+        ${source_root}/core/state_stack.cpp)
+
+set(includes
+        ${include_root}/../config.h
+        ${include_root}/export.h
+        ${include_root}/core/state.h
+        ${include_root}/core/state_stack.h)
+
+set(resources)
+# -------------------------------------------------------------------------------------------------- #
+# ----------------------------------- Find external libraries -------------------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+find_package(SFML REQUIRED COMPONENTS graphics audio system network)
+find_package(box2d REQUIRED)
+# -------------------------------------------------------------------------------------------------- #
+# ---------------------------------- create application target ------------------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+egnim_add_library(egnim-engine
+        SOURCES ${sources} ${includes} ${resources}
+        DEPENDS sfml-graphics sfml-audio sfml-system sfml-network box2d)
+
+set_target_properties(egnim-engine
+        PROPERTIES CXX_STANDARD 20)
+# -------------------------------------------------------------------------------------------------- #
