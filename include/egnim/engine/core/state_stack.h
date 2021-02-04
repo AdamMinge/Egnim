@@ -2,6 +2,7 @@
 #define STATE_STACK_H
 
 /* ----------------------------------- SFML --------------------------------- */
+#include <SFML/System/NonCopyable.hpp>
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 /* --------------------------------- Standard ------------------------------- */
@@ -17,7 +18,7 @@ namespace core
   class Context;
   class State;
 
-  class StateStack
+  class StateStack : private sf::NonCopyable
   {
   public:
     explicit StateStack(Context& context);
