@@ -1,18 +1,18 @@
-//---------------------------- Qt ----------------------------//
+/* ------------------------------------ Qt ---------------------------------- */
 #include <QApplication>
-//-------------------------- Local ---------------------------//
-#include <egnim/client-listener/main_window.h>
-#include <egnim/client-listener/meta_types.h>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/editor/main_window.h>
+#include <egnim/editor/meta_types.h>
 #include <egnim/config.h>
-//------------------------------------------------------------//
+/* -------------------------------------------------------------------------- */
 
 
 int main(int argc, char** argv)
 {
   QApplication app(argc, argv);
-  QApplication::setApplicationName(QStringLiteral("Egnim-Listner"));
+  QApplication::setApplicationName(QStringLiteral("Egnim-Editor"));
   QApplication::setApplicationVersion(QLatin1String(EGNIM_VERSION_STR));
-  QApplication::setApplicationDisplayName(QStringLiteral("Egnim-Listner"));
+  QApplication::setApplicationDisplayName(QStringLiteral("Egnim-Editor"));
   QApplication::setOrganizationName(QStringLiteral("Egnim"));
   registerMetaTypes();
 

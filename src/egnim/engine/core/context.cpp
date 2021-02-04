@@ -1,9 +1,3 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/meta_types.h>
+#include <egnim/engine/core/context.h>
 /* -------------------------------------------------------------------------- */
-
-
-void registerMetaTypes()
-{
-
-}

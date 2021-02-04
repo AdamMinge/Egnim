@@ -1,9 +1,9 @@
-#ifndef EGNIM_MAIN_WINDOW_H
-#define EGNIM_MAIN_WINDOW_H
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
-//--------------------------- Qt ----------------------------//
+/* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
-//-----------------------------------------------------------//
+/* -------------------------------------------------------------------------- */
 
 
 class MainWindow final : public QMainWindow
@@ -16,4 +16,4 @@ public:
 
 };
 
-#endif //EGNIM_MAIN_WINDOW_H
+#endif //MAIN_WINDOW_H

@@ -10,12 +10,14 @@ set(include_root ${EGNIM_SOURCE_DIR}/include/egnim/engine)
 set(resources_root ${EGNIM_SOURCE_DIR}/resources)
 
 set(sources
+        ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp)
 
 set(includes
         ${include_root}/../config.h
         ${include_root}/export.h
+        ${include_root}/core/context.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h)
 
