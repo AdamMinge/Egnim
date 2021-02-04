@@ -13,7 +13,8 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/scene_node.cpp)
+        ${source_root}/core/scene_node.cpp
+        ${source_root}/core/command_queue.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -22,7 +23,8 @@ set(includes
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
         ${include_root}/core/scene_node.h
-        ${include_root}/core/command.h)
+        ${include_root}/core/command.h
+        ${include_root}/core/command_queue.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

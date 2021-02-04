@@ -15,8 +15,10 @@
 
 namespace core
 {
+  class Command;
+  class CommandQueue;
 
-class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
+  class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
   public:
     explicit SceneNode();
@@ -28,10 +30,17 @@ class SceneNode : public sf::Transformable, public sf::Drawable, private sf::Non
     sf::Vector2f getWorldPosition() const;
     sf::Transform getWorldTransform() const;
 
+    void update(CommandQueue& command_queue, sf::Time dt);
+    void onCommand(const Command& command, sf::Time dt);
+
   protected:
+    virtual void updateCurrent(CommandQueue& command_queue, sf::Time dt);
+    void updateChildren(CommandQueue& command_queue, sf::Time dt);
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
     virtual void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
+
 
   private:
     std::vector<std::unique_ptr<SceneNode>> m_children;

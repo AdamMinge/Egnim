@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/command.h>
 /* -------------------------------------------------------------------------- */
 
 namespace core {
@@ -45,6 +46,27 @@ sf::Transform SceneNode::getWorldTransform() const
     transform = node->getTransform() * transform;
 
   return transform;
+}
+
+void SceneNode::update(CommandQueue& command_queue, sf::Time dt)
+{
+  updateCurrent(command_queue, dt);
+  updateChildren(command_queue, dt);
+}
+
+void SceneNode::onCommand(const Command& command, sf::Time dt)
+{
+  command(*this, dt);
+  for(const auto& child : m_children)
+    child->onCommand(command, dt);
+}
+
+void SceneNode::updateCurrent(CommandQueue& command_queue, sf::Time dt) {}
+
+void SceneNode::updateChildren(CommandQueue& command_queue, sf::Time dt)
+{
+  for(const auto& child : m_children)
+    child->update(command_queue, dt);
 }
 
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const

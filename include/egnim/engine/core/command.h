@@ -17,7 +17,7 @@ namespace core
     explicit Command() = default;
     virtual ~Command() = default;
 
-    virtual void operator()(SceneNode& node, sf::Time dt) = 0;
+    virtual void operator()(SceneNode& node, sf::Time dt) const = 0;
   };
 
   template<typename NODE_TYPE>
@@ -27,10 +27,10 @@ namespace core
     explicit BaseCommand() = default;
     ~BaseCommand() override = default;
 
-    void operator()(SceneNode& node, sf::Time) override;
+    void operator()(SceneNode& node, sf::Time) const override;
 
   protected:
-    virtual void action(NODE_TYPE& node, sf::Time);
+    virtual void action(NODE_TYPE& node, sf::Time) const;
   };
 
   template<typename NODE_TYPE>
@@ -41,7 +41,7 @@ namespace core
     ~FunctionCommand() override = default;
 
   protected:
-    void action(NODE_TYPE& node, sf::Time) override;
+    void action(NODE_TYPE& node, sf::Time) const override;
 
   private:
     std::function<void(NODE_TYPE& node, sf::Time)> m_action;
@@ -50,14 +50,14 @@ namespace core
   /* -------------------------------- BaseCommand ----------------------------- */
 
   template<typename NODE_TYPE>
-  void BaseCommand<NODE_TYPE>::operator()(SceneNode &node, sf::Time dt)
+  void BaseCommand<NODE_TYPE>::operator()(SceneNode &node, sf::Time dt) const
   {
     if(auto casted_node = dynamic_cast<NODE_TYPE*>(&node); casted_node)
       action(*casted_node, dt);
   }
 
   template<typename NODE_TYPE>
-  void BaseCommand<NODE_TYPE>::action(NODE_TYPE& node, sf::Time dt) {}
+  void BaseCommand<NODE_TYPE>::action(NODE_TYPE& node, sf::Time dt) const {}
 
   /* ------------------------------ FunctionCommand --------------------------- */
 
@@ -69,7 +69,7 @@ namespace core
   }
 
   template<typename NODE_TYPE>
-  void FunctionCommand<NODE_TYPE>::action(NODE_TYPE& node, sf::Time dt)
+  void FunctionCommand<NODE_TYPE>::action(NODE_TYPE& node, sf::Time dt) const
   {
     m_action(node, dt);
   }
