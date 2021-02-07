@@ -1,6 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/command_queue.h>
 #include <egnim/engine/core/command.h>
+/* --------------------------------- Standard ------------------------------- */
+#include <cassert>
 /* -------------------------------------------------------------------------- */
 
 namespace core {
@@ -16,26 +18,31 @@ void CommandQueue::push(std::unique_ptr<Command> command)
 
 void CommandQueue::pop()
 {
+  assert(!empty());
   m_commands.pop();
 }
 
 const Command& CommandQueue::front() const
 {
+  assert(!empty());
   return *m_commands.front();
 }
 
 Command& CommandQueue::front()
 {
+  assert(!empty());
   return *m_commands.front();
 }
 
 const Command& CommandQueue::back() const
 {
+  assert(!empty());
   return *m_commands.back();
 }
 
 Command& CommandQueue::back()
 {
+  assert(!empty());
   return *m_commands.back();
 }
 
@@ -51,6 +58,7 @@ size_t CommandQueue::size() const
 
 std::unique_ptr<Command> CommandQueue::take()
 {
+  assert(!empty());
   auto command = std::move(m_commands.front());
   m_commands.pop();
   return command;

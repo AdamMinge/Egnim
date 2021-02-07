@@ -16,7 +16,9 @@
 namespace core
 {
   class Command;
+  class Component;
   class CommandQueue;
+  class ComponentContainer;
 
   class SceneNode : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
@@ -27,6 +29,9 @@ namespace core
     void attachChild(std::unique_ptr<SceneNode> node);
     std::unique_ptr<SceneNode> detachChild(const SceneNode& node);
 
+    void attachComponent(std::unique_ptr<Component> component);
+    std::unique_ptr<Component> attachComponent(const Component& component);
+
     sf::Vector2f getWorldPosition() const;
     sf::Transform getWorldTransform() const;
 
@@ -36,14 +41,15 @@ namespace core
   protected:
     virtual void updateCurrent(CommandQueue& command_queue, sf::Time dt);
     void updateChildren(CommandQueue& command_queue, sf::Time dt);
+    void updateComponents(sf::Time dt);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
     virtual void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
 
-
   private:
     std::vector<std::unique_ptr<SceneNode>> m_children;
+    std::unique_ptr<ComponentContainer> m_components;
     SceneNode* m_parent;
   };
 

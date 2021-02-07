@@ -68,6 +68,11 @@ void StateStack::clearStates()
   });
 }
 
+bool StateStack::empty()
+{
+  return m_states.empty();
+}
+
 std::unique_ptr<State> StateStack::createState(std::string_view state_id)
 {
   if(m_factories.contains(state_id))

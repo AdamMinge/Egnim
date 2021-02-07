@@ -35,6 +35,8 @@ namespace core
     template<typename TYPE, typename ...Args>
     void registerState(std::string_view state_id, Args... args);
 
+    bool empty();
+
   private:
     std::unique_ptr<State> createState(std::string_view state_id);
     void applyPendingChanges();

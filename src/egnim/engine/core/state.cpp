@@ -1,6 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/state.h>
 #include <egnim/engine/core/state_stack.h>
+/* --------------------------------- Standard ------------------------------- */
+#include <cassert>
 /* -------------------------------------------------------------------------- */
 
 namespace core {
@@ -29,6 +31,7 @@ void State::requestStackPush(std::string_view state_id)
 
 void State::requestStackPop()
 {
+  assert(m_state_stack.empty());
   m_state_stack.popState();
 }
 
