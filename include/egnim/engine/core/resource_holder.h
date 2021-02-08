@@ -21,11 +21,13 @@ namespace core
   public:
     virtual ~ResourceHolderInterface() = default;
 
-    RESOURCE& get(IDENTIFIER id);
-    const RESOURCE& get(IDENTIFIER id) const;
+    [[nodiscard]] RESOURCE& get(IDENTIFIER id);
+    [[nodiscard]] const RESOURCE& get(IDENTIFIER id) const;
 
     void remove(IDENTIFIER id);
     std::unique_ptr<RESOURCE> take(IDENTIFIER id);
+
+    [[nodiscard]] bool contains(IDENTIFIER id) const;
 
   protected:
     explicit ResourceHolderInterface() = default;
@@ -115,6 +117,12 @@ namespace core
     auto resource = std::move(m_resources[id]);
     m_resources.erase(id);
     return resource;
+  }
+
+  template<typename RESOURCE, typename IDENTIFIER>
+  bool ResourceHolderInterface<RESOURCE, IDENTIFIER>::contains(IDENTIFIER id) const
+  {
+    return m_resources.contains(id);
   }
 
   template<typename RESOURCE, typename IDENTIFIER>

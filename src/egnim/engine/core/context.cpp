@@ -11,7 +11,7 @@ Context::Context() :
   m_shaders(nullptr),
   m_fonts(nullptr),
   m_musics(nullptr),
-  m_sounds(nullptr)
+  m_sound_buffers(nullptr)
 {
 
 }
@@ -38,9 +38,9 @@ Context::musics_holder& Context::getMusicsHolder()
   return *getter(m_musics);
 }
 
-Context::sounds_holder& Context::getSoundsHolder()
+Context::sound_buffer_holder& Context::getSoundsHolder()
 {
-  return *getter(m_sounds);
+  return *getter(m_sound_buffers);
 }
 
 const Context::textures_holder& Context::getTextureHolder() const
@@ -63,9 +63,9 @@ const Context::musics_holder& Context::getMusicsHolder() const
   return *getter(m_musics);
 }
 
-const Context::sounds_holder& Context::getSoundsHolder() const
+const Context::sound_buffer_holder& Context::getSoundBuffersHolder() const
 {
-  return *getter(m_sounds);
+  return *getter(m_sound_buffers);
 }
 
 } // namespace core

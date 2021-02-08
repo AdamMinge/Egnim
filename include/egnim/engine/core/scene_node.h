@@ -45,7 +45,7 @@ namespace core
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     virtual void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const;
-    virtual void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
+    void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
 
   private:
     std::vector<std::unique_ptr<SceneNode>> m_children;

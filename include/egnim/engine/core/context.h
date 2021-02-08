@@ -5,8 +5,8 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 #include <SFML/Audio/Music.hpp>
-#include <SFML/Audio/Sound.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
 #include <memory>
@@ -24,7 +24,7 @@ namespace core
     using shaders_holder = BaseResourceHolder<sf::Shader, std::string_view>;
     using fonts_holder = BaseResourceHolder<sf::Font, std::string_view>;
     using musics_holder = BaseResourceHolder<sf::Music, std::string_view>;
-    using sounds_holder = BaseResourceHolder<sf::Sound, std::string_view>;
+    using sound_buffer_holder = BaseResourceHolder<sf::SoundBuffer, std::string_view>;
 
   public:
     Context();
@@ -34,13 +34,13 @@ namespace core
     [[nodiscard]] shaders_holder& getShadersHolder();
     [[nodiscard]] fonts_holder& getFontsHolder();
     [[nodiscard]] musics_holder& getMusicsHolder();
-    [[nodiscard]] sounds_holder& getSoundsHolder();
+    [[nodiscard]] sound_buffer_holder& getSoundsHolder();
 
     [[nodiscard]] const textures_holder& getTextureHolder() const;
     [[nodiscard]] const shaders_holder& getShadersHolder() const;
     [[nodiscard]] const fonts_holder& getFontsHolder() const;
     [[nodiscard]] const musics_holder& getMusicsHolder() const;
-    [[nodiscard]] const sounds_holder& getSoundsHolder() const;
+    [[nodiscard]] const sound_buffer_holder& getSoundBuffersHolder() const;
 
   private:
     template<typename RESOURCE_HOLDER>
@@ -51,7 +51,7 @@ namespace core
     mutable std::unique_ptr<shaders_holder> m_shaders;
     mutable std::unique_ptr<fonts_holder> m_fonts;
     mutable std::unique_ptr<musics_holder> m_musics;
-    mutable std::unique_ptr<sounds_holder> m_sounds;
+    mutable std::unique_ptr<sound_buffer_holder> m_sound_buffers;
   };
 
   /* ----------------------------------- Context ------------------------------ */
