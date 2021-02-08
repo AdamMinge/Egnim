@@ -16,7 +16,8 @@ set(sources
         ${source_root}/core/scene_node.cpp
         ${source_root}/core/command_queue.cpp
         ${source_root}/core/component.cpp
-        ${source_root}/core/sound_node.cpp)
+        ${source_root}/core/sound_node.cpp
+        ${source_root}/core/music_node.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -30,7 +31,8 @@ set(includes
         ${include_root}/core/command_queue.h
         ${include_root}/core/component.h
         ${include_root}/core/component_container.h
-        ${include_root}/core/sound_node.h)
+        ${include_root}/core/sound_node.h
+        ${include_root}/core/music_node.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
