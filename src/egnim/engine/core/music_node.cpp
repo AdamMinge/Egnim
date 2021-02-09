@@ -4,7 +4,7 @@
 
 namespace core {
 
-MusicNode::MusicNode(Context::musics_holder& musics_holder) :
+MusicNode::MusicNode(BaseResourceHolder<sf::Music, std::string_view>& musics_holder) :
   m_musics_holder(musics_holder),
   m_default_settings(Settings{}),
   m_current_music(nullptr)

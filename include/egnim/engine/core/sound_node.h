@@ -4,13 +4,14 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Audio/Sound.hpp>
+#include <SFML/Audio/SoundBuffer.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
 #include <functional>
 #include <list>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/scene_node.h>
-#include <egnim/engine/core/context.h>
+#include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
 namespace core
@@ -28,7 +29,7 @@ namespace core
     };
 
   public:
-    explicit SoundNode(Context::sound_buffer_holder& sound_buffers);
+    explicit SoundNode(BaseResourceHolder<sf::SoundBuffer, std::string_view>& sound_buffers);
     ~SoundNode() override;
 
     void setDefaultSettings(const Settings& settings);
@@ -55,7 +56,7 @@ namespace core
     void setAllSounds(sf::Sound::Status status);
 
   private:
-    Context::sound_buffer_holder& m_sound_buffers;
+    BaseResourceHolder<sf::SoundBuffer, std::string_view>& m_sound_buffers;
     std::list<std::pair<sf::Sound, std::function<bool()>>> m_sounds;
     Settings m_default_settings;
   };

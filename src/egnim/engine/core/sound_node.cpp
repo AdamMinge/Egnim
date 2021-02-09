@@ -2,11 +2,9 @@
 #include <egnim/engine/core/sound_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
-{
+namespace core {
 
-SoundNode::SoundNode(Context::sound_buffer_holder &sound_buffers)
-  :
+SoundNode::SoundNode(BaseResourceHolder<sf::SoundBuffer, std::string_view>& sound_buffers) :
   m_sound_buffers(sound_buffers),
   m_default_settings(Settings{})
 {

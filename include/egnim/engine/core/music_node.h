@@ -2,12 +2,10 @@
 #define MUSIC_NODE_H
 
 /* ----------------------------------- SFML --------------------------------- */
-
-/* --------------------------------- Standard ------------------------------- */
-
+#include <SFML/Audio/Music.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/scene_node.h>
-#include <egnim/engine/core/context.h>
+#include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
 namespace core
@@ -25,7 +23,7 @@ namespace core
     };
 
   public:
-    explicit MusicNode(Context::musics_holder& musics_holder);
+    explicit MusicNode(BaseResourceHolder<sf::Music, std::string_view>& musics_holder);
     ~MusicNode() override;
 
     void setDefaultSettings(const Settings& settings);
@@ -43,7 +41,7 @@ namespace core
     bool isStopped();
 
   private:
-    Context::musics_holder& m_musics_holder;
+    BaseResourceHolder<sf::Music, std::string_view>& m_musics_holder;
     Settings m_default_settings;
     sf::Music* m_current_music;
   };
