@@ -1,5 +1,5 @@
-#ifndef LAZY_POINTER_H
-#define LAZY_POINTER_H
+#ifndef LAZY_UNIQUE_POINTER_H
+#define LAZY_UNIQUE_POINTER_H
 
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
@@ -19,13 +19,13 @@ namespace core
   class LazyUniquePointer
   {
     template<typename MAKER_TYPE>
-    friend auto make_lazy();
+    friend auto make_unique_lazy();
 
     template<typename MAKER_TYPE, typename ...ARGS>
-    friend auto make_lazy(ARGS&& ...args);
+    friend auto make_unique_lazy(ARGS&& ...args);
 
     template<typename MAKER_TYPE, typename CALLABLE, typename ...ARGS, typename>
-    friend auto make_lazy(CALLABLE&& initializer, ARGS&& ...args);
+    friend auto make_unique_lazy(CALLABLE&& initializer, ARGS&& ...args);
 
   public:
     ~LazyUniquePointer() = default;
@@ -58,16 +58,16 @@ namespace core
     return std::make_unique<TYPE>();
   }
 
-  /* -------------------------------- MakeLazy<TYPE> -------------------------- */
+  /* ------------------------------- make_unique_lazy ------------------------- */
 
   template<typename MAKER_TYPE>
-  auto make_lazy()
+  auto make_unique_lazy()
   {
     return LazyUniquePointer<MAKER_TYPE, DefaultCreator<MAKER_TYPE>>();
   }
 
   template<typename MAKER_TYPE, typename ...ARGS>
-  auto make_lazy(ARGS&& ...args)
+  auto make_unique_lazy(ARGS&& ...args)
   {
     auto creator = [args...](){
       return std::make_unique<MAKER_TYPE>(args...);
@@ -78,7 +78,7 @@ namespace core
 
   template<typename MAKER_TYPE, typename CALLABLE, typename ...ARGS,
     typename = std::enable_if_t<std::is_invocable<CALLABLE, MAKER_TYPE&>::value>>
-  auto make_lazy(CALLABLE&& initializer, ARGS&& ...args)
+  auto make_unique_lazy(CALLABLE&& initializer, ARGS&& ...args)
   {
     auto creator = [args..., initializer](){
       auto object = std::make_unique<MAKER_TYPE>(args...);
@@ -155,4 +155,4 @@ namespace core
 
 } // namespace core
 
-#endif //LAZY_POINTER_H
+#endif //LAZY_UNIQUE_POINTER_H
