@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.11)
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------- Generate headers and set files variable ------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-set(source_root ${ABOVO_SOURCE_DIR}/tests/core/src)
-set(include_root ${ABOVO_SOURCE_DIR}/tests/core/include)
+set(source_root ${EGNIM_SOURCE_DIR}/tests/engine/src)
+set(include_root ${EGNIM_SOURCE_DIR}/tests/engine/include)
 
 set(sources
     ${source_root}/main.cpp)
@@ -33,6 +33,7 @@ target_include_directories(egnim-core-test
 # -------------------------------------- Setup dependencies ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
 target_link_libraries(egnim-core-test
+                      PUBLIC egnim::egnim-engine
                       PRIVATE GTest::gtest
                       PRIVATE GTest::gmock)
 # -------------------------------------------------------------------------------------------------- #

@@ -14,7 +14,7 @@ include(${EGNIM_SOURCE_DIR}/cmake/macros.cmake)
 add_subdirectory(src/egnim)
 
 if(EGNIM_BUILD_TEST)
-    #add_subdirectory(tests)
+    add_subdirectory(tests)
 endif()
 # -------------------------------------------------------------------------------------------------- #
 # ------------------------------ Generate and install documentation -------------------------------- #

@@ -25,6 +25,7 @@ set(includes
         ${include_root}/../config.h
         ${include_root}/export.h
         ${include_root}/core/context.h
+        ${include_root}/core/lazy_pointer.h
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
