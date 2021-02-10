@@ -15,7 +15,7 @@ namespace core
     std::unique_ptr<TYPE> operator()() const;
   };
 
-  template<typename TYPE, typename CREATOR>
+  template<typename TYPE, typename CREATOR = DefaultCreator<TYPE>>
   class LazyUniquePointer
   {
     template<typename MAKER_TYPE>

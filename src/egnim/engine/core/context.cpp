@@ -5,11 +5,11 @@
 namespace core {
 
 Context::Context() :
-  m_textures(nullptr),
-  m_shaders(nullptr),
-  m_fonts(nullptr),
-  m_musics(nullptr),
-  m_sound_buffers(nullptr)
+  m_textures(make_unique_lazy<textures_holder>()),
+  m_shaders(make_unique_lazy<shaders_holder>()),
+  m_fonts(make_unique_lazy<fonts_holder>()),
+  m_musics(make_unique_lazy<musics_holder>()),
+  m_sound_buffers(make_unique_lazy<sound_buffer_holder>())
 {
 
 }
@@ -18,52 +18,52 @@ Context::~Context() = default;
 
 Context::textures_holder& Context::getTextureHolder()
 {
-  return *getter(m_textures);
+  return *m_textures;
 }
 
 Context::shaders_holder& Context::getShadersHolder()
 {
-  return *getter(m_shaders);
+  return *m_shaders;
 }
 
 Context::fonts_holder& Context::getFontsHolder()
 {
-  return *getter(m_fonts);
+  return *m_fonts;
 }
 
 Context::musics_holder& Context::getMusicsHolder()
 {
-  return *getter(m_musics);
+  return *m_musics;
 }
 
 Context::sound_buffer_holder& Context::getSoundsHolder()
 {
-  return *getter(m_sound_buffers);
+  return *m_sound_buffers;
 }
 
 const Context::textures_holder& Context::getTextureHolder() const
 {
-  return *getter(m_textures);
+  return *m_textures;
 }
 
 const Context::shaders_holder& Context::getShadersHolder() const
 {
-  return *getter(m_shaders);
+  return *m_shaders;
 }
 
 const Context::fonts_holder& Context::getFontsHolder() const
 {
-  return *getter(m_fonts);
+  return *m_fonts;
 }
 
 const Context::musics_holder& Context::getMusicsHolder() const
 {
-  return *getter(m_musics);
+  return *m_musics;
 }
 
 const Context::sound_buffer_holder& Context::getSoundBuffersHolder() const
 {
-  return *getter(m_sound_buffers);
+  return *m_sound_buffers;
 }
 
 } // namespace core

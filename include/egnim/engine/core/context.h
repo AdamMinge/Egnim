@@ -12,6 +12,7 @@
 #include <memory>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/core/resource_holder.h>
+#include <egnim/engine/core/lazy_unique_pointer.h>
 /* -------------------------------------------------------------------------- */
 
 namespace core
@@ -43,26 +44,12 @@ namespace core
     [[nodiscard]] const sound_buffer_holder& getSoundBuffersHolder() const;
 
   private:
-    template<typename RESOURCE_HOLDER>
-    RESOURCE_HOLDER& getter(RESOURCE_HOLDER& holder) const;
-
-  private:
-    mutable std::unique_ptr<textures_holder> m_textures;
-    mutable std::unique_ptr<shaders_holder> m_shaders;
-    mutable std::unique_ptr<fonts_holder> m_fonts;
-    mutable std::unique_ptr<musics_holder> m_musics;
-    mutable std::unique_ptr<sound_buffer_holder> m_sound_buffers;
+    LazyUniquePointer<textures_holder> m_textures;
+    LazyUniquePointer<shaders_holder> m_shaders;
+    LazyUniquePointer<fonts_holder> m_fonts;
+    LazyUniquePointer<musics_holder> m_musics;
+    LazyUniquePointer<sound_buffer_holder> m_sound_buffers;
   };
-
-  /* ----------------------------------- Context ------------------------------ */
-
-  template<typename RESOURCE_HOLDER>
-  RESOURCE_HOLDER& Context::getter(RESOURCE_HOLDER& holder) const
-  {
-    if(holder)
-      holder = std::make_unique<typename std::remove_cvref_t<decltype(holder)>::element_type>();
-    return holder;
-  }
 
 } // namespace core
 
