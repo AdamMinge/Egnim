@@ -24,8 +24,8 @@ namespace core
     template<typename MAKER_TYPE, typename ...ARGS>
     friend auto make_lazy(ARGS&& ...args);
 
-    template<typename MAKER_TYPE, typename ...ARGS>
-    friend auto make_lazy(std::function<void(MAKER_TYPE&)> initializer, ARGS&& ...args);
+    template<typename MAKER_TYPE, typename CALLABLE, typename ...ARGS, typename>
+    friend auto make_lazy(CALLABLE&& initializer, ARGS&& ...args);
 
   public:
     ~LazyUniquePointer() = default;
@@ -76,8 +76,9 @@ namespace core
     return LazyUniquePointer<MAKER_TYPE, decltype(creator)>(std::move(creator));
   }
 
-  template<typename MAKER_TYPE, typename ...ARGS>
-  auto make_lazy(std::function<void(MAKER_TYPE&)> initializer, ARGS&& ...args)
+  template<typename MAKER_TYPE, typename CALLABLE, typename ...ARGS,
+    typename = std::enable_if_t<std::is_invocable<CALLABLE, MAKER_TYPE&>::value>>
+  auto make_lazy(CALLABLE&& initializer, ARGS&& ...args)
   {
     auto creator = [args..., initializer](){
       auto object = std::make_unique<MAKER_TYPE>(args...);
