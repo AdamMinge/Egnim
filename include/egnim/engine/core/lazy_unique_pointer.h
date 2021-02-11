@@ -80,9 +80,9 @@ namespace egnim::core
   template<typename MAKER_TYPE, typename ...ARGS>
   auto make_unique_lazy(ARGS&& ...args)
   {
-    auto creator = [&args...](){
+    auto creator = std::function<std::unique_ptr<MAKER_TYPE>()>([&args...](){
       return std::make_unique<MAKER_TYPE>(std::forward<ARGS>(args)...);
-    };
+    });
 
     return LazyUniquePointer<MAKER_TYPE, decltype(creator)>(std::move(creator));
   }
@@ -91,11 +91,11 @@ namespace egnim::core
     typename = std::enable_if_t<std::is_invocable<CALLABLE, MAKER_TYPE&>::value>>
   auto make_unique_lazy(CALLABLE&& initializer, ARGS&& ...args)
   {
-    auto creator = [&args..., &initializer](){
+    auto creator = std::function<std::unique_ptr<MAKER_TYPE>()>([&args..., &initializer](){
       auto object = std::make_unique<MAKER_TYPE>(std::forward<ARGS>(args)...);
       std::forward<CALLABLE>(initializer)(*object);
       return object;
-    };
+    });
 
     return LazyUniquePointer<MAKER_TYPE, decltype(creator)>(std::move(creator));
   }
@@ -103,7 +103,7 @@ namespace egnim::core
   /* ------------------------------ LazyPointer<TYPE> ------------------------- */
 
   template<typename TYPE, typename CREATOR>
-  LazyUniquePointer<TYPE, CREATOR>::LazyUniquePointer(LazyUniquePointer&& other) noexcept
+  LazyUniquePointer<TYPE, CREATOR>::LazyUniquePointer(LazyUniquePointer<TYPE,CREATOR>&& other) noexcept
   {
     m_object = std::move(other.m_object);
     m_creator = std::move(other.m_creator);
@@ -113,7 +113,7 @@ namespace egnim::core
   }
 
   template<typename TYPE, typename CREATOR>
-  LazyUniquePointer<TYPE, CREATOR>& LazyUniquePointer<TYPE, CREATOR>::operator=(LazyUniquePointer&& other) noexcept
+  LazyUniquePointer<TYPE, CREATOR>& LazyUniquePointer<TYPE, CREATOR>::operator=(LazyUniquePointer<TYPE,CREATOR>&& other) noexcept
   {
     m_object = std::move(other.m_object);
     m_creator = std::move(other.m_creator);
@@ -179,7 +179,10 @@ namespace egnim::core
   TYPE* LazyUniquePointer<TYPE, CREATOR>::getter()
   {
     if(!m_object)
+    {
       m_object = m_creator ? (*m_creator)() : nullptr;
+      m_creator.reset();
+    }
 
     return m_object.get();
   }
@@ -188,7 +191,10 @@ namespace egnim::core
   const TYPE* LazyUniquePointer<TYPE, CREATOR>::getter() const
   {
     if(!m_object)
+    {
       m_object = m_creator ? (*m_creator)() : nullptr;
+      m_creator.reset();
+    }
 
     return m_object.get();
   }
