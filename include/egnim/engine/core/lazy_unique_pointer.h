@@ -49,6 +49,8 @@ namespace egnim::core
 
     explicit operator bool() const;
 
+    void init() const;
+
   private:
     explicit LazyUniquePointer(CREATOR&& creator);
     explicit LazyUniquePointer();
@@ -155,6 +157,16 @@ namespace egnim::core
   }
 
   template<typename TYPE, typename CREATOR>
+  void LazyUniquePointer<TYPE, CREATOR>::init() const
+  {
+    if(!m_object)
+    {
+      m_object = m_creator ? (*m_creator)() : nullptr;
+      m_creator.reset();
+    }
+  }
+
+  template<typename TYPE, typename CREATOR>
   LazyUniquePointer<TYPE, CREATOR>::LazyUniquePointer(CREATOR&& creator) :
     m_creator(std::forward<CREATOR>(creator))
   {
@@ -178,24 +190,14 @@ namespace egnim::core
   template<typename TYPE, typename CREATOR>
   TYPE* LazyUniquePointer<TYPE, CREATOR>::getter()
   {
-    if(!m_object)
-    {
-      m_object = m_creator ? (*m_creator)() : nullptr;
-      m_creator.reset();
-    }
-
+    init();
     return m_object.get();
   }
 
   template<typename TYPE, typename CREATOR>
   const TYPE* LazyUniquePointer<TYPE, CREATOR>::getter() const
   {
-    if(!m_object)
-    {
-      m_object = m_creator ? (*m_creator)() : nullptr;
-      m_creator.reset();
-    }
-
+    init();
     return m_object.get();
   }
 
