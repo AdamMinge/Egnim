@@ -12,7 +12,7 @@
 #include <map>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
   template<typename RESOURCE, typename IDENTIFIER>
@@ -314,6 +314,6 @@ namespace core
     return insertResource(id, resource);
   }
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //RESOURCE_HOLDER_H

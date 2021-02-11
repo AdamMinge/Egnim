@@ -2,7 +2,7 @@
 #include <egnim/engine/core/music_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 MusicNode::MusicNode(BaseResourceHolder<sf::Music, std::string_view>& musics_holder) :
   m_musics_holder(musics_holder),
@@ -82,4 +82,4 @@ bool MusicNode::isStopped()
   return m_current_music && m_current_music->getStatus() == sf::Music::Stopped;
 }
 
-} // namespace core
+} // namespace egnim::core

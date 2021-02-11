@@ -6,7 +6,7 @@
 #include <memory>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   class Command;
 
@@ -34,6 +34,7 @@ namespace core
     std::queue<std::unique_ptr<Command>> m_commands;
 
   };
-}
+
+} // namespace egnim::core
 
 #endif //COMMAND_QUEUE_H

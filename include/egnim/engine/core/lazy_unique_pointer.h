@@ -6,7 +6,7 @@
 #include <functional>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   template<typename TYPE>
   class DefaultCreator
@@ -193,6 +193,6 @@ namespace core
     return m_object.get();
   }
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //LAZY_UNIQUE_POINTER_H

@@ -4,7 +4,7 @@
 #include <egnim/engine/core/sprite_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 SpriteNode::SpriteNode(const sf::Texture &texture) :
   m_sprite(texture)
@@ -27,4 +27,4 @@ void SpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) 
 }
 
 
-} // namespace core
+} // namespace egnim::core

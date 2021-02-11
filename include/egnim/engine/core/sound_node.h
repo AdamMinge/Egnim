@@ -14,7 +14,7 @@
 #include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
   class SoundNode : public SceneNode
@@ -61,6 +61,6 @@ namespace core
     Settings m_default_settings;
   };
 
-}
+} // namespace egnim::core
 
 #endif //SOUND_NODE_H

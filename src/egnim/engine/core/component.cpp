@@ -4,7 +4,7 @@
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 Component::Component() :
   m_owner(nullptr)
@@ -25,4 +25,4 @@ SceneNode* Component::getOwner()
   return m_owner;
 }
 
-} // namespace core
+} // namespace egnim::core

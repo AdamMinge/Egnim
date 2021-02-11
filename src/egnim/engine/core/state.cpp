@@ -5,7 +5,7 @@
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 State::State(StateStack& state_stack, Context &context) :
   m_context(context),
@@ -40,6 +40,6 @@ void State::requestStateClear()
   m_state_stack.clearStates();
 }
 
-} // namespace core
+} // namespace egnim::core
 
 

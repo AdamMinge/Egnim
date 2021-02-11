@@ -3,7 +3,7 @@
 #include <egnim/engine/core/state.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 StateStack::StateStack(Context& context) :
   m_context(context)
@@ -90,4 +90,4 @@ void StateStack::applyPendingChanges()
   }
 }
 
-} // namespace core
+} // namespace egnim::core

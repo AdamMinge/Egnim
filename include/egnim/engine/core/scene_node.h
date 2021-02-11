@@ -13,7 +13,7 @@
 #include <memory>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   class Command;
   class Component;
@@ -53,6 +53,6 @@ namespace core
     SceneNode* m_parent;
   };
 
-}
+} // namespace egnim::core
 
 #endif //SCENE_NODE_H

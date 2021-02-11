@@ -7,7 +7,7 @@
 #include <functional>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   class SceneNode;
 
@@ -74,6 +74,6 @@ namespace core
     m_action(node, dt);
   }
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //COMMAND_H

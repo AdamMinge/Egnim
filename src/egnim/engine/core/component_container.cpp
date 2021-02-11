@@ -3,7 +3,7 @@
 #include <egnim/engine/core/component.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 ComponentContainer::ComponentContainer(SceneNode& owner) :
   m_owner(owner)
@@ -51,4 +51,4 @@ size_t ComponentContainer::size() const
 }
 
 
-} // namespace core
+} // namespace egnim::core

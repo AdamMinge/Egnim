@@ -9,7 +9,7 @@
 #include <string_view>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   class Context;
   class StateStack;
@@ -40,7 +40,7 @@ namespace core
 
   };
 
-} // namespace core
+} // namespace egnim::core
 
 
 #endif //STATE_H

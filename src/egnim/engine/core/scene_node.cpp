@@ -5,7 +5,7 @@
 #include <egnim/engine/core/component.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
 SceneNode::SceneNode() :
@@ -116,4 +116,4 @@ void SceneNode::drawChildren(sf::RenderTarget &target, sf::RenderStates states) 
     child->draw(target, states);
 }
 
-} // namespace cire
+} // namespace egnim::core

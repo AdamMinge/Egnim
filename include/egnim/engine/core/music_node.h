@@ -8,7 +8,7 @@
 #include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
   class MusicNode : public SceneNode
@@ -46,6 +46,6 @@ namespace core
     sf::Music* m_current_music;
   };
 
-}
+} // namespace egnim::core
 
 #endif //MUSIC_NODE_H

@@ -8,7 +8,7 @@
 #include <egnim/engine/core/scene_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
   class SpriteNode : public SceneNode
@@ -26,6 +26,6 @@ namespace core
     sf::Sprite m_sprite;
   };
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //SPRITE_NODE_H

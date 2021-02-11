@@ -15,7 +15,7 @@
 #include <egnim/engine/core/lazy_unique_pointer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
 
   class Context
@@ -51,6 +51,6 @@ namespace core
     LazyUniquePointer<sound_buffer_holder> m_sound_buffers;
   };
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //CONTEXT_H

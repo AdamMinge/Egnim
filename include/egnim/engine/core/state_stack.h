@@ -13,7 +13,7 @@
 #include <map>
 /* -------------------------------------------------------------------------- */
 
-namespace core
+namespace egnim::core
 {
   class Context;
   class State;
@@ -57,6 +57,6 @@ namespace core
     }));
   }
 
-} // namespace core
+} // namespace egnim::core
 
 #endif //STATE_STACK_H

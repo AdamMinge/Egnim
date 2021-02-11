@@ -2,7 +2,7 @@
 #include <egnim/engine/core/context.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 Context::Context() :
   m_textures(make_unique_lazy<textures_holder>()),
@@ -66,4 +66,4 @@ const Context::sound_buffer_holder& Context::getSoundBuffersHolder() const
   return *m_sound_buffers;
 }
 
-} // namespace core
+} // namespace egnim::core

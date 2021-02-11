@@ -5,7 +5,7 @@
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 CommandQueue::CommandQueue() = default;
 
@@ -64,6 +64,6 @@ std::unique_ptr<Command> CommandQueue::take()
   return command;
 }
 
-} // namespace core
+} // namespace egnim::core
 
 

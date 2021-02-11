@@ -2,7 +2,7 @@
 #include <egnim/engine/core/sound_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace core {
+namespace egnim::core {
 
 SoundNode::SoundNode(BaseResourceHolder<sf::SoundBuffer, std::string_view>& sound_buffers) :
   m_sound_buffers(sound_buffers),
@@ -116,4 +116,4 @@ void SoundNode::setAllSounds(sf::Sound::Status status)
   });
 }
 
-} // namespace core
+} // namespace egnim::core
