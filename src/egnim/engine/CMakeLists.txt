@@ -19,7 +19,8 @@ set(sources
         ${source_root}/core/component_container.cpp
         ${source_root}/core/sound_node.cpp
         ${source_root}/core/music_node.cpp
-        ${source_root}/core/sprite_node.cpp)
+        ${source_root}/core/sprite_node.cpp
+        ${source_root}/core/label_node.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -36,7 +37,8 @@ set(includes
         ${include_root}/core/component_container.h
         ${include_root}/core/sound_node.h
         ${include_root}/core/music_node.h
-        ${include_root}/core/sprite_node.h)
+        ${include_root}/core/sprite_node.h
+        ${include_root}/core/label_node.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
