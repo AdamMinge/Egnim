@@ -91,21 +91,21 @@ namespace egnim::core
   RESOURCE& ResourceHolderInterface<RESOURCE, IDENTIFIER>::get(IDENTIFIER id)
   {
     assert(m_resources.contains(id));
-    return *m_resources[id];
+    return *m_resources.at(id);
   }
 
   template<typename RESOURCE, typename IDENTIFIER>
   const RESOURCE& ResourceHolderInterface<RESOURCE, IDENTIFIER>::get(IDENTIFIER id) const
   {
     assert(m_resources.contains(id));
-    return *m_resources[id];
+    return *m_resources.at(id);
   }
 
   template<typename RESOURCE, typename IDENTIFIER>
   void ResourceHolderInterface<RESOURCE, IDENTIFIER>::remove(IDENTIFIER id)
   {
     assert(m_resources.contains(id));
-    return *m_resources[id];
+    m_resources.erase(id);
   }
 
   template<typename RESOURCE, typename IDENTIFIER>
