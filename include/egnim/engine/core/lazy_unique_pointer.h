@@ -13,6 +13,10 @@ namespace core
   {
   public:
     std::unique_ptr<TYPE> operator()() const;
+
+    DefaultCreator() = default;
+    DefaultCreator(DefaultCreator&&) noexcept = default;
+    DefaultCreator& operator=(DefaultCreator&&) noexcept = default;
   };
 
   template<typename TYPE, typename CREATOR = DefaultCreator<TYPE>>
@@ -28,7 +32,14 @@ namespace core
     friend auto make_unique_lazy(CALLABLE&& initializer, ARGS&& ...args);
 
   public:
+    explicit LazyUniquePointer(std::nullptr_t);
     ~LazyUniquePointer() = default;
+
+    LazyUniquePointer(LazyUniquePointer&& other) noexcept;
+    LazyUniquePointer& operator=(LazyUniquePointer&& other) noexcept;
+
+    LazyUniquePointer(const LazyUniquePointer&) = delete;
+    LazyUniquePointer& operator=(const LazyUniquePointer&) = delete;
 
     TYPE& operator*();
     const TYPE& operator*() const;
@@ -47,7 +58,7 @@ namespace core
 
   private:
     mutable std::unique_ptr<TYPE> m_object;
-    const CREATOR m_creator;
+    mutable std::optional<CREATOR> m_creator;
   };
 
   /* ----------------------------- DefaultCreator<TYPE> ----------------------- */
@@ -69,8 +80,8 @@ namespace core
   template<typename MAKER_TYPE, typename ...ARGS>
   auto make_unique_lazy(ARGS&& ...args)
   {
-    auto creator = [args...](){
-      return std::make_unique<MAKER_TYPE>(args...);
+    auto creator = [&args...](){
+      return std::make_unique<MAKER_TYPE>(std::forward<ARGS>(args)...);
     };
 
     return LazyUniquePointer<MAKER_TYPE, decltype(creator)>(std::move(creator));
@@ -80,9 +91,9 @@ namespace core
     typename = std::enable_if_t<std::is_invocable<CALLABLE, MAKER_TYPE&>::value>>
   auto make_unique_lazy(CALLABLE&& initializer, ARGS&& ...args)
   {
-    auto creator = [args..., initializer](){
-      auto object = std::make_unique<MAKER_TYPE>(args...);
-      initializer(*object);
+    auto creator = [&args..., &initializer](){
+      auto object = std::make_unique<MAKER_TYPE>(std::forward<ARGS>(args)...);
+      std::forward<CALLABLE>(initializer)(*object);
       return object;
     };
 
@@ -90,6 +101,28 @@ namespace core
   }
 
   /* ------------------------------ LazyPointer<TYPE> ------------------------- */
+
+  template<typename TYPE, typename CREATOR>
+  LazyUniquePointer<TYPE, CREATOR>::LazyUniquePointer(LazyUniquePointer&& other) noexcept
+  {
+    m_object = std::move(other.m_object);
+    m_creator = std::move(other.m_creator);
+
+    other.m_object.reset();
+    other.m_creator.reset();
+  }
+
+  template<typename TYPE, typename CREATOR>
+  LazyUniquePointer<TYPE, CREATOR>& LazyUniquePointer<TYPE, CREATOR>::operator=(LazyUniquePointer&& other) noexcept
+  {
+    m_object = std::move(other.m_object);
+    m_creator = std::move(other.m_creator);
+
+    other.m_object.reset();
+    other.m_creator.reset();
+
+    return *this;
+  }
 
   template<typename TYPE, typename CREATOR>
   TYPE& LazyUniquePointer<TYPE, CREATOR>::operator*()
@@ -136,10 +169,17 @@ namespace core
   }
 
   template<typename TYPE, typename CREATOR>
+  LazyUniquePointer<TYPE, CREATOR>::LazyUniquePointer(std::nullptr_t) :
+    m_creator(std::nullopt)
+  {
+
+  }
+
+  template<typename TYPE, typename CREATOR>
   TYPE* LazyUniquePointer<TYPE, CREATOR>::getter()
   {
     if(!m_object)
-      m_object = m_creator();
+      m_object = m_creator ? (*m_creator)() : nullptr;
 
     return m_object.get();
   }
@@ -148,7 +188,7 @@ namespace core
   const TYPE* LazyUniquePointer<TYPE, CREATOR>::getter() const
   {
     if(!m_object)
-      m_object = m_creator();
+      m_object = m_creator ? (*m_creator)() : nullptr;
 
     return m_object.get();
   }
