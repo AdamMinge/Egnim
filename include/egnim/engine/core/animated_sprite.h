@@ -24,7 +24,7 @@ namespace egnim::core
                             std::optional<std::size_t> num_frames = std::nullopt);
     ~AnimatedSprite() override;
 
-    void updateCurrent(sf::Time dt);
+    void update(sf::Time dt);
 
     void setFrameSize(sf::Vector2i frame_size);
     sf::Vector2i getFrameSize() const;

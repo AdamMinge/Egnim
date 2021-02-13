@@ -6,8 +6,7 @@
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
-{
+namespace egnim::core {
 
 AnimatedSprite::AnimatedSprite(const sf::Texture& texture, sf::Vector2i frame_size,
                                sf::Time duration, std::optional<std::size_t> num_frames) :
@@ -29,7 +28,7 @@ AnimatedSprite::AnimatedSprite(const sf::Texture& texture, sf::Vector2i frame_si
 
 AnimatedSprite::~AnimatedSprite() = default;
 
-void AnimatedSprite::updateCurrent(sf::Time dt)
+void AnimatedSprite::update(sf::Time dt)
 {
   auto time_per_frame = m_duration / static_cast<float>(m_num_frames);
   m_elapsed_time += dt;
