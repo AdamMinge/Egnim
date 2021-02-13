@@ -20,7 +20,9 @@ set(sources
         ${source_root}/core/sound_node.cpp
         ${source_root}/core/music_node.cpp
         ${source_root}/core/sprite_node.cpp
-        ${source_root}/core/label_node.cpp)
+        ${source_root}/core/label_node.cpp
+        ${source_root}/core/animated_sprite.cpp
+        ${source_root}/core/animated_sprite_node.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -38,7 +40,9 @@ set(includes
         ${include_root}/core/sound_node.h
         ${include_root}/core/music_node.h
         ${include_root}/core/sprite_node.h
-        ${include_root}/core/label_node.h)
+        ${include_root}/core/label_node.h
+        ${include_root}/core/animated_sprite.h
+        ${include_root}/core/animated_sprite_node.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
