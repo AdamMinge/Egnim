@@ -24,7 +24,8 @@ set(sources
         ${source_root}/core/animated_sprite.cpp
         ${source_root}/core/animated_sprite_node.cpp
         ${source_root}/core/camera.cpp
-        ${source_root}/core/scene_node.cpp)
+        ${source_root}/core/scene_node.cpp
+        ${source_root}/core/light_node.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -46,7 +47,8 @@ set(includes
         ${include_root}/core/animated_sprite.h
         ${include_root}/core/animated_sprite_node.h
         ${include_root}/core/camera.h
-        ${include_root}/core/scene_node.h)
+        ${include_root}/core/scene_node.h
+        ${include_root}/core/light_node.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
