@@ -5,14 +5,14 @@
 #include <map>
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/node.h>
 #include <egnim/engine/core/animated_sprite.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class AnimatedSpriteNode : public SceneNode
+  class AnimatedSpriteNode : public Node
   {
   public:
     explicit AnimatedSpriteNode();

@@ -5,13 +5,13 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/node.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class SpriteNode : public SceneNode
+  class SpriteNode : public Node
   {
   public:
     explicit SpriteNode(const sf::Texture& texture);

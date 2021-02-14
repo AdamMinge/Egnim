@@ -10,13 +10,13 @@
 
 namespace egnim::core
 {
-  class SceneNode;
+  class Node;
   class Component;
 
   class ComponentContainer
   {
   public:
-    explicit ComponentContainer(SceneNode& owner);
+    explicit ComponentContainer(Node& owner);
     ~ComponentContainer();
 
     void update(sf::Time dt);
@@ -29,7 +29,7 @@ namespace egnim::core
 
   private:
     std::vector<std::unique_ptr<Component>> m_components;
-    SceneNode& m_owner;
+    Node& m_owner;
   };
 
 } // namespace egnim::core

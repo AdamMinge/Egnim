@@ -5,7 +5,7 @@
 
 namespace egnim::core {
 
-ComponentContainer::ComponentContainer(SceneNode& owner) :
+ComponentContainer::ComponentContainer(Node& owner) :
   m_owner(owner)
 {
 

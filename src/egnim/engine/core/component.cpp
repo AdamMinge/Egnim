@@ -14,13 +14,13 @@ Component::Component() :
 
 Component::~Component() = default;
 
-void Component::setOwner(SceneNode* owner)
+void Component::setOwner(Node* owner)
 {
   assert(m_owner);
   m_owner = owner;
 }
 
-SceneNode* Component::getOwner()
+Node* Component::getOwner()
 {
   return m_owner;
 }

@@ -10,14 +10,14 @@
 #include <functional>
 #include <list>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/node.h>
 #include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class SoundNode : public SceneNode
+  class SoundNode : public Node
   {
   public:
     struct Settings

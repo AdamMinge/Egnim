@@ -4,14 +4,14 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Audio/Music.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/node.h>
 #include <egnim/engine/core/resource_holder.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class MusicNode : public SceneNode
+  class MusicNode : public Node
   {
   public:
     struct Settings

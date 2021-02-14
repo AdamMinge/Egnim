@@ -7,7 +7,7 @@
 
 namespace egnim::core
 {
-  class SceneNode;
+  class Node;
   class ComponentContainer;
 
   class Component
@@ -21,11 +21,11 @@ namespace egnim::core
     virtual void update(sf::Time dt) = 0;
 
   protected:
-    void setOwner(SceneNode* owner);
-    SceneNode* getOwner();
+    void setOwner(Node* owner);
+    Node* getOwner();
 
   private:
-    SceneNode* m_owner;
+    Node* m_owner;
   };
 
 } // namespace egnim::core

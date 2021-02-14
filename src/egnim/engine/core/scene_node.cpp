@@ -1,119 +1,43 @@
+/* ----------------------------------- SFML --------------------------------- */
+#include <SFML/Graphics/RenderTarget.hpp>
+/* --------------------------------- Standard ------------------------------- */
+#include <cassert>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/scene_node.h>
-#include <egnim/engine/core/command.h>
-#include <egnim/engine/core/component_container.h>
-#include <egnim/engine/core/component.h>
+#include <egnim/engine/core/camera.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
-{
+namespace egnim::core {
 
-SceneNode::SceneNode() :
-  m_parent(nullptr),
-  m_components(nullptr)
-{
-
-}
+SceneNode::SceneNode() = default;
 
 SceneNode::~SceneNode() = default;
 
-void SceneNode::attachChild(std::unique_ptr<SceneNode> node)
+void SceneNode::attachCamera(std::string_view id, std::unique_ptr<Camera> camera)
 {
-  node->m_parent = this;
-  m_children.push_back(std::move(node));
+  assert(!m_cameras.contains(id));
+  m_cameras.insert(std::make_pair(id, std::move(camera)));
 }
 
-std::unique_ptr<SceneNode> SceneNode::detachChild(const SceneNode &node)
+std::unique_ptr<Camera> SceneNode::detachCamera(std::string_view id)
 {
-  auto found = std::find_if(m_children.begin(), m_children.end(), [&node](auto &child)
-  {
-    return child.get() == &node;
-  });
+  assert(m_cameras.contains(id));
+  auto camera = std::move(m_cameras.at(id));
+  m_cameras.erase(id);
 
-  if (found == m_children.end())
-    return nullptr;
-
-  auto child = std::move(*found);
-  child->m_parent = nullptr;
-  m_children.erase(found);
-  return child;
+  return camera;
 }
 
-void SceneNode::attachComponent(std::unique_ptr<Component> component)
+Camera& SceneNode::getCamera(std::string_view id)
 {
-  if(!m_components)
-    m_components = std::make_unique<ComponentContainer>(*this);
-
-  m_components->add(std::move(component));
+  assert(m_cameras.contains(id));
+  return *m_cameras.at(id);
 }
 
-std::unique_ptr<Component> SceneNode::attachComponent(const Component &component)
+const Camera& SceneNode::getCamera(std::string_view id) const
 {
-  auto comp = m_components ? m_components->remove(component) : nullptr;
-
-  if(m_components && m_components->empty())
-    m_components.reset();
-
-  return comp;
-}
-
-sf::Vector2f SceneNode::getWorldPosition() const
-{
-  return getWorldTransform() * sf::Vector2f{};
-}
-
-sf::Transform SceneNode::getWorldTransform() const
-{
-  auto transform = sf::Transform::Identity;
-  for (const SceneNode *node = this; node != nullptr; node = node->m_parent)
-    transform = node->getTransform() * transform;
-
-  return transform;
-}
-
-void SceneNode::update(CommandQueue &command_queue, sf::Time dt)
-{
-  updateComponents(dt);
-  updateCurrent(command_queue, dt);
-  updateChildren(command_queue, dt);
-}
-
-void SceneNode::onCommand(const Command &command, sf::Time dt)
-{
-  command(*this, dt);
-  for (const auto &child : m_children)
-    child->onCommand(command, dt);
-}
-
-void SceneNode::updateCurrent(CommandQueue &command_queue, sf::Time dt)
-{}
-
-void SceneNode::updateChildren(CommandQueue &command_queue, sf::Time dt)
-{
-  for (const auto &child : m_children)
-    child->update(command_queue, dt);
-}
-
-void SceneNode::updateComponents(sf::Time dt)
-{
-  if(m_components)
-    m_components->update(dt);
-}
-
-void SceneNode::draw(sf::RenderTarget &target, sf::RenderStates states) const
-{
-  states.transform *= getTransform();
-  drawCurrent(target, states);
-  drawChildren(target, states);
-}
-
-void SceneNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
-{}
-
-void SceneNode::drawChildren(sf::RenderTarget &target, sf::RenderStates states) const
-{
-  for (const auto &child : m_children)
-    child->draw(target, states);
+  assert(m_cameras.contains(id));
+  return *m_cameras.at(id);
 }
 
 } // namespace egnim::core

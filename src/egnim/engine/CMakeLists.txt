@@ -13,7 +13,7 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/scene_node.cpp
+        ${source_root}/core/node.cpp
         ${source_root}/core/command_queue.cpp
         ${source_root}/core/component.cpp
         ${source_root}/core/component_container.cpp
@@ -22,7 +22,9 @@ set(sources
         ${source_root}/core/sprite_node.cpp
         ${source_root}/core/label_node.cpp
         ${source_root}/core/animated_sprite.cpp
-        ${source_root}/core/animated_sprite_node.cpp)
+        ${source_root}/core/animated_sprite_node.cpp
+        ${source_root}/core/camera.cpp
+        ${source_root}/core/scene_node.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -32,7 +34,7 @@ set(includes
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
-        ${include_root}/core/scene_node.h
+        ${include_root}/core/node.h
         ${include_root}/core/command.h
         ${include_root}/core/command_queue.h
         ${include_root}/core/component.h
@@ -42,7 +44,9 @@ set(includes
         ${include_root}/core/sprite_node.h
         ${include_root}/core/label_node.h
         ${include_root}/core/animated_sprite.h
-        ${include_root}/core/animated_sprite_node.h)
+        ${include_root}/core/animated_sprite_node.h
+        ${include_root}/core/camera.h
+        ${include_root}/core/scene_node.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

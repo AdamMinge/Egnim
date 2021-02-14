@@ -7,13 +7,13 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/core/node.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class LabelNode : public SceneNode
+  class LabelNode : public Node
   {
   public:
     explicit LabelNode(const sf::Font& font, const sf::String& text);
