@@ -62,8 +62,12 @@ std::unique_ptr<Component> Node::attachComponent(const Component &component)
 void Node::setCameraMask(size_t mask, bool applyChildren)
 {
   m_camera_mask = mask;
-  for (const auto &child : m_children)
-    child->setCameraMask(mask, applyChildren);
+
+  if(applyChildren)
+  {
+    for (const auto &child : m_children)
+      child->setCameraMask(mask, applyChildren);
+  }
 }
 
 size_t Node::getCameraMask() const
