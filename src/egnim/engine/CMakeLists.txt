@@ -56,12 +56,16 @@ set(resources)
 # -------------------------------------------------------------------------------------------------- #
 find_package(SFML REQUIRED COMPONENTS graphics audio system network)
 find_package(box2d REQUIRED)
+find_package(rpclib REQUIRED)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- create application target ------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
+
+message("RPCLIB_INCLUDE_DIR = ${RPCLIB_FOUND}")
+
 egnim_add_library(egnim-engine
         SOURCES ${sources} ${includes} ${resources}
-        DEPENDS sfml-graphics sfml-audio sfml-system sfml-network box2d)
+        DEPENDS sfml-graphics sfml-audio sfml-system box2d rpclib::rpc)
 
 set_target_properties(egnim-engine
         PROPERTIES CXX_STANDARD 20)
