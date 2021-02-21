@@ -6,20 +6,29 @@
 
 namespace egnim::core {
 
-SpriteNode::SpriteNode(const sf::Texture &texture) :
-  m_sprite(texture)
-{
-
-}
-
-SpriteNode::SpriteNode(const sf::Texture& texture, const sf::IntRect& rect) :
-  m_sprite(texture, rect)
-{
-
-}
-
+SpriteNode::SpriteNode() = default;
 
 SpriteNode::~SpriteNode() = default;
+
+void SpriteNode::setTexture(const sf::Texture& texture)
+{
+  m_sprite.setTexture(texture);
+}
+
+void SpriteNode::setTextureRect(const sf::IntRect& rect)
+{
+  m_sprite.setTextureRect(rect);
+}
+
+const sf::Texture& SpriteNode::getTexture() const
+{
+  return *m_sprite.getTexture();
+}
+
+const sf::IntRect& SpriteNode::getTextureRect() const
+{
+  return m_sprite.getTextureRect();
+}
 
 void SpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const
 {

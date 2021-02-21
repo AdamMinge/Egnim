@@ -8,15 +8,18 @@
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class LabelNode : public Node
+  class LabelNode : public Node, public RegisteredInNodeFactory<LabelNode>
   {
+    EGNIM_CLASS(LabelNode, Node)
+
   public:
-    explicit LabelNode(const sf::Font& font, const sf::String& text);
+    explicit LabelNode();
     ~LabelNode() override;
 
     void setFont(const sf::Font& font);

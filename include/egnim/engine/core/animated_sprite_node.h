@@ -7,13 +7,16 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
 #include <egnim/engine/core/animated_sprite.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class AnimatedSpriteNode : public Node
+  class AnimatedSpriteNode : public Node, public RegisteredInNodeFactory<AnimatedSpriteNode>
   {
+    EGNIM_CLASS(AnimatedSpriteNode, Node)
+
   public:
     explicit AnimatedSpriteNode();
     ~AnimatedSpriteNode() override;

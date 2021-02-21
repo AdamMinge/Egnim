@@ -25,11 +25,14 @@ set(sources
         ${source_root}/core/animated_sprite_node.cpp
         ${source_root}/core/camera.cpp
         ${source_root}/core/scene_node.cpp
-        ${source_root}/core/light_node.cpp)
+        ${source_root}/core/light_node.cpp
+        ${source_root}/core/main_loop.cpp
+        ${source_root}/core/node_factory.cpp)
 
 set(includes
         ${include_root}/../config.h
         ${include_root}/export.h
+        ${include_root}/core/object.h
         ${include_root}/core/context.h
         ${include_root}/core/lazy_unique_pointer.h
         ${include_root}/core/resource_holder.h
@@ -48,7 +51,9 @@ set(includes
         ${include_root}/core/animated_sprite_node.h
         ${include_root}/core/camera.h
         ${include_root}/core/scene_node.h
-        ${include_root}/core/light_node.h)
+        ${include_root}/core/light_node.h
+        ${include_root}/core/main_loop.h
+        ${include_root}/core/node_factory.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

@@ -2,6 +2,7 @@
 #define CONTEXT_H
 
 /* ----------------------------------- SFML --------------------------------- */
+#include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 #include <SFML/Graphics/Font.hpp>
@@ -36,12 +37,14 @@ namespace egnim::core
     [[nodiscard]] fonts_holder& getFontsHolder();
     [[nodiscard]] musics_holder& getMusicsHolder();
     [[nodiscard]] sound_buffer_holder& getSoundsHolder();
+    [[nodiscard]] sf::RenderWindow& getRenderWindow();
 
     [[nodiscard]] const textures_holder& getTextureHolder() const;
     [[nodiscard]] const shaders_holder& getShadersHolder() const;
     [[nodiscard]] const fonts_holder& getFontsHolder() const;
     [[nodiscard]] const musics_holder& getMusicsHolder() const;
     [[nodiscard]] const sound_buffer_holder& getSoundBuffersHolder() const;
+    [[nodiscard]] const sf::RenderWindow& getRenderWindow() const;
 
   private:
     LazyUniquePointer<textures_holder> m_textures;
@@ -49,6 +52,8 @@ namespace egnim::core
     LazyUniquePointer<fonts_holder> m_fonts;
     LazyUniquePointer<musics_holder> m_musics;
     LazyUniquePointer<sound_buffer_holder> m_sound_buffers;
+    LazyUniquePointer<sf::RenderWindow> m_render_window;
+
   };
 
 } // namespace egnim::core

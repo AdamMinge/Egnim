@@ -4,14 +4,24 @@
 
 namespace egnim::core {
 
-SoundNode::SoundNode(BaseResourceHolder<sf::SoundBuffer, std::string_view>& sound_buffers) :
-  m_sound_buffers(sound_buffers),
+SoundNode::SoundNode() :
+  m_sound_buffers(nullptr),
   m_default_settings(Settings{})
 {
 
 }
 
 SoundNode::~SoundNode() = default;
+
+void SoundNode::setSoundBuffers(BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers)
+{
+  m_sound_buffers = sound_buffers;
+}
+
+BaseResourceHolder<sf::SoundBuffer, std::string_view>* SoundNode::getSoundBuffers() const
+{
+  return m_sound_buffers;
+}
 
 void SoundNode::setDefaultSettings(const Settings &settings)
 {
@@ -45,10 +55,10 @@ bool SoundNode::playLoop(std::string_view id, const std::function<bool()>& stop_
   m_sounds.emplace_back(std::make_pair(sf::Sound{}, stop_condition));
   auto &sound = m_sounds.back().first;
 
-  if (!m_sound_buffers.contains(id))
+  if (m_sound_buffers && !m_sound_buffers->contains(id))
     return false;
 
-  sound.setBuffer(m_sound_buffers.get(id));
+  sound.setBuffer(m_sound_buffers->get(id));
   sound.setPosition(position.x, position.y, 0.f);
   sound.setAttenuation(settings.attenuation);
   sound.setMinDistance(settings.min_distance);

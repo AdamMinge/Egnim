@@ -7,11 +7,7 @@
 namespace egnim::core
 {
 
-LabelNode::LabelNode(const sf::Font &font, const sf::String &text)
-{
-  setFont(font);
-  setText(text);
-}
+LabelNode::LabelNode() = default;
 
 LabelNode::~LabelNode() = default;
 

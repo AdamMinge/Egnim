@@ -6,13 +6,16 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
 #include <egnim/engine/core/resource_holder.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class MusicNode : public Node
+  class MusicNode : public Node, public RegisteredInNodeFactory<MusicNode>
   {
+    EGNIM_CLASS(MusicNode, Node)
+
   public:
     struct Settings
     {
@@ -23,8 +26,11 @@ namespace egnim::core
     };
 
   public:
-    explicit MusicNode(BaseResourceHolder<sf::Music, std::string_view>& musics_holder);
+    explicit MusicNode();
     ~MusicNode() override;
+
+    void setMusicsHolder(BaseResourceHolder<sf::Music, std::string_view>* musics_holder);
+    BaseResourceHolder<sf::Music, std::string_view>* getMusicsHolder() const;
 
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
@@ -41,7 +47,7 @@ namespace egnim::core
     bool isStopped();
 
   private:
-    BaseResourceHolder<sf::Music, std::string_view>& m_musics_holder;
+    BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;
     sf::Music* m_current_music;
   };

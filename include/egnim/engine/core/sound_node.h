@@ -12,13 +12,16 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
 #include <egnim/engine/core/resource_holder.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class SoundNode : public Node
+  class SoundNode : public Node, public RegisteredInNodeFactory<SoundNode>
   {
+    EGNIM_CLASS(SoundNode, Node)
+
   public:
     struct Settings
     {
@@ -29,8 +32,11 @@ namespace egnim::core
     };
 
   public:
-    explicit SoundNode(BaseResourceHolder<sf::SoundBuffer, std::string_view>& sound_buffers);
+    explicit SoundNode();
     ~SoundNode() override;
+
+    void setSoundBuffers(BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers);
+    BaseResourceHolder<sf::SoundBuffer, std::string_view>* getSoundBuffers() const;
 
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
@@ -56,7 +62,7 @@ namespace egnim::core
     void setAllSounds(sf::Sound::Status status);
 
   private:
-    BaseResourceHolder<sf::SoundBuffer, std::string_view>& m_sound_buffers;
+    BaseResourceHolder<sf::SoundBuffer, std::string_view>* m_sound_buffers;
     std::list<std::pair<sf::Sound, std::function<bool()>>> m_sounds;
     Settings m_default_settings;
   };

@@ -11,6 +11,8 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <vector>
 #include <memory>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/core/object.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -20,10 +22,11 @@ namespace egnim::core
   class CommandQueue;
   class ComponentContainer;
 
-  class Node : public sf::Transformable, public sf::Drawable, private sf::NonCopyable
+  class Node : public Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
+    EGNIM_CLASS(Node, Object)
+
   public:
-    explicit Node();
     ~Node() override;
 
     void attachChild(std::unique_ptr<Node> node);
@@ -42,6 +45,8 @@ namespace egnim::core
     void onCommand(const Command& command, sf::Time dt);
 
   protected:
+    explicit Node();
+
     virtual void updateCurrent(CommandQueue& command_queue, sf::Time dt);
     void updateChildren(CommandQueue& command_queue, sf::Time dt);
     void updateComponents(sf::Time dt);

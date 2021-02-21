@@ -7,14 +7,17 @@
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
   class Camera;
 
-  class SceneNode : public Node
+  class SceneNode : public Node, public RegisteredInNodeFactory<SceneNode>
   {
+    EGNIM_CLASS(SceneNode, Node)
+
   public:
     explicit SceneNode();
     ~SceneNode() override;

@@ -6,13 +6,16 @@
 #include <SFML/Graphics/Sprite.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/node.h>
+#include <egnim/engine/core/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class LightNode : public Node
+  class LightNode : public Node, public RegisteredInNodeFactory<LightNode>
   {
+    EGNIM_CLASS(LightNode, Node)
+
   public:
     explicit LightNode();
     ~LightNode() override;
