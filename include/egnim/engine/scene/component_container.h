@@ -8,7 +8,7 @@
 #include <memory>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
   class Node;
   class Component;
@@ -32,6 +32,6 @@ namespace egnim::core
     Node& m_owner;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //COMPONENT_CONTANER_H

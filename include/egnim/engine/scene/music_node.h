@@ -4,12 +4,12 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Audio/Music.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node.h>
+#include <egnim/engine/scene/node.h>
 #include <egnim/engine/core/resource_holder.h>
-#include <egnim/engine/core/node_factory.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
   class MusicNode : public Node, public RegisteredInNodeFactory<MusicNode>
@@ -29,8 +29,8 @@ namespace egnim::core
     explicit MusicNode();
     ~MusicNode() override;
 
-    void setMusicsHolder(BaseResourceHolder<sf::Music, std::string_view>* musics_holder);
-    BaseResourceHolder<sf::Music, std::string_view>* getMusicsHolder() const;
+    void setMusicsHolder(core::BaseResourceHolder<sf::Music, std::string_view>* musics_holder);
+    core::BaseResourceHolder<sf::Music, std::string_view>* getMusicsHolder() const;
 
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
@@ -47,11 +47,11 @@ namespace egnim::core
     bool isStopped();
 
   private:
-    BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
+    core::BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;
     sf::Music* m_current_music;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //MUSIC_NODE_H

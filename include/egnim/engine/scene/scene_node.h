@@ -6,11 +6,11 @@
 #include <memory>
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node.h>
-#include <egnim/engine/core/node_factory.h>
+#include <egnim/engine/scene/node.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
   class Camera;
 
@@ -32,6 +32,6 @@ namespace egnim::core
     std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //SCENE_NODE_H

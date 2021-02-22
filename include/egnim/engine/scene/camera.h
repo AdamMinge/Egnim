@@ -8,7 +8,7 @@
 #include <map>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
   class Camera
@@ -71,6 +71,6 @@ namespace egnim::core
     static std::map<sf::RenderTarget*, Camera*> s_active_camera_per_target;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //CAMERA_H

@@ -1,12 +1,12 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
+#include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/core/command.h>
-#include <egnim/engine/core/component_container.h>
-#include <egnim/engine/core/component.h>
-#include <egnim/engine/core/camera.h>
+#include <egnim/engine/scene/component_container.h>
+#include <egnim/engine/scene/component.h>
+#include <egnim/engine/scene/camera.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
 Node::Node() :
@@ -89,24 +89,24 @@ sf::Transform Node::getWorldTransform() const
   return transform;
 }
 
-void Node::update(CommandQueue &command_queue, sf::Time dt)
+void Node::update(core::CommandQueue &command_queue, sf::Time dt)
 {
   updateComponents(dt);
   updateCurrent(command_queue, dt);
   updateChildren(command_queue, dt);
 }
 
-void Node::onCommand(const Command &command, sf::Time dt)
+void Node::onCommand(const core::Command &command, sf::Time dt)
 {
   command(*this, dt);
   for (const auto &child : m_children)
     child->onCommand(command, dt);
 }
 
-void Node::updateCurrent(CommandQueue &command_queue, sf::Time dt)
+void Node::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
 {}
 
-void Node::updateChildren(CommandQueue &command_queue, sf::Time dt)
+void Node::updateChildren(core::CommandQueue &command_queue, sf::Time dt)
 {
   for (const auto &child : m_children)
     child->update(command_queue, dt);
@@ -142,4 +142,4 @@ bool Node::isVisibleByTarget(sf::RenderTarget& target) const
   return target_camera == nullptr || target_camera->getViewFlag() & m_camera_mask;
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

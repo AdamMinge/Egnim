@@ -1,12 +1,12 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/animated_sprite_node.h>
+#include <egnim/engine/scene/animated_sprite_node.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
 AnimatedSpriteNode::AnimatedSpriteNode() :
@@ -17,7 +17,7 @@ AnimatedSpriteNode::AnimatedSpriteNode() :
 
 AnimatedSpriteNode::~AnimatedSpriteNode() = default;
 
-void AnimatedSpriteNode::addAnimation(std::string_view id, AnimatedSprite&& animated_sprite)
+void AnimatedSpriteNode::addAnimation(std::string_view id, core::AnimatedSprite&& animated_sprite)
 {
   assert(!m_animated_sprites.contains(id));
   m_animated_sprites.emplace(std::make_pair(id, std::move(animated_sprite)));
@@ -47,7 +47,7 @@ std::string_view AnimatedSpriteNode::getCurrentAnimation()
     return std::string_view{};
 }
 
-void AnimatedSpriteNode::updateCurrent(CommandQueue &command_queue, sf::Time dt)
+void AnimatedSpriteNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
 {
   if(m_current_animation != m_animated_sprites.end())
     m_current_animation->second.update(dt);
@@ -59,4 +59,4 @@ void AnimatedSpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates 
     target.draw(m_current_animation->second, states);
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

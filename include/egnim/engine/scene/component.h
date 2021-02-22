@@ -5,7 +5,7 @@
 #include <SFML/System/Time.hpp>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
   class Node;
   class ComponentContainer;
@@ -28,6 +28,6 @@ namespace egnim::core
     Node* m_owner;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //COMPONENT_H

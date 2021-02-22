@@ -1,8 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/music_node.h>
+#include <egnim/engine/scene/music_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 MusicNode::MusicNode() :
   m_musics_holder(nullptr),
@@ -14,12 +14,12 @@ MusicNode::MusicNode() :
 
 MusicNode::~MusicNode() = default;
 
-void MusicNode::setMusicsHolder(BaseResourceHolder<sf::Music, std::string_view>* musics_holder)
+void MusicNode::setMusicsHolder(core::BaseResourceHolder<sf::Music, std::string_view>* musics_holder)
 {
   m_musics_holder = musics_holder;
 }
 
-BaseResourceHolder<sf::Music, std::string_view>* MusicNode::getMusicsHolder() const
+core::BaseResourceHolder<sf::Music, std::string_view>* MusicNode::getMusicsHolder() const
 {
   return m_musics_holder;
 }
@@ -92,4 +92,4 @@ bool MusicNode::isStopped()
   return m_current_music && m_current_music->getStatus() == sf::Music::Stopped;
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

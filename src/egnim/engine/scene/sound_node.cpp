@@ -1,8 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/sound_node.h>
+#include <egnim/engine/scene/sound_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 SoundNode::SoundNode() :
   m_sound_buffers(nullptr),
@@ -13,12 +13,12 @@ SoundNode::SoundNode() :
 
 SoundNode::~SoundNode() = default;
 
-void SoundNode::setSoundBuffers(BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers)
+void SoundNode::setSoundBuffers(core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers)
 {
   m_sound_buffers = sound_buffers;
 }
 
-BaseResourceHolder<sf::SoundBuffer, std::string_view>* SoundNode::getSoundBuffers() const
+core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* SoundNode::getSoundBuffers() const
 {
   return m_sound_buffers;
 }
@@ -85,7 +85,7 @@ void SoundNode::startAllSounds()
   setAllSounds(sf::Sound::Playing);
 }
 
-void SoundNode::updateCurrent(CommandQueue &command_queue, sf::Time dt)
+void SoundNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
 {
   checkStopConditions();
   removeStoppedSounds();
@@ -126,4 +126,4 @@ void SoundNode::setAllSounds(sf::Sound::Status status)
   });
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

@@ -1,9 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node_factory.h>
-#include <egnim/engine/core/node.h>
+#include <egnim/engine/scene/node_factory.h>
+#include <egnim/engine/scene/node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 std::unique_ptr<NodeFactory> NodeFactory::s_instance = nullptr;
 
@@ -49,5 +49,5 @@ std::unique_ptr<Node> NodeFactory::createNode(std::string_view id) const
     return nullptr;
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene
 

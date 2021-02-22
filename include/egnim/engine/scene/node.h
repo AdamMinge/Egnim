@@ -18,11 +18,15 @@
 namespace egnim::core
 {
   class Command;
-  class Component;
   class CommandQueue;
+}
+
+namespace egnim::scene
+{
+  class Component;
   class ComponentContainer;
 
-  class Node : public Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
+  class Node : public core::Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
     EGNIM_CLASS(Node, Object)
 
@@ -41,14 +45,14 @@ namespace egnim::core
     sf::Vector2f getWorldPosition() const;
     sf::Transform getWorldTransform() const;
 
-    void update(CommandQueue& command_queue, sf::Time dt);
-    void onCommand(const Command& command, sf::Time dt);
+    void update(core::CommandQueue& command_queue, sf::Time dt);
+    void onCommand(const core::Command& command, sf::Time dt);
 
   protected:
     explicit Node();
 
-    virtual void updateCurrent(CommandQueue& command_queue, sf::Time dt);
-    void updateChildren(CommandQueue& command_queue, sf::Time dt);
+    virtual void updateCurrent(core::CommandQueue& command_queue, sf::Time dt);
+    void updateChildren(core::CommandQueue& command_queue, sf::Time dt);
     void updateComponents(sf::Time dt);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -64,6 +68,6 @@ namespace egnim::core
     size_t m_camera_mask;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //NODE_H

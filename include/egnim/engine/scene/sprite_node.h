@@ -5,11 +5,11 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node.h>
-#include <egnim/engine/core/node_factory.h>
+#include <egnim/engine/scene/node.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
   class SpriteNode : public Node, public RegisteredInNodeFactory<SpriteNode>
@@ -33,6 +33,6 @@ namespace egnim::core
     sf::Sprite m_sprite;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //SPRITE_NODE_H

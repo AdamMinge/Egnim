@@ -1,10 +1,10 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/label_node.h>
+#include <egnim/engine/scene/label_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
 LabelNode::LabelNode() = default;
@@ -106,4 +106,4 @@ void LabelNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) c
   target.draw(m_label);
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

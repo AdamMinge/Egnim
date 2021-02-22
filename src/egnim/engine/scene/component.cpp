@@ -1,10 +1,10 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/component.h>
+#include <egnim/engine/scene/component.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 Component::Component() :
   m_owner(nullptr)
@@ -25,4 +25,4 @@ Node* Component::getOwner()
   return m_owner;
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

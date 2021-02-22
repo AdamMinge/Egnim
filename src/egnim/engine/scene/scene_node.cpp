@@ -3,11 +3,11 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/scene_node.h>
-#include <egnim/engine/core/camera.h>
+#include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/scene/camera.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 SceneNode::SceneNode() = default;
 
@@ -40,4 +40,4 @@ const Camera& SceneNode::getCamera(std::string_view id) const
   return *m_cameras.at(id);
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

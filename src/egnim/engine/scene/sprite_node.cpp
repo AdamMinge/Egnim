@@ -1,10 +1,10 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/sprite_node.h>
+#include <egnim/engine/scene/sprite_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 SpriteNode::SpriteNode() = default;
 
@@ -36,4 +36,4 @@ void SpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) 
 }
 
 
-} // namespace egnim::core
+} // namespace egnim::scene

@@ -1,9 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/component_container.h>
-#include <egnim/engine/core/component.h>
+#include <egnim/engine/scene/component_container.h>
+#include <egnim/engine/scene/component.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 ComponentContainer::ComponentContainer(Node& owner) :
   m_owner(owner)
@@ -51,4 +51,4 @@ size_t ComponentContainer::size() const
 }
 
 
-} // namespace egnim::core
+} // namespace egnim::scene

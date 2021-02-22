@@ -1,12 +1,10 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
-/* --------------------------------- Standard ------------------------------- */
-#include <cassert>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/camera.h>
+#include <egnim/engine/scene/camera.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::scene {
 
 std::map<sf::RenderTarget*, Camera*> Camera::s_active_camera_per_target;
 
@@ -131,4 +129,4 @@ const Camera* Camera::getActiveCamera(sf::RenderTarget& render_target)
     return nullptr;
 }
 
-} // namespace egnim::core
+} // namespace egnim::scene

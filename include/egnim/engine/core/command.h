@@ -7,9 +7,13 @@
 #include <functional>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
   class Node;
+}
+
+namespace egnim::core
+{
 
   class Command
   {
@@ -17,7 +21,7 @@ namespace egnim::core
     explicit Command() = default;
     virtual ~Command() = default;
 
-    virtual void operator()(Node& node, sf::Time dt) const = 0;
+    virtual void operator()(scene::Node& node, sf::Time dt) const = 0;
   };
 
   template<typename NODE_TYPE>
@@ -27,7 +31,7 @@ namespace egnim::core
     explicit BaseCommand() = default;
     ~BaseCommand() override = default;
 
-    void operator()(Node& node, sf::Time) const override;
+    void operator()(scene::Node& node, sf::Time) const override;
 
   protected:
     virtual void action(NODE_TYPE& node, sf::Time) const;
@@ -50,7 +54,7 @@ namespace egnim::core
   /* -------------------------------- BaseCommand ----------------------------- */
 
   template<typename NODE_TYPE>
-  void BaseCommand<NODE_TYPE>::operator()(Node &node, sf::Time dt) const
+  void BaseCommand<NODE_TYPE>::operator()(scene::Node &node, sf::Time dt) const
   {
     if(auto casted_node = dynamic_cast<NODE_TYPE*>(&node); casted_node)
       action(*casted_node, dt);

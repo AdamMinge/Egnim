@@ -9,7 +9,7 @@
 #include <map>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
   class Node;
 
@@ -60,7 +60,7 @@ namespace egnim::core
   [[maybe_unused]] const bool RegisteredInNodeFactory<TYPE>::s_registered = NodeFactory::getInstance().registerNode(
     TYPE::staticClassName(), { std::function<std::unique_ptr<Node>()>([](){ return std::make_unique<TYPE>(); }) });
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 
 

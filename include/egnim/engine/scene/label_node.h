@@ -7,11 +7,11 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node.h>
-#include <egnim/engine/core/node_factory.h>
+#include <egnim/engine/scene/node.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
   class LabelNode : public Node, public RegisteredInNodeFactory<LabelNode>
@@ -49,6 +49,6 @@ namespace egnim::core
     sf::Text m_label;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //LABEL_NODE_H

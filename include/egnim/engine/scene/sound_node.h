@@ -10,12 +10,12 @@
 #include <functional>
 #include <list>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/node.h>
+#include <egnim/engine/scene/node.h>
 #include <egnim/engine/core/resource_holder.h>
-#include <egnim/engine/core/node_factory.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::scene
 {
 
   class SoundNode : public Node, public RegisteredInNodeFactory<SoundNode>
@@ -35,8 +35,8 @@ namespace egnim::core
     explicit SoundNode();
     ~SoundNode() override;
 
-    void setSoundBuffers(BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers);
-    BaseResourceHolder<sf::SoundBuffer, std::string_view>* getSoundBuffers() const;
+    void setSoundBuffers(core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers);
+    core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* getSoundBuffers() const;
 
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
@@ -54,7 +54,7 @@ namespace egnim::core
     void startAllSounds();
 
   protected:
-    void updateCurrent(CommandQueue& command_queue, sf::Time dt) override;
+    void updateCurrent(core::CommandQueue& command_queue, sf::Time dt) override;
 
   private:
     void checkStopConditions();
@@ -62,11 +62,11 @@ namespace egnim::core
     void setAllSounds(sf::Sound::Status status);
 
   private:
-    BaseResourceHolder<sf::SoundBuffer, std::string_view>* m_sound_buffers;
+    core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* m_sound_buffers;
     std::list<std::pair<sf::Sound, std::function<bool()>>> m_sounds;
     Settings m_default_settings;
   };
 
-} // namespace egnim::core
+} // namespace egnim::scene
 
 #endif //SOUND_NODE_H
