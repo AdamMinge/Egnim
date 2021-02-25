@@ -4,6 +4,8 @@
 #include <egnim/engine/scene/component_container.h>
 #include <egnim/engine/scene/component.h>
 #include <egnim/engine/scene/camera.h>
+/* --------------------------------- Standard ------------------------------- */
+#include <cassert>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -11,7 +13,7 @@ namespace egnim::scene
 
 Node::Node() :
   m_parent(nullptr),
-  m_components(nullptr),
+  m_components(std::make_unique<ComponentContainer>(*this)),
   m_camera_mask(Camera::CameraFlag::DEFAULT)
 {
 
@@ -41,22 +43,27 @@ std::unique_ptr<Node> Node::detachChild(const Node &node)
   return child;
 }
 
+const std::vector<std::unique_ptr<Node>>& Node::getChildren() const
+{
+  return m_children;
+}
+
 void Node::attachComponent(std::unique_ptr<Component> component)
 {
-  if(!m_components)
-    m_components = std::make_unique<ComponentContainer>(*this);
-
+  assert(m_components);
   m_components->add(std::move(component));
 }
 
 std::unique_ptr<Component> Node::attachComponent(const Component &component)
 {
-  auto comp = m_components ? m_components->remove(component) : nullptr;
+  assert(m_components);
+  return m_components->take(component);
+}
 
-  if(m_components && m_components->empty())
-    m_components.reset();
-
-  return comp;
+const ComponentContainer& Node::getComponentContainer() const
+{
+  assert(m_components);
+  return *m_components;
 }
 
 void Node::setCameraMask(size_t mask, bool applyChildren)

@@ -2,8 +2,9 @@
 #define SCENE_SERIALIZER_H
 
 /* --------------------------------- Standard ------------------------------- */
+#include <variant>
 #include <memory>
-#include <map>
+#include <ios>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
@@ -18,12 +19,16 @@ namespace egnim::scene
 
   class SceneSerializer : public SceneVisitor
   {
+    using istream = std::reference_wrapper<std::istream>;
+    using ostream = std::reference_wrapper<std::ostream>;
+
   public:
     enum class Action;
     enum class Format;
 
   public:
-    explicit SceneSerializer(Action action, Format format);
+    explicit SceneSerializer(Format format, std::ostream& stream);
+    explicit SceneSerializer(Format format, std::istream& stream);
     ~SceneSerializer();
 
     void visit(AnimatedSpriteNode& animated_sprite_node) override;
@@ -33,31 +38,29 @@ namespace egnim::scene
     void visit(SoundNode& sound_node) override;
     void visit(SpriteNode& sprite_node) override;
 
-    Action getAction();
-    void setAction(Action action);
-
     Format getFormat();
-    void setFormat(Format format);
+    Action getAction();
 
   protected:
     priv::SceneSerializerImpl& getImpl();
 
   private:
-    Action m_action;
     Format m_format;
+    Action m_action;
 
+    std::variant<istream, ostream> m_stream;
     std::unique_ptr<priv::SceneSerializerImpl> m_impl;
+  };
+
+  enum class SceneSerializer::Format
+  {
+    Json,
   };
 
   enum class SceneSerializer::Action
   {
     Serialize,
     Deserialize,
-  };
-
-  enum class SceneSerializer::Format
-  {
-    Json,
   };
 
 } // namespace egnim::scene

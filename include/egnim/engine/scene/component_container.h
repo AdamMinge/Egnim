@@ -22,7 +22,9 @@ namespace egnim::scene
     void update(sf::Time dt);
 
     void add(std::unique_ptr<Component> component);
-    std::unique_ptr<Component> remove(const Component& component);
+    void remove(const Component& component);
+    std::unique_ptr<Component> take(const Component& component);
+    [[nodiscard]] const std::vector<std::unique_ptr<Component>>& getComponents() const;
 
     [[nodiscard]] bool empty() const;
     [[nodiscard]] size_t size() const;

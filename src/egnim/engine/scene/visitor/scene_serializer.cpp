@@ -9,9 +9,19 @@
 
 namespace egnim::scene {
 
-SceneSerializer::SceneSerializer(Action action, Format format) :
-  m_action(action),
+SceneSerializer::SceneSerializer(Format format, std::ostream& stream) :
   m_format(format),
+  m_action(Action::Serialize),
+  m_stream(stream),
+  m_impl(nullptr)
+{
+
+}
+
+SceneSerializer::SceneSerializer(Format format, std::istream& stream) :
+  m_format(format),
+  m_action(Action::Deserialize),
+  m_stream(stream),
   m_impl(nullptr)
 {
 
@@ -22,59 +32,49 @@ SceneSerializer::~SceneSerializer() = default;
 void SceneSerializer::visit(AnimatedSpriteNode& animated_sprite_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(animated_sprite_node);
+    getImpl().serialize(animated_sprite_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(animated_sprite_node);
+    getImpl().deserialize(animated_sprite_node, std::get<istream>(m_stream));
 }
 
 void SceneSerializer::visit(LabelNode& label_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(label_node);
+    getImpl().serialize(label_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(label_node);
+    getImpl().deserialize(label_node, std::get<istream>(m_stream));
 }
 
 void SceneSerializer::visit(MusicNode& music_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(music_node);
+    getImpl().serialize(music_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(music_node);
+    getImpl().deserialize(music_node, std::get<istream>(m_stream));
 }
 
 void SceneSerializer::visit(SceneNode& scene_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(scene_node);
+    getImpl().serialize(scene_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(scene_node);
+    getImpl().deserialize(scene_node, std::get<istream>(m_stream));
 }
 
 void SceneSerializer::visit(SoundNode& sound_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(sound_node);
+    getImpl().serialize(sound_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(sound_node);
+    getImpl().deserialize(sound_node, std::get<istream>(m_stream));
 }
 
 void SceneSerializer::visit(SpriteNode& sprite_node)
 {
   if(getAction() == Action::Serialize)
-    getImpl().serialize(sprite_node);
+    getImpl().serialize(sprite_node, std::get<ostream>(m_stream));
   else if(getAction() == Action::Deserialize)
-    getImpl().deserialize(sprite_node);
-}
-
-SceneSerializer::Action SceneSerializer::getAction()
-{
-  return m_action;
-}
-
-void SceneSerializer::setAction(Action action)
-{
-  m_action = action;
+    getImpl().deserialize(sprite_node, std::get<istream>(m_stream));
 }
 
 SceneSerializer::Format SceneSerializer::getFormat()
@@ -82,10 +82,9 @@ SceneSerializer::Format SceneSerializer::getFormat()
   return m_format;
 }
 
-void SceneSerializer::setFormat(Format format)
+SceneSerializer::Action SceneSerializer::getAction()
 {
-  m_format = format;
-  m_impl.reset(nullptr);
+  return m_action;
 }
 
 priv::SceneSerializerImpl& SceneSerializer::getImpl()
@@ -96,6 +95,7 @@ priv::SceneSerializerImpl& SceneSerializer::getImpl()
     {
       case Format::Json:
         m_impl = std::make_unique<priv::JsonSceneSerializerImpl>();
+        break;
     }
   }
 

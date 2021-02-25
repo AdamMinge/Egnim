@@ -5,6 +5,11 @@
 #include <egnim/engine/scene/visitor/priv/scene_serializer_impl.h>
 /* -------------------------------------------------------------------------- */
 
+namespace egnim::scene
+{
+  class Node;
+}
+
 namespace egnim::scene::priv
 {
 
@@ -14,23 +19,27 @@ namespace egnim::scene::priv
     explicit JsonSceneSerializerImpl();
     ~JsonSceneSerializerImpl() override;
 
-    void serialize(AnimatedSpriteNode &animated_sprite_node) override;
-    void deserialize(AnimatedSpriteNode &animated_sprite_node) override;
+    void serialize(const AnimatedSpriteNode &animated_sprite_node, std::ostream& stream) override;
+    void deserialize(AnimatedSpriteNode &animated_sprite_node, std::istream& stream) override;
 
-    void serialize(LabelNode &label_node) override;
-    void deserialize(LabelNode &label_node) override;
+    void serialize(const LabelNode &label_node, std::ostream& stream) override;
+    void deserialize(LabelNode &label_node, std::istream& stream) override;
 
-    void serialize(MusicNode &music_node) override;
-    void deserialize(MusicNode &music_node) override;
+    void serialize(const MusicNode &music_node, std::ostream& stream) override;
+    void deserialize(MusicNode &music_node, std::istream& stream) override;
 
-    void serialize(SceneNode &scene_node) override;
-    void deserialize(SceneNode &scene_node) override;
+    void serialize(const SceneNode &scene_node, std::ostream& stream) override;
+    void deserialize(SceneNode &scene_node, std::istream& stream) override;
 
-    void serialize(SoundNode &sound_node) override;
-    void deserialize(SoundNode &sound_node) override;
+    void serialize(const SoundNode &sound_node, std::ostream& stream) override;
+    void deserialize(SoundNode &sound_node, std::istream& stream) override;
 
-    void serialize(SpriteNode &sprite_node) override;
-    void deserialize(SpriteNode &sprite_node) override;
+    void serialize(const SpriteNode &sprite_node, std::ostream& stream) override;
+    void deserialize(SpriteNode &sprite_node, std::istream& stream) override;
+
+  private:
+    void serialize(const Node &node, std::ostream& stream);
+    void deserialize(Node &node, std::istream& stream);
   };
 
 } // namespace egnim::scene::priv

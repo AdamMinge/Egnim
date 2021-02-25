@@ -36,9 +36,11 @@ namespace egnim::scene
 
     void attachChild(std::unique_ptr<Node> node);
     std::unique_ptr<Node> detachChild(const Node& node);
+    [[nodiscard]] const std::vector<std::unique_ptr<Node>>& getChildren() const;
 
     void attachComponent(std::unique_ptr<Component> component);
     std::unique_ptr<Component> attachComponent(const Component& component);
+    [[nodiscard]] const ComponentContainer& getComponentContainer() const;
 
     void setCameraMask(size_t mask, bool applyChildren = true);
     size_t getCameraMask() const;

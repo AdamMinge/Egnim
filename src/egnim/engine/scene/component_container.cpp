@@ -25,7 +25,16 @@ void ComponentContainer::add(std::unique_ptr<Component> component)
   m_components.push_back(std::move(component));
 }
 
-std::unique_ptr<Component> ComponentContainer::remove(const Component& component)
+void ComponentContainer::remove(const Component& component)
+{
+  auto found = std::find_if(m_components.begin(), m_components.end(), [&component](auto& comp){
+    return comp.get() == &component;
+  });
+
+  m_components.erase(found);
+}
+
+std::unique_ptr<Component> ComponentContainer::take(const Component& component)
 {
   auto found = std::find_if(m_components.begin(), m_components.end(), [&component](auto& comp){
     return comp.get() == &component;
@@ -38,6 +47,11 @@ std::unique_ptr<Component> ComponentContainer::remove(const Component& component
   comp->setOwner(nullptr);
   m_components.erase(found);
   return comp;
+}
+
+const std::vector<std::unique_ptr<Component>>& ComponentContainer::getComponents() const
+{
+  return m_components;
 }
 
 bool ComponentContainer::empty() const
