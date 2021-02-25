@@ -5,6 +5,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/camera.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
@@ -38,6 +39,11 @@ const Camera& SceneNode::getCamera(std::string_view id) const
 {
   assert(m_cameras.contains(id));
   return *m_cameras.at(id);
+}
+
+void SceneNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 } // namespace egnim::scene

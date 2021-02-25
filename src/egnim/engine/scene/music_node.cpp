@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/music_node.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
@@ -90,6 +91,11 @@ bool MusicNode::isPaused()
 bool MusicNode::isStopped()
 {
   return m_current_music && m_current_music->getStatus() == sf::Music::Stopped;
+}
+
+void MusicNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 } // namespace egnim::scene

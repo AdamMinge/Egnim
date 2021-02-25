@@ -27,7 +27,12 @@ set(sources
         ${source_root}/scene/animated_sprite_node.cpp
         ${source_root}/scene/camera.cpp
         ${source_root}/scene/scene_node.cpp
-        ${source_root}/scene/node_factory.cpp)
+        ${source_root}/scene/node_factory.cpp
+
+        ${source_root}/scene/visitor/scene_serializer.cpp
+        ${source_root}/scene/visitor/priv/scene_serializer_impl.h
+        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.h
+        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.cpp)
 
 set(includes
         ${include_root}/../config.h
@@ -53,7 +58,10 @@ set(includes
         ${include_root}/scene/animated_sprite_node.h
         ${include_root}/scene/camera.h
         ${include_root}/scene/scene_node.h
-        ${include_root}/scene/node_factory.h)
+        ${include_root}/scene/node_factory.h
+
+        ${include_root}/scene/visitor/scene_visitor.h
+        ${include_root}/scene/visitor/scene_serializer.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
@@ -61,15 +69,14 @@ set(resources)
 # -------------------------------------------------------------------------------------------------- #
 find_package(SFML REQUIRED COMPONENTS graphics audio system network)
 find_package(box2d REQUIRED)
+find_package(nlohmann_json REQUIRED)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- create application target ------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-
-message("RPCLIB_INCLUDE_DIR = ${RPCLIB_FOUND}")
-
 egnim_add_library(egnim-engine
         SOURCES ${sources} ${includes} ${resources}
-        DEPENDS sfml-graphics sfml-audio sfml-system box2d)
+        DEPENDS sfml-graphics sfml-audio sfml-system
+                box2d nlohmann_json::nlohmann_json)
 
 set_target_properties(egnim-engine
         PROPERTIES CXX_STANDARD 20)

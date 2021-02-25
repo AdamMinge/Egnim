@@ -28,6 +28,8 @@ namespace egnim::scene
     Camera& getCamera(std::string_view id);
     const Camera& getCamera(std::string_view id) const;
 
+    void accept(SceneVisitor& visitor) override;
+
   private:
     std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;
   };

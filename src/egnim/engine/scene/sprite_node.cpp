@@ -2,6 +2,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/sprite_node.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
@@ -28,6 +29,11 @@ const sf::Texture& SpriteNode::getTexture() const
 const sf::IntRect& SpriteNode::getTextureRect() const
 {
   return m_sprite.getTextureRect();
+}
+
+void SpriteNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 void SpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const

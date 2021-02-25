@@ -2,6 +2,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/animated_sprite_node.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */
@@ -45,6 +46,11 @@ std::string_view AnimatedSpriteNode::getCurrentAnimation()
     return m_current_animation->first;
   else
     return std::string_view{};
+}
+
+void AnimatedSpriteNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 void AnimatedSpriteNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)

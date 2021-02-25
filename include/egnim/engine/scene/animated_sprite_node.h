@@ -27,6 +27,8 @@ namespace egnim::scene
     void setCurrentAnimation(std::string_view id);
     std::string_view getCurrentAnimation();
 
+    void accept(SceneVisitor& visitor) override;
+
   protected:
     void updateCurrent(core::CommandQueue& command_queue, sf::Time dt) override;
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;

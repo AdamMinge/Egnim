@@ -2,6 +2,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/label_node.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -99,6 +100,11 @@ const sf::Color& LabelNode::getOutlineColor() const
 float LabelNode::getOutlineThickness() const
 {
   return m_label.getOutlineThickness();
+}
+
+void LabelNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 void LabelNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const

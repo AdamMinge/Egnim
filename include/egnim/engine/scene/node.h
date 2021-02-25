@@ -25,6 +25,7 @@ namespace egnim::scene
 {
   class Component;
   class ComponentContainer;
+  class SceneVisitor;
 
   class Node : public core::Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
@@ -47,6 +48,8 @@ namespace egnim::scene
 
     void update(core::CommandQueue& command_queue, sf::Time dt);
     void onCommand(const core::Command& command, sf::Time dt);
+
+    virtual void accept(SceneVisitor& visitor) = 0;
 
   protected:
     explicit Node();

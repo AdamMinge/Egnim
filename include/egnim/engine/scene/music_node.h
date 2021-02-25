@@ -46,6 +46,8 @@ namespace egnim::scene
     bool isPaused();
     bool isStopped();
 
+    void accept(SceneVisitor& visitor) override;
+
   private:
     core::BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;

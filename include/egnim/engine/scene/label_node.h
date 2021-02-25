@@ -42,6 +42,8 @@ namespace egnim::scene
     const sf::Color& getOutlineColor() const;
     float getOutlineThickness() const;
 
+    void accept(SceneVisitor& visitor) override;
+
   protected:
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 

@@ -26,6 +26,8 @@ namespace egnim::scene
     const sf::Texture& getTexture() const;
     const sf::IntRect& getTextureRect() const;
 
+    void accept(SceneVisitor& visitor) override;
+
   protected:
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 

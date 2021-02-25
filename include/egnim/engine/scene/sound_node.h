@@ -53,6 +53,8 @@ namespace egnim::scene
     void pauseAllSounds();
     void startAllSounds();
 
+    void accept(SceneVisitor& visitor) override;
+
   protected:
     void updateCurrent(core::CommandQueue& command_queue, sf::Time dt) override;
 

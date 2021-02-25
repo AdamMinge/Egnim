@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/sound_node.h>
+#include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
@@ -83,6 +84,11 @@ void SoundNode::pauseAllSounds()
 void SoundNode::startAllSounds()
 {
   setAllSounds(sf::Sound::Playing);
+}
+
+void SoundNode::accept(SceneVisitor& visitor)
+{
+  visitor.visit(*this);
 }
 
 void SoundNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
