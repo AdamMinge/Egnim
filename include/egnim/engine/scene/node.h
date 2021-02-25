@@ -26,6 +26,7 @@ namespace egnim::scene
   class Component;
   class ComponentContainer;
   class SceneVisitor;
+  class SceneNode;
 
   class Node : public core::Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
@@ -45,8 +46,17 @@ namespace egnim::scene
     void setCameraMask(size_t mask, bool applyChildren = true);
     size_t getCameraMask() const;
 
+    void setName(std::string_view name);
+    std::string_view getName() const;
+
     sf::Vector2f getWorldPosition() const;
     sf::Transform getWorldTransform() const;
+
+    SceneNode* getScene();
+
+    template<typename TYPE>
+    TYPE* findChildByName(std::string_view name);
+    Node* findChildByName(std::string_view name);
 
     void update(core::CommandQueue& command_queue, sf::Time dt);
     void onCommand(const core::Command& command, sf::Time dt);
@@ -71,7 +81,14 @@ namespace egnim::scene
     std::unique_ptr<ComponentContainer> m_components;
     Node* m_parent;
     size_t m_camera_mask;
+    std::string_view m_name;
   };
+
+  template<typename TYPE>
+  TYPE* Node::findChildByName(std::string_view name)
+  {
+    return dynamic_cast<TYPE*>(findChildByName(name));
+  }
 
 } // namespace egnim::scene
 

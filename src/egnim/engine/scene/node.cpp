@@ -6,6 +6,7 @@
 #include <egnim/engine/scene/camera.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
+#include <regex>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -14,7 +15,8 @@ namespace egnim::scene
 Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
-  m_camera_mask(Camera::CameraFlag::DEFAULT)
+  m_camera_mask(Camera::CameraFlag::DEFAULT),
+  m_name("")
 {
 
 }
@@ -82,6 +84,16 @@ size_t Node::getCameraMask() const
   return m_camera_mask;
 }
 
+void Node::setName(std::string_view name)
+{
+  m_name = name;
+}
+
+std::string_view Node::getName() const
+{
+  return m_name;
+}
+
 sf::Vector2f Node::getWorldPosition() const
 {
   return getWorldTransform() * sf::Vector2f{};
@@ -94,6 +106,28 @@ sf::Transform Node::getWorldTransform() const
     transform = node->getTransform() * transform;
 
   return transform;
+}
+
+SceneNode* Node::getScene()
+{
+  auto current_node = this;
+  while(current_node->m_parent && !dynamic_cast<SceneNode*>(current_node))
+    current_node = current_node->m_parent;
+
+  return dynamic_cast<SceneNode*>(current_node);
+}
+
+Node* Node::findChildByName(std::string_view name)
+{
+  std::regex name_regex(name.begin(), name.end());
+  for (const auto &child : m_children)
+  {
+    auto child_name = child->getName();
+    if(std::regex_match(child_name.begin(), child_name.end(), name_regex))
+      return child.get();
+  }
+
+  return nullptr;
 }
 
 void Node::update(core::CommandQueue &command_queue, sf::Time dt)
