@@ -7,6 +7,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 #include <regex>
+#include <cmath>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -94,6 +95,15 @@ std::string_view Node::getName() const
   return m_name;
 }
 
+float Node::getWorldRotation() const
+{
+  auto rotation = 0.f;
+  for (const Node *node = this; node != nullptr; node = node->m_parent)
+    rotation += node->getRotation();
+
+  return fmodf(rotation, 360.0f);
+}
+
 sf::Vector2f Node::getWorldPosition() const
 {
   return getWorldTransform() * sf::Vector2f{};
@@ -115,6 +125,20 @@ SceneNode* Node::getScene()
     current_node = current_node->m_parent;
 
   return dynamic_cast<SceneNode*>(current_node);
+}
+
+Node* Node::getParent()
+{
+  return m_parent;
+}
+
+Node* Node::getRoot()
+{
+  auto current_node = this;
+  while(current_node->m_parent)
+    current_node = current_node->m_parent;
+
+  return current_node;
 }
 
 Node* Node::findChildByName(std::string_view name)

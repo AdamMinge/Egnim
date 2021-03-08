@@ -30,17 +30,10 @@ set(sources
         ${source_root}/scene/node_factory.cpp
 
         ${source_root}/physics/physics_world.cpp
+        ${source_root}/physics/physics_body.cpp
         ${source_root}/physics/static_body.cpp
         ${source_root}/physics/kinematic_body.cpp
         ${source_root}/physics/dynamic_body.cpp
-        ${source_root}/physics/priv/physics_world_impl.h
-        ${source_root}/physics/priv/physics_world_impl.cpp
-        ${source_root}/physics/priv/static_body_impl.h
-        ${source_root}/physics/priv/static_body_impl.cpp
-        ${source_root}/physics/priv/kinematic_body_impl.h
-        ${source_root}/physics/priv/kinematic_body_impl.cpp
-        ${source_root}/physics/priv/dynamic_body_impl.h
-        ${source_root}/physics/priv/dynamic_body_impl.cpp
 
         ${source_root}/scene/visitor/scene_serializer.cpp
         ${source_root}/scene/visitor/priv/scene_serializer_impl.h
@@ -74,6 +67,7 @@ set(includes
         ${include_root}/scene/node_factory.h
 
         ${include_root}/physics/physics_world.h
+        ${include_root}/physics/physics_body.h
         ${include_root}/physics/static_body.h
         ${include_root}/physics/kinematic_body.h
         ${include_root}/physics/dynamic_body.h

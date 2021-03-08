@@ -49,10 +49,13 @@ namespace egnim::scene
     void setName(std::string_view name);
     std::string_view getName() const;
 
-    sf::Vector2f getWorldPosition() const;
-    sf::Transform getWorldTransform() const;
+    [[nodiscard]] float getWorldRotation() const;
+    [[nodiscard]] sf::Vector2f getWorldPosition() const;
+    [[nodiscard]] sf::Transform getWorldTransform() const;
 
-    SceneNode* getScene();
+    [[nodiscard]] SceneNode* getScene();
+    [[nodiscard]] Node* getParent();
+    [[nodiscard]] Node* getRoot();
 
     template<typename TYPE>
     TYPE* findChildByName(std::string_view name);

@@ -25,4 +25,9 @@ Node* Component::getOwner()
   return m_owner;
 }
 
+const Node* Component::getOwner() const
+{
+  return m_owner;
+}
+
 } // namespace egnim::scene

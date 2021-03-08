@@ -5,21 +5,23 @@
 #include <SFML/System/Vector2.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
+#include <list>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::physics::priv
-{
-  class WorldImpl;
-}
+class b2World;
 
 namespace egnim::physics
 {
 
-  class World
+  class PhysicsBody;
+
+  class PhysicsWorld
   {
+    friend PhysicsBody;
+
   public:
-    explicit World(const sf::Vector2f& gravity);
-    ~World();
+    explicit PhysicsWorld(const sf::Vector2f& gravity);
+    ~PhysicsWorld();
 
     void update(float time_step, int32_t velocity_iterations, int32_t position_iterations);
 
@@ -27,7 +29,13 @@ namespace egnim::physics
     [[nodiscard]] sf::Vector2f getGravity() const;
 
   private:
-    std::unique_ptr<priv::WorldImpl> m_impl;
+    b2Body* createBody(const b2BodyDef* b2_body_def);
+    void destroyBody(b2Body* b2_body);
+
+    std::list<PhysicsBody*> getPhysicsBody();
+
+  private:
+    std::unique_ptr<b2World> m_b2_world;
   };
 
 } // namespace egnim::physics

@@ -20,9 +20,11 @@ namespace egnim::scene
 
     virtual void update(sf::Time dt) = 0;
 
+    [[nodiscard]] Node* getOwner();
+    [[nodiscard]] const Node* getOwner() const;
+
   protected:
     void setOwner(Node* owner);
-    Node* getOwner();
 
   private:
     Node* m_owner;
