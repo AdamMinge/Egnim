@@ -11,9 +11,9 @@ namespace egnim::physics {
 
 PhysicsBody::PhysicsBody(PhysicsWorld& physics_world, Type type) :
   m_physics_world(physics_world),
-  m_b2_body(createInternalBody(type))
+  m_b2_body(nullptr)
 {
-
+  createInternalBody(type);
 }
 
 PhysicsBody::~PhysicsBody()
@@ -49,14 +49,14 @@ void PhysicsBody::update(sf::Time dt)
 
 }
 
-PhysicsWorld& PhysicsBody::getPhysicsWorld()
+PhysicsWorld* PhysicsBody::getPhysicsWorld()
 {
-  return m_physics_world;
+  return std::addressof(m_physics_world);
 }
 
-const PhysicsWorld& PhysicsBody::getPhysicsWorld() const
+const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 {
-  return m_physics_world;
+  return std::addressof(m_physics_world);
 }
 
 void PhysicsBody::setType(Type type)
@@ -136,21 +136,27 @@ const std::vector<std::unique_ptr<PhysicsShape>>& PhysicsBody::getPhysicsShapes(
   return m_physics_shapes;
 }
 
-b2Body* PhysicsBody::createInternalBody(Type type)
+void PhysicsBody::createInternalBody(Type type)
 {
   destroyInternalBody();
+
+  if(!getPhysicsWorld())
+    m_b2_body = nullptr;
 
   b2BodyDef body_def;
   body_def.type = static_cast<b2BodyType>(type);
   body_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-  return getPhysicsWorld().createInternalBody(&body_def);;
+  m_b2_body = getPhysicsWorld()->createInternalBody(&body_def);
 }
 
 void PhysicsBody::destroyInternalBody()
 {
-  getPhysicsWorld().destroyInternalBody(m_b2_body);
-  m_b2_body = nullptr;
+  if(m_b2_body)
+  {
+    getPhysicsWorld()->destroyInternalBody(m_b2_body);
+    m_b2_body = nullptr;
+  }
 }
 
 void PhysicsBody::beforeSimulation()

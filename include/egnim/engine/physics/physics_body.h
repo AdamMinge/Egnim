@@ -46,8 +46,8 @@ namespace egnim::physics
 
     void update(sf::Time dt) override;
 
-    [[nodiscard]] PhysicsWorld& getPhysicsWorld();
-    [[nodiscard]] const PhysicsWorld& getPhysicsWorld() const;
+    [[nodiscard]] PhysicsWorld* getPhysicsWorld();
+    [[nodiscard]] const PhysicsWorld* getPhysicsWorld() const;
 
     void setType(Type type);
     [[nodiscard]] Type getType() const;
@@ -69,7 +69,7 @@ namespace egnim::physics
     [[nodiscard]] const std::vector<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
 
   protected:
-    [[nodiscard]] b2Body* createInternalBody(Type type);
+    void createInternalBody(Type type);
     void destroyInternalBody();
 
   private:

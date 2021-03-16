@@ -3,8 +3,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
-/* --------------------------------- Standard ------------------------------- */
-#include <cassert>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -125,26 +123,29 @@ const PhysicsBody* PhysicsShape::getPhysicsBody() const
   return m_physics_body;
 }
 
-b2Fixture* PhysicsShape::createInternalFixture()
+void PhysicsShape::createInternalFixture()
 {
   destroyInternalFixture();
 
   if(!getPhysicsBody())
-    return nullptr;
+    m_b2_fixture = nullptr;
+
+  auto internal_shape = createInternalShape();
+  assert(internal_shape);
 
   b2FixtureDef fixture_def;
   fixture_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
   fixture_def.density = getDensity();
   fixture_def.friction = getFriction();
   fixture_def.restitution = getRestitution();
-  fixture_def.shape = std::addressof(createInternalShape());
+  fixture_def.shape = internal_shape.get();
 
-  return getPhysicsBody()->createInternalFixture(&fixture_def);
+  m_b2_fixture = getPhysicsBody()->createInternalFixture(&fixture_def);
 }
 
 void PhysicsShape::destroyInternalFixture()
 {
-  if(getPhysicsBody())
+  if(m_b2_fixture)
     getPhysicsBody()->destroyInternalFixture(m_b2_fixture);
 
   m_b2_fixture = nullptr;
@@ -164,7 +165,7 @@ void PhysicsShape::setPhysicsBody(PhysicsBody* physics_body)
 {
   destroyInternalFixture();
   m_physics_body = physics_body;
-  m_b2_fixture = createInternalFixture();
+  createInternalFixture();
 }
 
 /* ------------------------------ PhysicsShapeCircle ------------------------ */
@@ -177,9 +178,20 @@ PhysicsShapeCircle::PhysicsShapeCircle(float radius,
 
 }
 
-b2Shape& PhysicsShapeCircle::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeCircle::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeCircle::setRadius(float radius)
+{
+  m_radius = radius;
+  createInternalFixture();
+}
+
+float PhysicsShapeCircle::getRadius() const
+{
+  return m_radius;
 }
 
 /* -------------------------------- PhysicsShapeBox ------------------------- */
@@ -192,9 +204,20 @@ PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size,
 
 }
 
-b2Shape& PhysicsShapeBox::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeBox::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeBox::setSize(const sf::Vector2f& size)
+{
+  m_size = size;
+  createInternalFixture();
+}
+
+const sf::Vector2f& PhysicsShapeBox::getSize() const
+{
+  return m_size;
 }
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
@@ -207,9 +230,20 @@ PhysicsShapePolygon::PhysicsShapePolygon(std::list<sf::Vector2f> points,
 
 }
 
-b2Shape& PhysicsShapePolygon::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapePolygon::createInternalShape() const
 {
 
+}
+
+void PhysicsShapePolygon::setPoints(std::list<sf::Vector2f> points)
+{
+  m_points = std::move(points);
+  createInternalFixture();
+}
+
+const std::list<sf::Vector2f>& PhysicsShapePolygon::getPoints() const
+{
+  return m_points;
 }
 
 /* --------------------------- PhysicsShapeEdgeSegment ---------------------- */
@@ -223,9 +257,36 @@ PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, cons
 
 }
 
-b2Shape& PhysicsShapeEdgeSegment::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeEdgeSegment::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeEdgeSegment::setPositions(const sf::Vector2f& first, const sf::Vector2f& second)
+{
+  m_first = first;
+  m_second = second;
+  createInternalFixture();
+}
+
+void PhysicsShapeEdgeSegment::setFirstPosition(const sf::Vector2f& first)
+{
+  setPositions(first, getSecondPosition());
+}
+
+void PhysicsShapeEdgeSegment::setSecondPosition(const sf::Vector2f& second)
+{
+  setPositions(getFirstPosition(), second);
+}
+
+const sf::Vector2f& PhysicsShapeEdgeSegment::getFirstPosition() const
+{
+  return m_first;
+}
+
+const sf::Vector2f& PhysicsShapeEdgeSegment::getSecondPosition() const
+{
+  return m_second;
 }
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
@@ -238,9 +299,20 @@ PhysicsShapeEdgeBox::PhysicsShapeEdgeBox(const sf::Vector2f& size,
 
 }
 
-b2Shape& PhysicsShapeEdgeBox::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeEdgeBox::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeEdgeBox::setSize(const sf::Vector2f& size)
+{
+  m_size = size;
+  createInternalFixture();
+}
+
+const sf::Vector2f& PhysicsShapeEdgeBox::getSize() const
+{
+  return m_size;
 }
 
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
@@ -253,9 +325,20 @@ PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
 
 }
 
-b2Shape& PhysicsShapeEdgePolygon::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeEdgePolygon::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeEdgePolygon::setPoints(std::list<sf::Vector2f> points)
+{
+  m_points = std::move(points);
+  createInternalFixture();
+}
+
+const std::list<sf::Vector2f>& PhysicsShapeEdgePolygon::getPoints() const
+{
+  return m_points;
 }
 
 /* ----------------------------- PhysicsShapeEdgeChain ---------------------- */
@@ -268,9 +351,20 @@ PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
 
 }
 
-b2Shape& PhysicsShapeEdgeChain::createInternalShape() const
+std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
 {
 
+}
+
+void PhysicsShapeEdgeChain::setPoints(std::list<sf::Vector2f> points)
+{
+  m_points = std::move(points);
+  createInternalFixture();
+}
+
+const std::list<sf::Vector2f>& PhysicsShapeEdgeChain::getPoints() const
+{
+  return m_points;
 }
 
 } // namespace egnim::physics

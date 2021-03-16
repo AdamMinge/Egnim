@@ -72,11 +72,11 @@ namespace egnim::physics
   protected:
     explicit PhysicsShape(Type type, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
 
-    [[nodiscard]] b2Fixture* createInternalFixture();
+    void createInternalFixture();
     void destroyInternalFixture();
     void updateInternalFixture();
 
-    [[nodiscard]] virtual b2Shape& createInternalShape() const = 0;
+    [[nodiscard]] virtual std::unique_ptr<b2Shape> createInternalShape() const = 0;
 
   private:
     void setPhysicsBody(PhysicsBody* physics_body);
@@ -95,8 +95,11 @@ namespace egnim::physics
                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeCircle() override = default;
 
+    void setRadius(float radius);
+    [[nodiscard]] float getRadius() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     float m_radius;
@@ -109,8 +112,11 @@ namespace egnim::physics
                              const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeBox() override = default;
 
+    void setSize(const sf::Vector2f& size);
+    [[nodiscard]] const sf::Vector2f& getSize() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     sf::Vector2f m_size;
@@ -123,8 +129,11 @@ namespace egnim::physics
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapePolygon() override = default;
 
+    void setPoints(std::list<sf::Vector2f> points);
+    [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     std::list<sf::Vector2f> m_points;
@@ -137,8 +146,15 @@ namespace egnim::physics
                                      const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeSegment() override = default;
 
+    void setPositions(const sf::Vector2f& first, const sf::Vector2f& second);
+    void setFirstPosition(const sf::Vector2f& first);
+    void setSecondPosition(const sf::Vector2f& second);
+
+    [[nodiscard]] const sf::Vector2f& getFirstPosition() const;
+    [[nodiscard]] const sf::Vector2f& getSecondPosition() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     sf::Vector2f m_first;
@@ -151,8 +167,11 @@ namespace egnim::physics
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeBox() override = default;
 
+    void setSize(const sf::Vector2f& size);
+    [[nodiscard]] const sf::Vector2f& getSize() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     sf::Vector2f m_size;
@@ -164,8 +183,11 @@ namespace egnim::physics
                                      const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgePolygon() override = default;
 
+    void setPoints(std::list<sf::Vector2f> points);
+    [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     std::list<sf::Vector2f> m_points;
@@ -177,8 +199,11 @@ namespace egnim::physics
                                    const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeChain() override = default;
 
+    void setPoints(std::list<sf::Vector2f> points);
+    [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
+
   protected:
-    [[nodiscard]] b2Shape& createInternalShape() const override;
+    [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     std::list<sf::Vector2f> m_points;
