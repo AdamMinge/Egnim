@@ -40,7 +40,7 @@ namespace egnim::scene
     [[nodiscard]] const std::vector<std::unique_ptr<Node>>& getChildren() const;
 
     void attachComponent(std::unique_ptr<Component> component);
-    std::unique_ptr<Component> attachComponent(const Component& component);
+    std::unique_ptr<Component> detachComponent(const Component& component);
     [[nodiscard]] const ComponentContainer& getComponentContainer() const;
 
     void setCameraMask(size_t mask, bool applyChildren = true);
@@ -78,6 +78,8 @@ namespace egnim::scene
     void drawChildren(sf::RenderTarget& target, sf::RenderStates states) const;
 
     bool isVisibleByTarget(sf::RenderTarget& target) const;
+
+    void setParent(Node* parent);
 
   private:
     std::vector<std::unique_ptr<Node>> m_children;

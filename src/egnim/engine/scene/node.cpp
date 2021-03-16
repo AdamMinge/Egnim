@@ -26,7 +26,7 @@ Node::~Node() = default;
 
 void Node::attachChild(std::unique_ptr<Node> node)
 {
-  node->m_parent = this;
+  node->setParent(this);
   m_children.push_back(std::move(node));
 }
 
@@ -41,7 +41,7 @@ std::unique_ptr<Node> Node::detachChild(const Node &node)
     return nullptr;
 
   auto child = std::move(*found);
-  child->m_parent = nullptr;
+  child->setParent(nullptr);
   m_children.erase(found);
   return child;
 }
@@ -57,7 +57,7 @@ void Node::attachComponent(std::unique_ptr<Component> component)
   m_components->add(std::move(component));
 }
 
-std::unique_ptr<Component> Node::attachComponent(const Component &component)
+std::unique_ptr<Component> Node::detachComponent(const Component &component)
 {
   assert(m_components);
   return m_components->take(component);
@@ -205,6 +205,11 @@ bool Node::isVisibleByTarget(sf::RenderTarget& target) const
 {
   auto target_camera = Camera::getActiveCamera(target);
   return target_camera == nullptr || target_camera->getViewFlag() & m_camera_mask;
+}
+
+void Node::setParent(Node* parent)
+{
+  m_parent = parent;
 }
 
 } // namespace egnim::scene

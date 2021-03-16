@@ -9,6 +9,7 @@
 /* -------------------------------------------------------------------------- */
 
 class b2World;
+struct b2BodyDef;
 
 namespace egnim::physics
 {
@@ -29,8 +30,8 @@ namespace egnim::physics
     [[nodiscard]] sf::Vector2f getGravity() const;
 
   private:
-    b2Body* createBody(const b2BodyDef* b2_body_def);
-    void destroyBody(b2Body* b2_body);
+    b2Body* createInternalBody(const b2BodyDef* b2_body_def);
+    void destroyInternalBody(b2Body* b2_body);
 
     std::list<PhysicsBody*> getPhysicsBody();
 

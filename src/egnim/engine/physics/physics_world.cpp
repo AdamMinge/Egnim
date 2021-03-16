@@ -44,13 +44,13 @@ sf::Vector2f PhysicsWorld::getGravity() const
   return sf::Vector2f(b2_vec.x, b2_vec.y);
 }
 
-b2Body* PhysicsWorld::createBody(const b2BodyDef* b2_body_def)
+b2Body* PhysicsWorld::createInternalBody(const b2BodyDef* b2_body_def)
 {
   auto b2_body = m_b2_world->CreateBody(b2_body_def);
   return b2_body;
 }
 
-void PhysicsWorld::destroyBody(b2Body* b2_body)
+void PhysicsWorld::destroyInternalBody(b2Body* b2_body)
 {
   m_b2_world->DestroyBody(b2_body);
 }
