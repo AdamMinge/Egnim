@@ -91,35 +91,43 @@ namespace egnim::physics
   class PhysicsShapeCircle : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeCircle(float radius,
+    explicit PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeCircle() override = default;
 
     void setRadius(float radius);
     [[nodiscard]] float getRadius() const;
 
+    void setOffset(const sf::Vector2f& offset);
+    [[nodiscard]] const sf::Vector2f& getOffset() const;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     float m_radius;
+    sf::Vector2f m_offset;
   };
 
   class PhysicsShapeBox : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeBox(const sf::Vector2f& size,
+    explicit PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                              const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeBox() override = default;
 
     void setSize(const sf::Vector2f& size);
     [[nodiscard]] const sf::Vector2f& getSize() const;
 
+    void setOffset(const sf::Vector2f& offset);
+    [[nodiscard]] const sf::Vector2f& getOffset() const;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     sf::Vector2f m_size;
+    sf::Vector2f m_offset;
   };
 
   class PhysicsShapePolygon : public PhysicsShape
@@ -163,18 +171,22 @@ namespace egnim::physics
 
   class PhysicsShapeEdgeBox : public PhysicsShape
   {
-    explicit PhysicsShapeEdgeBox(const sf::Vector2f& size,
+    explicit PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeBox() override = default;
 
     void setSize(const sf::Vector2f& size);
     [[nodiscard]] const sf::Vector2f& getSize() const;
 
+    void setOffset(const sf::Vector2f& offset);
+    [[nodiscard]] const sf::Vector2f& getOffset() const;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
     sf::Vector2f m_size;
+    sf::Vector2f m_offset;
   };
 
   class PhysicsShapeEdgePolygon : public PhysicsShape

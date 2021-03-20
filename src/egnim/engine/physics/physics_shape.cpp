@@ -1,5 +1,9 @@
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_fixture.h>
+#include <box2d/b2_circle_shape.h>
+#include <box2d/b2_polygon_shape.h>
+#include <box2d/b2_edge_shape.h>
+#include <box2d/b2_chain_shape.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
@@ -170,17 +174,22 @@ void PhysicsShape::setPhysicsBody(PhysicsBody* physics_body)
 
 /* ------------------------------ PhysicsShapeCircle ------------------------ */
 
-PhysicsShapeCircle::PhysicsShapeCircle(float radius,
+PhysicsShapeCircle::PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
                                        const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::Circle, physics_material),
-  m_radius(radius)
+  m_radius(radius),
+  m_offset(offset)
 {
 
 }
 
 std::unique_ptr<b2Shape> PhysicsShapeCircle::createInternalShape() const
 {
+  auto b2_circle_shape = std::make_unique<b2CircleShape>();
+  b2_circle_shape->m_p.Set(m_offset.x, m_offset.y);
+  b2_circle_shape->m_radius = m_radius;
 
+  return b2_circle_shape;
 }
 
 void PhysicsShapeCircle::setRadius(float radius)
@@ -194,19 +203,34 @@ float PhysicsShapeCircle::getRadius() const
   return m_radius;
 }
 
+void PhysicsShapeCircle::setOffset(const sf::Vector2f& offset)
+{
+  m_offset = offset;
+  createInternalFixture();
+}
+
+const sf::Vector2f& PhysicsShapeCircle::getOffset() const
+{
+  return m_offset;
+}
+
 /* -------------------------------- PhysicsShapeBox ------------------------- */
 
-PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size,
+PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                  const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::Box, physics_material),
-  m_size(size)
+  m_size(size),
+  m_offset(offset)
 {
 
 }
 
 std::unique_ptr<b2Shape> PhysicsShapeBox::createInternalShape() const
 {
+  auto b2_box_shape = std::make_unique<b2PolygonShape>();
+  b2_box_shape->SetAsBox(m_size.x, m_size.y, b2Vec2(m_offset.x, m_offset.y), 0);
 
+  return b2_box_shape;
 }
 
 void PhysicsShapeBox::setSize(const sf::Vector2f& size)
@@ -218,6 +242,17 @@ void PhysicsShapeBox::setSize(const sf::Vector2f& size)
 const sf::Vector2f& PhysicsShapeBox::getSize() const
 {
   return m_size;
+}
+
+void PhysicsShapeBox::setOffset(const sf::Vector2f& offset)
+{
+  m_offset = offset;
+  createInternalFixture();
+}
+
+const sf::Vector2f& PhysicsShapeBox::getOffset() const
+{
+  return m_offset;
 }
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
@@ -232,7 +267,16 @@ PhysicsShapePolygon::PhysicsShapePolygon(std::list<sf::Vector2f> points,
 
 std::unique_ptr<b2Shape> PhysicsShapePolygon::createInternalShape() const
 {
+  auto b2_polygon_shape = std::make_unique<b2PolygonShape>();
+  auto b2_vertices = std::vector<b2Vec2>(m_points.size());
+  auto b2_vec_index = 0;
 
+  for(auto point : m_points)
+    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+
+  b2_polygon_shape->Set(b2_vertices.data(), b2_vertices.size());
+
+  return b2_polygon_shape;
 }
 
 void PhysicsShapePolygon::setPoints(std::list<sf::Vector2f> points)
@@ -259,7 +303,10 @@ PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, cons
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeSegment::createInternalShape() const
 {
+  auto b2_edge_shape = std::make_unique<b2EdgeShape>();
+  b2_edge_shape->SetTwoSided(b2Vec2(m_first.x, m_first.y), b2Vec2(m_second.x, m_second.y));
 
+  return b2_edge_shape;
 }
 
 void PhysicsShapeEdgeSegment::setPositions(const sf::Vector2f& first, const sf::Vector2f& second)
@@ -291,17 +338,28 @@ const sf::Vector2f& PhysicsShapeEdgeSegment::getSecondPosition() const
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
 
-PhysicsShapeEdgeBox::PhysicsShapeEdgeBox(const sf::Vector2f& size,
+PhysicsShapeEdgeBox::PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                          const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::EdgeBox, physics_material),
-  m_size(size)
+  m_size(size),
+  m_offset(offset)
 {
 
 }
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeBox::createInternalShape() const
 {
+  auto b2_chain_shape = std::make_unique<b2ChainShape>();
+  auto b2_vertices = std::array<b2Vec2, 4>();
+  auto b2_offset = b2Vec2(m_offset.x, m_offset.y);
 
+  b2_vertices[0] = b2Vec2(-0.5f, 0.5f) + b2_offset;
+  b2_vertices[1] = b2Vec2(-0.5f, -0.5f) + b2_offset;
+  b2_vertices[2] = b2Vec2(0.5f, -0.5f) + b2_offset;
+  b2_vertices[3] = b2Vec2(0.5f, 0.5f) + b2_offset;
+
+  b2_chain_shape->CreateLoop(b2_vertices.data(), 4);
+  return b2_chain_shape;
 }
 
 void PhysicsShapeEdgeBox::setSize(const sf::Vector2f& size)
@@ -313,6 +371,17 @@ void PhysicsShapeEdgeBox::setSize(const sf::Vector2f& size)
 const sf::Vector2f& PhysicsShapeEdgeBox::getSize() const
 {
   return m_size;
+}
+
+void PhysicsShapeEdgeBox::setOffset(const sf::Vector2f& offset)
+{
+  m_offset = offset;
+  createInternalFixture();
+}
+
+const sf::Vector2f& PhysicsShapeEdgeBox::getOffset() const
+{
+  return m_offset;
 }
 
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
@@ -327,7 +396,16 @@ PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgePolygon::createInternalShape() const
 {
+  auto b2_chain_shape = std::make_unique<b2ChainShape>();
+  auto b2_vertices = std::vector<b2Vec2>(m_points.size());
+  auto b2_vec_index = 0;
 
+  for(auto point : m_points)
+    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+
+  b2_chain_shape->CreateLoop(b2_vertices.data(), b2_vertices.size());
+
+  return b2_chain_shape;
 }
 
 void PhysicsShapeEdgePolygon::setPoints(std::list<sf::Vector2f> points)
@@ -353,7 +431,16 @@ PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
 {
+  auto b2_chain_shape = std::make_unique<b2ChainShape>();
+  auto b2_vertices = std::vector<b2Vec2>(m_points.size());
+  auto b2_vec_index = 0;
 
+  for(auto point : m_points)
+    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+
+  b2_chain_shape->CreateChain(b2_vertices.data(), b2_vertices.size(), b2_vertices.front(), b2_vertices.back());
+
+  return b2_chain_shape;
 }
 
 void PhysicsShapeEdgeChain::setPoints(std::list<sf::Vector2f> points)
