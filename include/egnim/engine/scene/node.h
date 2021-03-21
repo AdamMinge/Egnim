@@ -13,6 +13,7 @@
 #include <memory>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/object.h>
+#include <egnim/engine/scene/node_iterator.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -64,6 +65,12 @@ namespace egnim::scene
 
     [[nodiscard]] const physics::PhysicsBody* getPhysicsBody() const;
     [[nodiscard]] physics::PhysicsBody* getPhysicsBody();
+
+    [[nodiscard]] NodeIterator begin();
+    [[nodiscard]] ConstNodeIterator cbegin() const;
+
+    [[nodiscard]] NodeIterator end();
+    [[nodiscard]] ConstNodeIterator cend() const;
 
     template<typename TYPE>
     TYPE* findChildByName(std::string_view name);

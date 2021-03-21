@@ -18,7 +18,8 @@ Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
   m_camera_mask(Camera::CameraFlag::DEFAULT),
-  m_name("")
+  m_name(""),
+  m_physics_body(nullptr)
 {
 
 }
@@ -165,6 +166,26 @@ const physics::PhysicsBody* Node::getPhysicsBody() const
 physics::PhysicsBody* Node::getPhysicsBody()
 {
   return m_physics_body;
+}
+
+NodeIterator Node::begin()
+{
+  return NodeIterator(this);
+}
+
+ConstNodeIterator Node::cbegin() const
+{
+  return ConstNodeIterator(this);
+}
+
+NodeIterator Node::end() // NOLINT(readability-convert-member-functions-to-static)
+{
+  return NodeIterator(nullptr);
+}
+
+ConstNodeIterator Node::cend() const // NOLINT(readability-convert-member-functions-to-static)
+{
+  return ConstNodeIterator(nullptr);
 }
 
 Node* Node::findChildByName(std::string_view name)

@@ -52,40 +52,14 @@ void PhysicsWorld::destroyInternalBody(b2Body* b2_body)
 
 void PhysicsWorld::beforeSimulation()
 {
-  std::queue<scene::Node*> nodes;
-  nodes.push(std::addressof(m_scene_node));
-
-  while(nodes.empty())
-  {
-    auto current_node = nodes.front();
-    nodes.pop();
-
-    if(auto physics_body = current_node->getPhysicsBody(); physics_body)
-      physics_body->beforeSimulation();
-
-    auto& children = current_node->getChildren();
-    for(auto& child : children)
-      nodes.push(child.get());
-  }
+  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
+    if(auto physics_body = nodeIter->getPhysicsBody(); physics_body) physics_body->beforeSimulation();
 }
 
 void PhysicsWorld::afterSimulation()
 {
-  std::queue<scene::Node*> nodes;
-  nodes.push(std::addressof(m_scene_node));
-
-  while(nodes.empty())
-  {
-    auto current_node = nodes.front();
-    nodes.pop();
-
-    if(auto physics_body = current_node->getPhysicsBody(); physics_body)
-      physics_body->afterSimulation();
-
-    auto& children = current_node->getChildren();
-    for(auto& child : children)
-      nodes.push(child.get());
-  }
+  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
+    if(auto physics_body = nodeIter->getPhysicsBody(); physics_body) physics_body->afterSimulation();
 }
 
 b2Joint* PhysicsWorld::createInternalJoint(const b2JointDef* b2_joint_def)
