@@ -4,6 +4,7 @@
 #include <egnim/engine/scene/component_container.h>
 #include <egnim/engine/scene/component.h>
 #include <egnim/engine/scene/camera.h>
+#include <egnim/engine/physics/physics_body.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 #include <regex>
@@ -54,13 +55,28 @@ const std::vector<std::unique_ptr<Node>>& Node::getChildren() const
 void Node::attachComponent(std::unique_ptr<Component> component)
 {
   assert(m_components);
+
+  if(auto physics_body = dynamic_cast<physics::PhysicsBody*>(component.get()); physics_body)
+  {
+    assert(m_physics_body == nullptr);
+    m_physics_body = physics_body;
+  }
+
   m_components->add(std::move(component));
 }
 
 std::unique_ptr<Component> Node::detachComponent(const Component &component)
 {
   assert(m_components);
-  return m_components->take(component);
+  auto detached_component = m_components->take(component);
+
+  if(auto physics_body = dynamic_cast<physics::PhysicsBody*>(detached_component.get()); physics_body)
+  {
+    assert(m_physics_body);
+    m_physics_body = nullptr;
+  }
+
+  return detached_component;
 }
 
 const ComponentContainer& Node::getComponentContainer() const
@@ -139,6 +155,16 @@ Node* Node::getRoot()
     current_node = current_node->m_parent;
 
   return current_node;
+}
+
+const physics::PhysicsBody* Node::getPhysicsBody() const
+{
+  return m_physics_body;
+}
+
+physics::PhysicsBody* Node::getPhysicsBody()
+{
+  return m_physics_body;
 }
 
 Node* Node::findChildByName(std::string_view name)

@@ -4,15 +4,17 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_body.h>
+#include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/node.h>
 /* --------------------------------- Standard ------------------------------- */
-#include <cassert>
+#include <queue>
 #include <list>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
 
-PhysicsWorld::PhysicsWorld(const sf::Vector2f& gravity) :
+PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity) :
+  m_scene_node(scene_node),
   m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))
 {
 
@@ -22,15 +24,9 @@ PhysicsWorld::~PhysicsWorld() = default;
 
 void PhysicsWorld::update(float time_step, int32_t velocity_iterations, int32_t position_iterations)
 {
-  auto bodies = getPhysicsBody();
-
-  for(auto& body : bodies)
-    body->beforeSimulation();
-
+  beforeSimulation();
   m_b2_world->Step(time_step, velocity_iterations, position_iterations);
-
-  for(auto& body : bodies)
-    body->afterSimulation();
+  afterSimulation();
 }
 
 void PhysicsWorld::setGravity(const sf::Vector2f& gravity)
@@ -46,8 +42,7 @@ sf::Vector2f PhysicsWorld::getGravity() const
 
 b2Body* PhysicsWorld::createInternalBody(const b2BodyDef* b2_body_def)
 {
-  auto b2_body = m_b2_world->CreateBody(b2_body_def);
-  return b2_body;
+  return m_b2_world->CreateBody(b2_body_def);
 }
 
 void PhysicsWorld::destroyInternalBody(b2Body* b2_body)
@@ -55,28 +50,52 @@ void PhysicsWorld::destroyInternalBody(b2Body* b2_body)
   m_b2_world->DestroyBody(b2_body);
 }
 
-std::list<PhysicsBody*> PhysicsWorld::getPhysicsBody()
+void PhysicsWorld::beforeSimulation()
 {
-  std::list<PhysicsBody*> physicsBodies;
-  for(auto b2_body= m_b2_world->GetBodyList(); b2_body != nullptr; b2_body = b2_body->GetNext())
+  std::queue<scene::Node*> nodes;
+  nodes.push(std::addressof(m_scene_node));
+
+  while(nodes.empty())
   {
-    auto b2_body_user_data = b2_body->GetUserData().pointer;
-    assert(b2_body_user_data != reinterpret_cast<uintptr_t>(nullptr));
-    physicsBodies.push_back(reinterpret_cast<PhysicsBody*>(b2_body_user_data));
+    auto current_node = nodes.front();
+    nodes.pop();
+
+    if(auto physics_body = current_node->getPhysicsBody(); physics_body)
+      physics_body->beforeSimulation();
+
+    auto& children = current_node->getChildren();
+    for(auto& child : children)
+      nodes.push(child.get());
   }
+}
 
-  physicsBodies.sort([](auto first, auto second){
-    assert(first->getOwner());
-    assert(second->getOwner());
+void PhysicsWorld::afterSimulation()
+{
+  std::queue<scene::Node*> nodes;
+  nodes.push(std::addressof(m_scene_node));
 
-    auto current_node = second->getOwner();
-    while(current_node->getParent() && current_node != first->getOwner())
-      current_node = current_node->getParent();
+  while(nodes.empty())
+  {
+    auto current_node = nodes.front();
+    nodes.pop();
 
-    return current_node == first->getOwner();
-  });
+    if(auto physics_body = current_node->getPhysicsBody(); physics_body)
+      physics_body->afterSimulation();
 
-  return physicsBodies;
+    auto& children = current_node->getChildren();
+    for(auto& child : children)
+      nodes.push(child.get());
+  }
+}
+
+b2Joint* PhysicsWorld::createInternalJoint(const b2JointDef* b2_joint_def)
+{
+  return m_b2_world->CreateJoint(b2_joint_def);
+}
+
+void PhysicsWorld::destroyInternalJoint(b2Joint* b2_joint)
+{
+  return m_b2_world->DestroyJoint(b2_joint);
 }
 
 } // namespace egnim::physics

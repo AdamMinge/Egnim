@@ -21,6 +21,11 @@ namespace egnim::core
   class CommandQueue;
 }
 
+namespace egnim::physics
+{
+  class PhysicsBody;
+}
+
 namespace egnim::scene
 {
   class Component;
@@ -57,6 +62,9 @@ namespace egnim::scene
     [[nodiscard]] Node* getParent();
     [[nodiscard]] Node* getRoot();
 
+    [[nodiscard]] const physics::PhysicsBody* getPhysicsBody() const;
+    [[nodiscard]] physics::PhysicsBody* getPhysicsBody();
+
     template<typename TYPE>
     TYPE* findChildByName(std::string_view name);
     Node* findChildByName(std::string_view name);
@@ -87,6 +95,7 @@ namespace egnim::scene
     Node* m_parent;
     size_t m_camera_mask;
     std::string_view m_name;
+    physics::PhysicsBody* m_physics_body;
   };
 
   template<typename TYPE>
