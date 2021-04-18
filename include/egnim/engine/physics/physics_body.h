@@ -19,11 +19,13 @@ namespace egnim::physics
 
   class PhysicsWorld;
   class PhysicsShape;
+  class PhysicsJoint;
 
   class PhysicsBody : public scene::Component
   {
     friend PhysicsWorld;
     friend PhysicsShape;
+    friend PhysicsJoint;
 
   public:
     enum class Type;
@@ -68,16 +70,18 @@ namespace egnim::physics
     std::unique_ptr<PhysicsShape> detachPhysicsShape(const PhysicsShape& physics_shape);
     [[nodiscard]] const std::vector<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
 
-  protected:
+  private:
     void createInternalBody(Type type);
     void destroyInternalBody();
 
-  private:
     void beforeSimulation();
     void afterSimulation();
 
     [[nodiscard]] b2Fixture* createInternalFixture(const b2FixtureDef* b2_fixture_def);
     void destroyInternalFixture(b2Fixture* b2_fixture);
+
+    [[nodiscard]] const b2Body* getInternalBody() const;
+    [[nodiscard]] b2Body* getInternalBody();
 
   private:
     PhysicsWorld& m_physics_world;

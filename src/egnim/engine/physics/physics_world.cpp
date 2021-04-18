@@ -5,10 +5,6 @@
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/scene/scene_node.h>
-#include <egnim/engine/scene/node.h>
-/* --------------------------------- Standard ------------------------------- */
-#include <queue>
-#include <list>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -50,18 +46,6 @@ void PhysicsWorld::destroyInternalBody(b2Body* b2_body)
   m_b2_world->DestroyBody(b2_body);
 }
 
-void PhysicsWorld::beforeSimulation()
-{
-  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
-    if(auto physics_body = nodeIter->getPhysicsBody(); physics_body) physics_body->beforeSimulation();
-}
-
-void PhysicsWorld::afterSimulation()
-{
-  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
-    if(auto physics_body = nodeIter->getPhysicsBody(); physics_body) physics_body->afterSimulation();
-}
-
 b2Joint* PhysicsWorld::createInternalJoint(const b2JointDef* b2_joint_def)
 {
   return m_b2_world->CreateJoint(b2_joint_def);
@@ -70,6 +54,26 @@ b2Joint* PhysicsWorld::createInternalJoint(const b2JointDef* b2_joint_def)
 void PhysicsWorld::destroyInternalJoint(b2Joint* b2_joint)
 {
   return m_b2_world->DestroyJoint(b2_joint);
+}
+
+void PhysicsWorld::beforeSimulation()
+{
+  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
+  {
+    auto physics_body = nodeIter->getPhysicsBody();
+    if(physics_body && physics_body->getPhysicsWorld() == this)
+      physics_body->beforeSimulation();
+  }
+}
+
+void PhysicsWorld::afterSimulation()
+{
+  for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
+  {
+    auto physics_body = nodeIter->getPhysicsBody();
+    if(physics_body && physics_body->getPhysicsWorld() == this)
+      physics_body->afterSimulation();
+  }
 }
 
 } // namespace egnim::physics

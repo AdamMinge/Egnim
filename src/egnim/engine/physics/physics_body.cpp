@@ -197,4 +197,14 @@ void PhysicsBody::destroyInternalFixture(b2Fixture* b2_fixture)
   m_b2_body->DestroyFixture(b2_fixture);
 }
 
+const b2Body* PhysicsBody::getInternalBody() const
+{
+  return m_b2_body;
+}
+
+b2Body* PhysicsBody::getInternalBody()
+{
+  return m_b2_body;
+}
+
 } // namespace egnim::physics

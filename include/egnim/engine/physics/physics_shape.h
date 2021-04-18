@@ -95,10 +95,7 @@ namespace egnim::physics
                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeCircle() override = default;
 
-    void setRadius(float radius);
     [[nodiscard]] float getRadius() const;
-
-    void setOffset(const sf::Vector2f& offset);
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
   protected:
@@ -116,10 +113,7 @@ namespace egnim::physics
                              const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeBox() override = default;
 
-    void setSize(const sf::Vector2f& size);
     [[nodiscard]] const sf::Vector2f& getSize() const;
-
-    void setOffset(const sf::Vector2f& offset);
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
   protected:
@@ -137,7 +131,6 @@ namespace egnim::physics
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapePolygon() override = default;
 
-    void setPoints(std::list<sf::Vector2f> points);
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
   protected:
@@ -153,10 +146,6 @@ namespace egnim::physics
     explicit PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
                                      const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeSegment() override = default;
-
-    void setPositions(const sf::Vector2f& first, const sf::Vector2f& second);
-    void setFirstPosition(const sf::Vector2f& first);
-    void setSecondPosition(const sf::Vector2f& second);
 
     [[nodiscard]] const sf::Vector2f& getFirstPosition() const;
     [[nodiscard]] const sf::Vector2f& getSecondPosition() const;
@@ -175,10 +164,7 @@ namespace egnim::physics
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeBox() override = default;
 
-    void setSize(const sf::Vector2f& size);
     [[nodiscard]] const sf::Vector2f& getSize() const;
-
-    void setOffset(const sf::Vector2f& offset);
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
   protected:
@@ -195,7 +181,6 @@ namespace egnim::physics
                                      const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgePolygon() override = default;
 
-    void setPoints(std::list<sf::Vector2f> points);
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
   protected:
@@ -211,7 +196,6 @@ namespace egnim::physics
                                    const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeChain() override = default;
 
-    void setPoints(std::list<sf::Vector2f> points);
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
   protected:
