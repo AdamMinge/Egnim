@@ -59,7 +59,10 @@ PhysicsShape::PhysicsShape(Type type, const PhysicsMaterial& physics_material) :
   m_physics_body(nullptr),
   m_b2_fixture(nullptr),
   m_type(type),
-  m_physics_material(physics_material)
+  m_physics_material(physics_material),
+  m_contact_test_bitmask(0x0000),
+  m_collision_bitmask(0xFFFF),
+  m_group_index(0)
 {
 
 }
@@ -112,6 +115,39 @@ float PhysicsShape::getFriction() const
   return m_physics_material.getFriction();
 }
 
+void PhysicsShape::setContactTestBitmask(std::uint16_t bitmask)
+{
+  m_contact_test_bitmask = bitmask;
+  updateInternalFixture();
+}
+
+std::uint16_t PhysicsShape::getContactTestBitmask() const
+{
+  return m_contact_test_bitmask;
+}
+
+void PhysicsShape::setCollisionBitmask(std::uint16_t bitmask)
+{
+  m_collision_bitmask = bitmask;
+  updateInternalFixture();
+}
+
+std::uint16_t PhysicsShape::getCollisionBitmask() const
+{
+  return m_collision_bitmask;
+}
+
+void PhysicsShape::setGroup(std::int16_t group)
+{
+  m_group_index = group;
+  updateInternalFixture();
+}
+
+std::int16_t PhysicsShape::getGroup() const
+{
+  return m_group_index;
+}
+
 PhysicsShape::Type PhysicsShape::getType() const
 {
   return m_type;
@@ -143,6 +179,9 @@ void PhysicsShape::createInternalFixture()
   fixture_def.friction = getFriction();
   fixture_def.restitution = getRestitution();
   fixture_def.shape = internal_shape.get();
+  fixture_def.filter.categoryBits = m_contact_test_bitmask;
+  fixture_def.filter.maskBits = m_collision_bitmask;
+  fixture_def.filter.groupIndex = m_group_index;
 
   m_b2_fixture = getPhysicsBody()->createInternalFixture(&fixture_def);
 }
@@ -162,6 +201,13 @@ void PhysicsShape::updateInternalFixture()
     m_b2_fixture->SetDensity(getDensity());
     m_b2_fixture->SetFriction(getFriction());
     m_b2_fixture->SetRestitution(getRestitution());
+
+    b2Filter b2_filter;
+    b2_filter.categoryBits = m_contact_test_bitmask;
+    b2_filter.maskBits = m_collision_bitmask;
+    b2_filter.groupIndex = m_group_index;
+
+    m_b2_fixture->SetFilterData(b2_filter);
   }
 }
 

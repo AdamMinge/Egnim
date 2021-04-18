@@ -64,6 +64,15 @@ namespace egnim::physics
     [[nodiscard]] float getRestitution() const;
     [[nodiscard]] float getFriction() const;
 
+    void setContactTestBitmask(std::uint16_t bitmask);
+    [[nodiscard]] std::uint16_t getContactTestBitmask() const;
+
+    void setCollisionBitmask(std::uint16_t bitmask);
+    [[nodiscard]] std::uint16_t getCollisionBitmask() const;
+
+    void setGroup(std::int16_t group);
+    [[nodiscard]] std::int16_t getGroup() const;
+
     [[nodiscard]] Type getType() const;
 
     [[nodiscard]] PhysicsBody* getPhysicsBody();
@@ -86,6 +95,9 @@ namespace egnim::physics
     b2Fixture* m_b2_fixture;
     Type m_type;
     PhysicsMaterial m_physics_material;
+    std::uint16_t m_contact_test_bitmask;
+    std::uint16_t m_collision_bitmask;
+    std::int16_t m_group_index;
   };
 
   class PhysicsShapeCircle : public PhysicsShape
