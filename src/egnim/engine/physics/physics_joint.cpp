@@ -40,6 +40,8 @@ void PhysicsJoint::createInternalJoint()
 
   auto b2_joint_def = createInternalJointDef(m_first_physics_body.getInternalBody(),
                                              m_second_physics_body.getInternalBody());
+  b2_joint_def->userData.pointer = reinterpret_cast<uintptr_t>(this);
+
   m_b2_joint = m_physics_world.createInternalJoint(b2_joint_def.get());
 }
 

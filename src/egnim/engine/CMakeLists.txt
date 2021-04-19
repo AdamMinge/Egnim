@@ -34,6 +34,7 @@ set(sources
         ${source_root}/physics/physics_body.cpp
         ${source_root}/physics/physics_shape.cpp
         ${source_root}/physics/physics_joint.cpp
+        ${source_root}/physics/physics_contact.cpp
 
         ${source_root}/scene/visitor/scene_serializer.cpp
         ${source_root}/scene/visitor/priv/scene_serializer_impl.h
@@ -71,6 +72,7 @@ set(includes
         ${include_root}/physics/physics_body.h
         ${include_root}/physics/physics_shape.h
         ${include_root}/physics/physics_joint.h
+        ${include_root}/physics/physics_contact.h
 
         ${include_root}/scene/visitor/scene_visitor.h
         ${include_root}/scene/visitor/scene_serializer.h)
