@@ -1,5 +1,6 @@
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_body.h>
+#include <box2d/b2_joint.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/physics/physics_world.h>
@@ -57,6 +58,67 @@ PhysicsWorld* PhysicsBody::getPhysicsWorld()
 const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 {
   return std::addressof(m_physics_world);
+}
+
+void PhysicsBody::setLinearVelocity(const sf::Vector2f& linear_velocity)
+{
+  m_b2_body->SetLinearVelocity(b2Vec2(linear_velocity.x, linear_velocity.y));
+}
+
+sf::Vector2f PhysicsBody::getLinearVelocity() const
+{
+  auto b2_vec = m_b2_body->GetLinearVelocity();
+  return sf::Vector2f(b2_vec.x, b2_vec.y);
+}
+
+void PhysicsBody::setAngularVelocity(float omega)
+{
+  m_b2_body->SetAngularVelocity(omega);
+}
+
+float PhysicsBody::getAngularVelocity() const
+{
+  return m_b2_body->GetAngularVelocity();
+}
+
+void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point)
+{
+  m_b2_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), true);
+}
+
+void PhysicsBody::applyForceToCenter(const sf::Vector2f& force)
+{
+  m_b2_body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
+}
+
+void PhysicsBody::applyTorque(float torque)
+{
+  m_b2_body->ApplyTorque(torque, true);
+}
+
+void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point)
+{
+  m_b2_body->ApplyLinearImpulse(b2Vec2(impulse.x, impulse.y), b2Vec2(point.x, point.y), true);
+}
+
+void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse)
+{
+  m_b2_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
+}
+
+void PhysicsBody::applyAngularImpulse(float impulse)
+{
+  m_b2_body->ApplyAngularImpulse(impulse, true);
+}
+
+float PhysicsBody::getMass() const
+{
+  return m_b2_body->GetMass();
+}
+
+float PhysicsBody::getInertia() const
+{
+  return m_b2_body->GetInertia();
 }
 
 void PhysicsBody::setType(Type type)
@@ -134,6 +196,21 @@ std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape
 const std::vector<std::unique_ptr<PhysicsShape>>& PhysicsBody::getPhysicsShapes() const
 {
   return m_physics_shapes;
+}
+
+std::vector<PhysicsJoint*> PhysicsBody::getPhysicsJoints() const
+{
+  std::vector<PhysicsJoint*> joints;
+  auto b2_joint_edge = m_b2_body->GetJointList();
+
+  while(b2_joint_edge != nullptr)
+  {
+    auto physics_joint = reinterpret_cast<PhysicsJoint*>(b2_joint_edge->joint->GetUserData().pointer);
+    joints.push_back(physics_joint);
+    b2_joint_edge = b2_joint_edge->next;
+  }
+
+  return joints;
 }
 
 void PhysicsBody::createInternalBody(Type type)

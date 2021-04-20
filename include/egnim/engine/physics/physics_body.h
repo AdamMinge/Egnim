@@ -51,6 +51,23 @@ namespace egnim::physics
     [[nodiscard]] PhysicsWorld* getPhysicsWorld();
     [[nodiscard]] const PhysicsWorld* getPhysicsWorld() const;
 
+    void setLinearVelocity(const sf::Vector2f& linear_velocity);
+    [[nodiscard]] sf::Vector2f getLinearVelocity() const;
+
+    void setAngularVelocity(float omega);
+    [[nodiscard]] float getAngularVelocity() const;
+
+    void applyForce(const sf::Vector2f& force, const sf::Vector2f& point);
+    void applyForceToCenter(const sf::Vector2f& force);
+
+    void applyTorque(float torque);
+    void applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point);
+    void applyLinearImpulseToCenter(const sf::Vector2f& impulse);
+    void applyAngularImpulse(float impulse);
+
+    [[nodiscard]] float getMass() const;
+    [[nodiscard]] float getInertia() const;
+
     void setType(Type type);
     [[nodiscard]] Type getType() const;
 
@@ -69,6 +86,8 @@ namespace egnim::physics
     void attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape);
     std::unique_ptr<PhysicsShape> detachPhysicsShape(const PhysicsShape& physics_shape);
     [[nodiscard]] const std::vector<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
+
+    [[nodiscard]] std::vector<PhysicsJoint*> getPhysicsJoints() const;
 
   private:
     void createInternalBody(Type type);

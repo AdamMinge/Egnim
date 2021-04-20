@@ -73,6 +73,9 @@ namespace egnim::physics
     void setGroup(std::int16_t group);
     [[nodiscard]] std::int16_t getGroup() const;
 
+    void setSensor(bool sensor);
+    [[nodiscard]] bool isSensor() const;
+
     [[nodiscard]] Type getType() const;
 
     [[nodiscard]] PhysicsBody* getPhysicsBody();
@@ -98,6 +101,7 @@ namespace egnim::physics
     std::uint16_t m_contact_test_bitmask;
     std::uint16_t m_collision_bitmask;
     std::int16_t m_group_index;
+    bool m_sensor;
   };
 
   class PhysicsShapeCircle : public PhysicsShape
