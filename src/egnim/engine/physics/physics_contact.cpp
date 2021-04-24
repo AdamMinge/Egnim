@@ -3,13 +3,42 @@
 #include <egnim/engine/physics/physics_shape.h>
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_contact.h>
-/* --------------------------------- Standard ------------------------------- */
-#include <cassert>
 /* -------------------------------------------------------------------------- */
 
 
 namespace egnim::physics
 {
+
+/* ------------------------------- PhysicsContactImpulse -------------------- */
+
+PhysicsContactImpulse::PhysicsContactImpulse(std::list<float> normal_impulses, std::list<float> tangent_impulses) :
+  m_normal_impulses(std::move(normal_impulses)),
+  m_tangent_impulses(std::move(tangent_impulses))
+{
+
+}
+
+PhysicsContactImpulse::~PhysicsContactImpulse() = default;
+
+void PhysicsContactImpulse::setNormalImpulses(std::list<float> normal_impulses)
+{
+  m_normal_impulses = std::move(normal_impulses);
+}
+
+const std::list<float>& PhysicsContactImpulse::getNormalImpulses() const
+{
+  return m_normal_impulses;
+}
+
+void PhysicsContactImpulse::setTangentImpulses(std::list<float> tangent_impulses)
+{
+  m_tangent_impulses = std::move(tangent_impulses);
+}
+
+const std::list<float>& PhysicsContactImpulse::getTangentImpulses() const
+{
+  return m_tangent_impulses;
+}
 
 /* ------------------------------- PhysicsManifoldPoint --------------------- */
 
@@ -57,112 +86,94 @@ float PhysicsManifoldPoint::getTangentImpulse() const
 
 PhysicsManifold::~PhysicsManifold() = default;
 
-PhysicsManifold::PhysicsManifold(b2Manifold* manifold) :
-  m_manifold(manifold)
+PhysicsManifold::PhysicsManifold(Type type, const sf::Vector2f& local_point, const sf::Vector2f& local_normal,
+                                 std::list<PhysicsManifoldPoint> points) :
+  m_type(type),
+  m_local_point(local_point),
+  m_local_normal(local_normal),
+  m_points(std::move(points))
 {
 
 }
 
 void PhysicsManifold::setLocalPoint(const sf::Vector2f& local_point)
 {
-  assert(m_manifold);
-  m_manifold->localPoint.x = local_point.x;
-  m_manifold->localPoint.y = local_point.y;
+  m_local_point.x = local_point.x;
+  m_local_point.y = local_point.y;
 }
 
 sf::Vector2f PhysicsManifold::getLocalPoint() const
 {
-  assert(m_manifold);
-  return sf::Vector2f(m_manifold->localPoint.x, m_manifold->localPoint.y);
+  return sf::Vector2f(m_local_point.x, m_local_point.y);
 }
 
 void PhysicsManifold::setLocalNormal(const sf::Vector2f& local_normal)
 {
-  assert(m_manifold);
-  m_manifold->localNormal.x = local_normal.x;
-  m_manifold->localNormal.y = local_normal.y;
+  m_local_normal.x = local_normal.x;
+  m_local_normal.y = local_normal.y;
 }
 
 sf::Vector2f PhysicsManifold::getLocalNormal() const
 {
-  assert(m_manifold);
-  return sf::Vector2f(m_manifold->localNormal.x, m_manifold->localNormal.y);
+  return sf::Vector2f(m_local_normal.x, m_local_normal.y);
 }
 
 void PhysicsManifold::setPoints(const std::list<PhysicsManifoldPoint>& points)
 {
-  assert(m_manifold);
-  assert(points.size() <= b2_maxManifoldPoints);
-
-  m_manifold->pointCount = static_cast<int32>(points.size());
-  auto current_point_id = 0;
-  for(auto& point : points)
-  {
-    m_manifold->points[current_point_id].localPoint.x = point.getLocalPoint().x;
-    m_manifold->points[current_point_id].localPoint.y = point.getLocalPoint().y;
-    m_manifold->points[current_point_id].tangentImpulse = point.getTangentImpulse();
-    m_manifold->points[current_point_id].normalImpulse = point.getNormalImpulse();
-
-    current_point_id += 1;
-  }
+  m_points = points;
 }
 
-std::list<PhysicsManifoldPoint> PhysicsManifold::getPoints() const
+const std::list<PhysicsManifoldPoint>& PhysicsManifold::getPoints() const
 {
-  assert(m_manifold);
-  std::list<PhysicsManifoldPoint> points;
-  for(auto i = 0; i < m_manifold->pointCount; ++i)
-    points.emplace_back(PhysicsManifoldPoint(
-      sf::Vector2f(m_manifold->points[i].localPoint.x, m_manifold->points[i].localPoint.y),
-      m_manifold->points[i].normalImpulse, m_manifold->points[i].tangentImpulse));
-  return points;
+  return m_points;
 }
 
 void PhysicsManifold::setType(Type type)
 {
-  assert(m_manifold);
-  m_manifold->type = static_cast<b2Manifold::Type>(type);
+  m_type = type;
 }
 
 PhysicsManifold::Type PhysicsManifold::getType() const
 {
-  assert(m_manifold);
-  return static_cast<Type>(m_manifold->type);
+  return m_type;
 }
 
 /* --------------------------------- PhysicsContact ------------------------- */
 
 PhysicsContact::~PhysicsContact() = default;
 
-PhysicsContact::PhysicsContact(b2Contact *b2_contact) :
-  m_b2_contact(b2_contact),
-  m_physics_manifold(m_b2_contact->GetManifold())
+PhysicsContact::PhysicsContact(PhysicsShape* first_shape, PhysicsShape* second_shape, const PhysicsManifold& physics_manifold) :
+  m_first_shape(first_shape),
+  m_second_shape(second_shape),
+  m_physics_manifold(physics_manifold),
+  m_touching(true),
+  m_enabled(true),
+  m_friction(b2MixFriction(first_shape->getFriction(), second_shape->getFriction())),
+  m_restitution(b2MixRestitution(first_shape->getRestitution(), second_shape->getRestitution())),
+  m_threshold(b2MixRestitutionThreshold(first_shape->getRestitutionThreshold(), second_shape->getRestitutionThreshold())),
+  m_speed(0)
 {
 
 }
 
 PhysicsShape* PhysicsContact::getFirstShape()
 {
-  assert(m_b2_contact);
-  return reinterpret_cast<PhysicsShape*>(m_b2_contact->GetFixtureA()->GetUserData().pointer);
+  return m_first_shape;
 }
 
 const PhysicsShape* PhysicsContact::getFirstShape() const
 {
-  assert(m_b2_contact);
-  return reinterpret_cast<const PhysicsShape*>(m_b2_contact->GetFixtureA()->GetUserData().pointer);
+  return m_first_shape;
 }
 
 PhysicsShape* PhysicsContact::getSecondShape()
 {
-  assert(m_b2_contact);
-  return reinterpret_cast<PhysicsShape*>(m_b2_contact->GetFixtureB()->GetUserData().pointer);
+  return m_second_shape;
 }
 
 const PhysicsShape* PhysicsContact::getSecondShape() const
 {
-  assert(m_b2_contact);
-  return reinterpret_cast<const PhysicsShape*>(m_b2_contact->GetFixtureB()->GetUserData().pointer);
+  return m_second_shape;
 }
 
 PhysicsManifold* PhysicsContact::getPhysicsManifold()
@@ -175,88 +186,79 @@ const PhysicsManifold* PhysicsContact::getPhysicsManifold() const
   return std::addressof(m_physics_manifold);
 }
 
+void PhysicsContact::setTouching(bool touching)
+{
+  m_touching = touching;
+}
+
 bool PhysicsContact::isTouching() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->IsTouching();
+  return m_touching;
 }
 
 void PhysicsContact::setEnabled(bool enable)
 {
-  assert(m_b2_contact);
-  m_b2_contact->SetEnabled(enable);
+  m_enabled = enable;
 }
 
 bool PhysicsContact::isEnabled() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->IsEnabled();
+  return m_enabled;
 }
 
 void PhysicsContact::setFriction(float friction)
 {
-  assert(m_b2_contact);
-  m_b2_contact->SetFriction(friction);
+  m_friction = friction;
 }
 
 float PhysicsContact::getFriction() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->GetFriction();
+  return m_friction;
 }
 
 void PhysicsContact::resetFriction()
 {
-  assert(m_b2_contact);
-  m_b2_contact->ResetFriction();
+  m_friction = b2MixFriction(m_first_shape->getFriction(), m_second_shape->getFriction());
 }
 
 void PhysicsContact::setRestitution(float restitution)
 {
-  assert(m_b2_contact);
-  m_b2_contact->SetRestitution(restitution);
+  m_restitution = restitution;
 }
 
 float PhysicsContact::getRestitution() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->GetRestitution();
+  return m_restitution;
 }
 
 void PhysicsContact::resetRestitution()
 {
-  assert(m_b2_contact);
-  m_b2_contact->ResetRestitution();
+  m_friction = b2MixFriction(m_first_shape->getRestitution(), m_second_shape->getRestitution());
 }
 
 void PhysicsContact::setRestitutionThreshold(float threshold)
 {
-  assert(m_b2_contact);
-  m_b2_contact->SetRestitutionThreshold(threshold);
+  m_threshold = threshold;
 }
 
 float PhysicsContact::getRestitutionThreshold() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->GetRestitutionThreshold();
+  return m_threshold;
 }
 
 void PhysicsContact::resetRestitutionThreshold()
 {
-  assert(m_b2_contact);
-  m_b2_contact->ResetRestitutionThreshold();
+  m_friction = b2MixFriction(m_first_shape->getRestitutionThreshold(), m_second_shape->getRestitutionThreshold());
 }
 
 void PhysicsContact::setTangentSpeed(float speed)
 {
-  assert(m_b2_contact);
-  m_b2_contact->SetTangentSpeed(speed);
+  m_speed = speed;
 }
 
 float PhysicsContact::getTangentSpeed() const
 {
-  assert(m_b2_contact);
-  return m_b2_contact->GetTangentSpeed();
+  return m_speed;
 }
 
 } // namespace egnim::physics

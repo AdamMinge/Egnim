@@ -15,12 +15,13 @@ namespace egnim::physics {
 
 /* ------------------------------- PhysicsMaterial -------------------------- */
 
-[[maybe_unused]] const PhysicsMaterial PhysicsMaterial::DefaultMaterial = PhysicsMaterial(0.1f, 0.5f, 0.5f);
+[[maybe_unused]] const PhysicsMaterial PhysicsMaterial::DefaultMaterial = PhysicsMaterial(0.1f, 0.5f, 0.5f, 0.5f);
 
-PhysicsMaterial::PhysicsMaterial(float density, float restitution, float friction) noexcept :
+PhysicsMaterial::PhysicsMaterial(float density, float restitution, float friction, float threshold) noexcept :
   m_density(density),
   m_restitution(restitution),
-  m_friction(friction)
+  m_friction(friction),
+  m_restitution_threshold(threshold)
 {
 
 }
@@ -40,6 +41,11 @@ void PhysicsMaterial::setFriction(float friction)
   m_friction = friction;
 }
 
+void PhysicsMaterial::setRestitutionThreshold(float threshold)
+{
+  m_restitution_threshold = threshold;
+}
+
 float PhysicsMaterial::getDensity() const
 {
   return m_density;
@@ -53,6 +59,11 @@ float PhysicsMaterial::getRestitution() const
 float PhysicsMaterial::getFriction() const
 {
   return m_friction;
+}
+
+float PhysicsMaterial::getRestitutionThreshold() const
+{
+  return m_restitution_threshold;
 }
 
 /* --------------------------------- PhysicsShape --------------------------- */
@@ -103,6 +114,12 @@ void PhysicsShape::setFriction(float friction)
   updateInternalFixture();
 }
 
+void PhysicsShape::setRestitutionThreshold(float threshold)
+{
+  m_physics_material.setRestitutionThreshold(threshold);
+  updateInternalFixture();
+}
+
 float PhysicsShape::getDensity() const
 {
   return m_physics_material.getDensity();
@@ -116,6 +133,11 @@ float PhysicsShape::getRestitution() const
 float PhysicsShape::getFriction() const
 {
   return m_physics_material.getFriction();
+}
+
+float PhysicsShape::getRestitutionThreshold() const
+{
+  return m_physics_material.getRestitutionThreshold();
 }
 
 void PhysicsShape::setContactTestBitmask(std::uint16_t bitmask)

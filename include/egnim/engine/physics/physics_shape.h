@@ -21,20 +21,23 @@ namespace egnim::physics
     [[maybe_unused]] static const PhysicsMaterial DefaultMaterial;
 
   public:
-    PhysicsMaterial(float density, float restitution, float friction) noexcept;
+    PhysicsMaterial(float density, float restitution, float friction, float threshold) noexcept;
 
     void setDensity(float density);
     void setRestitution(float restitution);
     void setFriction(float friction);
+    void setRestitutionThreshold(float threshold);
 
     [[nodiscard]] float getDensity() const;
     [[nodiscard]] float getRestitution() const;
     [[nodiscard]] float getFriction() const;
+    [[nodiscard]] float getRestitutionThreshold() const;
 
   private:
     float m_density;
     float m_restitution;
     float m_friction;
+    float m_restitution_threshold;
   };
 
   class PhysicsShape
@@ -59,10 +62,12 @@ namespace egnim::physics
     void setDensity(float density);
     void setRestitution(float restitution);
     void setFriction(float friction);
+    void setRestitutionThreshold(float threshold);
 
     [[nodiscard]] float getDensity() const;
     [[nodiscard]] float getRestitution() const;
     [[nodiscard]] float getFriction() const;
+    [[nodiscard]] float getRestitutionThreshold() const;
 
     void setContactTestBitmask(std::uint16_t bitmask);
     [[nodiscard]] std::uint16_t getContactTestBitmask() const;

@@ -8,13 +8,27 @@
 #include <memory>
 /* -------------------------------------------------------------------------- */
 
-class b2Manifold;
-class b2Contact;
-
 namespace egnim::physics
 {
 
   class PhysicsShape;
+
+  class PhysicsContactImpulse
+  {
+  public:
+    explicit PhysicsContactImpulse(std::list<float> normal_impulses, std::list<float> tangent_impulses);
+    ~PhysicsContactImpulse();
+
+    void setNormalImpulses(std::list<float> normal_impulses);
+    [[nodiscard]] const std::list<float>& getNormalImpulses() const;
+
+    void setTangentImpulses(std::list<float> tangent_impulses);
+    [[nodiscard]] const std::list<float>& getTangentImpulses() const;
+
+  private:
+    std::list<float> m_normal_impulses;
+    std::list<float> m_tangent_impulses;
+  };
 
   class PhysicsManifoldPoint
   {
@@ -45,6 +59,8 @@ namespace egnim::physics
     enum class Type;
 
   public:
+    explicit PhysicsManifold(Type type, const sf::Vector2f& local_point, const sf::Vector2f& local_normal,
+                             std::list<PhysicsManifoldPoint> points = {});
     ~PhysicsManifold();
 
     void setLocalPoint(const sf::Vector2f& local_point);
@@ -54,21 +70,22 @@ namespace egnim::physics
     [[nodiscard]] sf::Vector2f getLocalNormal() const;
 
     void setPoints(const std::list<PhysicsManifoldPoint>& points);
-    [[nodiscard]] std::list<PhysicsManifoldPoint> getPoints() const;
+    [[nodiscard]] const std::list<PhysicsManifoldPoint>& getPoints() const;
 
     void setType(Type type);
     [[nodiscard]] Type getType() const;
 
   private:
-    explicit PhysicsManifold(b2Manifold* manifold);
-
-  private:
-    b2Manifold* m_manifold;
+    Type m_type;
+    sf::Vector2f m_local_point;
+    sf::Vector2f m_local_normal;
+    std::list<PhysicsManifoldPoint> m_points;
   };
 
   class PhysicsContact
   {
   public:
+    explicit PhysicsContact(PhysicsShape* first_shape, PhysicsShape* second_shape, const PhysicsManifold& physics_manifold);
     ~PhysicsContact();
 
     [[nodiscard]] PhysicsShape* getFirstShape();
@@ -80,6 +97,7 @@ namespace egnim::physics
     [[nodiscard]] PhysicsManifold* getPhysicsManifold();
     [[nodiscard]] const PhysicsManifold* getPhysicsManifold() const;
 
+    void setTouching(bool touching);
     [[nodiscard]] bool isTouching() const;
 
     void setEnabled(bool enable);
@@ -101,11 +119,15 @@ namespace egnim::physics
     [[nodiscard]] float getTangentSpeed() const;
 
   private:
-    explicit PhysicsContact(b2Contact* b2_contact);
-
-  private:
-    b2Contact* m_b2_contact;
+    PhysicsShape* m_first_shape;
+    PhysicsShape* m_second_shape;
     PhysicsManifold m_physics_manifold;
+    bool m_touching;
+    bool m_enabled;
+    float m_friction;
+    float m_restitution;
+    float m_threshold;
+    float m_speed;
   };
 
   enum class PhysicsManifold::Type
