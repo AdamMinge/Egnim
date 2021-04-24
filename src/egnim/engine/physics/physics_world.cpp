@@ -36,6 +36,40 @@ sf::Vector2f PhysicsWorld::getGravity() const
   return sf::Vector2f(b2_vec.x, b2_vec.y);
 }
 
+const std::list<PhysicsBody*>& PhysicsWorld::getPhysicsBodies() const
+{
+  return m_physics_bodies;
+}
+
+const std::list<PhysicsJoint*>& PhysicsWorld::getPhysicsJoints() const
+{
+  return m_physics_joints;
+}
+
+void PhysicsWorld::attachPhysicsBody(PhysicsBody* physics_body)
+{
+  m_physics_bodies.push_back(physics_body);
+}
+
+void PhysicsWorld::detachPhysicsBody(PhysicsBody* physics_body)
+{
+  auto found = std::find(m_physics_bodies.begin(), m_physics_bodies.end(), physics_body);
+  if (found != m_physics_bodies.end())
+    m_physics_bodies.erase(found);
+}
+
+void PhysicsWorld::attachPhysicsJoint(PhysicsJoint* physics_joint)
+{
+  m_physics_joints.push_back(physics_joint);
+}
+
+void PhysicsWorld::detachPhysicsJoint(PhysicsJoint* physics_joint)
+{
+  auto found = std::find(m_physics_joints.begin(), m_physics_joints.end(), physics_joint);
+  if (found != m_physics_joints.end())
+    m_physics_joints.erase(found);
+}
+
 b2Body* PhysicsWorld::createInternalBody(const b2BodyDef* b2_body_def)
 {
   return m_b2_world->CreateBody(b2_body_def);

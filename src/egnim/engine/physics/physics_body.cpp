@@ -181,7 +181,7 @@ std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape
 {
   auto found = std::find_if(m_physics_shapes.begin(), m_physics_shapes.end(), [&physics_shape](auto &shape)
   {
-    return shape.get() == &physics_shape;
+    return shape.get() == std::addressof(physics_shape);
   });
 
   if (found == m_physics_shapes.end())
@@ -193,38 +193,38 @@ std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape
   return shape;
 }
 
-const std::vector<std::unique_ptr<PhysicsShape>>& PhysicsBody::getPhysicsShapes() const
+const std::list<std::unique_ptr<PhysicsShape>>& PhysicsBody::getPhysicsShapes() const
 {
   return m_physics_shapes;
 }
 
-std::vector<PhysicsJoint*> PhysicsBody::getPhysicsJoints() const
+const std::list<PhysicsJoint*>& PhysicsBody::getPhysicsJoints() const
 {
-  std::vector<PhysicsJoint*> joints;
-  auto b2_joint_edge = m_b2_body->GetJointList();
+  return m_physics_joints;
+}
 
-  while(b2_joint_edge != nullptr)
-  {
-    auto physics_joint = reinterpret_cast<PhysicsJoint*>(b2_joint_edge->joint->GetUserData().pointer);
-    joints.push_back(physics_joint);
-    b2_joint_edge = b2_joint_edge->next;
-  }
-
-  return joints;
+void PhysicsBody::attachPhysicsJoint(PhysicsJoint* physics_joint)
+{
+  m_physics_joints.push_back(physics_joint);
+}
+void PhysicsBody::detachPhysicsJoint(PhysicsJoint* physics_joint)
+{
+  auto found = std::find(m_physics_joints.begin(), m_physics_joints.end(), physics_joint);
+  if (found != m_physics_joints.end())
+    m_physics_joints.erase(found);
 }
 
 void PhysicsBody::createInternalBody(Type type)
 {
   destroyInternalBody();
 
-  if(!getPhysicsWorld())
-    m_b2_body = nullptr;
-
   b2BodyDef body_def;
   body_def.type = static_cast<b2BodyType>(type);
   body_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
   m_b2_body = getPhysicsWorld()->createInternalBody(&body_def);
+
+  getPhysicsWorld()->attachPhysicsBody(this);
 }
 
 void PhysicsBody::destroyInternalBody()
@@ -232,6 +232,9 @@ void PhysicsBody::destroyInternalBody()
   if(m_b2_body)
   {
     getPhysicsWorld()->destroyInternalBody(m_b2_body);
+
+    getPhysicsWorld()->detachPhysicsBody(this);
+
     m_b2_body = nullptr;
   }
 }

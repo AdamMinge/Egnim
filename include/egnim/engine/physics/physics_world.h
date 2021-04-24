@@ -41,7 +41,16 @@ namespace egnim::physics
     void setGravity(const sf::Vector2f& gravity);
     [[nodiscard]] sf::Vector2f getGravity() const;
 
+    [[nodiscard]] const std::list<PhysicsBody*>& getPhysicsBodies() const;
+    [[nodiscard]] const std::list<PhysicsJoint*>& getPhysicsJoints() const;
+
   private:
+    void attachPhysicsBody(PhysicsBody* physics_body);
+    void detachPhysicsBody(PhysicsBody* physics_body);
+
+    void attachPhysicsJoint(PhysicsJoint* physics_joint);
+    void detachPhysicsJoint(PhysicsJoint* physics_joint);
+
     b2Body* createInternalBody(const b2BodyDef* b2_body_def);
     void destroyInternalBody(b2Body* b2_body);
 
@@ -54,6 +63,8 @@ namespace egnim::physics
   private:
     scene::SceneNode& m_scene_node;
     std::unique_ptr<b2World> m_b2_world;
+    std::list<PhysicsBody*> m_physics_bodies;
+    std::list<PhysicsJoint*> m_physics_joints;
   };
 
 } // namespace egnim::physics

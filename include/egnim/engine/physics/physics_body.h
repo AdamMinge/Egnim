@@ -5,7 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
-#include <vector>
+#include <list>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/scene/component.h>
 /* -------------------------------------------------------------------------- */
@@ -85,11 +85,13 @@ namespace egnim::physics
 
     void attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape);
     std::unique_ptr<PhysicsShape> detachPhysicsShape(const PhysicsShape& physics_shape);
-    [[nodiscard]] const std::vector<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
-
-    [[nodiscard]] std::vector<PhysicsJoint*> getPhysicsJoints() const;
+    [[nodiscard]] const std::list<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
+    [[nodiscard]] const std::list<PhysicsJoint*>& getPhysicsJoints() const;
 
   private:
+    void attachPhysicsJoint(PhysicsJoint* physics_joint);
+    void detachPhysicsJoint(PhysicsJoint* physics_joint);
+
     void createInternalBody(Type type);
     void destroyInternalBody();
 
@@ -105,7 +107,8 @@ namespace egnim::physics
   private:
     PhysicsWorld& m_physics_world;
     b2Body* m_b2_body;
-    std::vector<std::unique_ptr<PhysicsShape>> m_physics_shapes;
+    std::list<std::unique_ptr<PhysicsShape>> m_physics_shapes;
+    std::list<PhysicsJoint*> m_physics_joints;
   };
 
   enum class PhysicsBody::Type

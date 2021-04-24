@@ -42,15 +42,25 @@ void PhysicsJoint::createInternalJoint()
                                              m_second_physics_body.getInternalBody());
   b2_joint_def->userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-  m_b2_joint = m_physics_world.createInternalJoint(b2_joint_def.get());
+  m_b2_joint = getPhysicsWorld()->createInternalJoint(b2_joint_def.get());
+
+  getPhysicsWorld()->attachPhysicsJoint(this);
+  getFirstPhysicsBody()->attachPhysicsJoint(this);
+  getSecondPhysicsBody()->attachPhysicsJoint(this);
 }
 
 void PhysicsJoint::destroyInternalJoint()
 {
   if (m_b2_joint)
-    m_physics_world.destroyInternalJoint(m_b2_joint);
+  {
+    getPhysicsWorld()->destroyInternalJoint(m_b2_joint);
 
-  m_b2_joint = nullptr;
+    getPhysicsWorld()->detachPhysicsJoint(this);
+    getFirstPhysicsBody()->detachPhysicsJoint(this);
+    getSecondPhysicsBody()->detachPhysicsJoint(this);
+
+    m_b2_joint = nullptr;
+  }
 }
 
 const PhysicsBody* PhysicsJoint::getFirstPhysicsBody() const

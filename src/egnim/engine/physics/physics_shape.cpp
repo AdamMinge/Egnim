@@ -4,6 +4,8 @@
 #include <box2d/b2_polygon_shape.h>
 #include <box2d/b2_edge_shape.h>
 #include <box2d/b2_chain_shape.h>
+/* --------------------------------- Standard ------------------------------- */
+#include <vector>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
