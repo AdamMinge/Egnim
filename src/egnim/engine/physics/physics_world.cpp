@@ -14,16 +14,13 @@ namespace egnim::physics {
 class PhysicsWorldCallback : public b2ContactListener
 {
 public:
-  explicit PhysicsWorldCallback(core::CommandQueue& command_queue) : m_command_queue(command_queue) {}
+  explicit PhysicsWorldCallback() = default;
   ~PhysicsWorldCallback() override = default;
 
   void BeginContact(b2Contact* contact) override;
   void EndContact(b2Contact* contact) override;
   void PreSolve(b2Contact* contact, const b2Manifold* old_manifold) override;
   void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
-
-private:
-  core::CommandQueue& m_command_queue;
 };
 
 void PhysicsWorldCallback::BeginContact(b2Contact* contact)
@@ -48,9 +45,9 @@ void PhysicsWorldCallback::PostSolve(b2Contact* contact, const b2ContactImpulse*
 
 /* --------------------------------- PhysicsWorld --------------------------- */
 
-PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, core::CommandQueue& command_queue, const sf::Vector2f& gravity) :
+PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity) :
   m_scene_node(scene_node),
-  m_physics_world_callback(std::make_unique<PhysicsWorldCallback>(command_queue)),
+  m_physics_world_callback(std::make_unique<PhysicsWorldCallback>()),
   m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))
 {
   m_b2_world->SetContactListener(m_physics_world_callback.get());

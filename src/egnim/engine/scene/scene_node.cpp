@@ -6,11 +6,16 @@
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/camera.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/physics/physics_world.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
 
-SceneNode::SceneNode() = default;
+SceneNode::SceneNode() :
+  m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f()))
+{
+
+}
 
 SceneNode::~SceneNode() = default;
 
@@ -43,12 +48,12 @@ const Camera& SceneNode::getCamera(std::string_view id) const
 
 physics::PhysicsWorld& SceneNode::getPhysicsWorld()
 {
-
+  return *m_physics_world;
 }
 
 const physics::PhysicsWorld& SceneNode::getPhysicsWorld() const
 {
-
+  return *m_physics_world;
 }
 
 void SceneNode::accept(SceneVisitor& visitor)

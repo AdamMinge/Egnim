@@ -9,15 +9,16 @@
 /* -------------------------------------------------------------------------- */
 
 class b2World;
+
+class b2Body;
 struct b2BodyDef;
 
 class b2Joint;
 struct b2JointDef;
 
-namespace egnim
+namespace egnim::scene
 {
-  namespace core  { class CommandQueue; }
-  namespace scene { class SceneNode;    }
+  class SceneNode;
 }
 
 namespace egnim::physics
@@ -34,7 +35,7 @@ namespace egnim::physics
     friend PhysicsWorldCallback;
 
   public:
-    explicit PhysicsWorld(scene::SceneNode& scene_node, core::CommandQueue& command_queue, const sf::Vector2f& gravity);
+    explicit PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity);
     ~PhysicsWorld();
 
     void update(float time_step, int32_t velocity_iterations, int32_t position_iterations);
