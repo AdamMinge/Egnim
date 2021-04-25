@@ -4,6 +4,7 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Audio/Music.hpp>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/core/resource_holder.h>
 #include <egnim/engine/scene/node_factory.h>
@@ -12,7 +13,7 @@
 namespace egnim::scene
 {
 
-  class MusicNode : public Node, public RegisteredInNodeFactory<MusicNode>
+  class EGNIM_UTILITY_API MusicNode : public Node, public RegisteredInNodeFactory<MusicNode>
   {
     EGNIM_CLASS(MusicNode, Node)
 

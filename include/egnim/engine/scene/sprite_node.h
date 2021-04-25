@@ -5,6 +5,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
@@ -12,7 +13,7 @@
 namespace egnim::scene
 {
 
-  class SpriteNode : public Node, public RegisteredInNodeFactory<SpriteNode>
+  class EGNIM_UTILITY_API SpriteNode : public Node, public RegisteredInNodeFactory<SpriteNode>
   {
     EGNIM_CLASS(SpriteNode, Node)
 

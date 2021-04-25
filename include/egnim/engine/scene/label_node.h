@@ -7,6 +7,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
@@ -14,7 +15,7 @@
 namespace egnim::scene
 {
 
-  class LabelNode : public Node, public RegisteredInNodeFactory<LabelNode>
+  class EGNIM_UTILITY_API LabelNode : public Node, public RegisteredInNodeFactory<LabelNode>
   {
     EGNIM_CLASS(LabelNode, Node)
 

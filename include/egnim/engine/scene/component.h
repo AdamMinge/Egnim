@@ -3,6 +3,8 @@
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Time.hpp>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -10,7 +12,7 @@ namespace egnim::scene
   class Node;
   class ComponentContainer;
 
-  class Component
+  class EGNIM_UTILITY_API Component
   {
     friend ComponentContainer;
 

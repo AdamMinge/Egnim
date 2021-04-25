@@ -6,12 +6,14 @@
 #include <SFML/Graphics/View.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <map>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
 {
 
-  class Camera
+  class EGNIM_UTILITY_API Camera
   {
   public:
     enum CameraFlag

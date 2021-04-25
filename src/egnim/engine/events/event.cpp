@@ -1,10 +1,11 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/event.h>
+#include <egnim/engine/events/event.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::event {
 
-Event::Event() :
+Event::Event(Type type) :
+  m_type(type),
   m_stopped(false)
 {
 
@@ -22,4 +23,9 @@ bool Event::isStopped() const
   return m_stopped;
 }
 
-} // namespace egnim::core
+Event::Type Event::getType() const
+{
+  return m_type;
+}
+
+} // namespace egnim::event

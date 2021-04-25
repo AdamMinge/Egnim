@@ -5,6 +5,8 @@
 #include <SFML/System/Time.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
+/* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -12,7 +14,7 @@ namespace egnim::core
   class StateStack;
   class Context;
 
-  class MainLoop
+  class EGNIM_UTILITY_API MainLoop
   {
   public:
     explicit MainLoop();

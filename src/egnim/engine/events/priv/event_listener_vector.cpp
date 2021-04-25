@@ -1,7 +1,7 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/event_dispatcher.h>
+#include <egnim/engine/events/priv/event_listener_vector.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::event::priv {
 
-} // namespace egnim::core
+} // namespace egnim::event::priv

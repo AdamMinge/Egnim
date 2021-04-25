@@ -7,13 +7,15 @@
 #include <functional>
 #include <memory>
 #include <map>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
 {
   class Node;
 
-  class NodeFactory
+  class EGNIM_UTILITY_API NodeFactory
   {
   public:
     struct NodeCreatorMetaInfo;

@@ -1,10 +1,16 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+/* --------------------------------- Standard ------------------------------- */
+#include <string_view>
+/* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
+/* -------------------------------------------------------------------------- */
+
 namespace egnim::core
 {
 
-  class Object
+  class EGNIM_UTILITY_API Object
   {
   public:
     virtual ~Object() = default;

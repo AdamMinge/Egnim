@@ -6,6 +6,8 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
 #include <list>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 class b2World;
@@ -28,7 +30,7 @@ namespace egnim::physics
   class PhysicsJoint;
   class PhysicsWorldCallback;
 
-  class PhysicsWorld
+  class EGNIM_UTILITY_API PhysicsWorld
   {
     friend PhysicsBody;
     friend PhysicsJoint;

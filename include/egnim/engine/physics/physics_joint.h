@@ -6,6 +6,8 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
 #include <cassert>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 class b2Joint;
@@ -18,7 +20,7 @@ namespace egnim::physics
   class PhysicsBody;
   class PhysicsWorld;
 
-  class PhysicsJoint
+  class EGNIM_UTILITY_API PhysicsJoint
   {
   public:
     enum class Type;

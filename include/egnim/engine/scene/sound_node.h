@@ -10,6 +10,7 @@
 #include <functional>
 #include <list>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/core/resource_holder.h>
 #include <egnim/engine/scene/node_factory.h>
@@ -18,7 +19,7 @@
 namespace egnim::scene
 {
 
-  class SoundNode : public Node, public RegisteredInNodeFactory<SoundNode>
+  class EGNIM_UTILITY_API SoundNode : public Node, public RegisteredInNodeFactory<SoundNode>
   {
     EGNIM_CLASS(SoundNode, Node)
 

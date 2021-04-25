@@ -13,9 +13,6 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/event.cpp
-        ${source_root}/core/event_dispatcher.cpp
-        ${source_root}/core/event_listener.cpp
         ${source_root}/core/animated_sprite.cpp
         ${source_root}/core/main_loop.cpp
 
@@ -36,25 +33,33 @@ set(sources
         ${source_root}/physics/physics_body.cpp
         ${source_root}/physics/physics_shape.cpp
         ${source_root}/physics/physics_joint.cpp
+        ${source_root}/physics/physics_contact_impulse.cpp
+        ${source_root}/physics/physics_manifold.cpp
+        ${source_root}/physics/physics_manifold_point.cpp
         ${source_root}/physics/physics_contact.cpp
+        ${source_root}/physics/physics_material.cpp
 
         ${source_root}/scene/visitor/scene_serializer.cpp
         ${source_root}/scene/visitor/priv/scene_serializer_impl.h
         ${source_root}/scene/visitor/priv/json_scene_serializer_impl.h
-        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.cpp)
+        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.cpp
+
+        ${source_root}/events/event.cpp
+        ${source_root}/events/event_dispatcher.cpp
+        ${source_root}/events/event_listener.cpp
+        ${source_root}/events/priv/event_listener_vector.h
+        ${source_root}/events/priv/event_listener_vector.cpp)
 
 set(includes
         ${include_root}/../config.h
         ${include_root}/export.h
+
         ${include_root}/core/object.h
         ${include_root}/core/context.h
         ${include_root}/core/lazy_unique_pointer.h
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
-        ${include_root}/core/event.h
-        ${include_root}/core/event_dispatcher.h
-        ${include_root}/core/event_listener.h
         ${include_root}/core/animated_sprite.h
         ${include_root}/core/main_loop.h
 
@@ -75,10 +80,18 @@ set(includes
         ${include_root}/physics/physics_body.h
         ${include_root}/physics/physics_shape.h
         ${include_root}/physics/physics_joint.h
+        ${include_root}/physics/physics_contact_impulse.h
+        ${include_root}/physics/physics_manifold.h
+        ${include_root}/physics/physics_manifold_point.h
         ${include_root}/physics/physics_contact.h
+        ${include_root}/physics/physics_material.h
 
         ${include_root}/scene/visitor/scene_visitor.h
-        ${include_root}/scene/visitor/scene_serializer.h)
+        ${include_root}/scene/visitor/scene_serializer.h
+
+        ${include_root}/events/event.h
+        ${include_root}/events/event_dispatcher.h
+        ${include_root}/events/event_listener.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

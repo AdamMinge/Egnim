@@ -5,6 +5,8 @@
 #include <iterator>
 #include <memory>
 #include <queue>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -12,7 +14,7 @@ namespace egnim::scene
 
   class Node;
 
-  class NodeIterator
+  class EGNIM_UTILITY_API NodeIterator
   {
   public:
     using iterator_category = std::forward_iterator_tag;

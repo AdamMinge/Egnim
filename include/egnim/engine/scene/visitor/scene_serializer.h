@@ -6,6 +6,7 @@
 #include <memory>
 #include <ios>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
@@ -17,7 +18,7 @@ namespace egnim::scene::priv
 namespace egnim::scene
 {
 
-  class SceneSerializer : public SceneVisitor
+  class EGNIM_UTILITY_API SceneSerializer : public SceneVisitor
   {
     using istream = std::reference_wrapper<std::istream>;
     using ostream = std::reference_wrapper<std::ostream>;

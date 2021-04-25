@@ -12,6 +12,7 @@
 #include <string_view>
 #include <memory>
 /* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/core/resource_holder.h>
 #include <egnim/engine/core/lazy_unique_pointer.h>
 /* -------------------------------------------------------------------------- */
@@ -19,7 +20,7 @@
 namespace egnim::core
 {
 
-  class Context
+  class EGNIM_UTILITY_API Context
   {
   public:
     using textures_holder = BaseResourceHolder<sf::Texture, std::string_view>;

@@ -5,6 +5,7 @@
 #include <map>
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/core/animated_sprite.h>
 #include <egnim/engine/scene/node_factory.h>
@@ -13,7 +14,7 @@
 namespace egnim::scene
 {
 
-  class AnimatedSpriteNode : public Node, public RegisteredInNodeFactory<AnimatedSpriteNode>
+  class EGNIM_UTILITY_API AnimatedSpriteNode : public Node, public RegisteredInNodeFactory<AnimatedSpriteNode>
   {
     EGNIM_CLASS(AnimatedSpriteNode, Node)
 

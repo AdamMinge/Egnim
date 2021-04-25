@@ -11,6 +11,8 @@
 #include <memory>
 #include <queue>
 #include <map>
+/* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -18,7 +20,7 @@ namespace egnim::core
   class Context;
   class State;
 
-  class StateStack : private sf::NonCopyable
+  class EGNIM_UTILITY_API StateStack : private sf::NonCopyable
   {
   public:
     explicit StateStack(Context& context);

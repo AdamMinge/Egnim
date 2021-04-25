@@ -6,6 +6,8 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <vector>
 #include <memory>
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
@@ -13,7 +15,7 @@ namespace egnim::scene
   class Node;
   class Component;
 
-  class ComponentContainer
+  class EGNIM_UTILITY_API ComponentContainer
   {
   public:
     explicit ComponentContainer(Node& owner);

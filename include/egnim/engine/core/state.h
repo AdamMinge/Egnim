@@ -7,6 +7,8 @@
 #include <SFML/Window/Event.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <string_view>
+/* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -14,7 +16,7 @@ namespace egnim::core
   class Context;
   class StateStack;
 
-  class State : private sf::NonCopyable
+  class EGNIM_UTILITY_API State : private sf::NonCopyable
   {
   public:
     explicit State(StateStack& state_stack, Context& context);

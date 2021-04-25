@@ -6,6 +6,7 @@
 #include <memory>
 #include <string_view>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
@@ -19,7 +20,7 @@ namespace egnim::scene
 {
   class Camera;
 
-  class SceneNode : public Node, public RegisteredInNodeFactory<SceneNode>
+  class EGNIM_UTILITY_API SceneNode : public Node, public RegisteredInNodeFactory<SceneNode>
   {
     EGNIM_CLASS(SceneNode, Node)
 
@@ -37,6 +38,9 @@ namespace egnim::scene
     const physics::PhysicsWorld& getPhysicsWorld() const;
 
     void accept(SceneVisitor& visitor) override;
+
+  protected:
+    void updateCurrent(sf::Time dt) override;
 
   private:
     std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;

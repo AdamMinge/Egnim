@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/core/object.h>
 #include <egnim/engine/scene/node_iterator.h>
 /* -------------------------------------------------------------------------- */
@@ -28,7 +29,7 @@ namespace egnim::scene
   class SceneVisitor;
   class SceneNode;
 
-  class Node : public core::Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
+  class EGNIM_UTILITY_API Node : public core::Object, public sf::Transformable, public sf::Drawable, private sf::NonCopyable
   {
     EGNIM_CLASS(Node, Object)
 

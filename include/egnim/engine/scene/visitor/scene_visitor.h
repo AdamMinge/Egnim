@@ -1,6 +1,10 @@
 #ifndef SCENE_VISITOR_H
 #define SCENE_VISITOR_H
 
+/* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/export.h>
+/* -------------------------------------------------------------------------- */
+
 namespace egnim::scene
 {
 
@@ -11,7 +15,7 @@ namespace egnim::scene
   class SoundNode;
   class SpriteNode;
 
-  class SceneVisitor
+  class EGNIM_UTILITY_API SceneVisitor
   {
   public:
     SceneVisitor() = default;

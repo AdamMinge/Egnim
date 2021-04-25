@@ -10,12 +10,14 @@
 #include <SFML/System/Time.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <list>
+/* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
 {
 
-  class AnimatedSprite : public sf::Drawable, public sf::Transformable
+  class EGNIM_UTILITY_API AnimatedSprite : public sf::Drawable, public sf::Transformable
   {
   public:
     explicit AnimatedSprite(const sf::Texture& texture, sf::Vector2i frame_size, sf::Time duration,

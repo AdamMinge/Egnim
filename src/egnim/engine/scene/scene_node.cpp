@@ -61,4 +61,9 @@ void SceneNode::accept(SceneVisitor& visitor)
   visitor.visitSceneNode(*this);
 }
 
+void SceneNode::updateCurrent(sf::Time dt)
+{
+  m_physics_world->update(1/60.f, 8, 3);
+}
+
 } // namespace egnim::scene
