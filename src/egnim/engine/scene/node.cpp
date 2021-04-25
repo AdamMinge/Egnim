@@ -1,6 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
-#include <egnim/engine/core/command.h>
 #include <egnim/engine/scene/component_container.h>
 #include <egnim/engine/scene/component.h>
 #include <egnim/engine/scene/camera.h>
@@ -201,27 +200,20 @@ Node* Node::findChildByName(std::string_view name)
   return nullptr;
 }
 
-void Node::update(core::CommandQueue &command_queue, sf::Time dt)
+void Node::update(sf::Time dt)
 {
   updateComponents(dt);
-  updateCurrent(command_queue, dt);
-  updateChildren(command_queue, dt);
+  updateCurrent(dt);
+  updateChildren(dt);
 }
 
-void Node::onCommand(const core::Command &command, sf::Time dt)
-{
-  command(*this, dt);
-  for (const auto &child : m_children)
-    child->onCommand(command, dt);
-}
-
-void Node::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
+void Node::updateCurrent(sf::Time dt)
 {}
 
-void Node::updateChildren(core::CommandQueue &command_queue, sf::Time dt)
+void Node::updateChildren(sf::Time dt)
 {
   for (const auto &child : m_children)
-    child->update(command_queue, dt);
+    child->update(dt);
 }
 
 void Node::updateComponents(sf::Time dt)

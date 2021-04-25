@@ -10,6 +10,11 @@
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
+namespace egnim::physics
+{
+  class PhysicsWorld;
+}
+
 namespace egnim::scene
 {
   class Camera;
@@ -28,10 +33,14 @@ namespace egnim::scene
     Camera& getCamera(std::string_view id);
     const Camera& getCamera(std::string_view id) const;
 
+    physics::PhysicsWorld& getPhysicsWorld();
+    const physics::PhysicsWorld& getPhysicsWorld() const;
+
     void accept(SceneVisitor& visitor) override;
 
   private:
     std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;
+    std::unique_ptr<physics::PhysicsWorld> m_physics_world;
   };
 
 } // namespace egnim::scene

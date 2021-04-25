@@ -16,12 +16,6 @@
 #include <egnim/engine/scene/node_iterator.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
-{
-  class Command;
-  class CommandQueue;
-}
-
 namespace egnim::physics
 {
   class PhysicsBody;
@@ -76,16 +70,15 @@ namespace egnim::scene
     TYPE* findChildByName(std::string_view name);
     Node* findChildByName(std::string_view name);
 
-    void update(core::CommandQueue& command_queue, sf::Time dt);
-    void onCommand(const core::Command& command, sf::Time dt);
+    void update(sf::Time dt);
 
     virtual void accept(SceneVisitor& visitor) = 0;
 
   protected:
     explicit Node();
 
-    virtual void updateCurrent(core::CommandQueue& command_queue, sf::Time dt);
-    void updateChildren(core::CommandQueue& command_queue, sf::Time dt);
+    virtual void updateCurrent(sf::Time dt);
+    void updateChildren(sf::Time dt);
     void updateComponents(sf::Time dt);
 
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

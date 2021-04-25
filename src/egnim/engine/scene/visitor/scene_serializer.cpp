@@ -29,7 +29,7 @@ SceneSerializer::SceneSerializer(Format format, std::istream& stream) :
 
 SceneSerializer::~SceneSerializer() = default;
 
-void SceneSerializer::visit(AnimatedSpriteNode& animated_sprite_node)
+void SceneSerializer::visitAnimatedSpriteNode(AnimatedSpriteNode& animated_sprite_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(animated_sprite_node, std::get<ostream>(m_stream));
@@ -37,7 +37,7 @@ void SceneSerializer::visit(AnimatedSpriteNode& animated_sprite_node)
     getImpl().deserialize(animated_sprite_node, std::get<istream>(m_stream));
 }
 
-void SceneSerializer::visit(LabelNode& label_node)
+void SceneSerializer::visitLabelNode(LabelNode& label_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(label_node, std::get<ostream>(m_stream));
@@ -45,7 +45,7 @@ void SceneSerializer::visit(LabelNode& label_node)
     getImpl().deserialize(label_node, std::get<istream>(m_stream));
 }
 
-void SceneSerializer::visit(MusicNode& music_node)
+void SceneSerializer::visitMusicNode(MusicNode& music_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(music_node, std::get<ostream>(m_stream));
@@ -53,7 +53,7 @@ void SceneSerializer::visit(MusicNode& music_node)
     getImpl().deserialize(music_node, std::get<istream>(m_stream));
 }
 
-void SceneSerializer::visit(SceneNode& scene_node)
+void SceneSerializer::visitSceneNode(SceneNode& scene_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(scene_node, std::get<ostream>(m_stream));
@@ -61,7 +61,7 @@ void SceneSerializer::visit(SceneNode& scene_node)
     getImpl().deserialize(scene_node, std::get<istream>(m_stream));
 }
 
-void SceneSerializer::visit(SoundNode& sound_node)
+void SceneSerializer::visitSoundNode(SoundNode& sound_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(sound_node, std::get<ostream>(m_stream));
@@ -69,7 +69,7 @@ void SceneSerializer::visit(SoundNode& sound_node)
     getImpl().deserialize(sound_node, std::get<istream>(m_stream));
 }
 
-void SceneSerializer::visit(SpriteNode& sprite_node)
+void SceneSerializer::visitSpriteNode(SpriteNode& sprite_node)
 {
   if(getAction() == Action::Serialize)
     getImpl().serialize(sprite_node, std::get<ostream>(m_stream));

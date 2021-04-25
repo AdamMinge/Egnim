@@ -95,7 +95,7 @@ bool MusicNode::isStopped()
 
 void MusicNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitMusicNode(*this);
 }
 
 } // namespace egnim::scene

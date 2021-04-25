@@ -50,10 +50,10 @@ std::string_view AnimatedSpriteNode::getCurrentAnimation()
 
 void AnimatedSpriteNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitAnimatedSpriteNode(*this);
 }
 
-void AnimatedSpriteNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
+void AnimatedSpriteNode::updateCurrent(sf::Time dt)
 {
   if(m_current_animation != m_animated_sprites.end())
     m_current_animation->second.update(dt);

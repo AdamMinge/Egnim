@@ -104,7 +104,7 @@ float LabelNode::getOutlineThickness() const
 
 void LabelNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitLabelNode(*this);
 }
 
 void LabelNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const

@@ -33,7 +33,7 @@ const sf::IntRect& SpriteNode::getTextureRect() const
 
 void SpriteNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitSpriteNode(*this);
 }
 
 void SpriteNode::drawCurrent(sf::RenderTarget &target, sf::RenderStates states) const

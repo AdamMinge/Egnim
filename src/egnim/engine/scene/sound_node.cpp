@@ -88,10 +88,10 @@ void SoundNode::startAllSounds()
 
 void SoundNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitSoundNode(*this);
 }
 
-void SoundNode::updateCurrent(core::CommandQueue &command_queue, sf::Time dt)
+void SoundNode::updateCurrent(sf::Time dt)
 {
   checkStopConditions();
   removeStoppedSounds();

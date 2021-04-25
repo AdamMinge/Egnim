@@ -13,7 +13,9 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/command_queue.cpp
+        ${source_root}/core/event.cpp
+        ${source_root}/core/event_dispatcher.cpp
+        ${source_root}/core/event_listener.cpp
         ${source_root}/core/animated_sprite.cpp
         ${source_root}/core/main_loop.cpp
 
@@ -50,8 +52,9 @@ set(includes
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
-        ${include_root}/core/command.h
-        ${include_root}/core/command_queue.h
+        ${include_root}/core/event.h
+        ${include_root}/core/event_dispatcher.h
+        ${include_root}/core/event_listener.h
         ${include_root}/core/animated_sprite.h
         ${include_root}/core/main_loop.h
 

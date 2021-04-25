@@ -31,12 +31,12 @@ namespace egnim::scene
     explicit SceneSerializer(Format format, std::istream& stream);
     ~SceneSerializer();
 
-    void visit(AnimatedSpriteNode& animated_sprite_node) override;
-    void visit(LabelNode& label_node) override;
-    void visit(MusicNode& music_node) override;
-    void visit(SceneNode& scene_node) override;
-    void visit(SoundNode& sound_node) override;
-    void visit(SpriteNode& sprite_node) override;
+    void visitAnimatedSpriteNode(AnimatedSpriteNode& animated_sprite_node) override;
+    void visitLabelNode(LabelNode& label_node) override;
+    void visitMusicNode(MusicNode& music_node) override;
+    void visitSceneNode(SceneNode& scene_node) override;
+    void visitSoundNode(SoundNode& sound_node) override;
+    void visitSpriteNode(SpriteNode& sprite_node) override;
 
     Format getFormat();
     Action getAction();

@@ -41,9 +41,19 @@ const Camera& SceneNode::getCamera(std::string_view id) const
   return *m_cameras.at(id);
 }
 
+physics::PhysicsWorld& SceneNode::getPhysicsWorld()
+{
+
+}
+
+const physics::PhysicsWorld& SceneNode::getPhysicsWorld() const
+{
+
+}
+
 void SceneNode::accept(SceneVisitor& visitor)
 {
-  visitor.visit(*this);
+  visitor.visitSceneNode(*this);
 }
 
 } // namespace egnim::scene

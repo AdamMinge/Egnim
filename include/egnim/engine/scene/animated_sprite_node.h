@@ -30,7 +30,7 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
-    void updateCurrent(core::CommandQueue& command_queue, sf::Time dt) override;
+    void updateCurrent(sf::Time dt) override;
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:
