@@ -12,13 +12,15 @@
 namespace egnim::event
 {
 
+  namespace priv { class EventListenerVector; }
+
   class EventDispatcher;
   class Event;
 
   class EGNIM_UTILITY_API EventListener : public core::Object
   {
     EGNIM_CLASS(EventListener, core::Object)
-    friend class EventDispatcher;
+    friend class priv::EventListenerVector;
 
   public:
     ~EventListener() override;

@@ -3,6 +3,7 @@
 
 /* --------------------------------- Standard ------------------------------- */
 #include <unordered_map>
+#include <functional>
 #include <cstdint>
 #include <memory>
 /* ---------------------------------- Local --------------------------------- */
@@ -42,6 +43,9 @@ namespace egnim::event
 
     void setEnabled(bool enabled);
     [[nodiscard]] bool isEnabled() const;
+
+  private:
+    void visitEventListenerVectors(int32_t listen_events, const std::function<void(priv::EventListenerVector&)>& visitor);
 
   private:
     bool m_enabled;
