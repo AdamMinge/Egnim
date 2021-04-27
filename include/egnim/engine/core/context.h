@@ -17,6 +17,11 @@
 #include <egnim/engine/core/lazy_unique_pointer.h>
 /* -------------------------------------------------------------------------- */
 
+namespace egnim::event
+{
+  class EventDispatcher;
+}
+
 namespace egnim::core
 {
 
@@ -39,6 +44,7 @@ namespace egnim::core
     [[nodiscard]] musics_holder& getMusicsHolder();
     [[nodiscard]] sound_buffer_holder& getSoundsHolder();
     [[nodiscard]] sf::RenderWindow& getRenderWindow();
+    [[nodiscard]] event::EventDispatcher& getEventDispatcher();
 
     [[nodiscard]] const textures_holder& getTextureHolder() const;
     [[nodiscard]] const shaders_holder& getShadersHolder() const;
@@ -46,6 +52,8 @@ namespace egnim::core
     [[nodiscard]] const musics_holder& getMusicsHolder() const;
     [[nodiscard]] const sound_buffer_holder& getSoundBuffersHolder() const;
     [[nodiscard]] const sf::RenderWindow& getRenderWindow() const;
+    [[nodiscard]] const event::EventDispatcher& getEventDispatcher() const;
+
 
   private:
     LazyUniquePointer<textures_holder> m_textures;
@@ -54,7 +62,7 @@ namespace egnim::core
     LazyUniquePointer<musics_holder> m_musics;
     LazyUniquePointer<sound_buffer_holder> m_sound_buffers;
     LazyUniquePointer<sf::RenderWindow> m_render_window;
-
+    LazyUniquePointer<event::EventDispatcher> m_event_dispatcher;
   };
 
 } // namespace egnim::core

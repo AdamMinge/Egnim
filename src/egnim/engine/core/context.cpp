@@ -10,7 +10,8 @@ Context::Context() :
   m_fonts(make_unique_lazy<fonts_holder>()),
   m_musics(make_unique_lazy<musics_holder>()),
   m_sound_buffers(make_unique_lazy<sound_buffer_holder>()),
-  m_render_window(make_unique_lazy<sf::RenderWindow>())
+  m_render_window(make_unique_lazy<sf::RenderWindow>()),
+  m_event_dispatcher(make_unique_lazy<event::EventDispatcher>())
 {
 
 }
@@ -47,6 +48,11 @@ sf::RenderWindow& Context::getRenderWindow()
   return *m_render_window;
 }
 
+event::EventDispatcher& Context::getEventDispatcher()
+{
+  return *m_event_dispatcher;
+}
+
 const Context::textures_holder& Context::getTextureHolder() const
 {
   return *m_textures;
@@ -75,6 +81,11 @@ const Context::sound_buffer_holder& Context::getSoundBuffersHolder() const
 const sf::RenderWindow& Context::getRenderWindow() const
 {
   return *m_render_window;
+}
+
+const event::EventDispatcher& Context::getEventDispatcher() const
+{
+  return *m_event_dispatcher;
 }
 
 } // namespace egnim::core
