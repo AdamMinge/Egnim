@@ -4,9 +4,8 @@
 
 namespace egnim::event {
 
-EventListener::EventListener(int32_t listen_events, std::function<void(Event&)> on_event) :
+EventListener::EventListener(int32_t listen_events) :
   m_listen_events(listen_events),
-  m_on_event(std::move(on_event)),
   m_event_dispatcher(nullptr),
   m_enabled(true)
 {

@@ -38,6 +38,8 @@ namespace egnim::event
   {
     Keyboard  = 1 << 0,
     Mouse     = 1 << 1,
+    Sound     = 1 << 2,
+    Music     = 1 << 3,
 
     Custom    = 1 << 31,
   };

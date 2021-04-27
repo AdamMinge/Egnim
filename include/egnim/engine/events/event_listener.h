@@ -21,6 +21,7 @@ namespace egnim::event
   {
     EGNIM_CLASS(EventListener, core::Object)
     friend class priv::EventListenerVector;
+    friend class EventDispatcher;
 
   public:
     ~EventListener() override;
@@ -34,16 +35,29 @@ namespace egnim::event
     [[nodiscard]] const EventDispatcher* getEventDispatcher() const;
 
   protected:
-    explicit EventListener(int32_t listen_events, std::function<void(Event&)> on_event);
+    explicit EventListener(int32_t listen_events);
 
+    virtual void invoke(const Event& event) = 0;
     void setEventDispatcher(EventDispatcher* event_dispatcher);
+
+    template<typename EVENT_TO_CAST>
+    bool invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke);
 
   private:
     int32_t m_listen_events;
-    std::function<void(Event&)> m_on_event;
     EventDispatcher* m_event_dispatcher;
     bool m_enabled;
   };
+
+  template<typename EVENT_TO_CAST>
+  bool EventListener::invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke)
+  {
+    auto sound_play_event = dynamic_cast<const EVENT_TO_CAST*>(std::addressof(event));
+    if(sound_play_event && invoke)
+      invoke(*sound_play_event);
+
+    return sound_play_event;
+  }
 
 } // namespace egnim::event
 

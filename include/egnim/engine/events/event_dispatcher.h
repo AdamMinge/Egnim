@@ -39,7 +39,7 @@ namespace egnim::event
     void removeEventListener(scene::Node* node, bool recursive = false);
     void removeEventListener(int32_t listen_events);
 
-    void dispatchEvent(Event& event);
+    void dispatchEvent(const Event& event);
 
     void setEnabled(bool enabled);
     [[nodiscard]] bool isEnabled() const;

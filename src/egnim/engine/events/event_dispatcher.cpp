@@ -52,30 +52,29 @@ void EventDispatcher::removeEventListener(int32_t listen_events)
   });
 }
 
-void EventDispatcher::dispatchEvent(Event& event)
+void EventDispatcher::dispatchEvent(const Event& event)
 {
-  visitEventListenerVectors(static_cast<int32_t>(event.getType()), [&event](auto& listener_vector){
+  if(isEnabled())
+  {
+    visitEventListenerVectors(static_cast<int32_t>(event.getType()), [&event](auto& listener_vector){
 
-    auto& lower_fixed_listeners = listener_vector.getLowerFixedListeners();
-    auto& upper_fixed_listeners = listener_vector.getUpperFixedListeners();
-    auto& scene_graph_listeners = listener_vector.getSceneGraphListeners();
+      listener_vector.sort();
 
-    for(auto& [fixed_priority, listener] : lower_fixed_listeners)
-    {
+      auto& lower_fixed_listeners = listener_vector.getLowerFixedListeners();
+      auto& upper_fixed_listeners = listener_vector.getUpperFixedListeners();
+      auto& scene_graph_listeners = listener_vector.getSceneGraphListeners();
 
-    }
+      for(auto& [fixed_priority, listener] : lower_fixed_listeners)
+        if(listener->isEnabled()) listener->invoke(event);
 
-    for(auto& [node, listener] : scene_graph_listeners)
-    {
+      for(auto& [node, listener] : scene_graph_listeners)
+        if(listener->isEnabled()) listener->invoke(event);
 
-    }
+      for(auto& [fixed_priority, listener] : upper_fixed_listeners)
+        if(listener->isEnabled()) listener->invoke(event);
 
-    for(auto& [fixed_priority, listener] : upper_fixed_listeners)
-    {
-
-    }
-
-  });
+    });
+  }
 }
 
 void EventDispatcher::setEnabled(bool enabled)

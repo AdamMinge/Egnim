@@ -44,9 +44,13 @@ set(sources
         ${source_root}/scene/visitor/priv/json_scene_serializer_impl.h
         ${source_root}/scene/visitor/priv/json_scene_serializer_impl.cpp
 
-        ${source_root}/events/event.cpp
         ${source_root}/events/event_dispatcher.cpp
+        ${source_root}/events/event.cpp
+        ${source_root}/events/sound_event.cpp
+        ${source_root}/events/music_event.cpp
         ${source_root}/events/event_listener.cpp
+        ${source_root}/events/sound_event_listener.cpp
+        ${source_root}/events/music_event_listener.cpp
         ${source_root}/events/priv/event_listener_vector.h
         ${source_root}/events/priv/event_listener_vector.cpp)
 
@@ -89,9 +93,13 @@ set(includes
         ${include_root}/scene/visitor/scene_visitor.h
         ${include_root}/scene/visitor/scene_serializer.h
 
-        ${include_root}/events/event.h
         ${include_root}/events/event_dispatcher.h
-        ${include_root}/events/event_listener.h)
+        ${include_root}/events/event.h
+        ${include_root}/events/sound_event.h
+        ${include_root}/events/music_event.h
+        ${include_root}/events/event_listener.h
+        ${include_root}/events/sound_event_listener.h
+        ${include_root}/events/music_event_listener.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #
