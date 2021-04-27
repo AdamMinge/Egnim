@@ -8,7 +8,7 @@
 #include <egnim/engine/events/event_listener.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event
+namespace egnim::events
 {
 
   class SoundPlayEvent;
@@ -37,6 +37,6 @@ namespace egnim::event
     SoundControlEventCallback m_sound_control_event_callback;
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //SOUND_EVENT_LISTENER_H

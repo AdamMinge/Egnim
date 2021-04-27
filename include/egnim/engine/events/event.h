@@ -8,7 +8,7 @@
 #include <egnim/engine/core/object.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event
+namespace egnim::events
 {
 
   class EGNIM_UTILITY_API Event : public core::Object
@@ -44,6 +44,6 @@ namespace egnim::event
     Custom    = 1 << 31,
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //EVENT_H

@@ -15,14 +15,10 @@ namespace egnim::scene
   class Node;
 }
 
-namespace egnim::event::priv
-{
-  class EventListenerVector;
-}
-
-namespace egnim::event
+namespace egnim::events
 {
 
+  namespace priv { class EventListenerVector; }
   class EventListener;
   class Event;
 
@@ -52,6 +48,6 @@ namespace egnim::event
     std::unordered_map<int32_t, std::unique_ptr<priv::EventListenerVector>> m_event_to_listeners;
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //EVENT_DISPATCHER_H

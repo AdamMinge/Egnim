@@ -12,10 +12,10 @@
 namespace egnim
 {
   namespace scene { class Node; }
-  namespace event { class EventListener; class EventDispatcher; }
+  namespace events { class EventListener; class EventDispatcher; }
 }
 
-namespace egnim::event::priv
+namespace egnim::events::priv
 {
 
   struct FixedListenerComparator
@@ -60,6 +60,6 @@ namespace egnim::event::priv
     SceneGraphListeners m_scene_graph_listeners;
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //EVENT_LISTENER_VECTOR_H

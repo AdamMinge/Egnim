@@ -9,7 +9,7 @@
 #include <egnim/engine/scene/sound_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event
+namespace egnim::events
 {
 
   class EGNIM_UTILITY_API SoundPlayEvent : public Event
@@ -64,6 +64,6 @@ namespace egnim::event
     sf::Sound::Status m_sound_status;
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //SOUND_EVENT_H

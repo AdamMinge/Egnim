@@ -2,7 +2,7 @@
 #include <egnim/engine/events/event.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event {
+namespace egnim::events {
 
 Event::Event(Type type) :
   m_type(type),
@@ -28,4 +28,4 @@ Event::Type Event::getType() const
   return m_type;
 }
 
-} // namespace egnim::event
+} // namespace egnim::events

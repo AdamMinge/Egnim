@@ -7,7 +7,7 @@
 #include <egnim/engine/events/priv/event_listener_vector.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event {
+namespace egnim::events {
 
 EventDispatcher::EventDispatcher() :
   m_enabled(true)
@@ -104,4 +104,4 @@ void EventDispatcher::visitEventListenerVectors(int32_t listen_events,
   }
 }
 
-} // namespace egnim::event
+} // namespace egnim::events

@@ -6,7 +6,7 @@
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event::priv {
+namespace egnim::events::priv {
 
 /* -------------------------- FixedListenerComparator ------------------------ */
 
@@ -149,4 +149,4 @@ std::map<scene::Node*, int> EventListenerVector::getSceneGraphNodeDepth() const
   return node_to_depth;
 }
 
-} // namespace egnim::event::priv
+} // namespace egnim::events::priv

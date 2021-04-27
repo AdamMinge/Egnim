@@ -9,11 +9,10 @@
 #include <egnim/engine/core/object.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event
+namespace egnim::events
 {
 
   namespace priv { class EventListenerVector; }
-
   class EventDispatcher;
   class Event;
 
@@ -59,6 +58,6 @@ namespace egnim::event
     return sound_play_event;
   }
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //EVENT_LISTENER_H

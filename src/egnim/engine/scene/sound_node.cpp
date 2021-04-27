@@ -1,13 +1,15 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/sound_node.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/events/sound_event_listener.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
 
 SoundNode::SoundNode() :
   m_sound_buffers(nullptr),
-  m_default_settings(Settings{})
+  m_default_settings(Settings{}),
+  m_listener(std::make_unique<events::SoundEventListener>())
 {
 
 }

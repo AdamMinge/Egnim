@@ -3,7 +3,7 @@
 #include <egnim/engine/events/music_event.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event {
+namespace egnim::events {
 
 MusicEventListener::MusicEventListener() :
   EventListener(static_cast<int32_t>(Event::Type::Music))
@@ -29,7 +29,7 @@ void MusicEventListener::invoke(const Event& event)
   invokeIfCasted<MusicControlEvent>(event, m_sound_control_event_callback);
 }
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 
 

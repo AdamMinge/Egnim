@@ -7,7 +7,7 @@
 #include <egnim/engine/scene/music_node.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event
+namespace egnim::events
 {
 
   class EGNIM_UTILITY_API MusicPlayEvent : public Event
@@ -50,6 +50,6 @@ namespace egnim::event
     sf::Music::Status m_music_status;
   };
 
-} // namespace egnim::event
+} // namespace egnim::events
 
 #endif //MUSIC_EVENT_H

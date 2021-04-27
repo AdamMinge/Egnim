@@ -2,7 +2,7 @@
 #include <egnim/engine/events/event_listener.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event {
+namespace egnim::events {
 
 EventListener::EventListener(int32_t listen_events) :
   m_listen_events(listen_events),
@@ -44,4 +44,4 @@ void EventListener::setEventDispatcher(EventDispatcher* event_dispatcher)
   m_event_dispatcher = event_dispatcher;
 }
 
-} // namespace egnim::event
+} // namespace egnim::events

@@ -5,7 +5,7 @@
 #include <egnim/engine/events/sound_event.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::event {
+namespace egnim::events {
 
 /* ------------------------------- SoundPlayEvent --------------------------- */
 
@@ -107,4 +107,4 @@ sf::Sound::Status SoundControlEvent::getStatus() const
   return m_sound_status;
 }
 
-} // namespace egnim::event
+} // namespace egnim::events
