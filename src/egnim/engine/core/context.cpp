@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/core/context.h>
+#include <egnim/engine/events/event_dispatcher.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core {
@@ -11,7 +12,7 @@ Context::Context() :
   m_musics(make_unique_lazy<musics_holder>()),
   m_sound_buffers(make_unique_lazy<sound_buffer_holder>()),
   m_render_window(make_unique_lazy<sf::RenderWindow>()),
-  m_event_dispatcher(make_unique_lazy<event::EventDispatcher>())
+  m_event_dispatcher(make_unique_lazy<events::EventDispatcher>())
 {
 
 }
@@ -48,7 +49,7 @@ sf::RenderWindow& Context::getRenderWindow()
   return *m_render_window;
 }
 
-event::EventDispatcher& Context::getEventDispatcher()
+events::EventDispatcher& Context::getEventDispatcher()
 {
   return *m_event_dispatcher;
 }
@@ -83,7 +84,7 @@ const sf::RenderWindow& Context::getRenderWindow() const
   return *m_render_window;
 }
 
-const event::EventDispatcher& Context::getEventDispatcher() const
+const events::EventDispatcher& Context::getEventDispatcher() const
 {
   return *m_event_dispatcher;
 }

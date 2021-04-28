@@ -22,7 +22,7 @@ void ContactEvent::setPhysicsContact(const physics::PhysicsContact& physics_cont
 
 const physics::PhysicsContact& ContactEvent::getPhysicsContact() const
 {
-  return m_physics_contact
+  return m_physics_contact;
 }
 
 /* ----------------------------- BeginContactEvent -------------------------- */
