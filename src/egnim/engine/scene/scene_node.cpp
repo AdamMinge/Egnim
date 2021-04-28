@@ -1,5 +1,3 @@
-/* ----------------------------------- SFML --------------------------------- */
-#include <SFML/Graphics/RenderTarget.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ----------------------------------- Local -------------------------------- */
@@ -7,12 +5,14 @@
 #include <egnim/engine/scene/camera.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
 #include <egnim/engine/physics/physics_world.h>
+#include <egnim/engine/events/event_dispatcher.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
 
-SceneNode::SceneNode() :
-  m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f()))
+SceneNode::SceneNode(events::EventDispatcher& event_dispatcher) :
+  m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f())),
+  m_event_dispatcher(event_dispatcher)
 {
 
 }
@@ -54,6 +54,16 @@ physics::PhysicsWorld& SceneNode::getPhysicsWorld()
 const physics::PhysicsWorld& SceneNode::getPhysicsWorld() const
 {
   return *m_physics_world;
+}
+
+events::EventDispatcher& SceneNode::getEventDispatcher()
+{
+  return m_event_dispatcher;
+}
+
+const events::EventDispatcher& SceneNode::getEventDispatcher() const
+{
+  return m_event_dispatcher;
 }
 
 void SceneNode::accept(SceneVisitor& visitor)

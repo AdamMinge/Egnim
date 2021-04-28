@@ -1,10 +1,14 @@
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
+#include <box2d/b2_contact.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_body.h>
+#include <egnim/engine/physics/priv/b2_casters.h>
 #include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/events/contact_event.h>
+#include <egnim/engine/events/event_dispatcher.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -14,40 +18,53 @@ namespace egnim::physics {
 class PhysicsWorldCallback : public b2ContactListener
 {
 public:
-  explicit PhysicsWorldCallback() = default;
+  explicit PhysicsWorldCallback(events::EventDispatcher& event_dispatcher);
   ~PhysicsWorldCallback() override = default;
 
   void BeginContact(b2Contact* contact) override;
   void EndContact(b2Contact* contact) override;
   void PreSolve(b2Contact* contact, const b2Manifold* old_manifold) override;
   void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
+
+private:
+  events::EventDispatcher& m_event_dispatcher;
 };
+
+PhysicsWorldCallback::PhysicsWorldCallback(events::EventDispatcher& event_dispatcher) :
+  m_event_dispatcher(event_dispatcher)
+{
+
+}
 
 void PhysicsWorldCallback::BeginContact(b2Contact* contact)
 {
-
+  auto event = events::BeginContactEvent(priv::b2_cast(*contact));
+  m_event_dispatcher.dispatchEvent(event);
 }
 
 void PhysicsWorldCallback::EndContact(b2Contact* contact)
 {
-
+  auto event = events::EndContactEvent(priv::b2_cast(*contact));
+  m_event_dispatcher.dispatchEvent(event);
 }
 
 void PhysicsWorldCallback::PreSolve(b2Contact* contact, const b2Manifold* old_manifold)
 {
-
+  auto event = events::PreSolveContactEvent(priv::b2_cast(*contact), priv::b2_cast(*old_manifold));
+  m_event_dispatcher.dispatchEvent(event);
 }
 
 void PhysicsWorldCallback::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
 {
-
+  auto event = events::PostSolveContactEvent(priv::b2_cast(*contact), priv::b2_cast(*impulse));
+  m_event_dispatcher.dispatchEvent(event);
 }
 
 /* --------------------------------- PhysicsWorld --------------------------- */
 
 PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity) :
   m_scene_node(scene_node),
-  m_physics_world_callback(std::make_unique<PhysicsWorldCallback>()),
+  m_physics_world_callback(std::make_unique<PhysicsWorldCallback>(scene_node.getEventDispatcher())),
   m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))
 {
   m_b2_world->SetContactListener(m_physics_world_callback.get());

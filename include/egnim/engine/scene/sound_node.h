@@ -16,11 +16,6 @@
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::events
-{
-  class SoundEventListener;
-}
-
 namespace egnim::scene
 {
 
@@ -73,7 +68,6 @@ namespace egnim::scene
     core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* m_sound_buffers;
     std::list<std::pair<sf::Sound, std::function<bool()>>> m_sounds;
     Settings m_default_settings;
-    std::unique_ptr<events::SoundEventListener> m_listener;
   };
 
 } // namespace egnim::scene

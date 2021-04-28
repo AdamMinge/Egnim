@@ -10,11 +10,6 @@
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::events
-{
-  class MusicEventListener;
-}
-
 namespace egnim::scene
 {
 
@@ -58,7 +53,6 @@ namespace egnim::scene
     core::BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;
     sf::Music* m_current_music;
-    std::unique_ptr<events::MusicEventListener> m_listener;
   };
 
 } // namespace egnim::scene

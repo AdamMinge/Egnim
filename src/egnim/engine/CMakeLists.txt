@@ -38,6 +38,8 @@ set(sources
         ${source_root}/physics/physics_manifold_point.cpp
         ${source_root}/physics/physics_contact.cpp
         ${source_root}/physics/physics_material.cpp
+        ${source_root}/physics/priv/b2_casters.h
+        ${source_root}/physics/priv/b2_casters.cpp
 
         ${source_root}/scene/visitor/scene_serializer.cpp
         ${source_root}/scene/visitor/priv/scene_serializer_impl.h
@@ -46,12 +48,8 @@ set(sources
 
         ${source_root}/events/event_dispatcher.cpp
         ${source_root}/events/event.cpp
-        ${source_root}/events/sound_event.cpp
-        ${source_root}/events/music_event.cpp
         ${source_root}/events/contact_event.cpp
         ${source_root}/events/event_listener.cpp
-        ${source_root}/events/sound_event_listener.cpp
-        ${source_root}/events/music_event_listener.cpp
         ${source_root}/events/contact_event_listener.cpp
         ${source_root}/events/priv/event_listener_vector.h
         ${source_root}/events/priv/event_listener_vector.cpp)
@@ -97,12 +95,8 @@ set(includes
 
         ${include_root}/events/event_dispatcher.h
         ${include_root}/events/event.h
-        ${include_root}/events/sound_event.h
-        ${include_root}/events/music_event.h
         ${include_root}/events/contact_event.h
         ${include_root}/events/event_listener.h
-        ${include_root}/events/sound_event_listener.h
-        ${include_root}/events/music_event_listener.h
         ${include_root}/events/contact_event_listener.h)
 
 set(resources)

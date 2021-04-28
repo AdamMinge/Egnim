@@ -1,7 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/music_node.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
-#include <egnim/engine/events/music_event_listener.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
@@ -9,8 +8,7 @@ namespace egnim::scene {
 MusicNode::MusicNode() :
   m_musics_holder(nullptr),
   m_default_settings(Settings{}),
-  m_current_music(nullptr),
-  m_listener(std::make_unique<events::MusicEventListener>())
+  m_current_music(nullptr)
 {
 
 }

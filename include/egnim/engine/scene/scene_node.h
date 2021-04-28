@@ -8,24 +8,24 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
-#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::physics
+namespace egnim
 {
-  class PhysicsWorld;
+  namespace physics { class PhysicsWorld; }
+  namespace events { class EventDispatcher; }
 }
 
 namespace egnim::scene
 {
   class Camera;
 
-  class EGNIM_UTILITY_API SceneNode : public Node, public RegisteredInNodeFactory<SceneNode>
+  class EGNIM_UTILITY_API SceneNode : public Node
   {
     EGNIM_CLASS(SceneNode, Node)
 
   public:
-    explicit SceneNode();
+    explicit SceneNode(events::EventDispatcher& event_dispatcher);
     ~SceneNode() override;
 
     void attachCamera(std::string_view id, std::unique_ptr<Camera> camera);
@@ -37,6 +37,9 @@ namespace egnim::scene
     physics::PhysicsWorld& getPhysicsWorld();
     const physics::PhysicsWorld& getPhysicsWorld() const;
 
+    events::EventDispatcher& getEventDispatcher();
+    const events::EventDispatcher& getEventDispatcher() const;
+
     void accept(SceneVisitor& visitor) override;
 
   protected:
@@ -45,6 +48,7 @@ namespace egnim::scene
   private:
     std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;
     std::unique_ptr<physics::PhysicsWorld> m_physics_world;
+    events::EventDispatcher& m_event_dispatcher;
   };
 
 } // namespace egnim::scene
