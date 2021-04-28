@@ -1,0 +1,8 @@
+//
+// Created by adam on 27.04.2021.
+//
+
+#ifndef CONTACT_EVENT_LISTENER_H
+#define CONTACT_EVENT_LISTENER_H
+
+#endif //CONTACT_EVENT_LISTENER_H

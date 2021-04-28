@@ -48,9 +48,11 @@ set(sources
         ${source_root}/events/event.cpp
         ${source_root}/events/sound_event.cpp
         ${source_root}/events/music_event.cpp
+        ${source_root}/events/contact_event.cpp
         ${source_root}/events/event_listener.cpp
         ${source_root}/events/sound_event_listener.cpp
         ${source_root}/events/music_event_listener.cpp
+        ${source_root}/events/contact_event_listener.cpp
         ${source_root}/events/priv/event_listener_vector.h
         ${source_root}/events/priv/event_listener_vector.cpp)
 
@@ -97,9 +99,11 @@ set(includes
         ${include_root}/events/event.h
         ${include_root}/events/sound_event.h
         ${include_root}/events/music_event.h
+        ${include_root}/events/contact_event.h
         ${include_root}/events/event_listener.h
         ${include_root}/events/sound_event_listener.h
-        ${include_root}/events/music_event_listener.h)
+        ${include_root}/events/music_event_listener.h
+        ${include_root}/events/contact_event_listener.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

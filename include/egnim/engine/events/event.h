@@ -40,6 +40,7 @@ namespace egnim::events
     Mouse     = 1 << 1,
     Sound     = 1 << 2,
     Music     = 1 << 3,
+    Physics   = 1 << 4,
 
     Custom    = 1 << 31,
   };
