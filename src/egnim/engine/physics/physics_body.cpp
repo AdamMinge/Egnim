@@ -81,34 +81,34 @@ float PhysicsBody::getAngularVelocity() const
   return m_b2_body->GetAngularVelocity();
 }
 
-void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point)
+void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), true);
+  m_b2_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), awake);
 }
 
-void PhysicsBody::applyForceToCenter(const sf::Vector2f& force)
+void PhysicsBody::applyForceToCenter(const sf::Vector2f& force, bool awake)
 {
-  m_b2_body->ApplyForceToCenter(b2Vec2(force.x, force.y), true);
+  m_b2_body->ApplyForceToCenter(b2Vec2(force.x, force.y), awake);
 }
 
-void PhysicsBody::applyTorque(float torque)
+void PhysicsBody::applyTorque(float torque, bool awake)
 {
-  m_b2_body->ApplyTorque(torque, true);
+  m_b2_body->ApplyTorque(torque, awake);
 }
 
-void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point)
+void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyLinearImpulse(b2Vec2(impulse.x, impulse.y), b2Vec2(point.x, point.y), true);
+  m_b2_body->ApplyLinearImpulse(b2Vec2(impulse.x, impulse.y), b2Vec2(point.x, point.y), awake);
 }
 
-void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse)
+void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake)
 {
-  m_b2_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), true);
+  m_b2_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), awake);
 }
 
-void PhysicsBody::applyAngularImpulse(float impulse)
+void PhysicsBody::applyAngularImpulse(float impulse, bool awake)
 {
-  m_b2_body->ApplyAngularImpulse(impulse, true);
+  m_b2_body->ApplyAngularImpulse(impulse, awake);
 }
 
 float PhysicsBody::getMass() const
@@ -201,6 +201,26 @@ const std::list<std::unique_ptr<PhysicsShape>>& PhysicsBody::getPhysicsShapes() 
 const std::list<PhysicsJoint*>& PhysicsBody::getPhysicsJoints() const
 {
   return m_physics_joints;
+}
+
+void PhysicsBody::setAwake(bool awake)
+{
+  m_b2_body->SetAwake(awake);
+}
+
+bool PhysicsBody::isAwake() const
+{
+  return m_b2_body->IsAwake();
+}
+
+void PhysicsBody::setEnabled(bool enabled)
+{
+  m_b2_body->SetEnabled(enabled);
+}
+
+bool PhysicsBody::isEnabled() const
+{
+  return m_b2_body->IsEnabled();
 }
 
 void PhysicsBody::attachPhysicsJoint(PhysicsJoint* physics_joint)

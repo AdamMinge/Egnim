@@ -57,13 +57,13 @@ namespace egnim::physics
     void setAngularVelocity(float omega);
     [[nodiscard]] float getAngularVelocity() const;
 
-    void applyForce(const sf::Vector2f& force, const sf::Vector2f& point);
-    void applyForceToCenter(const sf::Vector2f& force);
+    void applyForce(const sf::Vector2f& force, const sf::Vector2f& point, bool awake = true);
+    void applyForceToCenter(const sf::Vector2f& force, bool awake = true);
 
-    void applyTorque(float torque);
-    void applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point);
-    void applyLinearImpulseToCenter(const sf::Vector2f& impulse);
-    void applyAngularImpulse(float impulse);
+    void applyTorque(float torque, bool awake = true);
+    void applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point, bool awake = true);
+    void applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake = true);
+    void applyAngularImpulse(float impulse, bool awake = true);
 
     [[nodiscard]] float getMass() const;
     [[nodiscard]] float getInertia() const;
@@ -87,6 +87,12 @@ namespace egnim::physics
     std::unique_ptr<PhysicsShape> detachPhysicsShape(const PhysicsShape& physics_shape);
     [[nodiscard]] const std::list<std::unique_ptr<PhysicsShape>>& getPhysicsShapes() const;
     [[nodiscard]] const std::list<PhysicsJoint*>& getPhysicsJoints() const;
+
+    void setAwake(bool awake);
+    [[nodiscard]] bool isAwake() const;
+
+    void setEnabled(bool enabled);
+    [[nodiscard]] bool isEnabled() const;
 
   private:
     void attachPhysicsJoint(PhysicsJoint* physics_joint);
