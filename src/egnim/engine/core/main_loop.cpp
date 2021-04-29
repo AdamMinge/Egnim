@@ -4,6 +4,9 @@
 #include <egnim/engine/core/main_loop.h>
 #include <egnim/engine/core/state_stack.h>
 #include <egnim/engine/core/context.h>
+#include <egnim/engine/events/event_dispatcher.h>
+#include <egnim/engine/events/keyboard_event.h>
+#include <egnim/engine/events/mouse_event.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core {
@@ -63,8 +66,9 @@ void MainLoop::processInput()
   {
     m_states->handleEvent(event);
 
-    if(event.type == sf::Event::Closed)
-      render_window.close();
+    processWindowEvent(event);
+    processKeyboardEvent(event);
+    processMouseEvent(event);
   }
 }
 
@@ -80,6 +84,90 @@ void MainLoop::render()
   render_window.clear();
   m_states->draw();
   render_window.display();
+}
+
+void MainLoop::processWindowEvent(const sf::Event& window_event)
+{
+
+}
+
+void MainLoop::processKeyboardEvent(const sf::Event& keyboard_event)
+{
+  switch(keyboard_event.type)
+  {
+    case sf::Event::KeyPressed:
+    {
+      auto key_pressed_event = events::KeyboardKeyPressedEvent(keyboard_event.key.code);
+      key_pressed_event.setAltPressed(keyboard_event.key.alt);
+      key_pressed_event.setControlPressed(keyboard_event.key.control);
+      key_pressed_event.setShiftPressed(keyboard_event.key.shift);
+      key_pressed_event.setSystemPressed(keyboard_event.key.system);
+
+      m_context->getEventDispatcher().dispatchEvent(key_pressed_event);
+      break;
+    }
+
+    case sf::Event::KeyReleased:
+    {
+      auto key_released_event = events::KeyboardKeyReleasedEvent(keyboard_event.key.code);
+      key_released_event.setAltPressed(keyboard_event.key.alt);
+      key_released_event.setControlPressed(keyboard_event.key.control);
+      key_released_event.setShiftPressed(keyboard_event.key.shift);
+      key_released_event.setSystemPressed(keyboard_event.key.system);
+
+      m_context->getEventDispatcher().dispatchEvent(key_released_event);
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
+void MainLoop::processMouseEvent(const sf::Event& mouse_event)
+{
+  switch(mouse_event.type)
+  {
+    case sf::Event::MouseButtonPressed:
+    {
+      auto mouse_button_pressed_event = events::MouseButtonPressedEvent(
+        mouse_event.mouseButton.button,sf::Vector2i(mouse_event.mouseButton.x, mouse_event.mouseButton.y));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_button_pressed_event);
+      break;
+    }
+
+    case sf::Event::MouseButtonReleased:
+    {
+      auto mouse_button_released_event = events::MouseButtonReleasedEvent(
+        mouse_event.mouseButton.button,sf::Vector2i(mouse_event.mouseButton.x, mouse_event.mouseButton.y));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_button_released_event);
+      break;
+    }
+
+    case sf::Event::MouseMoved:
+    {
+      auto mouse_move_event = events::MouseMoveEvent(
+        sf::Vector2i(mouse_event.mouseMove.x, mouse_event.mouseMove.y));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_move_event);
+      break;
+    }
+
+    case sf::Event::MouseWheelScrolled:
+    {
+      auto mouse_wheel_scrolled_event = events::MouseWheelScrollEvent(
+        mouse_event.mouseWheelScroll.wheel, mouse_event.mouseWheelScroll.delta,
+        sf::Vector2i(mouse_event.mouseWheelScroll.x, mouse_event.mouseWheelScroll.y));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_wheel_scrolled_event);
+      break;
+    }
+
+    default:
+      break;
+  }
 }
 
 } // namespace egnim::core

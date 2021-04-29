@@ -12,8 +12,8 @@ namespace egnim::events
 {
 
   class MouseMoveEvent;
-  class MouseKeyPressedEvent;
-  class MouseKeyReleasedEvent;
+  class MouseButtonPressedEvent;
+  class MouseButtonReleasedEvent;
   class MouseWheelScrollEvent;
 
   class EGNIM_UTILITY_API MouseEventListener: public EventListener
@@ -22,8 +22,8 @@ namespace egnim::events
 
   public:
     using MouseMoveEventCallback = std::function<void(const MouseMoveEvent&)>;
-    using MouseKeyPressedEventCallback = std::function<void(const MouseKeyPressedEvent&)>;
-    using MouseKeyReleasedEventCallback = std::function<void(const MouseKeyReleasedEvent&)>;
+    using MouseButtonPressedEventCallback = std::function<void(const MouseButtonPressedEvent&)>;
+    using MouseButtonReleasedEventCallback = std::function<void(const MouseButtonReleasedEvent&)>;
     using MouseWheelScrollEventCallback = std::function<void(const MouseWheelScrollEvent&)>;
 
   public:
@@ -31,8 +31,8 @@ namespace egnim::events
     ~MouseEventListener() override;
 
     void setMouseMoveEventCallback(const MouseMoveEventCallback& callback);
-    void setMouseKeyPressedEventCallback(const MouseKeyPressedEventCallback& callback);
-    void setMouseKeyReleasedEventCallback(const MouseKeyReleasedEventCallback& callback);
+    void setMouseButtonPressedEventCallback(const MouseButtonPressedEventCallback& callback);
+    void setMouseButtonReleasedEventCallback(const MouseButtonReleasedEventCallback& callback);
     void setMouseWheelScrollEventCallback(const MouseWheelScrollEventCallback& callback);
 
   protected:
@@ -40,8 +40,8 @@ namespace egnim::events
 
   private:
     MouseMoveEventCallback m_mouse_move_event_event_callback;
-    MouseKeyPressedEventCallback m_mouse_key_pressed_event_callback;
-    MouseKeyReleasedEventCallback m_mouse_key_released_event_callback;
+    MouseButtonPressedEventCallback m_mouse_button_pressed_event_callback;
+    MouseButtonReleasedEventCallback m_mouse_button_released_event_callback;
     MouseWheelScrollEventCallback m_mouse_wheel_scroll_event_callback;
   };
 

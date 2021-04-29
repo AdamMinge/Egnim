@@ -3,6 +3,7 @@
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Time.hpp>
+#include <SFML/Window/Event.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
 /* ---------------------------------- Local --------------------------------- */
@@ -29,6 +30,10 @@ namespace egnim::core
     virtual void processInput();
     virtual void update(sf::Time dt);
     virtual void render();
+
+    virtual void processWindowEvent(const sf::Event& window_event);
+    virtual void processKeyboardEvent(const sf::Event& keyboard_event);
+    virtual void processMouseEvent(const sf::Event& mouse_event);
 
   private:
     std::unique_ptr<Context> m_context;

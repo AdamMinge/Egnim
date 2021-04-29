@@ -18,14 +18,14 @@ void MouseEventListener::setMouseMoveEventCallback(const MouseMoveEventCallback&
   m_mouse_move_event_event_callback = callback;
 }
 
-void MouseEventListener::setMouseKeyPressedEventCallback(const MouseKeyPressedEventCallback& callback)
+void MouseEventListener::setMouseButtonPressedEventCallback(const MouseButtonPressedEventCallback& callback)
 {
-  m_mouse_key_pressed_event_callback = callback;
+  m_mouse_button_pressed_event_callback = callback;
 }
 
-void MouseEventListener::setMouseKeyReleasedEventCallback(const MouseKeyReleasedEventCallback& callback)
+void MouseEventListener::setMouseButtonReleasedEventCallback(const MouseButtonReleasedEventCallback& callback)
 {
-  m_mouse_key_released_event_callback = callback;
+  m_mouse_button_released_event_callback = callback;
 }
 
 void MouseEventListener::setMouseWheelScrollEventCallback(const MouseWheelScrollEventCallback& callback)
@@ -37,8 +37,8 @@ void MouseEventListener::invoke(const Event& event)
 {
   invokeIfCasted(event,
                  m_mouse_move_event_event_callback,
-                 m_mouse_key_pressed_event_callback,
-                 m_mouse_key_released_event_callback,
+                 m_mouse_button_pressed_event_callback,
+                 m_mouse_button_released_event_callback,
                  m_mouse_wheel_scroll_event_callback);
 }
 
