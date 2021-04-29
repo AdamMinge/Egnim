@@ -15,7 +15,7 @@ MouseEventListener::~MouseEventListener() = default;
 
 void MouseEventListener::setMouseMoveEventCallback(const MouseMoveEventCallback& callback)
 {
-  m_mouse_move_event_event_callback = callback;
+  m_mouse_move_event_callback = callback;
 }
 
 void MouseEventListener::setMouseButtonPressedEventCallback(const MouseButtonPressedEventCallback& callback)
@@ -36,7 +36,7 @@ void MouseEventListener::setMouseWheelScrollEventCallback(const MouseWheelScroll
 void MouseEventListener::invoke(const Event& event)
 {
   invokeIfCasted(event,
-                 m_mouse_move_event_event_callback,
+                 m_mouse_move_event_callback,
                  m_mouse_button_pressed_event_callback,
                  m_mouse_button_released_event_callback,
                  m_mouse_wheel_scroll_event_callback);

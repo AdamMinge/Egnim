@@ -39,7 +39,7 @@ namespace egnim::events
     void invoke(const Event& event) override;
 
   private:
-    MouseMoveEventCallback m_mouse_move_event_event_callback;
+    MouseMoveEventCallback m_mouse_move_event_callback;
     MouseButtonPressedEventCallback m_mouse_button_pressed_event_callback;
     MouseButtonReleasedEventCallback m_mouse_button_released_event_callback;
     MouseWheelScrollEventCallback m_mouse_wheel_scroll_event_callback;

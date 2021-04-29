@@ -36,9 +36,10 @@ namespace egnim::events
 
   enum class Event::Type : int32_t
   {
-    Keyboard  = 1 << 0,
-    Mouse     = 1 << 1,
-    Physics   = 1 << 2,
+    Window    = 1 << 0,
+    Keyboard  = 1 << 1,
+    Mouse     = 1 << 2,
+    Physics   = 1 << 3,
 
     Custom    = 1 << 31,
   };

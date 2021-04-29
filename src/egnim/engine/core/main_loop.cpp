@@ -7,6 +7,7 @@
 #include <egnim/engine/events/event_dispatcher.h>
 #include <egnim/engine/events/keyboard_event.h>
 #include <egnim/engine/events/mouse_event.h>
+#include <egnim/engine/events/window_event.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core {
@@ -88,7 +89,40 @@ void MainLoop::render()
 
 void MainLoop::processWindowEvent(const sf::Event& window_event)
 {
+  switch(window_event.type)
+  {
+    case sf::Event::GainedFocus:
+    {
+      auto window_gained_focus_event = events::WindowGainedFocusEvent();
+      m_context->getEventDispatcher().dispatchEvent(window_gained_focus_event);
+      break;
+    }
 
+    case sf::Event::LostFocus:
+    {
+      auto window_lost_focus_event = events::WindowLostFocusEvent();
+      m_context->getEventDispatcher().dispatchEvent(window_lost_focus_event);
+      break;
+    }
+
+    case sf::Event::Closed:
+    {
+      auto window_close_event = events::WindowCloseEvent();
+      m_context->getEventDispatcher().dispatchEvent(window_close_event);
+      break;
+    }
+
+    case sf::Event::Resized:
+    {
+      auto window_resize_event = events::WindowResizeEvent(
+        sf::Vector2u(window_event.size.width, window_event.size.height));
+      m_context->getEventDispatcher().dispatchEvent(window_resize_event);
+      break;
+    }
+
+    default:
+      break;
+  }
 }
 
 void MainLoop::processKeyboardEvent(const sf::Event& keyboard_event)
@@ -148,19 +182,19 @@ void MainLoop::processMouseEvent(const sf::Event& mouse_event)
 
     case sf::Event::MouseEntered:
     {
-      auto mouse_move_event = events::MouseEnteredEvent(
+      auto mouse_entered_event = events::MouseEnteredEvent(
         sf::Vector2i(sf::Mouse::getPosition(m_context->getRenderWindow())));
 
-      m_context->getEventDispatcher().dispatchEvent(mouse_move_event);
+      m_context->getEventDispatcher().dispatchEvent(mouse_entered_event);
       break;
     }
 
     case sf::Event::MouseLeft:
     {
-      auto mouse_move_event = events::MouseLeftEvent(
+      auto mouse_left_event = events::MouseLeftEvent(
         sf::Vector2i(sf::Mouse::getPosition(m_context->getRenderWindow())));
 
-      m_context->getEventDispatcher().dispatchEvent(mouse_move_event);
+      m_context->getEventDispatcher().dispatchEvent(mouse_left_event);
       break;
     }
 
