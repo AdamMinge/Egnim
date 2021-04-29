@@ -2,6 +2,7 @@
 #define EVENT_LISTENER_H
 
 /* --------------------------------- Standard ------------------------------- */
+#include <type_traits>
 #include <functional>
 #include <cstdint>
 /* ----------------------------------- Local -------------------------------- */
@@ -42,6 +43,9 @@ namespace egnim::events
     template<typename EVENT_TO_CAST>
     bool invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke);
 
+    template<typename EVENT_TO_CAST, typename ...INVOKERS>
+    bool invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke, INVOKERS... invokers);
+
   private:
     int32_t m_listen_events;
     EventDispatcher* m_event_dispatcher;
@@ -51,11 +55,20 @@ namespace egnim::events
   template<typename EVENT_TO_CAST>
   bool EventListener::invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke)
   {
-    auto sound_play_event = dynamic_cast<const EVENT_TO_CAST*>(std::addressof(event));
+    auto sound_play_event = dynamic_cast<const std::remove_reference_t<EVENT_TO_CAST>*>(std::addressof(event));
     if(sound_play_event && invoke)
       invoke(*sound_play_event);
 
     return sound_play_event;
+  }
+
+  template<typename EVENT_TO_CAST, typename ...INVOKERS>
+  bool EventListener::invokeIfCasted(const Event& event, const std::function<void(const EVENT_TO_CAST)>& invoke, INVOKERS... invokers)
+  {
+    if(invokeIfCasted(event, invoke))
+      return true;
+
+    return invokeIfCasted(event, invokers...);
   }
 
 } // namespace egnim::events

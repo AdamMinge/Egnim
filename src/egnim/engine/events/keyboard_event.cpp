@@ -68,25 +68,24 @@ bool KeyboardEvent::isSystemPressed() const
 {
   return m_system;
 }
+/* -------------------------- KeyboardKeyPressedEvent ----------------------- */
 
-/* ------------------------------ KeyPressedEvent --------------------------- */
-
-KeyPressedEvent::KeyPressedEvent(sf::Keyboard::Key key) :
+KeyboardKeyPressedEvent::KeyboardKeyPressedEvent(sf::Keyboard::Key key) :
   KeyboardEvent(key)
 {
 
 }
 
-KeyPressedEvent::~KeyPressedEvent() = default;
+KeyboardKeyPressedEvent::~KeyboardKeyPressedEvent() = default;
 
-/* ------------------------------ KeyReleasedEvent -------------------------- */
+/* -------------------------- KeyboardKeyReleasedEvent ---------------------- */
 
-KeyReleasedEvent::KeyReleasedEvent(sf::Keyboard::Key key) :
+KeyboardKeyReleasedEvent::KeyboardKeyReleasedEvent(sf::Keyboard::Key key) :
   KeyboardEvent(key)
 {
 
 }
 
-KeyReleasedEvent::~KeyReleasedEvent() = default;
+KeyboardKeyReleasedEvent::~KeyboardKeyReleasedEvent() = default;
 
 } // namespace egnim::events

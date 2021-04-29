@@ -25,44 +25,55 @@ const sf::Vector2i& MouseEvent::getPosition() const
   return m_position;
 }
 
-/* ------------------------------- MouseKeyPressed -------------------------- */
 
-MouseKeyPressed::MouseKeyPressed(sf::Mouse::Button button, const sf::Vector2i& position) :
+/* -------------------------------- MouseMoveEvent -------------------------- */
+
+MouseMoveEvent::MouseMoveEvent(const sf::Vector2i& position) :
+  MouseEvent(position)
+{
+
+}
+
+MouseMoveEvent::~MouseMoveEvent() = default;
+
+/* ---------------------------- MouseKeyPressedEvent ------------------------ */
+
+MouseKeyPressedEvent::MouseKeyPressedEvent(sf::Mouse::Button button, const sf::Vector2i& position) :
   MouseEvent(position),
   m_button(button)
 {
 
 }
 
-MouseKeyPressed::~MouseKeyPressed() = default;
+MouseKeyPressedEvent::~MouseKeyPressedEvent() = default;
 
-void MouseKeyPressed::setButton(sf::Mouse::Button button)
+void MouseKeyPressedEvent::setButton(sf::Mouse::Button button)
 {
   m_button = button;
 }
 
-sf::Mouse::Button MouseKeyPressed::getButton() const
+sf::Mouse::Button MouseKeyPressedEvent::getButton() const
 {
   return m_button;
 }
 
-/* ------------------------------ MouseKeyReleased -------------------------- */
+/* --------------------------- MouseKeyReleasedEvent ------------------------ */
 
-MouseKeyReleased::MouseKeyReleased(sf::Mouse::Button button, const sf::Vector2i& position) :
+MouseKeyReleasedEvent::MouseKeyReleasedEvent(sf::Mouse::Button button, const sf::Vector2i& position) :
   MouseEvent(position),
   m_button(button)
 {
 
 }
 
-MouseKeyReleased::~MouseKeyReleased() = default;
+MouseKeyReleasedEvent::~MouseKeyReleasedEvent() = default;
 
-void MouseKeyReleased::setButton(sf::Mouse::Button button)
+void MouseKeyReleasedEvent::setButton(sf::Mouse::Button button)
 {
   m_button = button;
 }
 
-sf::Mouse::Button MouseKeyReleased::getButton() const
+sf::Mouse::Button MouseKeyReleasedEvent::getButton() const
 {
   return m_button;
 }

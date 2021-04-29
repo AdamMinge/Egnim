@@ -29,13 +29,22 @@ namespace egnim::events
     sf::Vector2i m_position;
   };
 
-  class EGNIM_UTILITY_API MouseKeyPressed: public MouseEvent
+  class EGNIM_UTILITY_API MouseMoveEvent: public MouseEvent
   {
-    EGNIM_CLASS(MouseKeyPressed, MouseEvent)
+  EGNIM_CLASS(MouseMoveEvent, MouseEvent)
 
   public:
-    explicit MouseKeyPressed(sf::Mouse::Button button, const sf::Vector2i& position);
-    ~MouseKeyPressed() override;
+    explicit MouseMoveEvent(const sf::Vector2i& position);
+    ~MouseMoveEvent() override;
+  };
+
+  class EGNIM_UTILITY_API MouseKeyPressedEvent: public MouseEvent
+  {
+    EGNIM_CLASS(MouseKeyPressedEvent, MouseEvent)
+
+  public:
+    explicit MouseKeyPressedEvent(sf::Mouse::Button button, const sf::Vector2i& position);
+    ~MouseKeyPressedEvent() override;
 
     void setButton(sf::Mouse::Button button);
     [[nodiscard]] sf::Mouse::Button getButton() const;
@@ -44,13 +53,13 @@ namespace egnim::events
     sf::Mouse::Button m_button;
   };
 
-  class EGNIM_UTILITY_API MouseKeyReleased: public MouseEvent
+  class EGNIM_UTILITY_API MouseKeyReleasedEvent: public MouseEvent
   {
-    EGNIM_CLASS(MouseKeyReleased, MouseEvent)
+    EGNIM_CLASS(MouseKeyReleasedEvent, MouseEvent)
 
   public:
-    explicit MouseKeyReleased(sf::Mouse::Button button, const sf::Vector2i& position);
-    ~MouseKeyReleased() override;
+    explicit MouseKeyReleasedEvent(sf::Mouse::Button button, const sf::Vector2i& position);
+    ~MouseKeyReleasedEvent() override;
 
     void setButton(sf::Mouse::Button button);
     [[nodiscard]] sf::Mouse::Button getButton() const;

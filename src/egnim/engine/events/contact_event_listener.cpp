@@ -5,8 +5,7 @@
 
 namespace egnim::events {
 
-ContactEventListener::ContactEventListener()
-  :
+ContactEventListener::ContactEventListener() :
   EventListener(static_cast<int32_t>(Event::Type::Physics))
 {
 
@@ -36,10 +35,11 @@ void ContactEventListener::setPostSolveContactEventCallback(const PostSolveConta
 
 void ContactEventListener::invoke(const Event &event)
 {
-  invokeIfCasted<BeginContactEvent>(event, m_begin_contact_event_callback);
-  invokeIfCasted<EndContactEvent>(event, m_end_contact_event_callback);
-  invokeIfCasted<PreSolveContactEvent>(event, m_pre_solve_contact_event_callback);
-  invokeIfCasted<PostSolveContactEvent>(event, m_post_solve_contact_event_callback);
+  invokeIfCasted(event,
+                 m_begin_contact_event_callback,
+                 m_end_contact_event_callback,
+                 m_pre_solve_contact_event_callback,
+                 m_post_solve_contact_event_callback);
 }
 
 } // namespace egnim::events

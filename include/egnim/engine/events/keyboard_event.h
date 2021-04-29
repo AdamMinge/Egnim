@@ -42,22 +42,22 @@ namespace egnim::events
     bool m_system;
   };
 
-  class EGNIM_UTILITY_API KeyPressedEvent: public KeyboardEvent
+  class EGNIM_UTILITY_API KeyboardKeyPressedEvent: public KeyboardEvent
   {
-    EGNIM_CLASS(KeyPressedEvent, KeyboardEvent)
+    EGNIM_CLASS(KeyboardKeyPressedEvent, KeyboardEvent)
 
   public:
-    explicit KeyPressedEvent(sf::Keyboard::Key key);
-    ~KeyPressedEvent() override;
+    explicit KeyboardKeyPressedEvent(sf::Keyboard::Key key);
+    ~KeyboardKeyPressedEvent() override;
   };
 
-  class EGNIM_UTILITY_API KeyReleasedEvent: public KeyboardEvent
+  class EGNIM_UTILITY_API KeyboardKeyReleasedEvent: public KeyboardEvent
   {
-  EGNIM_CLASS(KeyReleasedEvent, KeyboardEvent)
+  EGNIM_CLASS(KeyboardKeyReleasedEvent, KeyboardEvent)
 
   public:
-    explicit KeyReleasedEvent(sf::Keyboard::Key key);
-    ~KeyReleasedEvent() override;
+    explicit KeyboardKeyReleasedEvent(sf::Keyboard::Key key);
+    ~KeyboardKeyReleasedEvent() override;
   };
 
 }; // namespace egnim::events
