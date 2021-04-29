@@ -51,10 +51,12 @@ set(sources
         ${source_root}/events/contact_event.cpp
         ${source_root}/events/mouse_event.cpp
         ${source_root}/events/keyboard_event.cpp
+        ${source_root}/events/window_event.cpp
         ${source_root}/events/event_listener.cpp
         ${source_root}/events/contact_event_listener.cpp
         ${source_root}/events/mouse_event_listener.cpp
         ${source_root}/events/keyboard_event_listener.cpp
+        ${source_root}/events/window_event_listener.cpp
         ${source_root}/events/priv/event_listener_vector.h
         ${source_root}/events/priv/event_listener_vector.cpp)
 
@@ -102,10 +104,12 @@ set(includes
         ${include_root}/events/contact_event.h
         ${include_root}/events/mouse_event.h
         ${include_root}/events/keyboard_event.h
+        ${include_root}/events/window_event.h
         ${include_root}/events/event_listener.h
         ${include_root}/events/contact_event_listener.h
         ${include_root}/events/mouse_event_listener.h
-        ${include_root}/events/keyboard_event_listener.h)
+        ${include_root}/events/keyboard_event_listener.h
+        ${include_root}/events/window_event_listener.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

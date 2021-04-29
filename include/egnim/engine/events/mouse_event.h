@@ -12,35 +12,53 @@
 namespace egnim::events
 {
 
-  class EGNIM_UTILITY_API MouseEvent: public Event
+  class EGNIM_UTILITY_API MousePositionEvent: public Event
   {
-    EGNIM_CLASS(MouseEvent, Event)
+    EGNIM_CLASS(MousePositionEvent, Event)
 
   public:
-    ~MouseEvent() override;
+    ~MousePositionEvent() override;
 
     void setPosition(const sf::Vector2i& position);
     [[nodiscard]] const sf::Vector2i& getPosition() const;
 
   protected:
-    explicit MouseEvent(const sf::Vector2i& position);
+    explicit MousePositionEvent(const sf::Vector2i& position);
 
   private:
     sf::Vector2i m_position;
   };
 
-  class EGNIM_UTILITY_API MouseMoveEvent: public MouseEvent
+  class EGNIM_UTILITY_API MouseEnteredEvent: public MousePositionEvent
   {
-  EGNIM_CLASS(MouseMoveEvent, MouseEvent)
+    EGNIM_CLASS(MousePositionEvent, MousePositionEvent)
+
+  public:
+    explicit MouseEnteredEvent(const sf::Vector2i& position);
+    ~MouseEnteredEvent() override;
+  };
+
+  class EGNIM_UTILITY_API MouseLeftEvent: public MousePositionEvent
+  {
+    EGNIM_CLASS(MousePositionEvent, MousePositionEvent)
+
+  public:
+    explicit MouseLeftEvent(const sf::Vector2i& position);
+    ~MouseLeftEvent() override;
+  };
+
+  class EGNIM_UTILITY_API MouseMoveEvent: public MousePositionEvent
+  {
+  EGNIM_CLASS(MouseMoveEvent, MousePositionEvent)
 
   public:
     explicit MouseMoveEvent(const sf::Vector2i& position);
     ~MouseMoveEvent() override;
   };
 
-  class EGNIM_UTILITY_API MouseButtonPressedEvent: public MouseEvent
+  class EGNIM_UTILITY_API MouseButtonPressedEvent: public MousePositionEvent
   {
-    EGNIM_CLASS(MouseButtonPressedEvent, MouseEvent)
+    EGNIM_CLASS(MouseButtonPressedEvent, MousePositionEvent)
 
   public:
     explicit MouseButtonPressedEvent(sf::Mouse::Button button, const sf::Vector2i& position);
@@ -53,9 +71,9 @@ namespace egnim::events
     sf::Mouse::Button m_button;
   };
 
-  class EGNIM_UTILITY_API MouseButtonReleasedEvent: public MouseEvent
+  class EGNIM_UTILITY_API MouseButtonReleasedEvent: public MousePositionEvent
   {
-    EGNIM_CLASS(MouseButtonReleasedEvent, MouseEvent)
+    EGNIM_CLASS(MouseButtonReleasedEvent, MousePositionEvent)
 
   public:
     explicit MouseButtonReleasedEvent(sf::Mouse::Button button, const sf::Vector2i& position);
@@ -68,12 +86,12 @@ namespace egnim::events
     sf::Mouse::Button m_button;
   };
 
-  class EGNIM_UTILITY_API MouseWheelScrollEvent: public MouseEvent
+  class EGNIM_UTILITY_API MouseWheelScrollEvent: public MousePositionEvent
   {
-    EGNIM_CLASS(MouseWheelScrollEvent, MouseEvent)
+    EGNIM_CLASS(MouseWheelScrollEvent, MousePositionEvent)
 
   public:
-    explicit MouseWheelScrollEvent(sf::Mouse::Wheel wheel, float delta, const sf::Vector2i position);
+    explicit MouseWheelScrollEvent(sf::Mouse::Wheel wheel, float delta, const sf::Vector2i& position);
     ~MouseWheelScrollEvent() override;
 
     void setWheel(sf::Mouse::Wheel wheel);

@@ -146,6 +146,24 @@ void MainLoop::processMouseEvent(const sf::Event& mouse_event)
       break;
     }
 
+    case sf::Event::MouseEntered:
+    {
+      auto mouse_move_event = events::MouseEnteredEvent(
+        sf::Vector2i(sf::Mouse::getPosition(m_context->getRenderWindow())));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_move_event);
+      break;
+    }
+
+    case sf::Event::MouseLeft:
+    {
+      auto mouse_move_event = events::MouseLeftEvent(
+        sf::Vector2i(sf::Mouse::getPosition(m_context->getRenderWindow())));
+
+      m_context->getEventDispatcher().dispatchEvent(mouse_move_event);
+      break;
+    }
+
     case sf::Event::MouseMoved:
     {
       auto mouse_move_event = events::MouseMoveEvent(

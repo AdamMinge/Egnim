@@ -4,32 +4,51 @@
 
 namespace egnim::events {
 
-/* --------------------------------- MouseEvent ----------------------------- */
+/* ----------------------------- MousePositionEvent ------------------------- */
 
-MouseEvent::MouseEvent(const sf::Vector2i& position)  :
+MousePositionEvent::MousePositionEvent(const sf::Vector2i& position)  :
   Event(Type::Mouse),
   m_position(position)
 {
 
 }
 
-MouseEvent::~MouseEvent() = default;
+MousePositionEvent::~MousePositionEvent() = default;
 
-void MouseEvent::setPosition(const sf::Vector2i& position)
+void MousePositionEvent::setPosition(const sf::Vector2i& position)
 {
   m_position = position;
 }
 
-const sf::Vector2i& MouseEvent::getPosition() const
+const sf::Vector2i& MousePositionEvent::getPosition() const
 {
   return m_position;
 }
 
+/* ------------------------------ MouseEnteredEvent ------------------------- */
+
+MouseEnteredEvent::MouseEnteredEvent(const sf::Vector2i& position) :
+  MousePositionEvent(position)
+{
+
+}
+
+MouseEnteredEvent::~MouseEnteredEvent() = default;
+
+/* -------------------------------- MouseLeftEvent -------------------------- */
+
+MouseLeftEvent::MouseLeftEvent(const sf::Vector2i& position) :
+  MousePositionEvent(position)
+{
+
+}
+
+MouseLeftEvent::~MouseLeftEvent() = default;
 
 /* -------------------------------- MouseMoveEvent -------------------------- */
 
 MouseMoveEvent::MouseMoveEvent(const sf::Vector2i& position) :
-  MouseEvent(position)
+  MousePositionEvent(position)
 {
 
 }
@@ -39,7 +58,7 @@ MouseMoveEvent::~MouseMoveEvent() = default;
 /* --------------------------- MouseButtonPressedEvent ---------------------- */
 
 MouseButtonPressedEvent::MouseButtonPressedEvent(sf::Mouse::Button button, const sf::Vector2i& position) :
-  MouseEvent(position),
+  MousePositionEvent(position),
   m_button(button)
 {
 
@@ -60,7 +79,7 @@ sf::Mouse::Button MouseButtonPressedEvent::getButton() const
 /* -------------------------- MouseButtonReleasedEvent ---------------------- */
 
 MouseButtonReleasedEvent::MouseButtonReleasedEvent(sf::Mouse::Button button, const sf::Vector2i& position) :
-  MouseEvent(position),
+  MousePositionEvent(position),
   m_button(button)
 {
 
@@ -80,8 +99,8 @@ sf::Mouse::Button MouseButtonReleasedEvent::getButton() const
 
 /* ---------------------------- MouseWheelScrollEvent ----------------------- */
 
-MouseWheelScrollEvent::MouseWheelScrollEvent(sf::Mouse::Wheel wheel, float delta, const sf::Vector2i position) :
-  MouseEvent(position),
+MouseWheelScrollEvent::MouseWheelScrollEvent(sf::Mouse::Wheel wheel, float delta, const sf::Vector2i& position) :
+  MousePositionEvent(position),
   m_wheel(wheel),
   m_delta(delta)
 {
