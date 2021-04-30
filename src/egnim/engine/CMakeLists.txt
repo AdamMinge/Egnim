@@ -38,8 +38,11 @@ set(sources
         ${source_root}/physics/physics_manifold_point.cpp
         ${source_root}/physics/physics_contact.cpp
         ${source_root}/physics/physics_material.cpp
-        ${source_root}/physics/priv/b2_casters.h
-        ${source_root}/physics/priv/b2_casters.cpp
+        ${source_root}/physics/physics_aabb.cpp
+        ${source_root}/physics/priv/b2_physics_casters.h
+        ${source_root}/physics/priv/b2_physics_casters.cpp
+        ${source_root}/physics/priv/b2_physics_world_callbacks.h
+        ${source_root}/physics/priv/b2_physics_world_callbacks.cpp
 
         ${source_root}/scene/visitor/scene_serializer.cpp
         ${source_root}/scene/visitor/priv/scene_serializer_impl.h
@@ -95,6 +98,7 @@ set(includes
         ${include_root}/physics/physics_manifold_point.h
         ${include_root}/physics/physics_contact.h
         ${include_root}/physics/physics_material.h
+        ${include_root}/physics/physics_aabb.h
 
         ${include_root}/scene/visitor/scene_visitor.h
         ${include_root}/scene/visitor/scene_serializer.h

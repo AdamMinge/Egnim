@@ -1,70 +1,23 @@
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
-#include <box2d/b2_contact.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_body.h>
-#include <egnim/engine/physics/priv/b2_casters.h>
+#include <egnim/engine/physics/physics_aabb.h>
 #include <egnim/engine/scene/scene_node.h>
-#include <egnim/engine/events/contact_event.h>
-#include <egnim/engine/events/event_dispatcher.h>
+#include <egnim/engine/physics/priv/b2_physics_world_callbacks.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
-
-/* ----------------------------- PhysicsWorldCallback ----------------------- */
-
-class PhysicsWorldCallback : public b2ContactListener
-{
-public:
-  explicit PhysicsWorldCallback(events::EventDispatcher& event_dispatcher);
-  ~PhysicsWorldCallback() override = default;
-
-  void BeginContact(b2Contact* contact) override;
-  void EndContact(b2Contact* contact) override;
-  void PreSolve(b2Contact* contact, const b2Manifold* old_manifold) override;
-  void PostSolve(b2Contact* contact, const b2ContactImpulse* impulse) override;
-
-private:
-  events::EventDispatcher& m_event_dispatcher;
-};
-
-PhysicsWorldCallback::PhysicsWorldCallback(events::EventDispatcher& event_dispatcher) :
-  m_event_dispatcher(event_dispatcher)
-{
-
-}
-
-void PhysicsWorldCallback::BeginContact(b2Contact* contact)
-{
-  auto event = events::BeginContactEvent(priv::b2_cast(*contact));
-  m_event_dispatcher.dispatchEvent(event);
-}
-
-void PhysicsWorldCallback::EndContact(b2Contact* contact)
-{
-  auto event = events::EndContactEvent(priv::b2_cast(*contact));
-  m_event_dispatcher.dispatchEvent(event);
-}
-
-void PhysicsWorldCallback::PreSolve(b2Contact* contact, const b2Manifold* old_manifold)
-{
-  auto event = events::PreSolveContactEvent(priv::b2_cast(*contact), priv::b2_cast(*old_manifold));
-  m_event_dispatcher.dispatchEvent(event);
-}
-
-void PhysicsWorldCallback::PostSolve(b2Contact* contact, const b2ContactImpulse* impulse)
-{
-  auto event = events::PostSolveContactEvent(priv::b2_cast(*contact), priv::b2_cast(*impulse));
-  m_event_dispatcher.dispatchEvent(event);
-}
 
 /* --------------------------------- PhysicsWorld --------------------------- */
 
 PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity) :
   m_scene_node(scene_node),
-  m_physics_world_callback(std::make_unique<PhysicsWorldCallback>(scene_node.getEventDispatcher())),
+  m_physics_world_callback(std::make_unique<priv::PhysicsWorldCallback>(scene_node.getEventDispatcher())),
+  m_physics_query_aabb_callback(std::make_unique<priv::PhysicsQueryAABBCallback>()),
+  m_physics_ray_cast_callback(std::make_unique<priv::PhysicsRayCastCallback>()),
   m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))
 {
   m_b2_world->SetContactListener(m_physics_world_callback.get());
@@ -98,6 +51,61 @@ const std::list<PhysicsBody*>& PhysicsWorld::getPhysicsBodies() const
 const std::list<PhysicsJoint*>& PhysicsWorld::getPhysicsJoints() const
 {
   return m_physics_joints;
+}
+
+void PhysicsWorld::setAllowSleeping(bool flag)
+{
+  m_b2_world->SetAllowSleeping(flag);
+}
+
+void PhysicsWorld::setWarmStarting(bool flag)
+{
+  m_b2_world->SetWarmStarting(flag);
+}
+
+void PhysicsWorld::setContinuousPhysics(bool flag)
+{
+  m_b2_world->SetContinuousPhysics(flag);
+}
+
+void PhysicsWorld::setSubStepping(bool flag)
+{
+  m_b2_world->SetSubStepping(flag);
+}
+
+bool PhysicsWorld::getAllowSleeping() const
+{
+  return m_b2_world->GetAllowSleeping();
+}
+
+bool PhysicsWorld::getWarmStarting() const
+{
+  return m_b2_world->GetWarmStarting();
+}
+
+bool PhysicsWorld::getContinuousPhysics() const
+{
+  return m_b2_world->GetContinuousPhysics();
+}
+
+bool PhysicsWorld::getSubStepping() const
+{
+  return m_b2_world->GetSubStepping();
+}
+
+void PhysicsWorld::queryAABB(const QueryAABBCallback& callback, const PhysicsAABB& physics_aabb)
+{
+  m_physics_query_aabb_callback->setCallback(std::addressof(callback));
+  m_b2_world->QueryAABB(m_physics_query_aabb_callback.get(),
+                        physics_aabb.getInternalAABB());
+}
+void PhysicsWorld::rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point,
+                           const sf::Vector2f& second_point)
+{
+  m_physics_ray_cast_callback->setCallback(std::addressof(callback));
+  m_b2_world->RayCast(m_physics_ray_cast_callback.get(),
+                      b2Vec2(first_point.x, first_point.y),
+                      b2Vec2(second_point.x, second_point.y));
 }
 
 void PhysicsWorld::attachPhysicsBody(PhysicsBody* physics_body)

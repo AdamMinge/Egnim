@@ -1,5 +1,5 @@
-#ifndef B2_CASTERS_H
-#define B2_CASTERS_H
+#ifndef B2_PHYSICS_CASTERS_H
+#define B2_PHYSICS_CASTERS_H
 
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_contact_impulse.h>
@@ -23,4 +23,4 @@ namespace egnim::physics::priv
 
 } // namespace egnim::physics::priv
 
-#endif //B2_CASTERS_H
+#endif //B2_PHYSICS_CASTERS_H

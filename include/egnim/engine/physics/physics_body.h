@@ -7,6 +7,7 @@
 #include <memory>
 #include <list>
 /* ---------------------------------- Local --------------------------------- */
+#include <egnim/engine/export.h>
 #include <egnim/engine/scene/component.h>
 /* -------------------------------------------------------------------------- */
 
@@ -21,7 +22,7 @@ namespace egnim::physics
   class PhysicsShape;
   class PhysicsJoint;
 
-  class PhysicsBody : public scene::Component
+  class EGNIM_UTILITY_API PhysicsBody : public scene::Component
   {
     friend PhysicsWorld;
     friend PhysicsShape;

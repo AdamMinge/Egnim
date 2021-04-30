@@ -4,6 +4,7 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Vector2.hpp>
 /* --------------------------------- Standard ------------------------------- */
+#include <functional>
 #include <memory>
 #include <list>
 /* ----------------------------------- Local -------------------------------- */
@@ -26,15 +27,27 @@ namespace egnim::scene
 namespace egnim::physics
 {
 
+  class PhysicsAABB;
   class PhysicsBody;
   class PhysicsJoint;
-  class PhysicsWorldCallback;
+  class PhysicsShape;
+
+  namespace priv
+  {
+    class PhysicsWorldCallback;
+    class PhysicsQueryAABBCallback;
+    class PhysicsRayCastCallback;
+  }
 
   class EGNIM_UTILITY_API PhysicsWorld
   {
     friend PhysicsBody;
     friend PhysicsJoint;
-    friend PhysicsWorldCallback;
+    friend priv::PhysicsWorldCallback;
+
+  public:
+    using QueryAABBCallback = std::function<bool(PhysicsShape*)>;
+    using RayCastCallback = std::function<float(PhysicsShape*, const sf::Vector2f&, const sf::Vector2f&, float)>;
 
   public:
     explicit PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity);
@@ -47,6 +60,19 @@ namespace egnim::physics
 
     [[nodiscard]] const std::list<PhysicsBody*>& getPhysicsBodies() const;
     [[nodiscard]] const std::list<PhysicsJoint*>& getPhysicsJoints() const;
+
+    void setAllowSleeping(bool flag);
+    void setWarmStarting(bool flag);
+    void setContinuousPhysics(bool flag);
+    void setSubStepping(bool flag);
+
+    [[nodiscard]] bool getAllowSleeping() const;
+    [[nodiscard]] bool getWarmStarting() const;
+    [[nodiscard]] bool getContinuousPhysics() const;
+    [[nodiscard]] bool getSubStepping() const;
+
+    void queryAABB(const QueryAABBCallback& callback, const PhysicsAABB& physics_aabb);
+    void rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point, const sf::Vector2f& second_point);
 
   private:
     void attachPhysicsBody(PhysicsBody* physics_body);
@@ -66,7 +92,9 @@ namespace egnim::physics
 
   private:
     scene::SceneNode& m_scene_node;
-    std::unique_ptr<PhysicsWorldCallback> m_physics_world_callback;
+    std::unique_ptr<priv::PhysicsWorldCallback> m_physics_world_callback;
+    std::unique_ptr<priv::PhysicsQueryAABBCallback> m_physics_query_aabb_callback;
+    std::unique_ptr<priv::PhysicsRayCastCallback> m_physics_ray_cast_callback;
     std::unique_ptr<b2World> m_b2_world;
     std::list<PhysicsBody*> m_physics_bodies;
     std::list<PhysicsJoint*> m_physics_joints;

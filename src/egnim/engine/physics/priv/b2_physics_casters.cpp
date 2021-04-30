@@ -4,7 +4,7 @@
 #include <box2d/b2_contact.h>
 #include <box2d/b2_fixture.h>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/physics/priv/b2_casters.h>
+#include <egnim/engine/physics/priv/b2_physics_casters.h>
 #include <egnim/engine/physics/physics_shape.h>
 /* -------------------------------------------------------------------------- */
 
