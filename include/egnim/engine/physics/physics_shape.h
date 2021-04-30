@@ -59,6 +59,8 @@ namespace egnim::physics
     void setSensor(bool sensor);
     [[nodiscard]] bool isSensor() const;
 
+    [[nodiscard]] virtual int32_t getChildCount() const = 0;
+
     [[nodiscard]] Type getType() const;
 
     [[nodiscard]] PhysicsBody* getPhysicsBody();
@@ -97,6 +99,8 @@ namespace egnim::physics
     [[nodiscard]] float getRadius() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
+    [[nodiscard]] int32_t getChildCount() const override;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
@@ -115,6 +119,8 @@ namespace egnim::physics
     [[nodiscard]] const sf::Vector2f& getSize() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
+    [[nodiscard]] int32_t getChildCount() const override;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
@@ -131,6 +137,8 @@ namespace egnim::physics
     ~PhysicsShapePolygon() override = default;
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
+
+    [[nodiscard]] int32_t getChildCount() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -149,6 +157,8 @@ namespace egnim::physics
     [[nodiscard]] const sf::Vector2f& getFirstPosition() const;
     [[nodiscard]] const sf::Vector2f& getSecondPosition() const;
 
+    [[nodiscard]] int32_t getChildCount() const override;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
@@ -166,6 +176,8 @@ namespace egnim::physics
     [[nodiscard]] const sf::Vector2f& getSize() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
 
+    [[nodiscard]] int32_t getChildCount() const override;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
@@ -182,6 +194,8 @@ namespace egnim::physics
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
+    [[nodiscard]] int32_t getChildCount() const override;
+
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
@@ -196,6 +210,8 @@ namespace egnim::physics
     ~PhysicsShapeEdgeChain() override = default;
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
+
+    [[nodiscard]] int32_t getChildCount() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;

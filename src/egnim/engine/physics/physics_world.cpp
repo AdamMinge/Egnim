@@ -97,7 +97,8 @@ void PhysicsWorld::queryAABB(const QueryAABBCallback& callback, const PhysicsAAB
 {
   m_physics_query_aabb_callback->setCallback(std::addressof(callback));
   m_b2_world->QueryAABB(m_physics_query_aabb_callback.get(),
-                        physics_aabb.getInternalAABB());
+                        b2AABB{b2Vec2(physics_aabb.getLowerBound().x, physics_aabb.getLowerBound().y),
+                                    b2Vec2(physics_aabb.getUpperBound().x, physics_aabb.getUpperBound().y)});
 }
 void PhysicsWorld::rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point,
                            const sf::Vector2f& second_point)

@@ -1,5 +1,5 @@
 /* ----------------------------------- Box2d -------------------------------- */
-#include <box2d/b2_collision.h>
+#include <box2d/b2_math.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_aabb.h>
 /* -------------------------------------------------------------------------- */
@@ -7,67 +7,79 @@
 namespace egnim::physics {
 
 PhysicsAABB::PhysicsAABB(const sf::Vector2f& lower_bound, const sf::Vector2f& upper_bound) :
-  m_b2_aabb(std::make_unique<b2AABB>())
+  m_lower_bound(lower_bound),
+  m_upper_bound(upper_bound)
 {
-  setLowerBound(lower_bound);
-  setUpperBound(upper_bound);
+
 }
 
 PhysicsAABB::~PhysicsAABB() = default;
 
-void PhysicsAABB::setLowerBound(const sf::Vector2f& lower_bound)
+sf::Vector2f PhysicsAABB::getCenter() const
 {
-  m_b2_aabb->lowerBound = b2Vec2(lower_bound.x, lower_bound.y);
+  return 0.5f * (m_lower_bound + m_upper_bound);
 }
 
-sf::Vector2f PhysicsAABB::getLowerBound() const
+sf::Vector2f PhysicsAABB::getExtents() const
 {
-  return sf::Vector2f(m_b2_aabb->lowerBound.x, m_b2_aabb->lowerBound.y);
+  return 0.5f * (m_upper_bound - m_lower_bound);
+}
+
+void PhysicsAABB::setLowerBound(const sf::Vector2f& lower_bound)
+{
+  m_lower_bound = lower_bound;
+}
+
+const sf::Vector2f& PhysicsAABB::getLowerBound() const
+{
+  return m_lower_bound;
 }
 
 void PhysicsAABB::setUpperBound(const sf::Vector2f& upper_bound)
 {
-  m_b2_aabb->lowerBound = b2Vec2(upper_bound.x, upper_bound.y);
+  m_upper_bound = upper_bound;
 }
 
-sf::Vector2f PhysicsAABB::getUpperBound() const
+const sf::Vector2f& PhysicsAABB::getUpperBound() const
 {
-  return sf::Vector2f(m_b2_aabb->upperBound.x, m_b2_aabb->upperBound.y);
+  return m_upper_bound;
 }
 
 bool PhysicsAABB::isValid() const
 {
-  return m_b2_aabb->IsValid();
+  return m_lower_bound.x <= m_upper_bound.x && m_lower_bound.y <= m_upper_bound.y;
 }
 
 float PhysicsAABB::getPerimeter() const
 {
-  return m_b2_aabb->GetPerimeter();
+  auto w = m_upper_bound - m_lower_bound;
+  return 2.0f * (w.x + w.y);
 }
 
 void PhysicsAABB::combine(const PhysicsAABB& aabb)
 {
-  m_b2_aabb->Combine(*aabb.m_b2_aabb);
+  combine(*this, aabb);
 }
 
 void PhysicsAABB::combine(const PhysicsAABB& first_aabb, const PhysicsAABB& second_aabb)
 {
-  m_b2_aabb->Combine(*first_aabb.m_b2_aabb, *second_aabb.m_b2_aabb);
+  setLowerBound(sf::Vector2f(
+    std::min(first_aabb.getLowerBound().x, second_aabb.getLowerBound().x),
+    std::min(first_aabb.getLowerBound().y, second_aabb.getLowerBound().y)));
+
+  setUpperBound(sf::Vector2f(
+    std::min(first_aabb.getUpperBound().x, second_aabb.getUpperBound().x),
+    std::min(first_aabb.getUpperBound().y, second_aabb.getUpperBound().y)));
 }
 
-bool PhysicsAABB::contains(const PhysicsAABB& aabb)
+bool PhysicsAABB::contains(const PhysicsAABB& aabb) const
 {
-  return m_b2_aabb->Contains(*aabb.m_b2_aabb);
-}
-
-b2AABB& PhysicsAABB::getInternalAABB()
-{
-  return *m_b2_aabb;
-}
-
-const b2AABB& PhysicsAABB::getInternalAABB() const
-{
-  return *m_b2_aabb;
+  auto result = true;
+  result &= getLowerBound().x <= aabb.getLowerBound().x;
+  result &= getLowerBound().y <= aabb.getLowerBound().y;
+  result &= aabb.getUpperBound().x <= getUpperBound().x;
+  result &= aabb.getUpperBound().y <= getUpperBound().y;
+  return result;
 }
 
 } // namespace egnim::physics

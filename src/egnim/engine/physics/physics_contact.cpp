@@ -10,10 +10,13 @@ namespace egnim::physics
 
 PhysicsContact::~PhysicsContact() = default;
 
-PhysicsContact::PhysicsContact(PhysicsShape* first_shape, PhysicsShape* second_shape, const PhysicsManifold& physics_manifold) :
+PhysicsContact::PhysicsContact(PhysicsShape* first_shape, int32_t first_index,
+                               PhysicsShape* second_shape, int32_t second_index, const PhysicsManifold& physics_manifold) :
   m_first_shape(first_shape),
   m_second_shape(second_shape),
   m_physics_manifold(physics_manifold),
+  m_first_child_index(first_index),
+  m_second_child_index(second_index),
   m_touching(true),
   m_enabled(true),
   m_friction(b2MixFriction(first_shape->getFriction(), second_shape->getFriction())),
@@ -42,6 +45,26 @@ PhysicsShape* PhysicsContact::getSecondShape()
 const PhysicsShape* PhysicsContact::getSecondShape() const
 {
   return m_second_shape;
+}
+
+void PhysicsContact::setFirstChildIndex(int32_t index)
+{
+  m_first_child_index = index;
+}
+
+int32_t PhysicsContact::getFirstChildIndex() const
+{
+  return m_first_child_index;
+}
+
+void PhysicsContact::setSecondChildIndex(int32_t index)
+{
+  m_second_child_index = index;
+}
+
+int32_t PhysicsContact::getSecondChildIndex() const
+{
+  return m_second_child_index;
 }
 
 PhysicsManifold* PhysicsContact::getPhysicsManifold()

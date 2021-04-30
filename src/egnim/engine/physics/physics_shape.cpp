@@ -233,6 +233,11 @@ const sf::Vector2f& PhysicsShapeCircle::getOffset() const
   return m_offset;
 }
 
+int32_t PhysicsShapeCircle::getChildCount() const
+{
+  return 1;
+}
+
 /* -------------------------------- PhysicsShapeBox ------------------------- */
 
 PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
@@ -260,6 +265,11 @@ const sf::Vector2f& PhysicsShapeBox::getSize() const
 const sf::Vector2f& PhysicsShapeBox::getOffset() const
 {
   return m_offset;
+}
+
+int32_t PhysicsShapeBox::getChildCount() const
+{
+  return 1;
 }
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
@@ -291,6 +301,11 @@ const std::list<sf::Vector2f>& PhysicsShapePolygon::getPoints() const
   return m_points;
 }
 
+int32_t PhysicsShapePolygon::getChildCount() const
+{
+  return 1;
+}
+
 /* --------------------------- PhysicsShapeEdgeSegment ---------------------- */
 
 PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
@@ -318,6 +333,11 @@ const sf::Vector2f& PhysicsShapeEdgeSegment::getFirstPosition() const
 const sf::Vector2f& PhysicsShapeEdgeSegment::getSecondPosition() const
 {
   return m_second;
+}
+
+int32_t PhysicsShapeEdgeSegment::getChildCount() const
+{
+  return 1;
 }
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
@@ -356,6 +376,11 @@ const sf::Vector2f& PhysicsShapeEdgeBox::getOffset() const
   return m_offset;
 }
 
+int32_t PhysicsShapeEdgeBox::getChildCount() const
+{
+  return 5;
+}
+
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
 
 PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
@@ -385,6 +410,11 @@ const std::list<sf::Vector2f>& PhysicsShapeEdgePolygon::getPoints() const
   return m_points;
 }
 
+int32_t PhysicsShapeEdgePolygon::getChildCount() const
+{
+  return static_cast<int32_t>(m_points.size()) + 1;
+}
+
 /* ----------------------------- PhysicsShapeEdgeChain ---------------------- */
 
 PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
@@ -412,6 +442,11 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
 const std::list<sf::Vector2f>& PhysicsShapeEdgeChain::getPoints() const
 {
   return m_points;
+}
+
+int32_t PhysicsShapeEdgeChain::getChildCount() const
+{
+  return static_cast<int32_t>(m_points.size());
 }
 
 } // namespace egnim::physics

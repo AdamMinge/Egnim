@@ -18,7 +18,9 @@ PhysicsContact b2_cast(const b2Contact& b2_contact)
   auto second_shape = reinterpret_cast<PhysicsShape*>(b2_contact_without_const.GetFixtureB()->GetUserData().pointer);
   auto physics_manifold = b2_cast(*b2_contact_without_const.GetManifold());
 
-  auto physics_contact = PhysicsContact(first_shape, second_shape, physics_manifold);
+  auto physics_contact = PhysicsContact(first_shape, b2_contact.GetChildIndexA(),
+                                        second_shape, b2_contact.GetChildIndexB(), physics_manifold);
+
   physics_contact.setTouching(b2_contact.IsTouching());
   physics_contact.setEnabled(b2_contact.IsEnabled());
   physics_contact.setFriction(b2_contact.GetFriction());
