@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef CAMERA_NODE_H
+#define CAMERA_NODE_H
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
@@ -8,13 +8,16 @@
 #include <map>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
+#include <egnim/engine/scene/node.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
 {
 
-  class EGNIM_UTILITY_API Camera
+  class EGNIM_UTILITY_API CameraNode : public Node
   {
+    EGNIM_CLASS(CameraNode, Node)
+
   public:
     enum CameraFlag
     {
@@ -30,49 +33,46 @@ namespace egnim::scene
     };
 
   public:
-    explicit Camera(sf::RenderTarget& render_target);
-    ~Camera();
+    explicit CameraNode();
+    ~CameraNode() override;
 
-    void move(float offset_x, float offset_y);
-    void move(const sf::Vector2f& offset);
-
-    void setCenter(float x, float y);
-    void setCenter(const sf::Vector2f& center);
-    const sf::Vector2f& getCenter() const;
+    void setRenderTarget(sf::RenderTarget* render_target);
+    [[nodiscard]] sf::RenderTarget* getRenderTarget() const;
 
     void setSize(float width, float height);
     void setSize(const sf::Vector2f& size);
-    const sf::Vector2f& getSize() const;
-
-    void rotate(float angle);
-    void setRotation(float angle);
-    float getRotation() const;
+    [[nodiscard]] const sf::Vector2f& getSize() const;
 
     void setViewport(const sf::FloatRect& viewport);
-    const sf::FloatRect& getViewport() const;
+    [[nodiscard]] const sf::FloatRect& getViewport() const;
 
     void setZoom(float factor);
-    float getZoom() const;
+    [[nodiscard]] float getZoom() const;
 
     void setViewFlag(size_t flag);
-    size_t getViewFlag() const;
+    [[nodiscard]] size_t getViewFlag() const;
 
     void setActive(bool active = true);
-    bool isActive() const;
+    [[nodiscard]] bool isActive() const;
 
   public:
-    static const Camera* getActiveCamera(sf::RenderTarget& render_target);
+    static CameraNode* getActiveCamera(sf::RenderTarget& render_target);
+
+  protected:
+    void updateCurrent(sf::Time dt) override;
 
   private:
-    sf::RenderTarget& m_render_target;
+    static void activeCamera(CameraNode* camera_node, bool active);
+
+  private:
+    sf::RenderTarget* m_render_target;
     sf::View m_view;
     size_t m_view_flag;
     float m_zoom_factor;
 
   private:
-    static std::map<sf::RenderTarget*, Camera*> s_active_camera_per_target;
+    static std::map<sf::RenderTarget*, CameraNode*> s_active_camera_per_target;
   };
 
-} // namespace egnim::scene
-
-#endif //CAMERA_H
+}
+#endif //CAMERA_NODE_H

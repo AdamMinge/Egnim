@@ -18,7 +18,6 @@ namespace egnim
 
 namespace egnim::scene
 {
-  class Camera;
 
   class EGNIM_UTILITY_API SceneNode : public Node
   {
@@ -27,12 +26,6 @@ namespace egnim::scene
   public:
     explicit SceneNode(events::EventDispatcher& event_dispatcher);
     ~SceneNode() override;
-
-    void attachCamera(std::string_view id, std::unique_ptr<Camera> camera);
-    std::unique_ptr<Camera> detachCamera(std::string_view id);
-
-    Camera& getCamera(std::string_view id);
-    const Camera& getCamera(std::string_view id) const;
 
     physics::PhysicsWorld& getPhysicsWorld();
     const physics::PhysicsWorld& getPhysicsWorld() const;
@@ -46,7 +39,6 @@ namespace egnim::scene
     void updateCurrent(sf::Time dt) override;
 
   private:
-    std::map<std::string_view, std::unique_ptr<Camera>> m_cameras;
     std::unique_ptr<physics::PhysicsWorld> m_physics_world;
     events::EventDispatcher& m_event_dispatcher;
   };

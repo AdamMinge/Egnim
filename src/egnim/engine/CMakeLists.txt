@@ -24,10 +24,10 @@ set(sources
         ${source_root}/scene/sprite_node.cpp
         ${source_root}/scene/label_node.cpp
         ${source_root}/scene/animated_sprite_node.cpp
-        ${source_root}/scene/camera.cpp
         ${source_root}/scene/scene_node.cpp
         ${source_root}/scene/node_factory.cpp
         ${source_root}/scene/node_iterator.cpp
+        ${source_root}/scene/camera_node.cpp
 
         ${source_root}/physics/physics_world.cpp
         ${source_root}/physics/physics_body.cpp
@@ -84,10 +84,10 @@ set(includes
         ${include_root}/scene/sprite_node.h
         ${include_root}/scene/label_node.h
         ${include_root}/scene/animated_sprite_node.h
-        ${include_root}/scene/camera.h
         ${include_root}/scene/scene_node.h
         ${include_root}/scene/node_factory.h
         ${include_root}/scene/node_iterator.h
+        ${include_root}/scene/camera_node.h
 
         ${include_root}/physics/physics_world.h
         ${include_root}/physics/physics_body.h

@@ -1,8 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/component_container.h>
+#include <egnim/engine/scene/camera_node.h>
 #include <egnim/engine/scene/component.h>
-#include <egnim/engine/scene/camera.h>
 #include <egnim/engine/physics/physics_body.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
@@ -16,7 +16,7 @@ namespace egnim::scene
 Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
-  m_camera_mask(Camera::CameraFlag::DEFAULT),
+  m_camera_mask(CameraNode::CameraFlag::DEFAULT),
   m_name(""),
   m_physics_body(nullptr)
 {
@@ -242,7 +242,7 @@ void Node::drawChildren(sf::RenderTarget &target, sf::RenderStates states) const
 
 bool Node::isVisibleByTarget(sf::RenderTarget& target) const
 {
-  auto target_camera = Camera::getActiveCamera(target);
+  auto target_camera = CameraNode::getActiveCamera(target);
   return target_camera == nullptr || target_camera->getViewFlag() & m_camera_mask;
 }
 
