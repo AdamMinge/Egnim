@@ -242,7 +242,7 @@ void Node::drawChildren(sf::RenderTarget &target, sf::RenderStates states) const
 
 bool Node::isVisibleByTarget(sf::RenderTarget& target) const
 {
-  auto target_camera = CameraNode::getActiveCamera(target);
+  auto target_camera = CameraManager::getInstance().getActiveCamera(target);
   return target_camera == nullptr || target_camera->getViewFlag() & m_camera_mask;
 }
 

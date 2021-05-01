@@ -14,6 +14,7 @@ namespace egnim::scene
   class SceneNode;
   class SoundNode;
   class SpriteNode;
+  class CameraNode;
 
   class EGNIM_UTILITY_API SceneVisitor
   {
@@ -33,6 +34,7 @@ namespace egnim::scene
     virtual void visitSceneNode(SceneNode& scene_node) = 0;
     virtual void visitSoundNode(SoundNode& sound_node) = 0;
     virtual void visitSpriteNode(SpriteNode& sprite_node) = 0;
+    virtual void visitCameraNode(CameraNode& camera_node) = 0;
   };
 
 } // namespace egnim::scene

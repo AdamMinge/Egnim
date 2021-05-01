@@ -13,7 +13,7 @@
 namespace egnim
 {
   namespace physics { class PhysicsWorld; }
-  namespace events { class EventDispatcher; }
+  namespace core { class Context; }
 }
 
 namespace egnim::scene
@@ -24,14 +24,14 @@ namespace egnim::scene
     EGNIM_CLASS(SceneNode, Node)
 
   public:
-    explicit SceneNode(events::EventDispatcher& event_dispatcher);
+    explicit SceneNode(core::Context& context);
     ~SceneNode() override;
 
     physics::PhysicsWorld& getPhysicsWorld();
     const physics::PhysicsWorld& getPhysicsWorld() const;
 
-    events::EventDispatcher& getEventDispatcher();
-    const events::EventDispatcher& getEventDispatcher() const;
+    core::Context& getContext();
+    const core::Context& getContext() const;
 
     void accept(SceneVisitor& visitor) override;
 
@@ -40,7 +40,7 @@ namespace egnim::scene
 
   private:
     std::unique_ptr<physics::PhysicsWorld> m_physics_world;
-    events::EventDispatcher& m_event_dispatcher;
+    core::Context& m_context;
   };
 
 } // namespace egnim::scene

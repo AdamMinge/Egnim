@@ -6,6 +6,7 @@
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/physics/physics_aabb.h>
 #include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/core/context.h>
 #include <egnim/engine/physics/priv/b2_physics_world_callbacks.h>
 /* -------------------------------------------------------------------------- */
 
@@ -15,7 +16,7 @@ namespace egnim::physics {
 
 PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gravity) :
   m_scene_node(scene_node),
-  m_physics_world_callback(std::make_unique<priv::PhysicsWorldCallback>(scene_node.getEventDispatcher())),
+  m_physics_world_callback(std::make_unique<priv::PhysicsWorldCallback>(scene_node.getContext().getEventDispatcher())),
   m_physics_query_aabb_callback(std::make_unique<priv::PhysicsQueryAABBCallback>()),
   m_physics_ray_cast_callback(std::make_unique<priv::PhysicsRayCastCallback>()),
   m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))

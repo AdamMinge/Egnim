@@ -77,6 +77,14 @@ void SceneSerializer::visitSpriteNode(SpriteNode& sprite_node)
     getImpl().deserialize(sprite_node, std::get<istream>(m_stream));
 }
 
+void SceneSerializer::visitCameraNode(CameraNode& camera_node)
+{
+  if(getAction() == Action::Serialize)
+    getImpl().serialize(camera_node, std::get<ostream>(m_stream));
+  else if(getAction() == Action::Deserialize)
+    getImpl().deserialize(camera_node, std::get<istream>(m_stream));
+}
+
 SceneSerializer::Format SceneSerializer::getFormat()
 {
   return m_format;

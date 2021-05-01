@@ -1,11 +1,9 @@
 #ifndef CAMERA_NODE_H
 #define CAMERA_NODE_H
 
-/* ----------------------------------- SFML --------------------------------- */
-#include <SFML/Graphics/RenderTarget.hpp>
-#include <SFML/Graphics/View.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <map>
+#include <memory>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
@@ -21,7 +19,7 @@ namespace egnim::scene
   public:
     enum CameraFlag
     {
-      DEFAULT = 1,
+      DEFAULT = 1 << 0,
       CAMERA_1 = 1 << 1,
       CAMERA_2 = 1 << 2,
       CAMERA_3 = 1 << 3,
@@ -35,9 +33,6 @@ namespace egnim::scene
   public:
     explicit CameraNode();
     ~CameraNode() override;
-
-    void setRenderTarget(sf::RenderTarget* render_target);
-    [[nodiscard]] sf::RenderTarget* getRenderTarget() const;
 
     void setSize(float width, float height);
     void setSize(const sf::Vector2f& size);
@@ -55,23 +50,40 @@ namespace egnim::scene
     void setActive(bool active = true);
     [[nodiscard]] bool isActive() const;
 
-  public:
-    static CameraNode* getActiveCamera(sf::RenderTarget& render_target);
-
-  protected:
-    void updateCurrent(sf::Time dt) override;
+    void accept(SceneVisitor& visitor) override;
 
   private:
-    static void activeCamera(CameraNode* camera_node, bool active);
-
-  private:
-    sf::RenderTarget* m_render_target;
-    sf::View m_view;
+    sf::Vector2f m_size;
+    sf::FloatRect m_viewport;
     size_t m_view_flag;
     float m_zoom_factor;
+  };
+
+  class EGNIM_UTILITY_API CameraManager
+  {
+    friend CameraNode;
+
+  public:
+    ~CameraManager();
+
+    [[nodiscard]] static CameraManager& getInstance();
+
+    [[nodiscard]] CameraNode* getActiveCamera(sf::RenderTarget& render_target);
+    [[nodiscard]] const CameraNode* getActiveCamera(sf::RenderTarget& render_target) const;
 
   private:
-    static std::map<sf::RenderTarget*, CameraNode*> s_active_camera_per_target;
+    explicit CameraManager();
+
+    void activeCamera(CameraNode& camera_node);
+    void deactivateCamera(CameraNode& camera_node);
+
+    void update(CameraNode& camera_node);
+
+    [[nodiscard]] bool isActiveCamera(const CameraNode& camera_node) const;
+
+  private:
+    static std::unique_ptr<CameraManager> s_instance;
+    std::map<sf::RenderTarget*, CameraNode*> m_render_target_to_camera_node;
   };
 
 }

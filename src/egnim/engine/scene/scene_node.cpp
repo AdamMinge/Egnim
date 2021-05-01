@@ -1,5 +1,3 @@
-/* --------------------------------- Standard ------------------------------- */
-#include <cassert>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/visitor/scene_visitor.h>
@@ -9,9 +7,9 @@
 
 namespace egnim::scene {
 
-SceneNode::SceneNode(events::EventDispatcher& event_dispatcher) :
+SceneNode::SceneNode(core::Context& context) :
   m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f())),
-  m_event_dispatcher(event_dispatcher)
+  m_context(context)
 {
 
 }
@@ -28,14 +26,14 @@ const physics::PhysicsWorld& SceneNode::getPhysicsWorld() const
   return *m_physics_world;
 }
 
-events::EventDispatcher& SceneNode::getEventDispatcher()
+core::Context& SceneNode::getContext()
 {
-  return m_event_dispatcher;
+  return m_context;
 }
 
-const events::EventDispatcher& SceneNode::getEventDispatcher() const
+const core::Context& SceneNode::getContext() const
 {
-  return m_event_dispatcher;
+  return m_context;
 }
 
 void SceneNode::accept(SceneVisitor& visitor)

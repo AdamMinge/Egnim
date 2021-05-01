@@ -38,6 +38,7 @@ namespace egnim::scene
     void visitSceneNode(SceneNode& scene_node) override;
     void visitSoundNode(SoundNode& sound_node) override;
     void visitSpriteNode(SpriteNode& sprite_node) override;
+    void visitCameraNode(CameraNode& camera_node) override;
 
     Format getFormat();
     Action getAction();

@@ -75,6 +75,16 @@ void JsonSceneSerializerImpl::deserialize(SpriteNode &sprite_node, std::istream&
 
 }
 
+void JsonSceneSerializerImpl::serialize(const CameraNode &camera_node, std::ostream& stream)
+{
+
+}
+
+void JsonSceneSerializerImpl::deserialize(CameraNode &camera_node, std::istream& stream)
+{
+
+}
+
 void JsonSceneSerializerImpl::serialize(const Node &node, std::ostream& stream)
 {
 
