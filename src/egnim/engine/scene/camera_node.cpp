@@ -125,6 +125,20 @@ const CameraNode* CameraManager::getActiveCamera(sf::RenderTarget& render_target
   return m_render_target_to_camera_node.at(std::addressof(render_target));
 }
 
+void CameraManager::setDefaultCamera(sf::RenderTarget& render_target)
+{
+  if(m_render_target_to_camera_node.contains(std::addressof(render_target)))
+  {
+    auto camera_node = m_render_target_to_camera_node[std::addressof(render_target)];
+    deactivateCamera(*camera_node);
+  }
+}
+
+bool CameraManager::hasDefaultCamera(sf::RenderTarget& render_target) const
+{
+  return !m_render_target_to_camera_node.contains(std::addressof(render_target));
+}
+
 void CameraManager::activeCamera(CameraNode& camera_node)
 {
   assert(camera_node.getScene());

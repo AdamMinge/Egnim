@@ -71,6 +71,9 @@ namespace egnim::scene
     [[nodiscard]] CameraNode* getActiveCamera(sf::RenderTarget& render_target);
     [[nodiscard]] const CameraNode* getActiveCamera(sf::RenderTarget& render_target) const;
 
+    void setDefaultCamera(sf::RenderTarget& render_target);
+    [[nodiscard]] bool hasDefaultCamera(sf::RenderTarget& render_target) const;
+
   private:
     explicit CameraManager();
 
