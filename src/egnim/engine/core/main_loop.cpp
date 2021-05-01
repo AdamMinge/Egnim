@@ -8,6 +8,7 @@
 #include <egnim/engine/events/keyboard_event.h>
 #include <egnim/engine/events/mouse_event.h>
 #include <egnim/engine/events/window_event.h>
+#include <egnim/engine/events/joystick_event.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core {
@@ -65,11 +66,10 @@ void MainLoop::processInput()
 
   while(render_window.pollEvent(event))
   {
-    m_states->handleEvent(event);
-
     processWindowEvent(event);
     processKeyboardEvent(event);
     processMouseEvent(event);
+    processJoystickEvent(event);
   }
 }
 
@@ -214,6 +214,57 @@ void MainLoop::processMouseEvent(const sf::Event& mouse_event)
         sf::Vector2i(mouse_event.mouseWheelScroll.x, mouse_event.mouseWheelScroll.y));
 
       m_context->getEventDispatcher().dispatchEvent(mouse_wheel_scrolled_event);
+      break;
+    }
+
+    default:
+      break;
+  }
+}
+
+void MainLoop::processJoystickEvent(const sf::Event& joystick_event)
+{
+  switch(joystick_event.type)
+  {
+    case sf::Event::JoystickButtonPressed:
+    {
+      auto joystick_button_pressed_event = events::JoystickButtonPressedEvent(joystick_event.joystickButton.joystickId,
+                                                                              joystick_event.joystickButton.button);
+
+      m_context->getEventDispatcher().dispatchEvent(joystick_button_pressed_event);
+      break;
+    }
+
+    case sf::Event::JoystickButtonReleased:
+    {
+      auto joystick_button_released_event = events::JoystickButtonReleasedEvent(joystick_event.joystickButton.joystickId,
+                                                                               joystick_event.joystickButton.button);
+
+      m_context->getEventDispatcher().dispatchEvent(joystick_button_released_event);
+      break;
+    }
+
+    case sf::Event::JoystickConnected:
+    {
+      auto joystick_connected_event = events::JoystickConnectedEvent(joystick_event.joystickConnect.joystickId);
+      m_context->getEventDispatcher().dispatchEvent(joystick_connected_event);
+      break;
+    }
+
+    case sf::Event::JoystickDisconnected:
+    {
+      auto joystick_disconnected_event = events::JoystickDisconnectedEvent(joystick_event.joystickConnect.joystickId);
+      m_context->getEventDispatcher().dispatchEvent(joystick_disconnected_event);
+      break;
+    }
+
+    case sf::Event::JoystickMoved:
+    {
+      auto joystick_move_event = events::JoystickMoveEvent(joystick_event.joystickMove.joystickId,
+                                                           joystick_event.joystickMove.axis,
+                                                           joystick_event.joystickMove.position);
+
+      m_context->getEventDispatcher().dispatchEvent(joystick_move_event);
       break;
     }
 

@@ -28,6 +28,7 @@ set(sources
         ${source_root}/scene/node_factory.cpp
         ${source_root}/scene/node_iterator.cpp
         ${source_root}/scene/camera_node.cpp
+        ${source_root}/scene/scene_state.cpp
 
         ${source_root}/physics/physics_world.cpp
         ${source_root}/physics/physics_body.cpp
@@ -55,11 +56,13 @@ set(sources
         ${source_root}/events/mouse_event.cpp
         ${source_root}/events/keyboard_event.cpp
         ${source_root}/events/window_event.cpp
+        ${source_root}/events/joystick_event.cpp
         ${source_root}/events/event_listener.cpp
         ${source_root}/events/contact_event_listener.cpp
         ${source_root}/events/mouse_event_listener.cpp
         ${source_root}/events/keyboard_event_listener.cpp
         ${source_root}/events/window_event_listener.cpp
+        ${source_root}/events/joystick_event_listener.cpp
         ${source_root}/events/priv/event_listener_vector.h
         ${source_root}/events/priv/event_listener_vector.cpp)
 
@@ -88,6 +91,7 @@ set(includes
         ${include_root}/scene/node_factory.h
         ${include_root}/scene/node_iterator.h
         ${include_root}/scene/camera_node.h
+        ${include_root}/scene/scene_state.h
 
         ${include_root}/physics/physics_world.h
         ${include_root}/physics/physics_body.h
@@ -109,11 +113,13 @@ set(includes
         ${include_root}/events/mouse_event.h
         ${include_root}/events/keyboard_event.h
         ${include_root}/events/window_event.h
+        ${include_root}/events/joystick_event
         ${include_root}/events/event_listener.h
         ${include_root}/events/contact_event_listener.h
         ${include_root}/events/mouse_event_listener.h
         ${include_root}/events/keyboard_event_listener.h
-        ${include_root}/events/window_event_listener.h)
+        ${include_root}/events/window_event_listener.h
+        ${include_root}/events/joystick_event_listener.h)
 
 set(resources)
 # -------------------------------------------------------------------------------------------------- #

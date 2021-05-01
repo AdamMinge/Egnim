@@ -39,7 +39,8 @@ namespace egnim::events
     Window    = 1 << 0,
     Keyboard  = 1 << 1,
     Mouse     = 1 << 2,
-    Physics   = 1 << 3,
+    Joystick  = 1 << 3,
+    Physics   = 1 << 4,
 
     Custom    = 1 << 31,
   };

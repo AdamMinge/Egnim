@@ -40,6 +40,26 @@ void State::requestStateClear()
   m_state_stack.clearStates();
 }
 
+Context& State::getContext()
+{
+  return m_context;
+}
+
+const Context& State::getContext() const
+{
+  return m_context;
+}
+
+StateStack& State::getStateStack()
+{
+  return m_state_stack;
+}
+
+const StateStack& State::getStateStack() const
+{
+  return m_state_stack;
+}
+
 } // namespace egnim::core
 
 

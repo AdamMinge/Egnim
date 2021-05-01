@@ -28,7 +28,6 @@ namespace egnim::core
 
     void draw();
     void update(sf::Time dt);
-    void handleEvent(const sf::Event& event);
 
     void pushState(std::string_view state_id);
     void popState();

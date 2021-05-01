@@ -23,8 +23,7 @@ namespace egnim::core
     virtual ~State();
 
     virtual void draw() = 0;
-    virtual bool update(sf::Time dt) = 0;
-    virtual bool handleEvent(const sf::Event& event) = 0;
+    virtual void update(sf::Time dt) = 0;
 
     virtual void onActive();
     virtual void onInactive();
@@ -36,10 +35,15 @@ namespace egnim::core
     void requestStackPop();
     void requestStateClear();
 
+    [[nodiscard]] Context& getContext();
+    [[nodiscard]] const Context& getContext() const;
+
+    [[nodiscard]] StateStack& getStateStack();
+    [[nodiscard]] const StateStack& getStateStack() const;
+
   private:
     Context& m_context;
     StateStack& m_state_stack;
-
   };
 
 } // namespace egnim::core

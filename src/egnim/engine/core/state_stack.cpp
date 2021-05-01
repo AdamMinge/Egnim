@@ -27,13 +27,6 @@ void StateStack::update(sf::Time dt)
   applyPendingChanges();
 }
 
-void StateStack::handleEvent(const sf::Event& event)
-{
-  for(auto& state : m_states)
-    state->handleEvent(event);
-  applyPendingChanges();
-}
-
 void StateStack::pushState(std::string_view state_id)
 {
   m_pending_changes.push([this, state_id](){

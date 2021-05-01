@@ -34,6 +34,7 @@ namespace egnim::core
     virtual void processWindowEvent(const sf::Event& window_event);
     virtual void processKeyboardEvent(const sf::Event& keyboard_event);
     virtual void processMouseEvent(const sf::Event& mouse_event);
+    virtual void processJoystickEvent(const sf::Event& joystick_event);
 
   private:
     std::unique_ptr<Context> m_context;
