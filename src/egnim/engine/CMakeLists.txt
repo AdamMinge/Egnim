@@ -15,6 +15,12 @@ set(sources
         ${source_root}/core/state_stack.cpp
         ${source_root}/core/animated_sprite.cpp
         ${source_root}/core/main_loop.cpp
+        ${source_root}/core/cell.cpp
+        ${source_root}/core/chunk.cpp
+        ${source_root}/core/tile.cpp
+        ${source_root}/core/tile_map.cpp
+        ${source_root}/core/tile_map_layer.cpp
+        ${source_root}/core/tileset.cpp
 
         ${source_root}/scene/component.cpp
         ${source_root}/scene/component_container.cpp
@@ -78,6 +84,12 @@ set(includes
         ${include_root}/core/state_stack.h
         ${include_root}/core/animated_sprite.h
         ${include_root}/core/main_loop.h
+        ${include_root}/core/cell.h
+        ${include_root}/core/chunk.h
+        ${include_root}/core/tile.h
+        ${include_root}/core/tile_map.h
+        ${include_root}/core/tile_map_layer.h
+        ${include_root}/core/tileset.h
 
         ${include_root}/scene/component.h
         ${include_root}/scene/component_container.h
