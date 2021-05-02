@@ -1,3 +1,5 @@
+/* ----------------------------------- SFML --------------------------------- */
+#include <SFML/Graphics/RenderTarget.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
@@ -77,7 +79,7 @@ std::vector<Cell>::const_iterator Chunk::end() const
 
 void Chunk::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-
+  std::for_each(begin(), end(), [&target](auto& cell){ target.draw(cell); });
 }
 
 } // namespace egnim::core
