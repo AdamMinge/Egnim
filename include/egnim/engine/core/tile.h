@@ -4,7 +4,6 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Graphics/Sprite.hpp>
-#include <SFML/System/Time.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <vector>
 /* ---------------------------------- Local --------------------------------- */
