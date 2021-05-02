@@ -6,11 +6,11 @@
 #include <SFML/System/Time.hpp>
 #include <SFML/Window/Event.hpp>
 /* --------------------------------- Standard ------------------------------- */
+#include <unordered_map>
 #include <string_view>
 #include <functional>
 #include <memory>
 #include <queue>
-#include <map>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
@@ -47,7 +47,7 @@ namespace egnim::core
 
     std::vector<std::unique_ptr<State>> m_states;
     std::queue<std::function<void()>> m_pending_changes;
-    std::map<std::string_view, std::function<std::unique_ptr<State>()>> m_factories;
+    std::unordered_map<std::string_view, std::function<std::unique_ptr<State>()>> m_factories;
   };
 
   template<typename TYPE, typename ...Args>

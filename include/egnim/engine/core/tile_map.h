@@ -8,6 +8,11 @@
 namespace egnim::core
 {
 
+  class EGNIM_UTILITY_API TileMap
+  {
+
+  };
+
 } // namespace egnim::core
 
 #endif //TILE_MAP_H

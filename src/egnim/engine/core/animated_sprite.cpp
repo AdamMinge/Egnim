@@ -111,8 +111,8 @@ bool AnimatedSprite::isFinished() const
 void AnimatedSprite::restart()
 {
   auto texture_bounds = m_sprite.getTexture()->getSize();
-  auto texture_rect = sf::IntRect(texture_bounds.x - m_frame_size.x,
-                                  texture_bounds.y - m_frame_size.y,
+  auto texture_rect = sf::IntRect(static_cast<int>(texture_bounds.x) - m_frame_size.x,
+                                  static_cast<int>(texture_bounds.y) - m_frame_size.y,
                                   m_frame_size.x, m_frame_size.y);
 
   m_elapsed_time = sf::Time::Zero;
@@ -145,8 +145,8 @@ void AnimatedSprite::nextFrame()
   {
     if(m_repeat)
     {
-      texture_rect = sf::IntRect(texture_bounds.x - m_frame_size.x,
-                                 texture_bounds.y - m_frame_size.y,
+      texture_rect = sf::IntRect(static_cast<int>(texture_bounds.x) - m_frame_size.x,
+                                 static_cast<int>(texture_bounds.y) - m_frame_size.y,
                                  m_frame_size.x, m_frame_size.y);
 
       m_current_frame = m_reverse ? m_num_frames - 1 : 0;

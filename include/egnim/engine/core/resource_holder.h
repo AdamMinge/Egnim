@@ -6,10 +6,10 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/Shader.hpp>
 /* --------------------------------- Standard ------------------------------- */
+#include <unordered_map>
 #include <string_view>
 #include <cassert>
 #include <memory>
-#include <map>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -34,7 +34,7 @@ namespace egnim::core
     bool insertResource(IDENTIFIER id, std::unique_ptr<RESOURCE> resource);
 
   protected:
-    std::map<IDENTIFIER, std::unique_ptr<RESOURCE>> m_resources;
+    std::unordered_map<IDENTIFIER, std::unique_ptr<RESOURCE>> m_resources;
 
   };
 
