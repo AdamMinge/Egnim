@@ -19,7 +19,9 @@ set(sources
         ${source_root}/core/chunk.cpp
         ${source_root}/core/tile.cpp
         ${source_root}/core/tile_map.cpp
-        ${source_root}/core/tile_map_layer.cpp
+        ${source_root}/core/layer.cpp
+        ${source_root}/core/tile_layer.cpp
+        ${source_root}/core/group_layer.cpp
         ${source_root}/core/tileset.cpp
 
         ${source_root}/scene/component.cpp
@@ -88,7 +90,9 @@ set(includes
         ${include_root}/core/chunk.h
         ${include_root}/core/tile.h
         ${include_root}/core/tile_map.h
-        ${include_root}/core/tile_map_layer.h
+        ${include_root}/core/layer.h
+        ${include_root}/core/tile_layer.h
+        ${include_root}/core/group_layer.h
         ${include_root}/core/tileset.h
 
         ${include_root}/scene/component.h
