@@ -4,6 +4,7 @@
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/core/chunk.h>
+#include <egnim/engine/core/tile.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core {
@@ -32,7 +33,7 @@ void Chunk::setCell(const sf::Vector2u& point, const Cell& cell)
   m_grid[index] = cell;
 }
 
-const Cell& Chunk::getCell(const sf::Vector2u& point)
+const Cell& Chunk::getCell(const sf::Vector2u& point) const
 {
   auto found_cell = findCell(point);
   assert(found_cell);
@@ -40,13 +41,13 @@ const Cell& Chunk::getCell(const sf::Vector2u& point)
   return *found_cell;
 }
 
-const Cell* Chunk::findCell(const sf::Vector2u& point)
+const Cell* Chunk::findCell(const sf::Vector2u& point) const
 {
   auto index = (point.y * m_size.x) + point.x;
   return std::addressof(m_grid[index]);
 }
 
-bool Chunk::contains(const sf::Vector2u& point)
+bool Chunk::contains(const sf::Vector2u& point) const
 {
   auto index = (point.y * m_size.x) + point.x;
   return index >= 0 && index < m_grid.size();
@@ -55,6 +56,11 @@ bool Chunk::contains(const sf::Vector2u& point)
 bool Chunk::isEmpty() const
 {
   return std::all_of(begin(), end(), [](auto& cell) { return cell.isEmpty(); });
+}
+
+const sf::Vector2u& Chunk::getSize() const
+{
+  return m_size;
 }
 
 std::vector<Cell>::iterator Chunk::begin()
@@ -75,11 +81,6 @@ std::vector<Cell>::iterator Chunk::end()
 std::vector<Cell>::const_iterator Chunk::end() const
 {
   return m_grid.cend();
-}
-
-void Chunk::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-  std::for_each(begin(), end(), [&target](auto& cell){ target.draw(cell); });
 }
 
 } // namespace egnim::core

@@ -25,6 +25,8 @@ namespace egnim::core
     [[nodiscard]] const Tileset& getTileset() const;
     [[nodiscard]] unsigned getId() const;
 
+    [[nodiscard]] sf::Vector2u getSize() const;
+
   protected:
     explicit Tile(Tileset& tileset, sf::Sprite sprite, unsigned id);
 

@@ -1,6 +1,8 @@
 #ifndef LAYER_H
 #define LAYER_H
 
+/* ----------------------------------- SFML --------------------------------- */
+#include <SFML/System/Vector2.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <list>
 /* ---------------------------------- Local --------------------------------- */
@@ -39,8 +41,9 @@ namespace egnim::core
     [[nodiscard]] virtual std::list<const Tileset*> getUsedTilesets() const = 0;
     [[nodiscard]] virtual bool isUsedTileset(const Tileset& tileset) const = 0;
 
-    [[nodiscard]] virtual bool canMergeWith(const Layer& layer) const = 0;
-    virtual bool mergeWith(const Layer& layer) = 0;
+    [[nodiscard]] virtual bool canMerge(const Layer& layer) const = 0;
+    virtual bool merge(const sf::Vector2u& point, const Layer& layer) = 0;
+    bool merge(const Layer& layer);
 
   protected:
     void setParent(GroupLayer* parent);

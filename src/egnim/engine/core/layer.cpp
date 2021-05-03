@@ -57,6 +57,11 @@ std::list<const Layer*> Layer::getSiblings() const
   return siblings;
 }
 
+bool Layer::merge(const Layer& layer)
+{
+  return merge(sf::Vector2u(), layer);
+}
+
 void Layer::setParent(GroupLayer* parent)
 {
   m_parent = parent;

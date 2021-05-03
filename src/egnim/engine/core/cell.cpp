@@ -46,7 +46,7 @@ bool Cell::isEmpty() const
 void Cell::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   if(isEmpty())
-    target.draw(*m_tile);
+    target.draw(*m_tile, states);
 }
 
 } // namespace egnim::core

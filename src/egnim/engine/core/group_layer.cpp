@@ -74,12 +74,12 @@ bool GroupLayer::isUsedTileset(const Tileset& tileset) const
   });
 }
 
-bool GroupLayer::canMergeWith(const Layer& layer) const
+bool GroupLayer::canMerge(const Layer& layer) const
 {
   return false;
 }
 
-bool GroupLayer::mergeWith(const Layer& layer)
+bool GroupLayer::merge(const sf::Vector2u& point, const Layer& layer)
 {
   return false;
 }

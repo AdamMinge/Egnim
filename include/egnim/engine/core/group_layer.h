@@ -26,8 +26,8 @@ namespace egnim::core
     [[nodiscard]] std::list<const Tileset*> getUsedTilesets() const override;
     [[nodiscard]] bool isUsedTileset(const Tileset& tileset) const override;
 
-    [[nodiscard]] bool canMergeWith(const Layer& layer) const override;
-    bool mergeWith(const Layer& layer) override;
+    [[nodiscard]] bool canMerge(const Layer& layer) const override;
+    bool merge(const sf::Vector2u& point, const Layer& layer) override;
 
   private:
     std::list<std::unique_ptr<Layer>> m_layers;

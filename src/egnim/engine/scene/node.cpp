@@ -172,7 +172,7 @@ NodeIterator Node::begin()
   return NodeIterator(this);
 }
 
-ConstNodeIterator Node::cbegin() const
+ConstNodeIterator Node::begin() const
 {
   return ConstNodeIterator(this);
 }
@@ -182,7 +182,7 @@ NodeIterator Node::end() // NOLINT(readability-convert-member-functions-to-stati
   return NodeIterator(nullptr);
 }
 
-ConstNodeIterator Node::cend() const // NOLINT(readability-convert-member-functions-to-static)
+ConstNodeIterator Node::end() const // NOLINT(readability-convert-member-functions-to-static)
 {
   return ConstNodeIterator(nullptr);
 }

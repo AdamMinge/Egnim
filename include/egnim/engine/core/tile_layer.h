@@ -32,19 +32,25 @@ namespace egnim::core
 
     [[nodiscard]] bool contains(const sf::Vector2u& point) const;
 
-    [[nodiscard]] const Chunk& getChunk(const sf::Vector2u& point);
-    [[nodiscard]] const Chunk* findChunk(const sf::Vector2u& point);
+    [[nodiscard]] const Chunk& getChunk(const sf::Vector2u& point) const;
+    [[nodiscard]] const Chunk* findChunk(const sf::Vector2u& point) const;
 
     void setCell(const sf::Vector2u& point, const Cell& cell);
-    [[nodiscard]] const Cell& getCell(const sf::Vector2u& point);
-    [[nodiscard]] const Cell* findCell(const sf::Vector2u& point);
+    [[nodiscard]] const Cell& getCell(const sf::Vector2u& point) const;
+    [[nodiscard]] const Cell* findCell(const sf::Vector2u& point) const;
 
     [[nodiscard]] bool isEmpty() const override;
     [[nodiscard]] std::list<const Tileset*> getUsedTilesets() const override;
     [[nodiscard]] bool isUsedTileset(const Tileset& tileset) const override;
 
-    [[nodiscard]] bool canMergeWith(const Layer& layer) const override;
-    bool mergeWith(const Layer& layer) override;
+    [[nodiscard]] bool canMerge(const Layer& layer) const override;
+    bool merge(const sf::Vector2u& point, const Layer& layer) override;
+
+  private:
+    void addChunk(const sf::Vector2u& point);
+
+    [[nodiscard]] Chunk* findChunk(const sf::Vector2u& point);
+    [[nodiscard]] sf::Vector2u toChunkCoordinate(const sf::Vector2u& point) const;
 
   private:
     sf::Vector2u m_size;

@@ -62,10 +62,10 @@ namespace egnim::scene
     [[nodiscard]] physics::PhysicsBody* getPhysicsBody();
 
     [[nodiscard]] NodeIterator begin();
-    [[nodiscard]] ConstNodeIterator cbegin() const;
+    [[nodiscard]] ConstNodeIterator begin() const;
 
     [[nodiscard]] NodeIterator end();
-    [[nodiscard]] ConstNodeIterator cend() const;
+    [[nodiscard]] ConstNodeIterator end() const;
 
     template<typename TYPE>
     TYPE* findChildByName(std::string_view name);

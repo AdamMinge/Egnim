@@ -27,6 +27,12 @@ unsigned Tile::getId() const
   return m_id;
 }
 
+sf::Vector2u Tile::getSize() const
+{
+  auto rect = m_sprite.getTextureRect();
+  return sf::Vector2u(rect.width, rect.height);
+}
+
 void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_sprite, states);

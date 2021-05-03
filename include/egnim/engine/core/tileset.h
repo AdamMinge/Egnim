@@ -19,11 +19,11 @@ namespace egnim::core
   class EGNIM_UTILITY_API Tileset
   {
   public:
-    explicit Tileset(sf::Texture& texture, const sf::Vector2u& size, unsigned spacing, unsigned margin);
+    explicit Tileset(sf::Texture& texture, const sf::Vector2u& tile_size, unsigned spacing, unsigned margin);
     ~Tileset();
 
-    void setSize(const sf::Vector2u& size);
-    [[nodiscard]] const sf::Vector2u& getSize() const;
+    void setTileSize(const sf::Vector2u& tile_size);
+    [[nodiscard]] const sf::Vector2u& getTileSize() const;
 
     void setSpacing(unsigned spacing);
     [[nodiscard]] unsigned getSpacing() const;
@@ -48,7 +48,7 @@ namespace egnim::core
   private:
     std::unordered_map<unsigned, std::unique_ptr<Tile>> m_tiles;
     sf::Texture& m_texture;
-    sf::Vector2u m_size;
+    sf::Vector2u m_tile_size;
     unsigned m_spacing;
     unsigned m_margin;
 

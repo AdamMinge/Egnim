@@ -9,9 +9,9 @@
 
 namespace egnim::core {
 
-Tileset::Tileset(sf::Texture& texture, const sf::Vector2u& size, unsigned spacing, unsigned margin) :
+Tileset::Tileset(sf::Texture& texture, const sf::Vector2u& tile_size, unsigned spacing, unsigned margin) :
   m_texture(texture),
-  m_size(size),
+  m_tile_size(tile_size),
   m_spacing(spacing),
   m_margin(margin),
   m_column_count(0),
@@ -22,14 +22,14 @@ Tileset::Tileset(sf::Texture& texture, const sf::Vector2u& size, unsigned spacin
 
 Tileset::~Tileset() = default;
 
-void Tileset::setSize(const sf::Vector2u& size)
+void Tileset::setTileSize(const sf::Vector2u& tile_size)
 {
-  changeValue(m_size, size);
+  changeValue(m_tile_size, tile_size);
 }
 
-const sf::Vector2u& Tileset::getSize() const
+const sf::Vector2u& Tileset::getTileSize() const
 {
-  return m_size;
+  return m_tile_size;
 }
 
 void Tileset::setSpacing(unsigned spacing)
@@ -80,23 +80,23 @@ bool Tileset::contains(const Tile& tile) const
 
 void Tileset::init()
 {
-  assert(m_size.x > 0 && m_size.y > 0);
+  assert(m_tile_size.x > 0 && m_tile_size.y > 0);
   m_tiles.clear();
 
   auto tileNum = 0u;
-  for(auto y = m_margin; y <= m_texture.getSize().y - m_size.y; y += m_size.y + m_spacing)
+  for(auto y = m_margin; y <= m_texture.getSize().y - m_tile_size.y; y += m_tile_size.y + m_spacing)
   {
-    for(auto x = m_margin; x <= m_texture.getSize().x - m_size.x; x += m_size.x + m_spacing)
+    for(auto x = m_margin; x <= m_texture.getSize().x - m_tile_size.x; x += m_tile_size.x + m_spacing)
     {
       auto tile_rect = sf::IntRect(static_cast<int>(x), static_cast<int>(y),
-                                   static_cast<int>(m_size.x), static_cast<int>(m_size.y));
+                                   static_cast<int>(m_tile_size.x), static_cast<int>(m_tile_size.y));
       auto sprite = sf::Sprite(m_texture, tile_rect);
       m_tiles.insert(std::make_pair(tileNum, std::unique_ptr<Tile>(new Tile(*this, sprite, tileNum))));
     }
   }
 
-  m_column_count = (m_texture.getSize().x - m_margin + m_spacing) / (m_size.x + m_spacing);
-  m_row_count = (m_texture.getSize().y - m_margin + m_spacing) / (m_size.y + m_spacing);
+  m_column_count = (m_texture.getSize().x - m_margin + m_spacing) / (m_tile_size.x + m_spacing);
+  m_row_count = (m_texture.getSize().y - m_margin + m_spacing) / (m_tile_size.y + m_spacing);
 
   assert(m_column_count > 0);
   assert(m_row_count > 0);
