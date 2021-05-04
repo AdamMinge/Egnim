@@ -171,11 +171,14 @@ bool TileLayer::merge(const sf::Vector2u& point, const Layer& layer)
 
 TileLayerIterator TileLayer::begin(TileLayerIterator::IterationOrder order)
 {
-  return TileLayerIterator(*this, order, false);
+  auto begin_iter = TileLayerIterator(*this, order);
+  return begin_iter;
 }
 TileLayerIterator TileLayer::end(TileLayerIterator::IterationOrder order)
 {
-  return TileLayerIterator(*this, order, true);
+  auto end_iter = TileLayerIterator(*this, order);
+  end_iter.setToEnd();
+  return end_iter;
 }
 
 void TileLayer::addChunk(const sf::Vector2u& point)

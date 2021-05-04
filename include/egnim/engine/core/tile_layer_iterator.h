@@ -49,17 +49,22 @@ namespace egnim::core
     bool operator!=(const TileLayerIterator& other) const;
 
   private:
-    explicit TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order, bool end = false);
-    void advance(TileLayerIterator& iter);
+    explicit TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order);
+    explicit TileLayerIterator(TileLayer& tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order);
+
+    void advance();
+    void setToPoint(const sf::Vector2u& point);
+    void setToStart();
+    void setToEnd();
 
     [[nodiscard]] sf::Vector2u getFirstPoint() const;
     [[nodiscard]] sf::Vector2u getLastPoint() const;
 
   private:
     TileLayer* m_tile_layer;
+    const Cell* m_current_cell;
     sf::Vector2u m_current_point;
     IterationOrder m_iteration_order;
-    bool m_end;
   };
 
   enum class TileLayerIterator::IterationOrder

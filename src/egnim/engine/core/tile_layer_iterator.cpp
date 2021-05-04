@@ -7,14 +7,20 @@
 
 namespace egnim::core {
 
-/* ---------------------------- TileLayerIterator --------------------------- */
-
-TileLayerIterator::TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order, bool end) :
+TileLayerIterator::TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order) :
   m_tile_layer(std::addressof(tile_layer)),
   m_iteration_order(iteration_order),
-  m_end(end)
+  m_current_cell(nullptr)
 {
-  m_current_point = getFirstPoint();
+  setToStart();
+}
+
+TileLayerIterator::TileLayerIterator(TileLayer& tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order) :
+  m_tile_layer(std::addressof(tile_layer)),
+  m_iteration_order(iteration_order),
+  m_current_cell(nullptr)
+{
+  setToPoint(start_point);
 }
 
 TileLayerIterator::~TileLayerIterator() = default;
@@ -26,75 +32,100 @@ TileLayerIterator::IterationOrder TileLayerIterator::getIterationOrder() const
 
 sf::Vector2u TileLayerIterator::getCurrentPoint() const
 {
+  assert(m_current_cell);
   return m_current_point;
 }
 
 TileLayerIterator::reference TileLayerIterator::operator*() const
 {
-  assert(m_tile_layer->contains(m_current_point) && !m_end);
+  assert(m_current_cell);
   return m_tile_layer->getCell(m_current_point);
 }
 
 TileLayerIterator::pointer TileLayerIterator::operator->()
 {
-  assert(m_tile_layer->contains(m_current_point) && !m_end);
+  assert(m_current_cell);
   return m_tile_layer->findCell(m_current_point);
 }
 
 TileLayerIterator& TileLayerIterator::operator++()
 {
-  advance(*this);
+  assert(m_current_cell);
+  advance();
   return *this;
 }
 
 TileLayerIterator TileLayerIterator::operator++(int) // NOLINT(cert-dcl21-cpp)
 {
+  assert(m_current_cell);
   auto iter = *this;
-  advance(iter);
+  iter.advance();
   return iter;
 }
 
 bool TileLayerIterator::operator==(const TileLayerIterator& other) const
 {
   assert(m_tile_layer == other.m_tile_layer && getIterationOrder() == other.getIterationOrder());
-  return getCurrentPoint() == other.getCurrentPoint() && m_end == other.m_end;
+  return m_current_cell == other.m_current_cell;
 }
 
 bool TileLayerIterator::operator!=(const TileLayerIterator& other) const
 {
   assert(m_tile_layer == other.m_tile_layer && getIterationOrder() == other.getIterationOrder());
-  return getCurrentPoint() != other.getCurrentPoint() || m_end != other.m_end;;
+  return m_current_cell == other.m_current_cell;
 }
 
-void TileLayerIterator::advance(TileLayerIterator& iter)
+void TileLayerIterator::advance()
 {
-  if(getCurrentPoint() == getLastPoint())
-  {
-    assert(!m_end);
-    m_end = true;
-    return;
-  }
+  auto last_point = getLastPoint();
+  auto tile_layer_size = m_tile_layer->getSize();
+  m_current_cell = nullptr;
 
-  if(m_iteration_order == IterationOrder::RightDown)
+  while(m_current_cell == nullptr && m_current_point != last_point)
   {
-    m_current_point.y = (m_current_point.x == 0) ? m_current_point.y - 1 : m_current_point.y;
-    m_current_point.x = (m_current_point.x == 0) ? m_tile_layer->getSize().x - 1 : m_current_point.y - 1;
+    if(m_iteration_order == IterationOrder::RightDown)
+    {
+      m_current_point.y = (m_current_point.x == 0) ? m_current_point.y - 1 : m_current_point.y;
+      m_current_point.x = (m_current_point.x == 0) ? tile_layer_size.x - 1 : m_current_point.y - 1;
+    }
+    else if(m_iteration_order == IterationOrder::RightUp)
+    {
+      m_current_point.y = (m_current_point.x == 0) ? m_current_point.y + 1 : m_current_point.y;
+      m_current_point.x = (m_current_point.x == 0) ? tile_layer_size.x - 1 : m_current_point.y - 1;
+    }
+    else if(m_iteration_order == IterationOrder::LeftDown)
+    {
+      m_current_point.y = (m_current_point.x == tile_layer_size.x - 1) ? m_current_point.y - 1 : m_current_point.y;
+      m_current_point.x = (m_current_point.x == tile_layer_size.x - 1) ? 0 : m_current_point.x + 1;
+    }
+    else if(m_iteration_order == IterationOrder::LeftUp)
+    {
+      m_current_point.y = (m_current_point.x == tile_layer_size.x - 1) ? m_current_point.y + 1 : m_current_point.y;
+      m_current_point.x = (m_current_point.x == tile_layer_size.x - 1) ? 0 : m_current_point.x + 1;
+    }
+
+    m_current_cell = m_tile_layer->findCell(m_current_point);
   }
-  else if(m_iteration_order == IterationOrder::RightUp)
-  {
-    m_current_point.y = (m_current_point.x == 0) ? m_current_point.y + 1 : m_current_point.y;
-    m_current_point.x = (m_current_point.x == 0) ? m_tile_layer->getSize().x - 1 : m_current_point.y - 1;
-  }
-  else if(m_iteration_order == IterationOrder::LeftDown)
-  {
-    m_current_point.y = (m_current_point.x == m_tile_layer->getSize().x - 1) ? m_current_point.y - 1 : m_current_point.y;
-    m_current_point.x = (m_current_point.x == m_tile_layer->getSize().x - 1) ? 0 : m_current_point.x + 1;
-  }
-  else if(m_iteration_order == IterationOrder::LeftUp)
-  {
-    m_current_point.y = (m_current_point.x == m_tile_layer->getSize().x - 1) ? m_current_point.y + 1 : m_current_point.y;
-    m_current_point.x = (m_current_point.x == m_tile_layer->getSize().x - 1) ? 0 : m_current_point.x + 1;
-  }
+}
+
+void TileLayerIterator::setToPoint(const sf::Vector2u& point)
+{
+  assert(m_tile_layer->contains(point));
+  m_current_point = point;
+  m_current_cell = m_tile_layer->findCell(point);
+
+  if(!m_current_cell)
+    advance();
+}
+
+void TileLayerIterator::setToStart()
+{
+  setToPoint(getFirstPoint());
+}
+
+void TileLayerIterator::setToEnd()
+{
+  setToPoint(getLastPoint());
 }
 
 sf::Vector2u TileLayerIterator::getFirstPoint() const
