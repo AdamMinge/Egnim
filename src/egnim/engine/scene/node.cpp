@@ -17,7 +17,6 @@ Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
   m_camera_mask(CameraNode::CameraFlag::DEFAULT),
-  m_name(""),
   m_physics_body(nullptr)
 {
 
@@ -35,7 +34,7 @@ std::unique_ptr<Node> Node::detachChild(const Node &node)
 {
   auto found = std::find_if(m_children.begin(), m_children.end(), [&node](auto &child)
   {
-    return child.get() == &node;
+    return child.get() == std::addressof(node);
   });
 
   if (found == m_children.end())
