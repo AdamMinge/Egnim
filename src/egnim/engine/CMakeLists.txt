@@ -45,6 +45,10 @@ set(sources
         ${source_root}/scene/node_iterator.cpp
         ${source_root}/scene/camera_node.cpp
         ${source_root}/scene/scene_state.cpp
+        ${source_root}/scene/scene_serializer.cpp
+        ${source_root}/scene/priv/scene_serializer_impl.h
+        ${source_root}/scene/priv/json_scene_serializer_impl.h
+        ${source_root}/scene/priv/json_scene_serializer_impl.cpp
 
         ${source_root}/physics/physics_world.cpp
         ${source_root}/physics/physics_body.cpp
@@ -60,11 +64,6 @@ set(sources
         ${source_root}/physics/priv/b2_physics_casters.cpp
         ${source_root}/physics/priv/b2_physics_world_callbacks.h
         ${source_root}/physics/priv/b2_physics_world_callbacks.cpp
-
-        ${source_root}/scene/visitor/scene_serializer.cpp
-        ${source_root}/scene/visitor/priv/scene_serializer_impl.h
-        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.h
-        ${source_root}/scene/visitor/priv/json_scene_serializer_impl.cpp
 
         ${source_root}/events/event_dispatcher.cpp
         ${source_root}/events/event.cpp
@@ -118,6 +117,8 @@ set(includes
         ${include_root}/scene/node_iterator.h
         ${include_root}/scene/camera_node.h
         ${include_root}/scene/scene_state.h
+        ${include_root}/scene/scene_visitor.h
+        ${include_root}/scene/scene_serializer.h
 
         ${include_root}/physics/physics_world.h
         ${include_root}/physics/physics_body.h
@@ -129,9 +130,6 @@ set(includes
         ${include_root}/physics/physics_contact.h
         ${include_root}/physics/physics_material.h
         ${include_root}/physics/physics_aabb.h
-
-        ${include_root}/scene/visitor/scene_visitor.h
-        ${include_root}/scene/visitor/scene_serializer.h
 
         ${include_root}/events/event_dispatcher.h
         ${include_root}/events/event.h

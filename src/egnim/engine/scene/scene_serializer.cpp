@@ -1,7 +1,7 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/scene/visitor/scene_serializer.h>
+#include <egnim/engine/scene/scene_serializer.h>
 /* ------------------------------- Private Local ---------------------------- */
-#include <egnim/engine/scene/visitor/priv/json_scene_serializer_impl.h>
+#include <egnim/engine/scene/priv/json_scene_serializer_impl.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */

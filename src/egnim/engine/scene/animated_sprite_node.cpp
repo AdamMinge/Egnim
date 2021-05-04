@@ -2,7 +2,7 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/animated_sprite_node.h>
-#include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/scene/scene_visitor.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */

@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/music_node.h>
-#include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/scene/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {

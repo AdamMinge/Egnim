@@ -2,7 +2,7 @@
 #define JSON_SCENE_SERIALIZER_IMPL_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/scene/visitor/priv/scene_serializer_impl.h>
+#include <egnim/engine/scene/priv/scene_serializer_impl.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene

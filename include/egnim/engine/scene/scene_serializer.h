@@ -7,7 +7,7 @@
 #include <ios>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
-#include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/scene/scene_visitor.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene::priv

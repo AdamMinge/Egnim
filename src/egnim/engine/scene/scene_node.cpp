@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
-#include <egnim/engine/scene/visitor/scene_visitor.h>
+#include <egnim/engine/scene/scene_visitor.h>
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/events/event_dispatcher.h>
 /* -------------------------------------------------------------------------- */

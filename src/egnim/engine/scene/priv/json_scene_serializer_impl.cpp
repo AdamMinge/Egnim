@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/scene/visitor/priv/json_scene_serializer_impl.h>
+#include <egnim/engine/scene/priv/json_scene_serializer_impl.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/scene/label_node.h>
 #include <egnim/engine/scene/sound_node.h>
