@@ -3,14 +3,14 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/tile_map.h>
-#include <egnim/engine/core/group_layer.h>
-#include <egnim/engine/core/tileset.h>
-#include <egnim/engine/core/priv/orthogonal_tile_map_renderer.h>
-#include <egnim/engine/core/priv/isometric_tile_map_renderer.h>
+#include <egnim/engine/graphics/tile_map.h>
+#include <egnim/engine/graphics/group_layer.h>
+#include <egnim/engine/graphics/tileset.h>
+#include <egnim/engine/graphics/priv/orthogonal_tile_map_renderer.h>
+#include <egnim/engine/graphics/priv/isometric_tile_map_renderer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 TileMap::TileMap(Orientation orientation, RenderOrder render_order) :
   m_orientation(orientation),
@@ -95,4 +95,4 @@ std::unique_ptr<priv::TileMapRenderer> TileMap::createRenderer(const TileMap& ti
   else                                      return std::make_unique<priv::OrthogonalTileMapRenderer>(tile_map);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

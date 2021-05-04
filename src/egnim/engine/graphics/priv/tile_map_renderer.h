@@ -5,12 +5,12 @@
 #include <SFML/Graphics/Drawable.hpp>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
   class TileMap;
 }
 
-namespace egnim::core::priv
+namespace egnim::graphics::priv
 {
 
   class TileMapRenderer : public sf::Drawable
@@ -28,6 +28,6 @@ namespace egnim::core::priv
     const TileMap& m_tile_map;
   };
 
-} // namespace egnim::core::priv
+} // namespace egnim::graphics::priv
 
 #endif //TILE_MAP_RENDERER_H

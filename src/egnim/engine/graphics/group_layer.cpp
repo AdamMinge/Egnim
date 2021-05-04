@@ -1,10 +1,10 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/group_layer.h>
+#include <egnim/engine/graphics/group_layer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 std::list<const Tileset*>& operator|=(std::list<const Tileset*>& united, const std::list<const Tileset*>& other)
 {
@@ -84,4 +84,4 @@ bool GroupLayer::merge(const sf::Vector2u& point, const Layer& layer)
   return false;
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

@@ -10,7 +10,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class Tileset;
@@ -38,6 +38,6 @@ namespace egnim::core
     unsigned m_id;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //TILE_H

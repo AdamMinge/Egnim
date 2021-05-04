@@ -14,7 +14,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class EGNIM_UTILITY_API AnimatedSprite : public sf::Drawable, public sf::Transformable
@@ -65,6 +65,6 @@ namespace egnim::core
     bool m_reverse;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //ANIMATED_SPRITE_H

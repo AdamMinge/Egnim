@@ -11,7 +11,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class Tile;
@@ -66,6 +66,6 @@ namespace egnim::core
     }
   }
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //TILESET_H

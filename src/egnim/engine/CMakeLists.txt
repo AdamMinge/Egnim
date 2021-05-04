@@ -13,23 +13,24 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/animated_sprite.cpp
         ${source_root}/core/main_loop.cpp
-        ${source_root}/core/cell.cpp
-        ${source_root}/core/chunk.cpp
-        ${source_root}/core/tile.cpp
-        ${source_root}/core/tile_map.cpp
-        ${source_root}/core/layer.cpp
-        ${source_root}/core/tile_layer.cpp
-        ${source_root}/core/tile_layer_iterator.cpp
-        ${source_root}/core/group_layer.cpp
-        ${source_root}/core/tileset.cpp
-        ${source_root}/core/priv/tile_map_renderer.h
-        ${source_root}/core/priv/tile_map_renderer.cpp
-        ${source_root}/core/priv/isometric_tile_map_renderer.h
-        ${source_root}/core/priv/isometric_tile_map_renderer.cpp
-        ${source_root}/core/priv/orthogonal_tile_map_renderer.h
-        ${source_root}/core/priv/orthogonal_tile_map_renderer.cpp
+
+        ${source_root}/graphics/animated_sprite.cpp
+        ${source_root}/graphics/cell.cpp
+        ${source_root}/graphics/chunk.cpp
+        ${source_root}/graphics/tile.cpp
+        ${source_root}/graphics/tile_map.cpp
+        ${source_root}/graphics/layer.cpp
+        ${source_root}/graphics/tile_layer.cpp
+        ${source_root}/graphics/tile_layer_iterator.cpp
+        ${source_root}/graphics/group_layer.cpp
+        ${source_root}/graphics/tileset.cpp
+        ${source_root}/graphics/priv/tile_map_renderer.h
+        ${source_root}/graphics/priv/tile_map_renderer.cpp
+        ${source_root}/graphics/priv/isometric_tile_map_renderer.h
+        ${source_root}/graphics/priv/isometric_tile_map_renderer.cpp
+        ${source_root}/graphics/priv/orthogonal_tile_map_renderer.h
+        ${source_root}/graphics/priv/orthogonal_tile_map_renderer.cpp
 
         ${source_root}/scene/component.cpp
         ${source_root}/scene/component_container.cpp
@@ -91,17 +92,18 @@ set(includes
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
-        ${include_root}/core/animated_sprite.h
         ${include_root}/core/main_loop.h
-        ${include_root}/core/cell.h
-        ${include_root}/core/chunk.h
-        ${include_root}/core/tile.h
-        ${include_root}/core/tile_map.h
-        ${include_root}/core/layer.h
-        ${include_root}/core/tile_layer.h
-        ${include_root}/core/tile_layer_iterator.h
-        ${include_root}/core/group_layer.h
-        ${include_root}/core/tileset.h
+
+        ${include_root}/graphics/animated_sprite.h
+        ${include_root}/graphics/cell.h
+        ${include_root}/graphics/chunk.h
+        ${include_root}/graphics/tile.h
+        ${include_root}/graphics/tile_map.h
+        ${include_root}/graphics/layer.h
+        ${include_root}/graphics/tile_layer.h
+        ${include_root}/graphics/tile_layer_iterator.h
+        ${include_root}/graphics/group_layer.h
+        ${include_root}/graphics/tileset.h
 
         ${include_root}/scene/component.h
         ${include_root}/scene/component_container.h

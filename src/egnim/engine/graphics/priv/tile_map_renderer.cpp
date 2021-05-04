@@ -1,8 +1,8 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/priv/tile_map_renderer.h>
+#include <egnim/engine/graphics/priv/tile_map_renderer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core::priv {
+namespace egnim::graphics::priv {
 
 TileMapRenderer::TileMapRenderer(const TileMap &tile_map) :
   m_tile_map(tile_map)
@@ -22,4 +22,4 @@ void TileMapRenderer::draw(sf::RenderTarget& target, sf::RenderStates states) co
 
 }
 
-} // namespace egnim::core::priv
+} // namespace egnim::graphics::priv

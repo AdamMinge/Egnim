@@ -2,10 +2,10 @@
 #define ISOMETRIC_TILE_MAP_RENDERER_H
 
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/priv/tile_map_renderer.h>
+#include <egnim/engine/graphics/priv/tile_map_renderer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core::priv
+namespace egnim::graphics::priv
 {
 
   class IsometricTileMapRenderer : public TileMapRenderer
@@ -15,6 +15,6 @@ namespace egnim::core::priv
     ~IsometricTileMapRenderer() override;
   };
 
-}
+} // namespace egnim::graphics::priv
 
 #endif //ISOMETRIC_TILE_MAP_RENDERER_H

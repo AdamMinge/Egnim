@@ -6,10 +6,10 @@
 #include <memory>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
-#include <egnim/engine/core/layer.h>
+#include <egnim/engine/graphics/layer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class EGNIM_UTILITY_API GroupLayer : public Layer
@@ -33,6 +33,6 @@ namespace egnim::core
     std::list<std::unique_ptr<Layer>> m_layers;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //GROUP_LAYER_H

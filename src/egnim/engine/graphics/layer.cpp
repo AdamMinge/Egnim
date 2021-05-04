@@ -1,9 +1,9 @@
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/layer.h>
-#include <egnim/engine/core/group_layer.h>
+#include <egnim/engine/graphics/layer.h>
+#include <egnim/engine/graphics/group_layer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 Layer::Layer(Type type) :
   m_type(type),
@@ -67,4 +67,4 @@ void Layer::setParent(GroupLayer* parent)
   m_parent = parent;
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

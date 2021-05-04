@@ -8,10 +8,10 @@
 #include <vector>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
-#include <egnim/engine/core/cell.h>
+#include <egnim/engine/graphics/cell.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class EGNIM_UTILITY_API Chunk
@@ -40,6 +40,6 @@ namespace egnim::core
     sf::Vector2u m_size;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //CHUNK_H

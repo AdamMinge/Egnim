@@ -9,7 +9,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class TileLayer;
@@ -75,6 +75,6 @@ namespace egnim::core
     LeftUp
   };
 
-} // namespace egnim::scene
+} // namespace egnim::graphics
 
 #endif //TILE_LAYER_ITERATOR_H

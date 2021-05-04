@@ -1,12 +1,12 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/animated_sprite.h>
+#include <egnim/engine/graphics/animated_sprite.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 AnimatedSprite::AnimatedSprite(const sf::Texture& texture, sf::Vector2i frame_size,
                                sf::Time duration, std::optional<std::size_t> num_frames) :
@@ -181,4 +181,4 @@ void AnimatedSprite::nextFrame()
   m_sprite.setTextureRect(texture_rect);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

@@ -3,11 +3,11 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/chunk.h>
-#include <egnim/engine/core/tile.h>
+#include <egnim/engine/graphics/chunk.h>
+#include <egnim/engine/graphics/tile.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 Chunk::Chunk(const sf::Vector2u& size) :
   m_grid(size.x * size.y),
@@ -63,4 +63,4 @@ const sf::Vector2u& Chunk::getSize() const
   return m_size;
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

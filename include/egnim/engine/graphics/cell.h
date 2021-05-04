@@ -7,7 +7,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class Tile;
@@ -39,6 +39,6 @@ namespace egnim::core
     const Tile* m_tile;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //CELL_H

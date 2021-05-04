@@ -11,7 +11,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class GroupLayer;
@@ -69,6 +69,6 @@ namespace egnim::core
     Isometric
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //TILE_MAP_H

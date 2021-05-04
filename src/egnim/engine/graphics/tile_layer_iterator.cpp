@@ -1,11 +1,11 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/tile_layer_iterator.h>
-#include <egnim/engine/core/tile_layer.h>
+#include <egnim/engine/graphics/tile_layer_iterator.h>
+#include <egnim/engine/graphics/tile_layer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 TileLayerIterator::TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order) :
   m_tile_layer(std::addressof(tile_layer)),
@@ -156,4 +156,4 @@ sf::Vector2u TileLayerIterator::getLastPoint() const
   return sf::Vector2u(m_tile_layer->getSize().x  - 1, m_tile_layer->getSize().y  - 1);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

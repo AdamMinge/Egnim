@@ -1,7 +1,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/tile_layer.h>
+#include <egnim/engine/graphics/tile_layer.h>
 /* -------------------------------------------------------------------------- */
 
 namespace sf {
@@ -16,7 +16,7 @@ bool operator<(const sf::Vector2<unsigned int>& first, const sf::Vector2<unsigne
 
 } // namespace sf
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 TileLayer::TileLayer(const sf::Vector2u& size, const sf::Vector2u& chunk_size) :
   Layer(Type::TileLayer),
@@ -214,4 +214,4 @@ sf::Vector2u TileLayer::toChunkCoordinate(const sf::Vector2u& point) const
   return sf::Vector2u(point.x & m_chunk_size.y - 1, point.y & m_chunk_size.y - 1);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

@@ -7,7 +7,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
-#include <egnim/engine/core/animated_sprite.h>
+#include <egnim/engine/graphics/animated_sprite.h>
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
@@ -22,7 +22,7 @@ namespace egnim::scene
     explicit AnimatedSpriteNode();
     ~AnimatedSpriteNode() override;
 
-    void addAnimation(std::string_view id, core::AnimatedSprite&& animated_sprite);
+    void addAnimation(std::string_view id, graphics::AnimatedSprite&& animated_sprite);
     void removeAnimation(std::string_view id);
 
     void setCurrentAnimation(std::string_view id);
@@ -35,8 +35,8 @@ namespace egnim::scene
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:
-    std::map<std::string_view, core::AnimatedSprite> m_animated_sprites;
-    std::map<std::string_view, core::AnimatedSprite>::iterator m_current_animation;
+    std::map<std::string_view, graphics::AnimatedSprite> m_animated_sprites;
+    std::map<std::string_view, graphics::AnimatedSprite>::iterator m_current_animation;
   };
 
 } // namespace egnim::scene

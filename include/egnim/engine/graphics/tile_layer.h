@@ -9,13 +9,13 @@
 #include <map>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
-#include <egnim/engine/core/layer.h>
-#include <egnim/engine/core/chunk.h>
-#include <egnim/engine/core/cell.h>
-#include <egnim/engine/core/tile_layer_iterator.h>
+#include <egnim/engine/graphics/layer.h>
+#include <egnim/engine/graphics/chunk.h>
+#include <egnim/engine/graphics/cell.h>
+#include <egnim/engine/graphics/tile_layer_iterator.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class EGNIM_UTILITY_API TileLayer : public Layer
@@ -64,6 +64,6 @@ namespace egnim::core
     std::unordered_map<const Tileset*, unsigned> m_used_tilesets;
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //TILE_LAYER_H

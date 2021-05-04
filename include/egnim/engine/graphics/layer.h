@@ -9,7 +9,7 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core
+namespace egnim::graphics
 {
 
   class Tileset;
@@ -60,6 +60,6 @@ namespace egnim::core
     GroupLayer
   };
 
-} // namespace egnim::core
+} // namespace egnim::graphics
 
 #endif //LAYER_H

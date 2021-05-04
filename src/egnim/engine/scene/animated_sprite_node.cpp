@@ -18,7 +18,7 @@ AnimatedSpriteNode::AnimatedSpriteNode() :
 
 AnimatedSpriteNode::~AnimatedSpriteNode() = default;
 
-void AnimatedSpriteNode::addAnimation(std::string_view id, core::AnimatedSprite&& animated_sprite)
+void AnimatedSpriteNode::addAnimation(std::string_view id, graphics::AnimatedSprite&& animated_sprite)
 {
   assert(!m_animated_sprites.contains(id));
   m_animated_sprites.emplace(std::make_pair(id, std::move(animated_sprite)));

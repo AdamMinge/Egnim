@@ -2,10 +2,10 @@
 #define ORTHOGONAL_TILE_MAP_RENDERER_H
 
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/priv/tile_map_renderer.h>
+#include <egnim/engine/graphics/priv/tile_map_renderer.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core::priv
+namespace egnim::graphics::priv
 {
 
   class OrthogonalTileMapRenderer : public TileMapRenderer
@@ -15,6 +15,6 @@ namespace egnim::core::priv
     ~OrthogonalTileMapRenderer() override;
   };
 
-}
+} // namespace egnim::graphics::priv
 
 #endif //ORTHOGONAL_TILE_MAP_RENDERER_H

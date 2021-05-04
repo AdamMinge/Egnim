@@ -1,10 +1,10 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/tile.h>
+#include <egnim/engine/graphics/tile.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 
 Tile::Tile(Tileset& tileset, sf::Sprite sprite, unsigned id) :
@@ -38,4 +38,4 @@ void Tile::draw(sf::RenderTarget& target, sf::RenderStates states) const
   target.draw(m_sprite, states);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

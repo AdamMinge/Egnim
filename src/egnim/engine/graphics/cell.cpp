@@ -1,11 +1,11 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/Graphics/RenderTarget.hpp>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/cell.h>
-#include <egnim/engine/core/tile.h>
+#include <egnim/engine/graphics/cell.h>
+#include <egnim/engine/graphics/tile.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 Cell::Cell(const Tile* tile) :
   m_tile(tile)
@@ -49,4 +49,4 @@ void Cell::draw(sf::RenderTarget& target, sf::RenderStates states) const
     target.draw(*m_tile, states);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics

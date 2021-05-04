@@ -3,11 +3,11 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ---------------------------------- Local --------------------------------- */
-#include <egnim/engine/core/tileset.h>
-#include <egnim/engine/core/tile.h>
+#include <egnim/engine/graphics/tileset.h>
+#include <egnim/engine/graphics/tile.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::core {
+namespace egnim::graphics {
 
 Tileset::Tileset(sf::Texture& texture, const sf::Vector2u& tile_size, unsigned spacing, unsigned margin) :
   m_texture(texture),
@@ -102,4 +102,4 @@ void Tileset::init()
   assert(m_row_count > 0);
 }
 
-} // namespace egnim::core
+} // namespace egnim::graphics
