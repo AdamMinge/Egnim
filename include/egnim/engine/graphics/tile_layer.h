@@ -47,8 +47,8 @@ namespace egnim::graphics
     [[nodiscard]] bool canMerge(const Layer& layer) const override;
     bool merge(const sf::Vector2u& point, const Layer& layer) override;
 
-    [[nodiscard]] TileLayerIterator begin(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp);
-    [[nodiscard]] TileLayerIterator end(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp);
+    [[nodiscard]] TileLayerIterator begin(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp) const;
+    [[nodiscard]] TileLayerIterator end(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp) const;
 
   private:
     void addChunk(const sf::Vector2u& point);

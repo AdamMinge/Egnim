@@ -140,8 +140,9 @@ void ConstGroupLayerIterator::advance()
   auto current_layer = m_layers_queue.front();
   m_layers_queue.pop();
 
-  if(auto group_layer = dynamic_cast<const GroupLayer*>(current_layer); group_layer)
+  if(current_layer->getType() == Layer::Type::GroupLayer)
   {
+    auto group_layer = dynamic_cast<const GroupLayer*>(current_layer);
     for(auto& layer : group_layer->getLayers())
       m_layers_queue.push(layer.get());
   }

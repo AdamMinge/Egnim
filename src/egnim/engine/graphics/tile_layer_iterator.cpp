@@ -7,7 +7,7 @@
 
 namespace egnim::graphics {
 
-TileLayerIterator::TileLayerIterator(TileLayer* tile_layer, IterationOrder iteration_order) :
+TileLayerIterator::TileLayerIterator(const TileLayer* tile_layer, IterationOrder iteration_order) :
   m_tile_layer(tile_layer),
   m_iteration_order(iteration_order),
   m_current_cell(nullptr)
@@ -15,7 +15,7 @@ TileLayerIterator::TileLayerIterator(TileLayer* tile_layer, IterationOrder itera
   setToStart();
 }
 
-TileLayerIterator::TileLayerIterator(TileLayer* tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order) :
+TileLayerIterator::TileLayerIterator(const TileLayer* tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order) :
   m_tile_layer(tile_layer),
   m_iteration_order(iteration_order),
   m_current_cell(nullptr)

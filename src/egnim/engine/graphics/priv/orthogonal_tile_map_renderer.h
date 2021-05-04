@@ -13,6 +13,9 @@ namespace egnim::graphics::priv
   public:
     explicit OrthogonalTileMapRenderer(const TileMap& tile_map);
     ~OrthogonalTileMapRenderer() override;
+
+    [[nodiscard]] sf::Vector2f tileToPixelCoords(unsigned x, unsigned y) const override;
+    [[nodiscard]] sf::Vector2u pixelToTileCoords(float x, float y) const override;
   };
 
 } // namespace egnim::graphics::priv
