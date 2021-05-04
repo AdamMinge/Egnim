@@ -23,6 +23,7 @@ set(sources
         ${source_root}/graphics/layer.cpp
         ${source_root}/graphics/tile_layer.cpp
         ${source_root}/graphics/tile_layer_iterator.cpp
+        ${source_root}/graphics/group_layer_iterator.cpp
         ${source_root}/graphics/group_layer.cpp
         ${source_root}/graphics/tileset.cpp
         ${source_root}/graphics/priv/tile_map_renderer.h
@@ -101,6 +102,7 @@ set(includes
         ${include_root}/graphics/layer.h
         ${include_root}/graphics/tile_layer.h
         ${include_root}/graphics/tile_layer_iterator.h
+        ${include_root}/graphics/group_layer_iterator.h
         ${include_root}/graphics/group_layer.h
         ${include_root}/graphics/tileset.h
 

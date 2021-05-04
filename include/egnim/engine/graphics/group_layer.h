@@ -7,6 +7,7 @@
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/graphics/layer.h>
+#include <egnim/engine/graphics/group_layer_iterator.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::graphics
@@ -28,6 +29,12 @@ namespace egnim::graphics
 
     [[nodiscard]] bool canMerge(const Layer& layer) const override;
     bool merge(const sf::Vector2u& point, const Layer& layer) override;
+
+    [[nodiscard]] GroupLayerIterator begin();
+    [[nodiscard]] ConstGroupLayerIterator begin() const;
+
+    [[nodiscard]] GroupLayerIterator end();
+    [[nodiscard]] ConstGroupLayerIterator end() const;
 
   private:
     std::list<std::unique_ptr<Layer>> m_layers;

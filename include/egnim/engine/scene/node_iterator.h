@@ -16,6 +16,8 @@ namespace egnim::scene
 
   class EGNIM_UTILITY_API NodeIterator
   {
+    friend class Node;
+
   public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type   = std::ptrdiff_t;
@@ -24,7 +26,6 @@ namespace egnim::scene
     using reference         = Node&;
 
   public:
-    explicit NodeIterator(Node* current_node);
     ~NodeIterator();
 
     NodeIterator(const NodeIterator&) = default;
@@ -43,7 +44,10 @@ namespace egnim::scene
     bool operator!=(const NodeIterator& other) const;
 
   private:
+    explicit NodeIterator(Node* current_node);
     explicit NodeIterator(std::queue<Node*> nodes_queue);
+
+    void advance();
 
   private:
     std::queue<Node*> m_nodes_queue;
@@ -51,6 +55,8 @@ namespace egnim::scene
 
   class ConstNodeIterator
   {
+    friend class Node;
+
   public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type   = std::ptrdiff_t;
@@ -59,7 +65,6 @@ namespace egnim::scene
     using reference         = const Node&;
 
   public:
-    explicit ConstNodeIterator(const Node* current_node);
     ~ConstNodeIterator();
 
     ConstNodeIterator(const ConstNodeIterator&) = default;
@@ -74,11 +79,14 @@ namespace egnim::scene
     ConstNodeIterator& operator++();
     ConstNodeIterator operator++(int); // NOLINT(cert-dcl21-cpp)
 
-    bool operator==(const ConstNodeIterator& other) const;
-    bool operator!=(const ConstNodeIterator& other) const;
+    [[nodiscard]] bool operator==(const ConstNodeIterator& other) const;
+    [[nodiscard]] bool operator!=(const ConstNodeIterator& other) const;
 
   private:
+    explicit ConstNodeIterator(const Node* current_node);
     explicit ConstNodeIterator(std::queue<const Node*> nodes_queue);
+
+    void advance();
 
   private:
     std::queue<const Node*> m_nodes_queue;

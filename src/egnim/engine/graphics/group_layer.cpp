@@ -84,4 +84,24 @@ bool GroupLayer::merge(const sf::Vector2u& point, const Layer& layer)
   return false;
 }
 
+GroupLayerIterator GroupLayer::begin()
+{
+  return GroupLayerIterator(this);
+}
+
+ConstGroupLayerIterator GroupLayer::begin() const
+{
+  return ConstGroupLayerIterator(this);
+}
+
+GroupLayerIterator GroupLayer::end()
+{
+  return GroupLayerIterator(nullptr);
+}
+
+ConstGroupLayerIterator GroupLayer::end() const
+{
+  return ConstGroupLayerIterator(nullptr);
+}
+
 } // namespace egnim::graphics

@@ -17,7 +17,7 @@ namespace egnim::graphics
 
   class EGNIM_UTILITY_API TileLayerIterator
   {
-    friend TileLayer;
+    friend class TileLayer;
 
   public:
     using iterator_category = std::forward_iterator_tag;
@@ -49,8 +49,8 @@ namespace egnim::graphics
     bool operator!=(const TileLayerIterator& other) const;
 
   private:
-    explicit TileLayerIterator(TileLayer& tile_layer, IterationOrder iteration_order);
-    explicit TileLayerIterator(TileLayer& tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order);
+    explicit TileLayerIterator(TileLayer* tile_layer, IterationOrder iteration_order);
+    explicit TileLayerIterator(TileLayer* tile_layer, const sf::Vector2u& start_point, IterationOrder iteration_order);
 
     void advance();
     void setToPoint(const sf::Vector2u& point);

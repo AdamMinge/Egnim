@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/graphics/priv/tile_map_renderer.h>
+#include <egnim/engine/graphics/tile_map.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::graphics::priv {
@@ -19,6 +20,7 @@ const TileMap& TileMapRenderer::getTileMap() const
 
 void TileMapRenderer::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
+  auto& root_layer = m_tile_map.getRootLayer();
 
 }
 

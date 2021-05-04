@@ -171,12 +171,12 @@ bool TileLayer::merge(const sf::Vector2u& point, const Layer& layer)
 
 TileLayerIterator TileLayer::begin(TileLayerIterator::IterationOrder order)
 {
-  auto begin_iter = TileLayerIterator(*this, order);
+  auto begin_iter = TileLayerIterator(this, order);
   return begin_iter;
 }
 TileLayerIterator TileLayer::end(TileLayerIterator::IterationOrder order)
 {
-  auto end_iter = TileLayerIterator(*this, order);
+  auto end_iter = TileLayerIterator(this, order);
   end_iter.setToEnd();
   return end_iter;
 }
