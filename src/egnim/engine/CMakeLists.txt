@@ -24,6 +24,12 @@ set(sources
         ${source_root}/core/tile_layer_iterator.cpp
         ${source_root}/core/group_layer.cpp
         ${source_root}/core/tileset.cpp
+        ${source_root}/core/priv/tile_map_renderer.h
+        ${source_root}/core/priv/tile_map_renderer.cpp
+        ${source_root}/core/priv/isometric_tile_map_renderer.h
+        ${source_root}/core/priv/isometric_tile_map_renderer.cpp
+        ${source_root}/core/priv/orthogonal_tile_map_renderer.h
+        ${source_root}/core/priv/orthogonal_tile_map_renderer.cpp
 
         ${source_root}/scene/component.cpp
         ${source_root}/scene/component_container.cpp

@@ -2,6 +2,7 @@
 #define TILE_MAP_H
 
 /* ----------------------------------- SFML --------------------------------- */
+#include <SFML//Graphics/Transformable.hpp>
 #include <SFML/Graphics/Drawable.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
@@ -15,8 +16,9 @@ namespace egnim::core
 
   class GroupLayer;
   class Tileset;
+  namespace priv { class TileMapRenderer; }
 
-  class EGNIM_UTILITY_API TileMap : public sf::Drawable
+  class EGNIM_UTILITY_API TileMap : public sf::Drawable , public sf::Transformable
   {
   public:
     enum class RenderOrder;
@@ -24,7 +26,7 @@ namespace egnim::core
 
   public:
     explicit TileMap(Orientation orientation, RenderOrder render_order);
-    ~TileMap();
+    ~TileMap() override;
 
     void setOrientation(Orientation orientation);
     [[nodiscard]] Orientation getOrientation() const;
@@ -43,8 +45,12 @@ namespace egnim::core
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:
+    static std::unique_ptr<priv::TileMapRenderer> createRenderer(const TileMap& tile_map, Orientation orientation);
+
+  private:
     RenderOrder m_render_order;
     Orientation m_orientation;
+    std::unique_ptr<priv::TileMapRenderer> m_tile_map_renderer;
     std::unique_ptr<GroupLayer> m_root_layer;
     std::list<std::unique_ptr<Tileset>> m_tilesets;
   };
