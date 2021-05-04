@@ -35,12 +35,6 @@ namespace egnim::core
 
     [[nodiscard]] const sf::Vector2u& getSize() const;
 
-    [[nodiscard]] std::vector<Cell>::iterator begin();
-    [[nodiscard]] std::vector<Cell>::const_iterator begin() const;
-
-    [[nodiscard]] std::vector<Cell>::iterator end();
-    [[nodiscard]] std::vector<Cell>::const_iterator end() const;
-
   private:
     std::vector<Cell> m_grid;
     sf::Vector2u m_size;

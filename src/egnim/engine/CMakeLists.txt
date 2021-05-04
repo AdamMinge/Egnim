@@ -21,6 +21,7 @@ set(sources
         ${source_root}/core/tile_map.cpp
         ${source_root}/core/layer.cpp
         ${source_root}/core/tile_layer.cpp
+        ${source_root}/core/tile_layer_iterator.cpp
         ${source_root}/core/group_layer.cpp
         ${source_root}/core/tileset.cpp
 
@@ -92,6 +93,7 @@ set(includes
         ${include_root}/core/tile_map.h
         ${include_root}/core/layer.h
         ${include_root}/core/tile_layer.h
+        ${include_root}/core/tile_layer_iterator.h
         ${include_root}/core/group_layer.h
         ${include_root}/core/tileset.h
 

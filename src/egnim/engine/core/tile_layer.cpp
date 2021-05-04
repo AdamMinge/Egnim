@@ -169,6 +169,15 @@ bool TileLayer::merge(const sf::Vector2u& point, const Layer& layer)
   return true;
 }
 
+TileLayerIterator TileLayer::begin(TileLayerIterator::IterationOrder order)
+{
+  return TileLayerIterator(*this, order, false);
+}
+TileLayerIterator TileLayer::end(TileLayerIterator::IterationOrder order)
+{
+  return TileLayerIterator(*this, order, true);
+}
+
 void TileLayer::addChunk(const sf::Vector2u& point)
 {
   assert(contains(point));

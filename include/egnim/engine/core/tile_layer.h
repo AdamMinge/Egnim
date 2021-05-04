@@ -12,6 +12,7 @@
 #include <egnim/engine/core/layer.h>
 #include <egnim/engine/core/chunk.h>
 #include <egnim/engine/core/cell.h>
+#include <egnim/engine/core/tile_layer_iterator.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::core
@@ -45,6 +46,9 @@ namespace egnim::core
 
     [[nodiscard]] bool canMerge(const Layer& layer) const override;
     bool merge(const sf::Vector2u& point, const Layer& layer) override;
+
+    [[nodiscard]] TileLayerIterator begin(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp);
+    [[nodiscard]] TileLayerIterator end(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp);
 
   private:
     void addChunk(const sf::Vector2u& point);

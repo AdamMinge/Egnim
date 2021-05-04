@@ -55,32 +55,12 @@ bool Chunk::contains(const sf::Vector2u& point) const
 
 bool Chunk::isEmpty() const
 {
-  return std::all_of(begin(), end(), [](auto& cell) { return cell.isEmpty(); });
+  return std::all_of(m_grid.begin(), m_grid.end(), [](auto& cell) { return cell.isEmpty(); });
 }
 
 const sf::Vector2u& Chunk::getSize() const
 {
   return m_size;
-}
-
-std::vector<Cell>::iterator Chunk::begin()
-{
-  return m_grid.begin();
-}
-
-std::vector<Cell>::const_iterator Chunk::begin() const
-{
-  return m_grid.cbegin();
-}
-
-std::vector<Cell>::iterator Chunk::end()
-{
-  return m_grid.end();
-}
-
-std::vector<Cell>::const_iterator Chunk::end() const
-{
-  return m_grid.cend();
 }
 
 } // namespace egnim::core

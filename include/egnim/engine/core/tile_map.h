@@ -10,7 +10,17 @@ namespace egnim::core
 
   class EGNIM_UTILITY_API TileMap
   {
+  public:
+    enum class RenderOrder;
 
+  };
+
+  enum class TileMap::RenderOrder
+  {
+    RightDown,
+    RightUp,
+    LeftDown,
+    LeftUp
   };
 
 } // namespace egnim::core
