@@ -95,4 +95,14 @@ void JsonSceneSerializerImpl::deserialize(Node &node, std::istream& stream)
 
 }
 
+void JsonSceneSerializerImpl::serialize(const TileMapNode &tile_map_node, std::ostream& stream)
+{
+
+}
+
+void JsonSceneSerializerImpl::deserialize(TileMapNode &tile_map_node, std::istream& stream)
+{
+
+}
+
 } // namespace egnim::scene::priv

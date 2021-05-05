@@ -8,12 +8,13 @@
 namespace egnim::scene
 {
   class AnimatedSpriteNode;
+  class TileMapNode;
+  class SpriteNode;
+  class CameraNode;
   class LabelNode;
   class MusicNode;
   class SceneNode;
   class SoundNode;
-  class SpriteNode;
-  class CameraNode;
 }
 
 namespace egnim::scene::priv
@@ -44,6 +45,9 @@ namespace egnim::scene::priv
 
     virtual void serialize(const CameraNode &camera_node, std::ostream& stream) = 0;
     virtual void deserialize(CameraNode &camera_node, std::istream& stream) = 0;
+
+    virtual void serialize(const TileMapNode &tile_map_node, std::ostream& stream) = 0;
+    virtual void deserialize(TileMapNode &tile_map_node, std::istream& stream) = 0;
 
   protected:
     explicit SceneSerializerImpl() = default;

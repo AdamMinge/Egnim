@@ -40,6 +40,9 @@ namespace egnim::scene::priv
     void serialize(const CameraNode &camera_node, std::ostream& stream) override;
     void deserialize(CameraNode &camera_node, std::istream& stream) override;
 
+    void serialize(const TileMapNode &tile_map_node, std::ostream& stream) override;
+    void deserialize(TileMapNode &tile_map_node, std::istream& stream) override;
+
   private:
     void serialize(const Node &node, std::ostream& stream);
     void deserialize(Node &node, std::istream& stream);

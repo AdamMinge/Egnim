@@ -39,12 +39,17 @@ namespace egnim::scene
     void visitSoundNode(SoundNode& sound_node) override;
     void visitSpriteNode(SpriteNode& sprite_node) override;
     void visitCameraNode(CameraNode& camera_node) override;
+    void visitTileMapNode(TileMapNode& tile_map_node) override;
 
     Format getFormat();
     Action getAction();
 
   protected:
     priv::SceneSerializerImpl& getImpl();
+
+  private:
+    template<typename NODE_TYPE, typename IMPLEMENTATION>
+    void visit(NODE_TYPE& node, IMPLEMENTATION&& implementation);
 
   private:
     Format m_format;
@@ -64,6 +69,15 @@ namespace egnim::scene
     Serialize,
     Deserialize,
   };
+
+  template<typename NODE_TYPE, typename IMPLEMENTATION>
+  void SceneSerializer::visit(NODE_TYPE& node, IMPLEMENTATION&& implementation)
+  {
+    if(getAction() == Action::Serialize)
+      std::forward<IMPLEMENTATION>(implementation).serialize(node, std::get<ostream>(m_stream));
+    else if(getAction() == Action::Deserialize)
+      std::forward<IMPLEMENTATION>(implementation).deserialize(node, std::get<istream>(m_stream));
+  }
 
 } // namespace egnim::scene
 
