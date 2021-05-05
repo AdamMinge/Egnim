@@ -16,7 +16,7 @@ namespace egnim::graphics
 
   class GroupLayer;
   class Tileset;
-  namespace priv { class TileMapRenderer; }
+  namespace priv { class TileMapImpl; }
 
   class EGNIM_UTILITY_API TileMap : public sf::Drawable , public sf::Transformable
   {
@@ -25,7 +25,7 @@ namespace egnim::graphics
     enum class Orientation;
 
   public:
-    explicit TileMap(Orientation orientation, RenderOrder render_order);
+    explicit TileMap(Orientation orientation, RenderOrder render_order, const sf::Vector2u& tile_size);
     ~TileMap() override;
 
     void setOrientation(Orientation orientation);
@@ -34,6 +34,9 @@ namespace egnim::graphics
     void setRenderOrder(RenderOrder render_order);
     [[nodiscard]] RenderOrder getRenderOrder() const;
 
+    void setTileSize(const sf::Vector2u& tile_size);
+    [[nodiscard]] const sf::Vector2u& getTileSize() const;
+
     void attachTileset(std::unique_ptr<Tileset> tileset);
     [[nodiscard]] std::unique_ptr<Tileset> detachTileset(const Tileset& tileset);
     [[nodiscard]] const std::list<std::unique_ptr<Tileset>>& getTilesets() const;
@@ -41,18 +44,22 @@ namespace egnim::graphics
     [[nodiscard]] GroupLayer& getRootLayer();
     [[nodiscard]] const GroupLayer& getRootLayer() const;
 
+    [[nodiscard]] sf::Vector2f tileToPixelCoords(unsigned x, unsigned y) const;
+    [[nodiscard]] sf::Vector2f tileToPixelCoords(const sf::Vector2u& point) const;
+    [[nodiscard]] sf::FloatRect tileToPixelCoords(const sf::Rect<unsigned>& area) const;
+
+    [[nodiscard]] sf::Vector2u pixelToTileCoords(float x, float y) const;
+    [[nodiscard]] sf::Vector2u pixelToTileCoords(const sf::Vector2f& point) const;
+
   protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 
-  private:
-    static std::unique_ptr<priv::TileMapRenderer> createRenderer(const TileMap& tile_map, Orientation orientation);
+    [[nodiscard]] static std::unique_ptr<priv::TileMapImpl> createImpl(
+      Orientation orientation, RenderOrder render_order, const sf::Vector2u& tile_size);
 
   private:
-    RenderOrder m_render_order;
-    Orientation m_orientation;
-    std::unique_ptr<priv::TileMapRenderer> m_tile_map_renderer;
-    std::unique_ptr<GroupLayer> m_root_layer;
-    std::list<std::unique_ptr<Tileset>> m_tilesets;
+    TileMap::Orientation m_orientation;
+    std::unique_ptr<priv::TileMapImpl> m_tile_map_impl;
   };
 
   enum class TileMap::RenderOrder

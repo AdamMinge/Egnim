@@ -26,12 +26,12 @@ set(sources
         ${source_root}/graphics/group_layer_iterator.cpp
         ${source_root}/graphics/group_layer.cpp
         ${source_root}/graphics/tileset.cpp
-        ${source_root}/graphics/priv/tile_map_renderer.h
-        ${source_root}/graphics/priv/tile_map_renderer.cpp
-        ${source_root}/graphics/priv/isometric_tile_map_renderer.h
-        ${source_root}/graphics/priv/isometric_tile_map_renderer.cpp
-        ${source_root}/graphics/priv/orthogonal_tile_map_renderer.h
-        ${source_root}/graphics/priv/orthogonal_tile_map_renderer.cpp
+        ${source_root}/graphics/priv/tile_map_impl.h
+        ${source_root}/graphics/priv/tile_map_impl.cpp
+        ${source_root}/graphics/priv/isometric_tile_map_impl.h
+        ${source_root}/graphics/priv/isometric_tile_map_impl.cpp
+        ${source_root}/graphics/priv/orthogonal_tile_map_impl.h
+        ${source_root}/graphics/priv/orthogonal_tile_map_impl.cpp
 
         ${source_root}/scene/component.cpp
         ${source_root}/scene/component_container.cpp
