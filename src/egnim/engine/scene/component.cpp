@@ -16,7 +16,7 @@ Component::~Component() = default;
 
 void Component::setOwner(Node* owner)
 {
-  assert(m_owner);
+  assert(!m_owner);
   m_owner = owner;
 }
 

@@ -20,7 +20,7 @@ PhysicsShape::PhysicsShape(Type type, const PhysicsMaterial& physics_material) :
   m_b2_fixture(nullptr),
   m_type(type),
   m_physics_material(physics_material),
-  m_contact_test_bitmask(0x0000),
+  m_contact_test_bitmask(0x0001),
   m_collision_bitmask(0xFFFF),
   m_group_index(0),
   m_sensor(false)
