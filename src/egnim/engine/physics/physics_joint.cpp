@@ -108,8 +108,7 @@ sf::Vector2f PhysicsJoint::getSecondAnchor() const
 sf::Vector2f PhysicsJoint::getReactionForce(float inv_dt) const
 {
   assert(m_b2_joint);
-  auto reaction_force = m_b2_joint->GetReactionForce(inv_dt);
-  return sf::Vector2f(reaction_force.x, reaction_force.y);
+  return priv::b2_cast(m_b2_joint->GetReactionForce(inv_dt));
 }
 
 float PhysicsJoint::getReactionTorque(float inv_dt) const
@@ -285,13 +284,13 @@ float MotorPhysicsJoint::getCorrectionFactory() const
 
 void MotorPhysicsJoint::setLinearOffset(const sf::Vector2f& linear_offset)
 {
-  getInternalJoint<b2MotorJoint>()->SetLinearOffset(b2Vec2(linear_offset.x, linear_offset.y));
+  getInternalJoint<b2MotorJoint>()->SetLinearOffset(priv::b2_cast(linear_offset));
 }
 
 sf::Vector2f MotorPhysicsJoint::getLinearOffset() const
 {
   auto linear_offset = getInternalJoint<b2MotorJoint>()->GetLinearOffset();
-  return sf::Vector2f(linear_offset.x, linear_offset.y);
+  return priv::b2_cast(linear_offset);
 }
 
 void MotorPhysicsJoint::setAngularOffset(float angular_offset)

@@ -23,6 +23,9 @@ namespace egnim::physics::priv
   PhysicsManifoldPoint b2_cast(const b2ManifoldPoint& b2_manifold_point);
   PhysicsContactImpulse b2_cast(const b2ContactImpulse& b2_contact_impulse);
 
+  b2Vec2 b2_cast(const sf::Vector2f& point);
+  sf::Vector2f b2_cast(const b2Vec2& point);
+
   b2Vec2 b2_pixel_to_meter(const sf::Vector2f& pixel_point);
   sf::Vector2f b2_meter_to_pixel(const b2Vec2& meter_point);
 

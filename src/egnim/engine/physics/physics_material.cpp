@@ -4,7 +4,7 @@
 
 namespace egnim::physics {
 
-[[maybe_unused]] const PhysicsMaterial PhysicsMaterial::DefaultMaterial = PhysicsMaterial(0.1f, 0.5f, 0.5f, 0.5f);
+[[maybe_unused]] const PhysicsMaterial PhysicsMaterial::DefaultMaterial = PhysicsMaterial(1.0f, 0.5f, 0.5f, 0.5f);
 
 PhysicsMaterial::PhysicsMaterial(float density, float restitution, float friction, float threshold) noexcept :
   m_density(density),

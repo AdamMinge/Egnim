@@ -38,7 +38,7 @@ PhysicsManifold b2_cast(const b2Manifold& b2_manifold)
 
   return PhysicsManifold(static_cast<PhysicsManifold::Type>(b2_manifold.type),
                          priv::b2_meter_to_pixel(b2_manifold.localPoint),
-                         sf::Vector2f(b2_manifold.localNormal.x, b2_manifold.localNormal.y),
+                         priv::b2_cast(b2_manifold.localNormal),
                          points);
 }
 
@@ -59,6 +59,16 @@ PhysicsContactImpulse b2_cast(const b2ContactImpulse& b2_contact_impulse)
   }
 
   return PhysicsContactImpulse(normal_impulses, tangent_impulses);
+}
+
+b2Vec2 b2_cast(const sf::Vector2f& point)
+{
+  return b2Vec2(point.x, point.y);
+}
+
+sf::Vector2f b2_cast(const b2Vec2& point)
+{
+  return sf::Vector2f(point.x, point.y);
 }
 
 b2Vec2 b2_pixel_to_meter(const sf::Vector2f& pixel_point)

@@ -60,13 +60,12 @@ const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 
 void PhysicsBody::setLinearVelocity(const sf::Vector2f& linear_velocity)
 {
-  m_b2_body->SetLinearVelocity(b2Vec2(linear_velocity.x, linear_velocity.y));
+  m_b2_body->SetLinearVelocity(priv::b2_cast(linear_velocity));
 }
 
 sf::Vector2f PhysicsBody::getLinearVelocity() const
 {
-  auto b2_vec = m_b2_body->GetLinearVelocity();
-  return sf::Vector2f(b2_vec.x, b2_vec.y);
+  return priv::b2_cast(m_b2_body->GetLinearVelocity());
 }
 
 void PhysicsBody::setAngularVelocity(float omega)
@@ -81,12 +80,12 @@ float PhysicsBody::getAngularVelocity() const
 
 void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyForce(b2Vec2(force.x, force.y), b2Vec2(point.x, point.y), awake);
+  m_b2_body->ApplyForce(priv::b2_cast(force), priv::b2_cast(point), awake);
 }
 
 void PhysicsBody::applyForceToCenter(const sf::Vector2f& force, bool awake)
 {
-  m_b2_body->ApplyForceToCenter(b2Vec2(force.x, force.y), awake);
+  m_b2_body->ApplyForceToCenter(priv::b2_cast(force), awake);
 }
 
 void PhysicsBody::applyTorque(float torque, bool awake)
@@ -96,12 +95,12 @@ void PhysicsBody::applyTorque(float torque, bool awake)
 
 void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyLinearImpulse(b2Vec2(impulse.x, impulse.y), b2Vec2(point.x, point.y), awake);
+  m_b2_body->ApplyLinearImpulse(priv::b2_cast(impulse), priv::b2_cast(point), awake);
 }
 
 void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake)
 {
-  m_b2_body->ApplyLinearImpulseToCenter(b2Vec2(impulse.x, impulse.y), awake);
+  m_b2_body->ApplyLinearImpulseToCenter(priv::b2_cast(impulse), awake);
 }
 
 void PhysicsBody::applyAngularImpulse(float impulse, bool awake)
