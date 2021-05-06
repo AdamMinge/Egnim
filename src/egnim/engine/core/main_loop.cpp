@@ -33,6 +33,26 @@ sf::Time MainLoop::getTimePerFrame() const
   return m_time_per_frame;
 }
 
+Context& MainLoop::getContext()
+{
+  return *m_context;
+}
+
+const Context& MainLoop::getContext() const
+{
+  return *m_context;
+}
+
+StateStack& MainLoop::getStateStack()
+{
+  return *m_states;
+}
+
+const StateStack& MainLoop::getStateStack() const
+{
+  return *m_states;
+}
+
 void MainLoop::run()
 {
   sf::Clock clock;

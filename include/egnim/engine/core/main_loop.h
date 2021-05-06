@@ -24,6 +24,12 @@ namespace egnim::core
     void setTimePerFrame(const sf::Time& time_per_frame);
     [[nodiscard]] sf::Time getTimePerFrame() const;
 
+    [[nodiscard]] Context& getContext();
+    [[nodiscard]] const Context& getContext() const;
+
+    [[nodiscard]] StateStack& getStateStack();
+    [[nodiscard]] const StateStack& getStateStack() const;
+
     void run();
 
   protected:
