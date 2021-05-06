@@ -24,6 +24,7 @@ egnim_set_option(BUILD_SHARED_LIBS TRUE BOOL "TRUE to build EGNIM dependencies a
 egnim_set_option(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${EGNIM_BINARY_DIR}" PATH "set global directory for output runtime")
 egnim_set_option(EGNIM_DEPRECATED_WARNINGS TRUE BOOL "FALSE to disable deprecated warning, TRUE to enable depracated warning")
 egnim_set_option(EGNIM_BUILD_TEST TRUE BOOL "TRUE to build the egnim-tests, FALSE to ignore them")
+egnim_set_option(EGNIM_BUILD_EXAMPLES TRUE BOOL "TRUE to build the egnim-examples, FALSE to ignore them")
 egnim_set_option(EGNIM_BUILD_DOCUMENTATION TRUE BOOL "TRUE to build the documentation, FALSE to ignore them")
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------------------- Set other options ---------------------------------------- #

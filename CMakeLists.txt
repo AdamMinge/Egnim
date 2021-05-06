@@ -16,6 +16,10 @@ add_subdirectory(src/egnim)
 if(EGNIM_BUILD_TEST)
     add_subdirectory(tests)
 endif()
+
+if(EGNIM_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
 # -------------------------------------------------------------------------------------------------- #
 # ------------------------------ Generate and install documentation -------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
