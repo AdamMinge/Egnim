@@ -8,8 +8,8 @@
 namespace egnim::scene {
 
 SceneNode::SceneNode(core::Context& context) :
-  m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f())),
-  m_context(context)
+  m_context(context),
+  m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f()))
 {
 
 }

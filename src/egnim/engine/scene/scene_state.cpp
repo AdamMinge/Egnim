@@ -46,4 +46,14 @@ void SceneState::onDestroy()
 
 }
 
+SceneNode& SceneState::getSceneNode()
+{
+  return *m_scene_node;
+}
+
+const SceneNode& SceneState::getSceneNode() const
+{
+  return *m_scene_node;
+}
+
 } // namespace egnim::scene

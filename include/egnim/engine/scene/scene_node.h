@@ -39,8 +39,8 @@ namespace egnim::scene
     void updateCurrent(sf::Time dt) override;
 
   private:
-    std::unique_ptr<physics::PhysicsWorld> m_physics_world;
     core::Context& m_context;
+    std::unique_ptr<physics::PhysicsWorld> m_physics_world;
   };
 
 } // namespace egnim::scene

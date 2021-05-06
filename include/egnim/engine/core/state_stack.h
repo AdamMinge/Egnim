@@ -34,7 +34,7 @@ namespace egnim::core
     void clearStates();
 
     template<typename TYPE, typename ...Args>
-    void registerState(std::string_view state_id, Args... args);
+    void registerState(std::string_view state_id, Args&&... args);
 
     bool empty();
 
@@ -51,10 +51,10 @@ namespace egnim::core
   };
 
   template<typename TYPE, typename ...Args>
-  void StateStack::registerState(std::string_view state_id, Args... args)
+  void StateStack::registerState(std::string_view state_id, Args&&... args)
   {
-    m_factories.insert(std::make_pair(state_id, [args...](){
-      return std::make_unique<TYPE>(args...);
+    m_factories.insert(std::make_pair(state_id, [this, &args...](){
+      return std::make_unique<TYPE>(*this, std::forward<Args>(args)...);
     }));
   }
 

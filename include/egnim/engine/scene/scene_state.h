@@ -27,6 +27,9 @@ namespace egnim::scene
     void onCreate() override;
     void onDestroy() override;
 
+    [[nodiscard]] SceneNode& getSceneNode();
+    [[nodiscard]] const SceneNode& getSceneNode() const;
+
   private:
     std::unique_ptr<SceneNode> m_scene_node;
   };
