@@ -2,6 +2,7 @@
 #include <egnim/engine/physics/physics_joint.h>
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/physics/physics_world.h>
+#include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_friction_joint.h>
@@ -18,8 +19,7 @@ namespace egnim::physics
 
 /* ---------------------------------- PhysicsJoint -------------------------- */
 
-PhysicsJoint::PhysicsJoint(Type type, PhysicsBody &first_physics_body, PhysicsBody &second_physics_body)
-  :
+PhysicsJoint::PhysicsJoint(Type type, PhysicsBody &first_physics_body, PhysicsBody &second_physics_body) :
   m_type(type),
   m_physics_world(*first_physics_body.getPhysicsWorld()),
   m_first_physics_body(first_physics_body),
@@ -96,15 +96,13 @@ PhysicsWorld* PhysicsJoint::getPhysicsWorld()
 sf::Vector2f PhysicsJoint::getFirstAnchor() const
 {
   assert(m_b2_joint);
-  auto anchor = m_b2_joint->GetAnchorA();
-  return sf::Vector2f(anchor.x, anchor.y);
+  return priv::b2_meter_to_pixel(m_b2_joint->GetAnchorA());
 }
 
 sf::Vector2f PhysicsJoint::getSecondAnchor() const
 {
   assert(m_b2_joint);
-  auto anchor = m_b2_joint->GetAnchorB();
-  return sf::Vector2f(anchor.x, anchor.y);
+  return priv::b2_meter_to_pixel(m_b2_joint->GetAnchorB());
 }
 
 sf::Vector2f PhysicsJoint::getReactionForce(float inv_dt) const
@@ -138,37 +136,37 @@ DistancePhysicsJoint::DistancePhysicsJoint(PhysicsBody& first_physics_body, Phys
 
 void DistancePhysicsJoint::setLength(float length)
 {
-  getInternalJoint<b2DistanceJoint>()->SetLength(length);
+  getInternalJoint<b2DistanceJoint>()->SetLength(priv::b2_pixel_to_meter(length));
 }
 
 float DistancePhysicsJoint::getLength() const
 {
-  return getInternalJoint<b2DistanceJoint>()->GetLength();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2DistanceJoint>()->GetLength());
 }
 
 void DistancePhysicsJoint::setMinLength(float min_length)
 {
-  getInternalJoint<b2DistanceJoint>()->SetMinLength(min_length);
+  getInternalJoint<b2DistanceJoint>()->SetMinLength(priv::b2_pixel_to_meter(min_length));
 }
 
 float DistancePhysicsJoint::getMinLength() const
 {
-  return getInternalJoint<b2DistanceJoint>()->GetMinLength();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2DistanceJoint>()->GetMinLength());
 }
 
 void DistancePhysicsJoint::setMaxLength(float max_length)
 {
-  getInternalJoint<b2DistanceJoint>()->SetMaxLength(max_length);
+  getInternalJoint<b2DistanceJoint>()->SetMaxLength(priv::b2_pixel_to_meter(max_length));
 }
 
 float DistancePhysicsJoint::getMaxLength() const
 {
-  return getInternalJoint<b2DistanceJoint>()->GetMaxLength();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2DistanceJoint>()->GetMaxLength());
 }
 
 float DistancePhysicsJoint::getCurrentLength() const
 {
-  return getInternalJoint<b2DistanceJoint>()->GetCurrentLength();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2DistanceJoint>()->GetCurrentLength());
 }
 
 void DistancePhysicsJoint::setStiffness(float stiffness)
@@ -196,8 +194,8 @@ std::unique_ptr<b2JointDef> DistancePhysicsJoint::createInternalJointDef(
 {
   auto b2_distance_joint_def = std::make_unique<b2DistanceJointDef>();
   b2_distance_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                   b2Vec2(m_first_anchor.x, m_first_anchor.y),
-                                   b2Vec2(m_second_anchor.x, m_second_anchor.y));
+                                    priv::b2_pixel_to_meter(m_first_anchor),
+                                    priv::b2_pixel_to_meter(m_second_anchor));
 
   return b2_distance_joint_def;
 }
@@ -242,7 +240,7 @@ std::unique_ptr<b2JointDef> FrictionPhysicsJoint::createInternalJointDef(
 {
   auto b2_friction_joint_def = std::make_unique<b2FrictionJointDef>();
   b2_friction_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                    b2Vec2(m_anchor.x, m_anchor.y));
+                                    priv::b2_pixel_to_meter(m_anchor));
 
   return b2_friction_joint_def;
 }
@@ -406,8 +404,8 @@ std::unique_ptr<b2JointDef> PrismaticPhysicsJoint::createInternalJointDef(
 {
   auto b2_prismatic_joint_def = std::make_unique<b2PrismaticJointDef>();
   b2_prismatic_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                     b2Vec2(m_anchor.x, m_anchor.y),
-                                     b2Vec2(m_axis.x, m_axis.y));
+                                     priv::b2_pixel_to_meter(m_anchor),
+                                     priv::b2_pixel_to_meter(m_axis));
 
   return b2_prismatic_joint_def;
 }
@@ -430,23 +428,23 @@ PulleyPhysicsJoint::PulleyPhysicsJoint(PhysicsBody& first_physics_body, PhysicsB
 sf::Vector2f PulleyPhysicsJoint::getFirstGroundAnchor() const
 {
   auto first_ground_anchor = getInternalJoint<b2PulleyJoint>()->GetGroundAnchorA();
-  return sf::Vector2f(first_ground_anchor.x, first_ground_anchor.y);
+  return priv::b2_meter_to_pixel(first_ground_anchor);
 }
 
 sf::Vector2f PulleyPhysicsJoint::getSecondGroundAnchor() const
 {
   auto second_ground_anchor = getInternalJoint<b2PulleyJoint>()->GetGroundAnchorB();
-  return sf::Vector2f(second_ground_anchor.x, second_ground_anchor.y);
+  return priv::b2_meter_to_pixel(second_ground_anchor);
 }
 
 float PulleyPhysicsJoint::getFirstLength() const
 {
-  return getInternalJoint<b2PulleyJoint>()->GetLengthA();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetLengthA());
 }
 
 float PulleyPhysicsJoint::getSecondLength() const
 {
-  return getInternalJoint<b2PulleyJoint>()->GetLengthB();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetLengthB());
 }
 
 float PulleyPhysicsJoint::getRation() const
@@ -456,12 +454,12 @@ float PulleyPhysicsJoint::getRation() const
 
 float PulleyPhysicsJoint::getCurrentFirstLength() const
 {
-  return getInternalJoint<b2PulleyJoint>()->GetCurrentLengthA();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetCurrentLengthA());
 }
 
 float PulleyPhysicsJoint::getCurrentSecondLength() const
 {
-  return getInternalJoint<b2PulleyJoint>()->GetCurrentLengthB();
+  return priv::b2_meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetCurrentLengthB());
 }
 
 std::unique_ptr<b2JointDef> PulleyPhysicsJoint::createInternalJointDef(
@@ -469,10 +467,10 @@ std::unique_ptr<b2JointDef> PulleyPhysicsJoint::createInternalJointDef(
 {
   auto b2_pulley_joint_def = std::make_unique<b2PulleyJointDef>();
   b2_pulley_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                  b2Vec2(m_first_ground_anchor.x, m_first_ground_anchor.y),
-                                  b2Vec2(m_second_ground_anchor.x, m_second_ground_anchor.y),
-                                  b2Vec2(m_first_anchor.x, m_first_anchor.y),
-                                  b2Vec2(m_second_anchor.x, m_second_anchor.y),
+                                  priv::b2_pixel_to_meter(m_first_ground_anchor),
+                                  priv::b2_pixel_to_meter(m_second_ground_anchor),
+                                  priv::b2_pixel_to_meter(m_first_anchor),
+                                  priv::b2_pixel_to_meter(m_second_anchor),
                                   m_ration);
 
   return b2_pulley_joint_def;
@@ -568,7 +566,7 @@ std::unique_ptr<b2JointDef> RevolutePhysicsJoint::createInternalJointDef(
 {
   auto b2_revolute_joint_def = std::make_unique<b2RevoluteJointDef>();
   b2_revolute_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                    b2Vec2(m_anchor.x, m_anchor.y));
+                                    priv::b2_pixel_to_meter(m_anchor));
 
   return b2_revolute_joint_def;
 }
@@ -603,7 +601,7 @@ std::unique_ptr<b2JointDef> WeldPhysicsJoint::createInternalJointDef(
 {
   auto b2_weld_joint_def = std::make_unique<b2WeldJointDef>();
   b2_weld_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                b2Vec2(m_anchor.x, m_anchor.y));
+                                priv::b2_pixel_to_meter(m_anchor));
 
   return b2_weld_joint_def;
 }
@@ -724,8 +722,8 @@ std::unique_ptr<b2JointDef> WheelPhysicsJoint::createInternalJointDef(
 {
   auto b2_wheel_joint_def = std::make_unique<b2WheelJointDef>();
   b2_wheel_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                 b2Vec2(m_anchor.x, m_anchor.y),
-                                 b2Vec2(m_axis.x, m_axis.y));
+                                 priv::b2_pixel_to_meter(m_anchor),
+                                 priv::b2_pixel_to_meter(m_axis));
 
   return b2_wheel_joint_def;
 }

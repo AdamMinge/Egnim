@@ -8,6 +8,7 @@
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/core/context.h>
 #include <egnim/engine/physics/priv/b2_physics_world_callbacks.h>
+#include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -98,16 +99,16 @@ void PhysicsWorld::queryAABB(const QueryAABBCallback& callback, const PhysicsAAB
 {
   m_physics_query_aabb_callback->setCallback(std::addressof(callback));
   m_b2_world->QueryAABB(m_physics_query_aabb_callback.get(),
-                        b2AABB{b2Vec2(physics_aabb.getLowerBound().x, physics_aabb.getLowerBound().y),
-                                    b2Vec2(physics_aabb.getUpperBound().x, physics_aabb.getUpperBound().y)});
+                        b2AABB{priv::b2_pixel_to_meter(physics_aabb.getLowerBound()),
+                               priv::b2_pixel_to_meter(physics_aabb.getUpperBound())});
 }
 void PhysicsWorld::rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point,
                            const sf::Vector2f& second_point)
 {
   m_physics_ray_cast_callback->setCallback(std::addressof(callback));
   m_b2_world->RayCast(m_physics_ray_cast_callback.get(),
-                      b2Vec2(first_point.x, first_point.y),
-                      b2Vec2(second_point.x, second_point.y));
+                      priv::b2_pixel_to_meter(first_point),
+                      priv::b2_pixel_to_meter(second_point));
 }
 
 void PhysicsWorld::attachPhysicsBody(PhysicsBody* physics_body)

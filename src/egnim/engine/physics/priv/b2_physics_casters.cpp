@@ -2,7 +2,6 @@
 #include <box2d/b2_world_callbacks.h>
 #include <box2d/b2_collision.h>
 #include <box2d/b2_contact.h>
-#include <box2d/b2_fixture.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/priv/b2_physics_casters.h>
 #include <egnim/engine/physics/physics_shape.h>
@@ -38,14 +37,14 @@ PhysicsManifold b2_cast(const b2Manifold& b2_manifold)
     points.push_back(b2_cast(b2_manifold.points[i]));
 
   return PhysicsManifold(static_cast<PhysicsManifold::Type>(b2_manifold.type),
-                         sf::Vector2f(b2_manifold.localPoint.x, b2_manifold.localPoint.y),
+                         priv::b2_meter_to_pixel(b2_manifold.localPoint),
                          sf::Vector2f(b2_manifold.localNormal.x, b2_manifold.localNormal.y),
                          points);
 }
 
 PhysicsManifoldPoint b2_cast(const b2ManifoldPoint& b2_manifold_point)
 {
-  return PhysicsManifoldPoint(sf::Vector2f(b2_manifold_point.localPoint.x, b2_manifold_point.localPoint.y),
+  return PhysicsManifoldPoint(priv::b2_meter_to_pixel(b2_manifold_point.localPoint),
                               b2_manifold_point.normalImpulse, b2_manifold_point.tangentImpulse);
 }
 
@@ -60,6 +59,28 @@ PhysicsContactImpulse b2_cast(const b2ContactImpulse& b2_contact_impulse)
   }
 
   return PhysicsContactImpulse(normal_impulses, tangent_impulses);
+}
+
+b2Vec2 b2_pixel_to_meter(const sf::Vector2f& pixel_point)
+{
+  return b2Vec2(b2_pixel_to_meter(pixel_point.x),
+                b2_pixel_to_meter(pixel_point.y));
+}
+
+sf::Vector2f b2_meter_to_pixel(const b2Vec2& meter_point)
+{
+  return sf::Vector2f(b2_meter_to_pixel(meter_point.x),
+                      b2_meter_to_pixel(meter_point.y));
+}
+
+float b2_pixel_to_meter(float pixel)
+{
+  return pixel * 30.f;
+}
+
+float b2_meter_to_pixel(float meter)
+{
+  return meter / 30.f;
 }
 
 } // namespace egnim::physics::priv

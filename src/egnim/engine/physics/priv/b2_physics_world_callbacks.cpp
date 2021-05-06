@@ -92,7 +92,7 @@ float PhysicsRayCastCallback::ReportFixture(b2Fixture* b2_fixture, const b2Vec2&
                                             const b2Vec2& b2_normal, float fraction)
 {
   auto first_shape = reinterpret_cast<PhysicsShape*>(b2_fixture->GetUserData().pointer);
-  auto point = sf::Vector2f(b2_point.x, b2_point.y);
+  auto point = priv::b2_meter_to_pixel(b2_point);
   auto normal = sf::Vector2f(b2_normal.x, b2_normal.y);
 
   if(m_callback && *m_callback) return (*m_callback)(first_shape, point, normal, fraction);

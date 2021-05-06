@@ -6,6 +6,7 @@
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/scene/node.h>
+#include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -24,20 +25,17 @@ PhysicsBody::~PhysicsBody()
 
 void PhysicsBody::setPosition(const sf::Vector2f& position)
 {
-  auto b2_body_angle = m_b2_body->GetAngle();
-  m_b2_body->SetTransform(b2Vec2(position.x, position.y), b2_body_angle);
+  m_b2_body->SetTransform(priv::b2_pixel_to_meter(position), m_b2_body->GetAngle());
 }
 
 sf::Vector2f PhysicsBody::getPosition() const
 {
-  auto b2_body_pos = m_b2_body->GetPosition();
-  return sf::Vector2f(b2_body_pos.x, b2_body_pos.y);
+  return priv::b2_meter_to_pixel(m_b2_body->GetPosition());
 }
 
 void PhysicsBody::setRotation(float angle)
 {
-  auto b2_body_pos = m_b2_body->GetPosition();
-  m_b2_body->SetTransform(b2_body_pos, angle);
+  m_b2_body->SetTransform(m_b2_body->GetPosition(), angle);
 }
 
 float PhysicsBody::getRotation() const
@@ -252,9 +250,7 @@ void PhysicsBody::destroyInternalBody()
   if(m_b2_body)
   {
     getPhysicsWorld()->destroyInternalBody(m_b2_body);
-
     getPhysicsWorld()->detachPhysicsBody(this);
-
     m_b2_body = nullptr;
   }
 }

@@ -9,6 +9,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
+#include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -217,8 +218,9 @@ PhysicsShapeCircle::PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
 std::unique_ptr<b2Shape> PhysicsShapeCircle::createInternalShape() const
 {
   auto b2_circle_shape = std::make_unique<b2CircleShape>();
-  b2_circle_shape->m_p.Set(m_offset.x, m_offset.y);
-  b2_circle_shape->m_radius = m_radius;
+  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
+  b2_circle_shape->m_p.Set(b2_offset.x, b2_offset.y);
+  b2_circle_shape->m_radius = priv::b2_pixel_to_meter(m_radius);
 
   return b2_circle_shape;
 }
@@ -252,7 +254,9 @@ PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& o
 std::unique_ptr<b2Shape> PhysicsShapeBox::createInternalShape() const
 {
   auto b2_box_shape = std::make_unique<b2PolygonShape>();
-  b2_box_shape->SetAsBox(m_size.x, m_size.y, b2Vec2(m_offset.x, m_offset.y), 0);
+  auto b2_size = priv::b2_pixel_to_meter(m_size);
+  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
+  b2_box_shape->SetAsBox(b2_size.x / 2.0f, b2_size.y / 2.0f, b2_offset, 0);
 
   return b2_box_shape;
 }
@@ -289,7 +293,10 @@ std::unique_ptr<b2Shape> PhysicsShapePolygon::createInternalShape() const
   auto b2_vec_index = 0;
 
   for(auto point : m_points)
-    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+  {
+    auto b2_point = priv::b2_pixel_to_meter(point);
+    b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
+  }
 
   b2_polygon_shape->Set(b2_vertices.data(), static_cast<int>(b2_vertices.size()));
 
@@ -320,7 +327,8 @@ PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, cons
 std::unique_ptr<b2Shape> PhysicsShapeEdgeSegment::createInternalShape() const
 {
   auto b2_edge_shape = std::make_unique<b2EdgeShape>();
-  b2_edge_shape->SetTwoSided(b2Vec2(m_first.x, m_first.y), b2Vec2(m_second.x, m_second.y));
+  b2_edge_shape->SetTwoSided(priv::b2_pixel_to_meter(m_first),
+                             priv::b2_pixel_to_meter(m_second));
 
   return b2_edge_shape;
 }
@@ -355,12 +363,13 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgeBox::createInternalShape() const
 {
   auto b2_chain_shape = std::make_unique<b2ChainShape>();
   auto b2_vertices = std::array<b2Vec2, 4>();
-  auto b2_offset = b2Vec2(m_offset.x, m_offset.y);
+  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
+  auto b2_size = priv::b2_pixel_to_meter(m_size);
 
-  b2_vertices[0] = b2Vec2(-0.5f, 0.5f) + b2_offset;
-  b2_vertices[1] = b2Vec2(-0.5f, -0.5f) + b2_offset;
-  b2_vertices[2] = b2Vec2(0.5f, -0.5f) + b2_offset;
-  b2_vertices[3] = b2Vec2(0.5f, 0.5f) + b2_offset;
+  b2_vertices[0] = b2Vec2(-0.5f * b2_size.x / 2.f, 0.5f * b2_size.x / 2.f) + b2_offset;
+  b2_vertices[1] = b2Vec2(-0.5f * b2_size.x / 2.f, -0.5f * b2_size.x / 2.f) + b2_offset;
+  b2_vertices[2] = b2Vec2(0.5f * b2_size.x / 2.f, -0.5f * b2_size.x / 2.f) + b2_offset;
+  b2_vertices[3] = b2Vec2(0.5f * b2_size.x / 2.f, 0.5f * b2_size.x / 2.f) + b2_offset;
 
   b2_chain_shape->CreateLoop(b2_vertices.data(), 4);
   return b2_chain_shape;
@@ -398,7 +407,10 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgePolygon::createInternalShape() const
   auto b2_vec_index = 0;
 
   for(auto point : m_points)
-    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+  {
+    auto b2_point = priv::b2_pixel_to_meter(point);
+    b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
+  }
 
   b2_chain_shape->CreateLoop(b2_vertices.data(), static_cast<int>(b2_vertices.size()));
 
@@ -432,7 +444,10 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
   auto b2_vec_index = 0;
 
   for(auto point : m_points)
-    b2_vertices[b2_vec_index++].Set(point.x, point.y);
+  {
+    auto b2_point = priv::b2_pixel_to_meter(point);
+    b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
+  }
 
   b2_chain_shape->CreateChain(b2_vertices.data(), static_cast<int>(b2_vertices.size()), b2_vertices.front(), b2_vertices.back());
 
