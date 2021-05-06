@@ -36,16 +36,6 @@ void SceneState::onInactive()
 
 }
 
-void SceneState::onCreate()
-{
-
-}
-
-void SceneState::onDestroy()
-{
-
-}
-
 SceneNode& SceneState::getSceneNode()
 {
   return *m_scene_node;

@@ -41,6 +41,7 @@ namespace egnim::events
     Mouse     = 1 << 2,
     Joystick  = 1 << 3,
     Physics   = 1 << 4,
+    State     = 1 << 5,
 
     Custom    = 1 << 31,
   };

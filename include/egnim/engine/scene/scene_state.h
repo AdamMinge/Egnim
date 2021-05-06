@@ -24,8 +24,6 @@ namespace egnim::scene
 
     void onActive() override;
     void onInactive() override;
-    void onCreate() override;
-    void onDestroy() override;
 
     [[nodiscard]] SceneNode& getSceneNode();
     [[nodiscard]] const SceneNode& getSceneNode() const;

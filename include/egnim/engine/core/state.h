@@ -27,8 +27,6 @@ namespace egnim::core
 
     virtual void onActive();
     virtual void onInactive();
-    virtual void onCreate();
-    virtual void onDestroy();
 
   protected:
     void requestStackPush(std::string_view state_id);

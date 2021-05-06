@@ -20,10 +20,6 @@ void State::onActive() {}
 
 void State::onInactive() {}
 
-void State::onCreate() {}
-
-void State::onDestroy() {}
-
 void State::requestStackPush(std::string_view state_id)
 {
   m_state_stack.pushState(state_id);
