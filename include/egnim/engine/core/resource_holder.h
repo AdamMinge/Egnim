@@ -144,7 +144,7 @@ namespace egnim::core
     if(!resource->loadFromFile(filename))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<RESOURCE, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename RESOURCE, typename IDENTIFIER>
@@ -154,7 +154,7 @@ namespace egnim::core
     if(!resource->loadFromMemory(data, size_in_bytes))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<RESOURCE, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename RESOURCE, typename IDENTIFIER>
@@ -164,7 +164,7 @@ namespace egnim::core
     if(!resource->loadFromStream(stream))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<RESOURCE, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   /* -------------------- ResourceHolder<sf::Texture,IDENTIFIER> -------------- */
@@ -177,7 +177,7 @@ namespace egnim::core
     if(!resource->loadFromFile(std::string{texture_filename}, area))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Texture, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -189,7 +189,7 @@ namespace egnim::core
     if(!resource->loadFromMemory(data, size_in_bytes, area))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Texture, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -201,7 +201,7 @@ namespace egnim::core
     if(!resource->loadFromStream(texture_stream, area))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Texture, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   /* -------------------- ResourceHolder<sf::Shader,IDENTIFIER> --------------- */
@@ -214,7 +214,7 @@ namespace egnim::core
     if(!resource->loadFromFile(std::string{shader_filename}, type))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -226,7 +226,7 @@ namespace egnim::core
                                std::string{fragment_shader_filename}))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -240,7 +240,7 @@ namespace egnim::core
                                std::string{fragment_shader_filename}))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -251,7 +251,7 @@ namespace egnim::core
     if(!resource->loadFromMemory(std::string{shader}, type))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -262,7 +262,7 @@ namespace egnim::core
     if(!resource->loadFromMemory(std::string{vertex_shader}, std::string{fragment_shader}))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -276,7 +276,7 @@ namespace egnim::core
                                  std::string{geometry_shader}))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -287,7 +287,7 @@ namespace egnim::core
     if(!resource->loadFromStream(shader_stream, type))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -298,7 +298,7 @@ namespace egnim::core
     if(!resource->loadFromStream(vertex_shader_stream, fragment_shader_stream))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
   template<typename IDENTIFIER>
@@ -311,7 +311,7 @@ namespace egnim::core
     if(!resource->loadFromStream(vertex_shader_stream, geometry_shader_stream, fragment_shader_stream))
       return false;
 
-    return insertResource(id, resource);
+    return BaseResourceHolder<sf::Shader, IDENTIFIER>::insertResource(id, std::move(resource));
   }
 
 } // namespace egnim::core
