@@ -85,12 +85,12 @@ sf::Vector2f b2_meter_to_pixel(const b2Vec2& meter_point)
 
 float b2_pixel_to_meter(float pixel)
 {
-  return pixel * 30.f;
+  return pixel / 30.f;
 }
 
 float b2_meter_to_pixel(float meter)
 {
-  return meter / 30.f;
+  return meter * 30.f;
 }
 
 } // namespace egnim::physics::priv

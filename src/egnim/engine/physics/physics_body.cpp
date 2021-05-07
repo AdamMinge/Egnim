@@ -35,12 +35,12 @@ sf::Vector2f PhysicsBody::getPosition() const
 
 void PhysicsBody::setRotation(float angle)
 {
-  m_b2_body->SetTransform(m_b2_body->GetPosition(), angle);
+  m_b2_body->SetTransform(m_b2_body->GetPosition(), angle * b2_pi / 180);
 }
 
 float PhysicsBody::getRotation() const
 {
-  return m_b2_body->GetAngle();
+  return m_b2_body->GetAngle() * 180 / b2_pi;
 }
 
 void PhysicsBody::update(sf::Time dt)
@@ -258,7 +258,7 @@ void PhysicsBody::beforeSimulation()
 {
   if(!getOwner()) return;
 
-  auto world_pos = getOwner()->getWorldPosition();
+  auto world_pos = getOwner()->getWorldTransform().transformPoint(getOwner()->getOrigin());
   auto world_rotate = getOwner()->getWorldRotation();
 
   setPosition(world_pos);
