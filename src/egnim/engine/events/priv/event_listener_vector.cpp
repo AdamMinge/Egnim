@@ -13,7 +13,10 @@ namespace egnim::events::priv {
 bool FixedListenerComparator::operator()(const std::pair<int, EventListener*>& first_key,
   const std::pair<int, EventListener*>& second_key) const
 {
-  return first_key.first < second_key.first;
+  if(first_key.first < second_key.first)
+    return true;
+
+  return first_key.first == second_key.first && first_key.second < second_key.second;
 }
 
 /* ---------------------------- EventListenerVector -------------------------- */

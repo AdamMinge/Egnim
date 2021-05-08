@@ -169,7 +169,6 @@ void CameraManager::deactivateCamera(CameraNode& camera_node)
 
 void CameraManager::update(CameraNode& camera_node)
 {
-  assert(camera_node.getScene());
   if(isActiveCamera(camera_node))
   {
     auto& render_target = camera_node.getScene()->getContext().getRenderWindow();
