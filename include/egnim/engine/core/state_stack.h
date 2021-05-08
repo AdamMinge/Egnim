@@ -45,7 +45,7 @@ namespace egnim::core
   private:
     Context& m_context;
 
-    std::vector<std::unique_ptr<State>> m_states;
+    std::vector<std::pair<std::unique_ptr<State>, std::string_view>> m_states;
     std::queue<std::function<void()>> m_pending_changes;
     std::unordered_map<std::string_view, std::function<std::unique_ptr<State>()>> m_factories;
   };

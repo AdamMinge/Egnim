@@ -6,9 +6,10 @@ namespace egnim::events {
 
 /* --------------------------------- StateEvent ----------------------------- */
 
-StateEvent::StateEvent(core::State& state) :
+StateEvent::StateEvent(core::State& state, std::string_view state_id) :
   Event(Type::State),
-  m_state(std::addressof(state))
+  m_state(std::addressof(state)),
+  m_state_id(state_id)
 {
 
 }
@@ -25,10 +26,20 @@ core::State& StateEvent::getState() const
   return *m_state;
 }
 
+void StateEvent::setStateId(std::string_view state_id)
+{
+  m_state_id = state_id;
+}
+
+std::string_view StateEvent::getStateId() const
+{
+  return m_state_id;
+}
+
 /* ------------------------------- ActivatedState --------------------------- */
 
-ActivatedState::ActivatedState(core::State& state) :
-  StateEvent(state)
+ActivatedState::ActivatedState(core::State& state, std::string_view state_id) :
+  StateEvent(state, state_id)
 {
 
 }
@@ -37,8 +48,8 @@ ActivatedState::~ActivatedState() = default;
 
 /* ------------------------------- InactiveedState -------------------------- */
 
-InactivatedState::InactivatedState(core::State& state) :
-  StateEvent(state)
+InactivatedState::InactivatedState(core::State& state, std::string_view state_id) :
+  StateEvent(state, state_id)
 {
 
 }

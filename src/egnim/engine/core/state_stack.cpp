@@ -19,14 +19,14 @@ StateStack::~StateStack() = default;
 void StateStack::draw()
 {
   for(auto& state : m_states)
-    state->draw();
+    state.first->draw();
   applyPendingChanges();
 }
 
 void StateStack::update(sf::Time dt)
 {
   for(auto& state : m_states)
-    state->update(dt);
+    state.first->update(dt);
   applyPendingChanges();
 }
 
@@ -37,14 +37,17 @@ void StateStack::pushState(std::string_view state_id)
     {
       if(!m_states.empty())
       {
-        m_states.back()->onInactive();
-        m_context.getEventDispatcher().dispatchEvent(events::InactivatedState(*m_states.back()));
+        auto& inactive_state = m_states.back().first;
+        auto& inactive_state_id = m_states.back().second;
+
+        inactive_state->onInactive();
+        m_context.getEventDispatcher().dispatchEvent(events::InactivatedState(*inactive_state, inactive_state_id));
       }
 
       new_state->onActive();
-      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*new_state));
+      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*new_state, state_id));
 
-      m_states.push_back(std::move(new_state));
+      m_states.emplace_back(std::make_pair(std::move(new_state), state_id));
     }
   });
 }
@@ -52,15 +55,22 @@ void StateStack::pushState(std::string_view state_id)
 void StateStack::popState()
 {
   m_pending_changes.push([this](){
-    m_states.back()->onInactive();
-    m_context.getEventDispatcher().dispatchEvent(events::InactivatedState(*m_states.back()));
+
+    auto& inactive_state = m_states.back().first;
+    auto& inactive_state_id = m_states.back().second;
+
+    inactive_state->onInactive();
+    m_context.getEventDispatcher().dispatchEvent(events::InactivatedState(*inactive_state, inactive_state_id));
 
     m_states.pop_back();
 
     if(!m_states.empty())
     {
-      m_states.back()->onActive();
-      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*m_states.back()));
+      auto& active_state = m_states.back().first;
+      auto& active_state_id = m_states.back().second;
+
+      active_state->onActive();
+      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*active_state, active_state_id));
     }
   });
 }
@@ -70,8 +80,11 @@ void StateStack::clearStates()
   m_pending_changes.push([this](){
     for(auto& state : m_states)
     {
-      state->onInactive();
-      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*state));
+      auto& inactive_state = state.first;
+      auto& inactive_state_id = state.second;
+
+      inactive_state->onInactive();
+      m_context.getEventDispatcher().dispatchEvent(events::ActivatedState(*inactive_state, inactive_state_id));
     }
     m_states.clear();
   });

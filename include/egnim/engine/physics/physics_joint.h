@@ -22,6 +22,8 @@ namespace egnim::physics
 
   class EGNIM_UTILITY_API PhysicsJoint
   {
+    friend PhysicsWorld;
+
   public:
     enum class Type;
 

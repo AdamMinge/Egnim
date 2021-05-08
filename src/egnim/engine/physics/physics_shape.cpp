@@ -152,7 +152,7 @@ void PhysicsShape::createInternalFixture()
   destroyInternalFixture();
 
   if(!getPhysicsBody())
-    m_b2_fixture = nullptr;
+    return;
 
   auto internal_shape = createInternalShape();
   assert(internal_shape);

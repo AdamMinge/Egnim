@@ -8,7 +8,7 @@
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* -------------------------------------------------------------------------- */
-
+#include <iostream>
 namespace egnim::physics {
 
 PhysicsBody::PhysicsBody(PhysicsWorld& physics_world, Type type) :
@@ -248,6 +248,7 @@ void PhysicsBody::destroyInternalBody()
 {
   if(m_b2_body)
   {
+    m_physics_shapes.clear();
     getPhysicsWorld()->destroyInternalBody(m_b2_body);
     getPhysicsWorld()->detachPhysicsBody(this);
     m_b2_body = nullptr;

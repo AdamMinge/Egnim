@@ -4,13 +4,14 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_body.h>
+#include <egnim/engine/physics/physics_joint.h>
 #include <egnim/engine/physics/physics_aabb.h>
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/core/context.h>
 #include <egnim/engine/physics/priv/b2_physics_world_callbacks.h>
 #include <egnim/engine/physics/priv/b2_physics_casters.h>
 /* -------------------------------------------------------------------------- */
-
+#include <egnim/engine/physics/physics_shape.h>
 namespace egnim::physics {
 
 /* --------------------------------- PhysicsWorld --------------------------- */
@@ -25,7 +26,14 @@ PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gra
   m_b2_world->SetContactListener(m_physics_world_callback.get());
 }
 
-PhysicsWorld::~PhysicsWorld() = default;
+PhysicsWorld::~PhysicsWorld()
+{
+  while(!m_physics_bodies.empty())
+    m_physics_bodies.back()->destroyInternalBody();
+
+  while(!m_physics_joints.empty())
+    m_physics_joints.back()->destroyInternalJoint();
+}
 
 void PhysicsWorld::update(float time_step, int32_t velocity_iterations, int32_t position_iterations)
 {

@@ -28,7 +28,7 @@ set_target_properties(egnim-core-test PROPERTIES COMPILE_FEATURES cxx_std_20)
 # ----------------------------------- Setup include directories ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
 target_include_directories(egnim-core-test
-                           PUBLIC $<BUILD_INTERFACE:${ABOVO_SOURCE_DIR}/tests/core/include>)
+                           PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/tests/core/include>)
 # -------------------------------------------------------------------------------------------------- #
 # -------------------------------------- Setup dependencies ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #

@@ -54,11 +54,9 @@ void PhysicsJoint::destroyInternalJoint()
   if (m_b2_joint)
   {
     getPhysicsWorld()->destroyInternalJoint(m_b2_joint);
-
     getPhysicsWorld()->detachPhysicsJoint(this);
     getFirstPhysicsBody()->detachPhysicsJoint(this);
     getSecondPhysicsBody()->detachPhysicsJoint(this);
-
     m_b2_joint = nullptr;
   }
 }
