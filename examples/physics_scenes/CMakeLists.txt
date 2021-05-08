@@ -5,29 +5,33 @@ cmake_minimum_required(VERSION 3.11)
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------- Generate headers and set files variable ------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-set(source_root ${EGNIM_SOURCE_DIR}/examples/simple_scene/src)
-set(include_root ${EGNIM_SOURCE_DIR}/examples/simple_scene/include)
+set(source_root ${EGNIM_SOURCE_DIR}/examples/physics_scenes/src)
+set(include_root ${EGNIM_SOURCE_DIR}/examples/physics_scenes/include)
 
 set(sources
-    ${source_root}/main.cpp)
+    ${source_root}/main.cpp
+    ${source_root}/game.cpp
+    ${source_root}/boxes_state.cpp)
 
-set(includes)
+set(includes
+    ${include_root}/game.h
+    ${include_root}/boxes_state.h)
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------------- Define the abovo-test target ----------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-add_executable(egnim-example-simple-scene ${sources} ${includes})
+add_executable(egnim-example-physics_scenes ${sources} ${includes})
 # -------------------------------------------------------------------------------------------------- #
 # -------------------------------- Define the abovo-test features ---------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-set_target_properties(egnim-example-simple-scene PROPERTIES COMPILE_FEATURES cxx_std_20)
+set_target_properties(egnim-example-physics_scenes PROPERTIES COMPILE_FEATURES cxx_std_20)
 # -------------------------------------------------------------------------------------------------- #
 # ----------------------------------- Setup include directories ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-target_include_directories(egnim-example-simple-scene
-                           PUBLIC $<BUILD_INTERFACE:${ABOVO_SOURCE_DIR}/examples/simple_scene/include>)
+target_include_directories(egnim-example-physics_scenes
+                           PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/examples/physics_scenes/include>)
 # -------------------------------------------------------------------------------------------------- #
 # -------------------------------------- Setup dependencies ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-target_link_libraries(egnim-example-simple-scene
+target_link_libraries(egnim-example-physics_scenes
                       PUBLIC egnim::egnim-engine)
 # -------------------------------------------------------------------------------------------------- #

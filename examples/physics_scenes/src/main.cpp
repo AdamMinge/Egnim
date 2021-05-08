@@ -1,9 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/config.h>
+#include "game.h"
 /* -------------------------------------------------------------------------- */
-
 
 int main(int argc, char** argv)
 {
-  return 0;
+  Game game(800, 600, "physics_scenes");
+  return game.run();
 }
