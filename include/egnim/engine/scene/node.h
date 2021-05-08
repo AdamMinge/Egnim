@@ -55,8 +55,13 @@ namespace egnim::scene
     [[nodiscard]] sf::Transform getWorldTransform() const;
 
     [[nodiscard]] SceneNode* getScene();
+    [[nodiscard]] const SceneNode* getScene() const;
+
     [[nodiscard]] Node* getParent();
+    [[nodiscard]] const Node* getParent() const;
+
     [[nodiscard]] Node* getRoot();
+    [[nodiscard]] const Node* getRoot() const;
 
     [[nodiscard]] const physics::PhysicsBody* getPhysicsBody() const;
     [[nodiscard]] physics::PhysicsBody* getPhysicsBody();

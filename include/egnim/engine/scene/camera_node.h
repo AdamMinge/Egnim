@@ -52,6 +52,9 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
+  protected:
+    void updateCurrent(sf::Time dt) override;
+
   private:
     sf::Vector2f m_size;
     sf::FloatRect m_viewport;

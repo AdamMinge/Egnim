@@ -142,12 +142,35 @@ SceneNode* Node::getScene()
   return dynamic_cast<SceneNode*>(current_node);
 }
 
+const SceneNode* Node::getScene() const
+{
+  auto current_node = this;
+  while(current_node->m_parent && !dynamic_cast<const SceneNode*>(current_node))
+    current_node = current_node->m_parent;
+
+  return dynamic_cast<const SceneNode*>(current_node);
+}
+
 Node* Node::getParent()
 {
   return m_parent;
 }
 
+const Node* Node::getParent() const
+{
+  return m_parent;
+}
+
 Node* Node::getRoot()
+{
+  auto current_node = this;
+  while(current_node->m_parent)
+    current_node = current_node->m_parent;
+
+  return current_node;
+}
+
+const Node* Node::getRoot() const
 {
   auto current_node = this;
   while(current_node->m_parent)

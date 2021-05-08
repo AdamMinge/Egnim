@@ -94,6 +94,11 @@ void CameraNode::accept(SceneVisitor& visitor)
   visitor.visitCameraNode(*this);
 }
 
+void CameraNode::updateCurrent(sf::Time dt)
+{
+  CameraManager::getInstance().update(*this);
+}
+
 /* -------------------------------- CameraManager --------------------------- */
 
 std::unique_ptr<CameraManager> CameraManager::s_instance = nullptr;
