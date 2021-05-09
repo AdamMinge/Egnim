@@ -47,49 +47,17 @@ namespace egnim::scene
     void setViewFlag(size_t flag);
     [[nodiscard]] size_t getViewFlag() const;
 
-    void setActive(bool active = true);
-    [[nodiscard]] bool isActive() const;
+    void setEnabled(bool enabled);
+    [[nodiscard]] bool isEnabled() const;
 
     void accept(SceneVisitor& visitor) override;
-
-  protected:
-    void updateCurrent(sf::Time dt) override;
 
   private:
     sf::Vector2f m_size;
     sf::FloatRect m_viewport;
     size_t m_view_flag;
     float m_zoom_factor;
-  };
-
-  class EGNIM_UTILITY_API CameraManager
-  {
-    friend CameraNode;
-
-  public:
-    ~CameraManager();
-
-    [[nodiscard]] static CameraManager& getInstance();
-
-    [[nodiscard]] CameraNode* getActiveCamera(sf::RenderTarget& render_target);
-    [[nodiscard]] const CameraNode* getActiveCamera(sf::RenderTarget& render_target) const;
-
-    void setDefaultCamera(sf::RenderTarget& render_target);
-    [[nodiscard]] bool hasDefaultCamera(sf::RenderTarget& render_target) const;
-
-  private:
-    explicit CameraManager();
-
-    void activeCamera(CameraNode& camera_node);
-    void deactivateCamera(CameraNode& camera_node);
-
-    void update(CameraNode& camera_node);
-
-    [[nodiscard]] bool isActiveCamera(const CameraNode& camera_node) const;
-
-  private:
-    static std::unique_ptr<CameraManager> s_instance;
-    std::map<sf::RenderTarget*, CameraNode*> m_render_target_to_camera_node;
+    bool m_enabled;
   };
 
 }

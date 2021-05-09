@@ -3,6 +3,7 @@
 #include <egnim/engine/scene/component_container.h>
 #include <egnim/engine/scene/camera_node.h>
 #include <egnim/engine/scene/component.h>
+#include <egnim/engine/scene/camera_manager.h>
 #include <egnim/engine/physics/physics_body.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
@@ -264,7 +265,8 @@ void Node::drawChildren(sf::RenderTarget &target, sf::RenderStates states) const
 
 bool Node::isVisibleByTarget(sf::RenderTarget& target) const
 {
-  auto target_camera = CameraManager::getInstance().getActiveCamera(target);
+  assert(getScene());
+  auto target_camera = getScene()->getCameraManager().getActiveCamera();
   return target_camera == nullptr || target_camera->getViewFlag() & m_camera_mask;
 }
 

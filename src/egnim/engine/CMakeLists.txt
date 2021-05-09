@@ -45,6 +45,7 @@ set(sources
         ${source_root}/scene/node_factory.cpp
         ${source_root}/scene/node_iterator.cpp
         ${source_root}/scene/camera_node.cpp
+        ${source_root}/scene/camera_manager.cpp
         ${source_root}/scene/tile_map_node.cpp
         ${source_root}/scene/scene_state.cpp
         ${source_root}/scene/scene_serializer.cpp
@@ -121,6 +122,7 @@ set(includes
         ${include_root}/scene/node_factory.h
         ${include_root}/scene/node_iterator.h
         ${include_root}/scene/camera_node.h
+        ${include_root}/scene/camera_manager.h
         ${include_root}/scene/tile_map_node.h
         ${include_root}/scene/scene_state.h
         ${include_root}/scene/scene_visitor.h
