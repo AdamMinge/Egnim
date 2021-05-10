@@ -49,6 +49,7 @@ std::unique_ptr<egnim::scene::SpriteNode> BoxesState::createSpriteNode(const sf:
 
 void BoxesState::createBox(const sf::Vector2f& position)
 {
+  // create box
   auto& scene_node = getSceneNode();
   scene_node.attachChild(createSpriteNode(
     position, scene_node.getContext().getTextureHolder().get("box"),
@@ -59,6 +60,7 @@ void BoxesState::createBox(const sf::Vector2f& position)
 
 void BoxesState::createFloor(const sf::Vector2f& position)
 {
+  // create floor
   auto& scene_node = getSceneNode();
   scene_node.attachChild(createSpriteNode(
     position, scene_node.getContext().getTextureHolder().get("floor"),
@@ -69,8 +71,8 @@ void BoxesState::createFloor(const sf::Vector2f& position)
 
 void BoxesState::createCamera(const sf::Vector2f& position, const sf::FloatRect& rect, std::string_view name)
 {
+  // create camera
   auto& scene_node = getSceneNode();
-
   auto camera_node = std::make_unique<egnim::scene::CameraNode>();
   camera_node->setSize(sf::Vector2f(800, 600));
   camera_node->setPosition(position);
@@ -87,6 +89,7 @@ void BoxesState::mouseButtonPressed(const egnim::events::MouseButtonPressedEvent
 
   if(pressed_button_event.getButton() == sf::Mouse::Button::Left)
   {
+    // spawn box on left mouse button click
     auto& camera_manager = scene_node.getCameraManager();
     auto coordinate = camera_manager.mapPixelToCoords(pressed_button_event.getPosition(),
                                                       camera_manager.getCameraNode(pressed_button_event.getPosition()));
@@ -100,10 +103,11 @@ void BoxesState::keyboardKeyPressed(const egnim::events::KeyboardKeyPressedEvent
   auto& scene_node = getSceneNode();
   auto camera_move = sf::Vector2f(0.0f, 0.0f);
 
-  if(pressed_key_event.getKey() == sf::Keyboard::Up) camera_move.y -= 10.0f;
-  if(pressed_key_event.getKey() == sf::Keyboard::Down) camera_move.y += 10.0f;
-  if(pressed_key_event.getKey() == sf::Keyboard::Left) camera_move.x -= 10.0f;
-  if(pressed_key_event.getKey() == sf::Keyboard::Right) camera_move.x += 10.0f;
+  // move camera depend on second key pressed ( alt / ctrl )
+  if(pressed_key_event.getKey() == sf::Keyboard::Up) camera_move.y += 10.0f;
+  if(pressed_key_event.getKey() == sf::Keyboard::Down) camera_move.y -= 10.0f;
+  if(pressed_key_event.getKey() == sf::Keyboard::Left) camera_move.x += 10.0f;
+  if(pressed_key_event.getKey() == sf::Keyboard::Right) camera_move.x -= 10.0f;
 
   if(pressed_key_event.isAltPressed())
     scene_node.findChildByName("camera_1")->move(camera_move);
