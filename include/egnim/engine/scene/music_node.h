@@ -49,6 +49,8 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
+    [[nodiscard]] std::unique_ptr<Node> clone() const override;
+
   private:
     core::BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;

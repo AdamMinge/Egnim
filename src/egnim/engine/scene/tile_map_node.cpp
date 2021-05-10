@@ -32,6 +32,15 @@ void TileMapNode::accept(SceneVisitor& visitor)
   visitor.visitTileMapNode(*this);
 }
 
+std::unique_ptr<Node> TileMapNode::clone() const
+{
+  auto clone_node = std::make_unique<TileMapNode>();
+  Node::initializeClone(*clone_node);
+  static_assert(false, "TileMapNode clone : Not implemented yet");
+
+  return clone_node;
+}
+
 void TileMapNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
   target.draw(m_tile_map, states);

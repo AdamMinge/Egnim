@@ -98,4 +98,16 @@ void MusicNode::accept(SceneVisitor& visitor)
   visitor.visitMusicNode(*this);
 }
 
+std::unique_ptr<Node> MusicNode::clone() const
+{
+  auto clone_node = std::make_unique<MusicNode>();
+  Node::initializeClone(*clone_node);
+
+  clone_node->m_musics_holder = m_musics_holder;
+  clone_node->m_default_settings = m_default_settings;
+  clone_node->m_current_music = nullptr;
+
+  return clone_node;
+}
+
 } // namespace egnim::scene

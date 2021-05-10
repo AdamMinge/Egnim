@@ -1,3 +1,5 @@
+/* --------------------------------- Standard ------------------------------- */
+#include <cassert>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/scene_visitor.h>
@@ -51,6 +53,16 @@ const core::Context& SceneNode::getContext() const
 void SceneNode::accept(SceneVisitor& visitor)
 {
   visitor.visitSceneNode(*this);
+}
+
+std::unique_ptr<Node> SceneNode::clone() const
+{
+  return nullptr;
+}
+
+bool SceneNode::isCloneable() const
+{
+  return false;
 }
 
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
