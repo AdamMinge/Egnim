@@ -5,6 +5,8 @@
 #include <egnim/engine/scene/component.h>
 #include <egnim/engine/scene/camera_manager.h>
 #include <egnim/engine/physics/physics_body.h>
+#include <egnim/engine/actions/action_manager.h>
+#include <egnim/engine/actions/action.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 #include <regex>
@@ -17,6 +19,7 @@ namespace egnim::scene
 Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
+  m_action_manager(std::make_unique<actions::ActionManager>(*this)),
   m_camera_mask(CameraNode::CameraFlag::DEFAULT),
   m_physics_body(nullptr)
 {
@@ -83,6 +86,24 @@ const ComponentContainer& Node::getComponentContainer() const
 {
   assert(m_components);
   return *m_components;
+}
+
+void Node::attachAction(std::unique_ptr<actions::Action> action)
+{
+  assert(m_action_manager);
+  m_action_manager->attachAction(std::move(action));
+}
+
+std::unique_ptr<actions::Action> Node::detachAction(const actions::Action& action)
+{
+  assert(m_action_manager);
+  return m_action_manager->detachAction(action);
+}
+
+const actions::ActionManager& Node::getActionManager() const
+{
+  assert(m_action_manager);
+  return *m_action_manager;
 }
 
 void Node::setCameraMask(size_t mask, bool applyChildren)

@@ -22,6 +22,12 @@ namespace egnim::physics
   class PhysicsBody;
 }
 
+namespace egnim::actions
+{
+  class ActionManager;
+  class Action;
+}
+
 namespace egnim::scene
 {
   class Component;
@@ -43,6 +49,10 @@ namespace egnim::scene
     void attachComponent(std::unique_ptr<Component> component);
     std::unique_ptr<Component> detachComponent(const Component& component);
     [[nodiscard]] const ComponentContainer& getComponentContainer() const;
+
+    void attachAction(std::unique_ptr<actions::Action> action);
+    std::unique_ptr<actions::Action> detachAction(const actions::Action& action);
+    [[nodiscard]] const actions::ActionManager& getActionManager() const;
 
     void setCameraMask(size_t mask, bool applyChildren = true);
     size_t getCameraMask() const;
@@ -103,6 +113,7 @@ namespace egnim::scene
   private:
     std::vector<std::unique_ptr<Node>> m_children;
     std::unique_ptr<ComponentContainer> m_components;
+    std::unique_ptr<actions::ActionManager> m_action_manager;
     Node* m_parent;
     size_t m_camera_mask;
     std::string_view m_name;
