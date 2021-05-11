@@ -197,6 +197,18 @@ void PhysicsShape::updateInternalFixture()
   }
 }
 
+void PhysicsShape::initializeClone(PhysicsShape& physics_shape) const
+{
+  physics_shape.m_physics_material = m_physics_material;
+  physics_shape.m_b2_fixture = nullptr;
+  physics_shape.m_physics_body = nullptr;
+  physics_shape.m_sensor = m_sensor;
+  physics_shape.m_group_index = m_group_index;
+  physics_shape.m_contact_test_bitmask = m_contact_test_bitmask;
+  physics_shape.m_collision_bitmask = m_collision_bitmask;
+  physics_shape.m_type = m_type;
+}
+
 void PhysicsShape::setPhysicsBody(PhysicsBody* physics_body)
 {
   destroyInternalFixture();
@@ -240,6 +252,14 @@ int32_t PhysicsShapeCircle::getChildCount() const
   return 1;
 }
 
+std::unique_ptr<PhysicsShape> PhysicsShapeCircle::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeCircle>(getRadius(), getOffset(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
+}
+
 /* -------------------------------- PhysicsShapeBox ------------------------- */
 
 PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
@@ -274,6 +294,14 @@ const sf::Vector2f& PhysicsShapeBox::getOffset() const
 int32_t PhysicsShapeBox::getChildCount() const
 {
   return 1;
+}
+
+std::unique_ptr<PhysicsShape> PhysicsShapeBox::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeBox>(getSize(), getOffset(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
 }
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
@@ -313,6 +341,14 @@ int32_t PhysicsShapePolygon::getChildCount() const
   return 1;
 }
 
+std::unique_ptr<PhysicsShape> PhysicsShapePolygon::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapePolygon>(getPoints(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
+}
+
 /* --------------------------- PhysicsShapeEdgeSegment ---------------------- */
 
 PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
@@ -346,6 +382,14 @@ const sf::Vector2f& PhysicsShapeEdgeSegment::getSecondPosition() const
 int32_t PhysicsShapeEdgeSegment::getChildCount() const
 {
   return 1;
+}
+
+std::unique_ptr<PhysicsShape> PhysicsShapeEdgeSegment::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeSegment>(getFirstPosition(), getSecondPosition(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
 }
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
@@ -390,6 +434,14 @@ int32_t PhysicsShapeEdgeBox::getChildCount() const
   return 5;
 }
 
+std::unique_ptr<PhysicsShape> PhysicsShapeEdgeBox::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeBox>(getSize(), getOffset(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
+}
+
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
 
 PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
@@ -427,6 +479,14 @@ int32_t PhysicsShapeEdgePolygon::getChildCount() const
   return static_cast<int32_t>(m_points.size()) + 1;
 }
 
+std::unique_ptr<PhysicsShape> PhysicsShapeEdgePolygon::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgePolygon>(getPoints(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
+}
+
 /* ----------------------------- PhysicsShapeEdgeChain ---------------------- */
 
 PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
@@ -462,6 +522,14 @@ const std::list<sf::Vector2f>& PhysicsShapeEdgeChain::getPoints() const
 int32_t PhysicsShapeEdgeChain::getChildCount() const
 {
   return static_cast<int32_t>(m_points.size());
+}
+
+std::unique_ptr<PhysicsShape> PhysicsShapeEdgeChain::clone() const
+{
+  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeChain>(getPoints(), getPhysicsMaterial());
+  PhysicsShape::initializeClone(*clone_physics_shape);
+
+  return clone_physics_shape;
 }
 
 } // namespace egnim::physics

@@ -104,4 +104,15 @@ ConstGroupLayerIterator GroupLayer::end() const
   return ConstGroupLayerIterator(nullptr);
 }
 
+std::unique_ptr<Layer> GroupLayer::clone() const
+{
+  auto clone_layer = std::make_unique<GroupLayer>();
+  Layer::initializeClone(*clone_layer);
+
+  for(auto& layer : m_layers)
+    clone_layer->attachLayer(layer->clone());
+
+  return clone_layer;
+}
+
 } // namespace egnim::graphics

@@ -36,6 +36,8 @@ namespace egnim::graphics
     [[nodiscard]] GroupLayerIterator end();
     [[nodiscard]] ConstGroupLayerIterator end() const;
 
+    [[nodiscard]] std::unique_ptr<Layer> clone() const override;
+
   private:
     std::list<std::unique_ptr<Layer>> m_layers;
   };

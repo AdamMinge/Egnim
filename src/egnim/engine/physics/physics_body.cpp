@@ -220,6 +220,19 @@ bool PhysicsBody::isEnabled() const
   return m_b2_body->IsEnabled();
 }
 
+std::unique_ptr<scene::Component> PhysicsBody::clone() const
+{
+  auto clone_physics_body = std::make_unique<PhysicsBody>(m_physics_world, getType());
+  scene::Component::initializeClone(*clone_physics_body);
+
+  clone_physics_body->m_physics_joints = {};
+
+  for(auto& shape : m_physics_shapes)
+    clone_physics_body->attachPhysicsShape(shape->clone());
+
+  return clone_physics_body;
+}
+
 void PhysicsBody::attachPhysicsJoint(PhysicsJoint* physics_joint)
 {
   m_physics_joints.push_back(physics_joint);

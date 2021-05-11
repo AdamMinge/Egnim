@@ -1,12 +1,13 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/music_node.h>
 #include <egnim/engine/scene/scene_visitor.h>
+#include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/core/context.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
 
 MusicNode::MusicNode() :
-  m_musics_holder(nullptr),
   m_default_settings(Settings{}),
   m_current_music(nullptr)
 {
@@ -15,15 +16,6 @@ MusicNode::MusicNode() :
 
 MusicNode::~MusicNode() = default;
 
-void MusicNode::setMusicsHolder(core::BaseResourceHolder<sf::Music, std::string_view>* musics_holder)
-{
-  m_musics_holder = musics_holder;
-}
-
-core::BaseResourceHolder<sf::Music, std::string_view>* MusicNode::getMusicsHolder() const
-{
-  return m_musics_holder;
-}
 
 void MusicNode::setDefaultSettings(const Settings& settings)
 {
@@ -51,11 +43,11 @@ bool MusicNode::play(std::string_view id, bool loop)
 
 bool MusicNode::play(std::string_view id, const Settings& settings, bool loop)
 {
-  if (m_musics_holder && !m_musics_holder->contains(id))
+  auto music_holder = getScene() ? std::addressof(getScene()->getContext().getMusicsHolder()) : nullptr;
+  if (music_holder && !music_holder->contains(id))
     return false;
 
-  m_current_music = &m_musics_holder->get(id);
-
+  m_current_music = &music_holder->get(id);
   m_current_music->setAttenuation(settings.attenuation);
   m_current_music->setMinDistance(settings.min_distance);
   m_current_music->setPitch(settings.pitch);
@@ -96,6 +88,17 @@ bool MusicNode::isStopped()
 void MusicNode::accept(SceneVisitor& visitor)
 {
   visitor.visitMusicNode(*this);
+}
+
+std::unique_ptr<Node> MusicNode::clone() const
+{
+  auto clone_node = std::make_unique<MusicNode>();
+  Node::initializeClone(*clone_node);
+
+  clone_node->m_default_settings = m_default_settings;
+  clone_node->m_current_music = nullptr;
+
+  return clone_node;
 }
 
 } // namespace egnim::scene

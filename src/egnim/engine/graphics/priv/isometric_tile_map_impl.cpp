@@ -43,5 +43,11 @@ sf::Vector2f IsometricTileMapImpl::getHalfTileSize() const
   );
 }
 
+std::unique_ptr<TileMapImpl> IsometricTileMapImpl::clone() const
+{
+  auto clone_tile_map_impl = std::make_unique<IsometricTileMapImpl>(getRenderOrder(), getTileSize());
+  return clone_tile_map_impl;
+}
+
 
 } // namespace egnim::graphics::priv

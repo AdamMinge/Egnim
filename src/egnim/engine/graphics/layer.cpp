@@ -67,4 +67,11 @@ void Layer::setParent(GroupLayer* parent)
   m_parent = parent;
 }
 
+void Layer::initializeClone(Layer& node) const
+{
+  node.m_parent = nullptr;
+  node.m_visible = m_visible;
+  node.m_type = m_type;
+}
+
 } // namespace egnim::graphics

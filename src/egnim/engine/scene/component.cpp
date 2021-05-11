@@ -20,6 +20,11 @@ void Component::setOwner(Node* owner)
   m_owner = owner;
 }
 
+void Component::initializeClone(Component& component) const
+{
+  component.m_owner = nullptr;
+}
+
 Node* Component::getOwner()
 {
   return m_owner;

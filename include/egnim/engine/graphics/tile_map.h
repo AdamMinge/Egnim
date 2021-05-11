@@ -28,6 +28,9 @@ namespace egnim::graphics
     explicit TileMap(Orientation orientation, RenderOrder render_order, const sf::Vector2u& tile_size);
     ~TileMap() override;
 
+    TileMap(const TileMap& other);
+    TileMap& operator=(const TileMap& other);
+
     void setOrientation(Orientation orientation);
     [[nodiscard]] Orientation getOrientation() const;
 
@@ -37,9 +40,9 @@ namespace egnim::graphics
     void setTileSize(const sf::Vector2u& tile_size);
     [[nodiscard]] const sf::Vector2u& getTileSize() const;
 
-    void attachTileset(std::unique_ptr<Tileset> tileset);
-    [[nodiscard]] std::unique_ptr<Tileset> detachTileset(const Tileset& tileset);
-    [[nodiscard]] const std::list<std::unique_ptr<Tileset>>& getTilesets() const;
+    void attachTileset(std::shared_ptr<Tileset> tileset);
+    [[nodiscard]] std::shared_ptr<Tileset> detachTileset(const Tileset& tileset);
+    [[nodiscard]] const std::list<std::shared_ptr<Tileset>>& getTilesets() const;
 
     [[nodiscard]] GroupLayer& getRootLayer();
     [[nodiscard]] const GroupLayer& getRootLayer() const;

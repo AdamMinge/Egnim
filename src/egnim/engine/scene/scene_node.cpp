@@ -55,6 +55,16 @@ void SceneNode::accept(SceneVisitor& visitor)
   visitor.visitSceneNode(*this);
 }
 
+std::unique_ptr<Node> SceneNode::clone() const
+{
+  return nullptr;
+}
+
+bool SceneNode::isCloneable() const
+{
+  return false;
+}
+
 void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
   auto visitedAnyCamera = m_camera_manager->visitCameras([this, &target, &states](auto&& camera_node){

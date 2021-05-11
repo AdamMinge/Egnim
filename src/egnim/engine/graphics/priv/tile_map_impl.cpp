@@ -3,6 +3,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
 /* ----------------------------------- Local -------------------------------- */
+#include <egnim/engine/core/unique_pointer.h>
 #include <egnim/engine/graphics/priv/tile_map_impl.h>
 #include <egnim/engine/graphics/group_layer.h>
 #include <egnim/engine/graphics/tile_layer.h>
@@ -59,13 +60,13 @@ const sf::Vector2u& TileMapImpl::getTileSize() const
   return m_tile_size;
 }
 
-void TileMapImpl::attachTileset(std::unique_ptr<Tileset> tileset)
+void TileMapImpl::attachTileset(std::shared_ptr<Tileset> tileset)
 {
   assert(tileset);
   m_tilesets.push_back(std::move(tileset));
 }
 
-std::unique_ptr<Tileset> TileMapImpl::detachTileset(const Tileset& tileset)
+std::shared_ptr<Tileset> TileMapImpl::detachTileset(const Tileset& tileset)
 {
   auto found = std::find_if(m_tilesets.begin(), m_tilesets.end(), [&tileset](auto &current_tileset)
   {
@@ -80,7 +81,7 @@ std::unique_ptr<Tileset> TileMapImpl::detachTileset(const Tileset& tileset)
   return found_tileset;
 }
 
-const std::list<std::unique_ptr<Tileset>>& TileMapImpl::getTilesets() const
+const std::list<std::shared_ptr<Tileset>>& TileMapImpl::getTilesets() const
 {
   return m_tilesets;
 }
@@ -136,6 +137,14 @@ void TileMapImpl::draw(sf::RenderTarget& target, sf::RenderStates states) const
       target.draw(cell, states);
     }
   }
+}
+
+void TileMapImpl::initializeClone(TileMapImpl& tile_map_impl) const
+{
+  tile_map_impl.m_tile_size = m_tile_size;
+  tile_map_impl.m_tilesets = m_tilesets;
+  tile_map_impl.m_render_order = m_render_order;
+  tile_map_impl.m_root_layer = core::static_unique_pointer_cast<GroupLayer>(m_root_layer->clone());
 }
 
 } // namespace egnim::graphics::priv

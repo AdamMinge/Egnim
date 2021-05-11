@@ -36,9 +36,6 @@ namespace egnim::scene
     explicit SoundNode();
     ~SoundNode() override;
 
-    void setSoundBuffers(core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers);
-    core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* getSoundBuffers() const;
-
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
 
@@ -56,6 +53,8 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
+    [[nodiscard]] std::unique_ptr<Node> clone() const override;
+
   protected:
     void updateCurrent(sf::Time dt) override;
 
@@ -65,7 +64,6 @@ namespace egnim::scene
     void setAllSounds(sf::Sound::Status status);
 
   private:
-    core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* m_sound_buffers;
     std::list<std::pair<sf::Sound, std::function<bool()>>> m_sounds;
     Settings m_default_settings;
   };

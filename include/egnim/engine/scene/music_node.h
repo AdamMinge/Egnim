@@ -6,7 +6,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
-#include <egnim/engine/core/resource_holder.h>
 #include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
@@ -30,9 +29,6 @@ namespace egnim::scene
     explicit MusicNode();
     ~MusicNode() override;
 
-    void setMusicsHolder(core::BaseResourceHolder<sf::Music, std::string_view>* musics_holder);
-    core::BaseResourceHolder<sf::Music, std::string_view>* getMusicsHolder() const;
-
     void setDefaultSettings(const Settings& settings);
     const Settings& getDefaultSettings() const;
 
@@ -49,8 +45,9 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
+    [[nodiscard]] std::unique_ptr<Node> clone() const override;
+
   private:
-    core::BaseResourceHolder<sf::Music, std::string_view>* m_musics_holder;
     Settings m_default_settings;
     sf::Music* m_current_music;
   };

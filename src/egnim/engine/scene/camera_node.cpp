@@ -84,4 +84,18 @@ void CameraNode::accept(SceneVisitor& visitor)
   visitor.visitCameraNode(*this);
 }
 
+std::unique_ptr<Node> CameraNode::clone() const
+{
+  auto clone_node = std::make_unique<CameraNode>();
+  Node::initializeClone(*clone_node);
+
+  clone_node->m_size = m_size;
+  clone_node->m_viewport = m_viewport;
+  clone_node->m_view_flag = m_view_flag;
+  clone_node->m_enabled = m_enabled;
+  clone_node->m_zoom_factor = m_zoom_factor;
+
+  return clone_node;
+}
+
 } // namespace egnim::scene

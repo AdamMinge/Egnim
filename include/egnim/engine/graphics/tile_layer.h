@@ -50,6 +50,8 @@ namespace egnim::graphics
     [[nodiscard]] TileLayerIterator begin(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp) const;
     [[nodiscard]] TileLayerIterator end(TileLayerIterator::IterationOrder order = TileLayerIterator::IterationOrder::LeftUp) const;
 
+    [[nodiscard]] std::unique_ptr<Layer> clone() const override;
+
   private:
     void addChunk(const sf::Vector2u& point);
 

@@ -181,6 +181,18 @@ TileLayerIterator TileLayer::end(TileLayerIterator::IterationOrder order) const
   return end_iter;
 }
 
+std::unique_ptr<Layer> TileLayer::clone() const
+{
+  auto clone_layer = std::make_unique<TileLayer>(getSize(), getChunkSize());
+  Layer::initializeClone(*clone_layer);
+
+  clone_layer->m_chunks = m_chunks;
+  clone_layer->m_bounds = m_bounds;
+  clone_layer->m_used_tilesets = m_used_tilesets;
+
+  return clone_layer;
+}
+
 void TileLayer::addChunk(const sf::Vector2u& point)
 {
   assert(contains(point));

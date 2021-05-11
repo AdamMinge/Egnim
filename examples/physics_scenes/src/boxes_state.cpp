@@ -27,7 +27,7 @@ std::unique_ptr<egnim::scene::SpriteNode> BoxesState::createSpriteNode(const sf:
 
   // create sprite / physics_body / physics_shape for node
   auto node = std::make_unique<egnim::scene::SpriteNode>();
-  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>(physics_world,type);
+  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>(physics_world, type);
   auto physics_shape = std::make_unique<egnim::physics::PhysicsShapeBox>(
     sf::Vector2f(static_cast<float>(texture.getSize().x),
                  static_cast<float>(texture.getSize().y)), sf::Vector2f(0,0));

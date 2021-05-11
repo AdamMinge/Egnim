@@ -12,8 +12,7 @@
 namespace egnim::graphics
 {
 
-TileMap::TileMap(Orientation orientation, RenderOrder render_order, const sf::Vector2u &tile_size)
-  :
+TileMap::TileMap(Orientation orientation, RenderOrder render_order, const sf::Vector2u &tile_size) :
   m_orientation(orientation),
   m_tile_map_impl(createImpl(orientation, render_order, tile_size))
 {
@@ -21,6 +20,21 @@ TileMap::TileMap(Orientation orientation, RenderOrder render_order, const sf::Ve
 }
 
 TileMap::~TileMap() = default;
+
+TileMap::TileMap(const TileMap& other) :
+  sf::Transformable(other),
+  m_orientation(other.m_orientation),
+  m_tile_map_impl(other.m_tile_map_impl->clone())
+{
+
+}
+
+TileMap& TileMap::operator=(const TileMap& other)
+{
+  m_orientation = other.m_orientation;
+  m_tile_map_impl = other.m_tile_map_impl->clone();
+  return *this;
+}
 
 void TileMap::setOrientation(Orientation orientation)
 {
@@ -56,17 +70,17 @@ const sf::Vector2u& TileMap::getTileSize() const
   return m_tile_map_impl->getTileSize();
 }
 
-void TileMap::attachTileset(std::unique_ptr<Tileset> tileset)
+void TileMap::attachTileset(std::shared_ptr<Tileset> tileset)
 {
   m_tile_map_impl->attachTileset(std::move(tileset));
 }
 
-std::unique_ptr<Tileset> TileMap::detachTileset(const Tileset& tileset)
+std::shared_ptr<Tileset> TileMap::detachTileset(const Tileset& tileset)
 {
   return m_tile_map_impl->detachTileset(tileset);
 }
 
-const std::list<std::unique_ptr<Tileset>>& TileMap::getTilesets() const
+const std::list<std::shared_ptr<Tileset>>& TileMap::getTilesets() const
 {
   return m_tile_map_impl->getTilesets();
 }

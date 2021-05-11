@@ -96,6 +96,7 @@ set(includes
         ${include_root}/core/object.h
         ${include_root}/core/context.h
         ${include_root}/core/lazy_unique_pointer.h
+        ${include_root}/core/unique_pointer.h
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h

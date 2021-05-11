@@ -33,4 +33,10 @@ sf::Vector2u OrthogonalTileMapImpl::pixelToTileCoords(float x, float y) const
   );
 }
 
+std::unique_ptr<TileMapImpl> OrthogonalTileMapImpl::clone() const
+{
+  auto clone_tile_map_impl = std::make_unique<OrthogonalTileMapImpl>(getRenderOrder(), getTileSize());
+  return clone_tile_map_impl;
+}
+
 } // namespace egnim::graphics::priv

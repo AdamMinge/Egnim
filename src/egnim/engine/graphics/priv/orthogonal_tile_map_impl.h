@@ -16,6 +16,8 @@ namespace egnim::graphics::priv
 
     [[nodiscard]] sf::Vector2f tileToPixelCoords(unsigned x, unsigned y) const override;
     [[nodiscard]] sf::Vector2u pixelToTileCoords(float x, float y) const override;
+
+    [[nodiscard]] std::unique_ptr<TileMapImpl> clone() const override;
   };
 
 } // namespace egnim::graphics::priv

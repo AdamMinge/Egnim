@@ -5,6 +5,7 @@
 #include <SFML/System/Vector2.hpp>
 /* --------------------------------- Standard ------------------------------- */
 #include <list>
+#include <memory>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
@@ -45,8 +46,12 @@ namespace egnim::graphics
     virtual bool merge(const sf::Vector2u& point, const Layer& layer) = 0;
     bool merge(const Layer& layer);
 
+    [[nodiscard]] virtual std::unique_ptr<Layer> clone() const = 0;
+
   protected:
     void setParent(GroupLayer* parent);
+
+    void initializeClone(Layer& node) const;
 
   private:
     Type m_type;

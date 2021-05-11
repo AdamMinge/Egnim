@@ -230,6 +230,11 @@ void Node::update(sf::Time dt)
   updateChildren(dt);
 }
 
+bool Node::isCloneable() const
+{
+  return true;
+}
+
 void Node::updateCurrent(sf::Time dt)
 {}
 
@@ -273,6 +278,24 @@ bool Node::isVisibleByTarget(sf::RenderTarget& target) const
 void Node::setParent(Node* parent)
 {
   m_parent = parent;
+}
+
+void Node::initializeClone(Node& node) const
+{
+  node.m_parent = nullptr;
+  node.m_physics_body = nullptr;
+  node.m_camera_mask = m_camera_mask;
+
+  node.setPosition(getPosition());
+  node.setRotation(getRotation());
+  node.setScale(getScale());
+  node.setOrigin(getOrigin());
+
+  for(auto& child : m_children)
+    node.attachChild(child->clone());
+
+  for(auto& component : m_components->getComponents())
+    node.attachComponent(component->clone());
 }
 
 } // namespace egnim::scene

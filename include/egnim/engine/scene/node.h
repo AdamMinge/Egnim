@@ -80,6 +80,9 @@ namespace egnim::scene
 
     virtual void accept(SceneVisitor& visitor) = 0;
 
+    [[nodiscard]] virtual std::unique_ptr<Node> clone() const = 0;
+    [[nodiscard]] virtual bool isCloneable() const;
+
   protected:
     explicit Node();
 
@@ -94,6 +97,8 @@ namespace egnim::scene
     bool isVisibleByTarget(sf::RenderTarget& target) const;
 
     void setParent(Node* parent);
+
+    void initializeClone(Node& node) const;
 
   private:
     std::vector<std::unique_ptr<Node>> m_children;

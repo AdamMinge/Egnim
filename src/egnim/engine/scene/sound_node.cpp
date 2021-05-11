@@ -1,28 +1,19 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/scene/sound_node.h>
 #include <egnim/engine/scene/scene_visitor.h>
+#include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/core/context.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene {
 
 SoundNode::SoundNode() :
-  m_sound_buffers(nullptr),
   m_default_settings(Settings{})
 {
 
 }
 
 SoundNode::~SoundNode() = default;
-
-void SoundNode::setSoundBuffers(core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* sound_buffers)
-{
-  m_sound_buffers = sound_buffers;
-}
-
-core::BaseResourceHolder<sf::SoundBuffer, std::string_view>* SoundNode::getSoundBuffers() const
-{
-  return m_sound_buffers;
-}
 
 void SoundNode::setDefaultSettings(const Settings &settings)
 {
@@ -53,13 +44,16 @@ bool SoundNode::playLoop(std::string_view id, const std::function<bool()>& stop_
 bool SoundNode::playLoop(std::string_view id, const std::function<bool()>& stop_condition,
                           const Settings &settings, sf::Vector2f position)
 {
+
+
+  auto sound_holder = getScene() ? std::addressof(getScene()->getContext().getSoundsHolder()) : nullptr;
+  if (sound_holder && !sound_holder->contains(id))
+    return false;
+
   m_sounds.emplace_back(std::make_pair(sf::Sound{}, stop_condition));
   auto &sound = m_sounds.back().first;
 
-  if (m_sound_buffers && !m_sound_buffers->contains(id))
-    return false;
-
-  sound.setBuffer(m_sound_buffers->get(id));
+  sound.setBuffer(sound_holder->get(id));
   sound.setPosition(position.x, position.y, 0.f);
   sound.setAttenuation(settings.attenuation);
   sound.setMinDistance(settings.min_distance);
@@ -89,6 +83,17 @@ void SoundNode::startAllSounds()
 void SoundNode::accept(SceneVisitor& visitor)
 {
   visitor.visitSoundNode(*this);
+}
+
+std::unique_ptr<Node> SoundNode::clone() const
+{
+  auto clone_node = std::make_unique<SoundNode>();
+  Node::initializeClone(*clone_node);
+
+  clone_node->m_sounds = {};
+  clone_node->m_default_settings = m_default_settings;
+
+  return clone_node;
 }
 
 void SoundNode::updateCurrent(sf::Time dt)

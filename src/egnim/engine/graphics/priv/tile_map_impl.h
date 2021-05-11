@@ -29,9 +29,9 @@ namespace egnim::graphics::priv
     void setTileSize(const sf::Vector2u& tile_size);
     [[nodiscard]] const sf::Vector2u& getTileSize() const;
 
-    void attachTileset(std::unique_ptr<Tileset> tileset);
-    [[nodiscard]] std::unique_ptr<Tileset> detachTileset(const Tileset& tileset);
-    [[nodiscard]] const std::list<std::unique_ptr<Tileset>>& getTilesets() const;
+    void attachTileset(std::shared_ptr<Tileset> tileset);
+    [[nodiscard]] std::shared_ptr<Tileset> detachTileset(const Tileset& tileset);
+    [[nodiscard]] const std::list<std::shared_ptr<Tileset>>& getTilesets() const;
 
     [[nodiscard]] GroupLayer& getRootLayer();
     [[nodiscard]] const GroupLayer& getRootLayer() const;
@@ -43,14 +43,18 @@ namespace egnim::graphics::priv
     [[nodiscard]] virtual sf::Vector2u pixelToTileCoords(float x, float y) const = 0;
     [[nodiscard]] sf::Vector2u pixelToTileCoords(const sf::Vector2f& point) const;
 
+    [[nodiscard]] virtual std::unique_ptr<TileMapImpl> clone() const = 0;
+
   protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+
+    void initializeClone(TileMapImpl& tile_map_impl) const;
 
   private:
     sf::Vector2u m_tile_size;
     TileMap::RenderOrder m_render_order;
     std::unique_ptr<GroupLayer> m_root_layer;
-    std::list<std::unique_ptr<Tileset>> m_tilesets;
+    std::list<std::shared_ptr<Tileset>> m_tilesets;
   };
 
 } // namespace egnim::graphics::priv
