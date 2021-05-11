@@ -40,7 +40,7 @@ void PhysicsShape::setPhysicsMaterial(const PhysicsMaterial& physics_material)
   updateInternalFixture();
 }
 
-PhysicsMaterial PhysicsShape::getPhysicsMaterial()
+PhysicsMaterial PhysicsShape::getPhysicsMaterial() const
 {
   return m_physics_material;
 }

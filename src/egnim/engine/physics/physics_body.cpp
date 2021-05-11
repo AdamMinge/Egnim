@@ -220,14 +220,6 @@ bool PhysicsBody::isEnabled() const
   return m_b2_body->IsEnabled();
 }
 
-std::unique_ptr<scene::Component> PhysicsBody::clone() const
-{
-  auto clone_node = std::make_unique<PhysicsBody>(m_physics_world, getType());
-  static_assert(false, "PhysicsBody clone : Not implemented yet");
-
-  return clone_node;
-}
-
 void PhysicsBody::attachPhysicsJoint(PhysicsJoint* physics_joint)
 {
   m_physics_joints.push_back(physics_joint);

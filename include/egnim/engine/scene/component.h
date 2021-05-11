@@ -27,8 +27,6 @@ namespace egnim::scene
     [[nodiscard]] Node* getOwner();
     [[nodiscard]] const Node* getOwner() const;
 
-    [[nodiscard]] virtual std::unique_ptr<Component> clone() const = 0;
-
   protected:
     void setOwner(Node* owner);
 

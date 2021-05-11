@@ -35,7 +35,7 @@ namespace egnim::physics
     PhysicsShape& operator=(PhysicsShape&&) = delete;
 
     void setPhysicsMaterial(const PhysicsMaterial& physics_material);
-    PhysicsMaterial getPhysicsMaterial();
+    [[nodiscard]] PhysicsMaterial getPhysicsMaterial() const;
 
     void setDensity(float density);
     void setRestitution(float restitution);
@@ -169,6 +169,7 @@ namespace egnim::physics
 
   class PhysicsShapeEdgeBox : public PhysicsShape
   {
+  public:
     explicit PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                  const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeBox() override = default;
@@ -188,6 +189,7 @@ namespace egnim::physics
 
   class PhysicsShapeEdgePolygon : public PhysicsShape
   {
+  public:
     explicit PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
                                      const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgePolygon() override = default;
@@ -205,6 +207,7 @@ namespace egnim::physics
 
   class PhysicsShapeEdgeChain : public PhysicsShape
   {
+  public:
     explicit PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
                                    const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
     ~PhysicsShapeEdgeChain() override = default;

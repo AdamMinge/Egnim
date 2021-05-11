@@ -52,8 +52,6 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
-    [[nodiscard]] std::unique_ptr<Node> clone() const override;
-
   private:
     sf::Vector2f m_size;
     sf::FloatRect m_viewport;

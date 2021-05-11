@@ -40,9 +40,6 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
-    [[nodiscard]] std::unique_ptr<Node> clone() const override;
-    [[nodiscard]] bool isCloneable() const override;
-
   protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void updateCurrent(sf::Time dt) override;

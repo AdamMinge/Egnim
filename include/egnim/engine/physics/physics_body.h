@@ -95,8 +95,6 @@ namespace egnim::physics
     void setEnabled(bool enabled);
     [[nodiscard]] bool isEnabled() const;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
-
   private:
     void attachPhysicsJoint(PhysicsJoint* physics_joint);
     void detachPhysicsJoint(PhysicsJoint* physics_joint);

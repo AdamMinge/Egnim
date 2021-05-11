@@ -53,17 +53,6 @@ void AnimatedSpriteNode::accept(SceneVisitor& visitor)
   visitor.visitAnimatedSpriteNode(*this);
 }
 
-std::unique_ptr<Node> AnimatedSpriteNode::clone() const
-{
-  auto clone_node = std::make_unique<AnimatedSpriteNode>();
-  Node::initializeClone(*clone_node);
-
-  clone_node->m_animated_sprites = m_animated_sprites;
-  clone_node->m_current_animation = clone_node->m_animated_sprites.end();
-
-  return clone_node;
-}
-
 void AnimatedSpriteNode::updateCurrent(sf::Time dt)
 {
   if(m_current_animation != m_animated_sprites.end())
