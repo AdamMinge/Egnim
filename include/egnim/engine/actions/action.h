@@ -35,13 +35,15 @@ namespace egnim::actions
 
     [[nodiscard]] virtual bool isDone() const;
 
-    [[nodiscard]] virtual std::unique_ptr<Action> getReverse() const = 0;
-    [[nodiscard]] virtual bool isReversible() const = 0;
+    [[nodiscard]] virtual std::unique_ptr<Action> getReverse() const;
+    [[nodiscard]] virtual bool isReversible() const;
 
     [[nodiscard]] virtual std::unique_ptr<Action> clone() const = 0;
 
   protected:
     void setTarget(scene::Node* target);
+
+    void initializeClone(Action& action) const;
 
   private:
     scene::Node* m_target;

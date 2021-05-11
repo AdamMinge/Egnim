@@ -87,6 +87,7 @@ set(sources
         ${source_root}/events/priv/event_listener_vector.cpp
 
         ${source_root}/actions/action.cpp
+        ${source_root}/actions/follow_action.cpp
         ${source_root}/actions/action_manager.cpp)
 
 set(includes
@@ -160,6 +161,7 @@ set(includes
         ${include_root}/events/state_event_listener.h
 
         ${include_root}/actions/action.h
+        ${include_root}/actions/follow_action.h
         ${include_root}/actions/action_manager.h)
 
 set(resources)

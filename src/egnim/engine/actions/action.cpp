@@ -29,4 +29,19 @@ bool Action::isDone() const
   return true;
 }
 
+std::unique_ptr<Action> Action::getReverse() const
+{
+  return nullptr;
+}
+
+bool Action::isReversible() const
+{
+  return false;
+}
+
+void Action::initializeClone(Action& action) const
+{
+  action.m_target = nullptr;
+}
+
 } // namespace egnim::actions

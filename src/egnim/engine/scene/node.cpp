@@ -257,7 +257,9 @@ bool Node::isCloneable() const
 }
 
 void Node::updateCurrent(sf::Time dt)
-{}
+{
+  m_action_manager->update(dt);
+}
 
 void Node::updateChildren(sf::Time dt)
 {
