@@ -1,0 +1,4 @@
+#ifndef STYLE_MANAGER_H
+#define STYLE_MANAGER_H
+
+#endif //STYLE_MANAGER_H

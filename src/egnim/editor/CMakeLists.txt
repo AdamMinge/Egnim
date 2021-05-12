@@ -13,11 +13,25 @@ set(resources_root ${EGNIM_SOURCE_DIR}/resources)
 set(sources
         ${source_root}/meta_types.cpp
         ${source_root}/main.cpp
-        ${source_root}/main_window.cpp)
+        ${source_root}/main_window.cpp
+        ${source_root}/document.cpp
+        ${source_root}/editor.cpp
+        ${source_root}/document_manager.cpp
+        ${source_root}/language_manager.cpp
+        ${source_root}/style_manager.cpp
+
+        ${source_root}/widgets/dialog_with_toggle_view.cpp)
 
 set(includes
         ${include_root}/meta_types.h
-        ${include_root}/main_window.h)
+        ${include_root}/main_window.h
+        ${include_root}/document.h
+        ${include_root}/editor.h
+        ${include_root}/document_manager.h
+        ${include_root}/language_manager.h
+        ${include_root}/style_manager.h
+
+        ${include_root}/widgets/dialog_with_toggle_view.h)
 
 set(resources)
 
