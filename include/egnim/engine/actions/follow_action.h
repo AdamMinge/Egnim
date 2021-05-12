@@ -23,7 +23,7 @@ namespace egnim::actions
     void setFollowed(scene::Node* followed_node);
     [[nodiscard]] scene::Node* getFollowed() const;
 
-    void setFollowMargins(float left_margin, float right_margin, float top_margin, float bottom_margin);
+    void setMargins(float left_margin, float right_margin, float top_margin, float bottom_margin);
 
     void setLeftMargin(float left_margin);
     [[nodiscard]] float getLeftMargin() const;
@@ -37,9 +37,6 @@ namespace egnim::actions
     void setBottomMargin(float bottom_margin);
     [[nodiscard]] float getBottomMargin() const;
 
-    void setOffset(const sf::Vector2f& offset);
-    [[nodiscard]] const sf::Vector2f& getOffset() const;
-
     void update(sf::Time dt) override;
 
     [[nodiscard]] bool isDone() const override;
@@ -48,7 +45,6 @@ namespace egnim::actions
 
   private:
     scene::Node* m_followed_node;
-    sf::Vector2f m_offset;
     float m_left_margin;
     float m_right_margin;
     float m_top_margin;

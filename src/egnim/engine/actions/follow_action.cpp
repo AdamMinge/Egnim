@@ -29,7 +29,7 @@ scene::Node* FollowAction::getFollowed() const
   return m_followed_node;
 }
 
-void FollowAction::setFollowMargins(float left_margin, float right_margin, float top_margin, float bottom_margin)
+void FollowAction::setMargins(float left_margin, float right_margin, float top_margin, float bottom_margin)
 {
   m_left_margin = left_margin;
   m_right_margin = right_margin;
@@ -77,25 +77,16 @@ float FollowAction::getBottomMargin() const
   return m_bottom_margin;
 }
 
-void FollowAction::setOffset(const sf::Vector2f& offset)
-{
-  m_offset = offset;
-}
-
-const sf::Vector2f& FollowAction::getOffset() const
-{
-  return m_offset;
-}
-
 void FollowAction::update(sf::Time dt)
 {
   auto target = getTarget();
   auto followed = getFollowed();
   assert(target && followed);
 
-  auto tmp_pos = followed->getPosition() - getOffset();
-  target->setPosition(std::clamp(tmp_pos.x, tmp_pos.x - getLeftMargin(), tmp_pos.x + getRightMargin()),
-                      std::clamp(tmp_pos.y, tmp_pos.y - getTopMargin(), tmp_pos.y + getBottomMargin()));
+  target->setPosition(std::clamp(target->getPosition().x, followed->getPosition().x - getLeftMargin(),
+                                 followed->getPosition().x + getRightMargin()),
+                      std::clamp(target->getPosition().y, followed->getPosition().y - getTopMargin(),
+                                 followed->getPosition().y + getBottomMargin()));
 }
 
 bool FollowAction::isDone() const
