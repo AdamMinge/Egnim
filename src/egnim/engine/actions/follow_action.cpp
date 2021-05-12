@@ -8,7 +8,11 @@
 namespace egnim::actions {
 
 FollowAction::FollowAction(scene::Node* followed_node) :
-  m_followed_node(followed_node)
+  m_followed_node(followed_node),
+  m_left_margin(0),
+  m_right_margin(0),
+  m_top_margin(0),
+  m_bottom_margin(0)
 {
 
 }
@@ -25,14 +29,52 @@ scene::Node* FollowAction::getFollowed() const
   return m_followed_node;
 }
 
-void FollowAction::setBoundary(const sf::FloatRect& rect)
+void FollowAction::setFollowMargins(float left_margin, float right_margin, float top_margin, float bottom_margin)
 {
-  m_rect = rect;
+  m_left_margin = left_margin;
+  m_right_margin = right_margin;
+  m_top_margin = top_margin;
+  m_bottom_margin = bottom_margin;
 }
 
-const sf::FloatRect& FollowAction::getBoundary() const
+void FollowAction::setLeftMargin(float left_margin)
 {
-  return m_rect;
+  m_left_margin = left_margin;
+}
+
+float FollowAction::getLeftMargin() const
+{
+  return m_left_margin;
+}
+
+void FollowAction::setRightMargin(float right_margin)
+{
+  m_right_margin = right_margin;
+}
+
+float FollowAction::getRightMargin() const
+{
+  return m_right_margin;
+}
+
+void FollowAction::setTopMargin(float top_margin)
+{
+  m_top_margin = top_margin;
+}
+
+float FollowAction::getTopMargin() const
+{
+  return m_top_margin;
+}
+
+void FollowAction::setBottomMargin(float bottom_margin)
+{
+  m_bottom_margin = bottom_margin;
+}
+
+float FollowAction::getBottomMargin() const
+{
+  return m_bottom_margin;
 }
 
 void FollowAction::setOffset(const sf::Vector2f& offset)
@@ -51,22 +93,9 @@ void FollowAction::update(sf::Time dt)
   auto followed = getFollowed();
   assert(target && followed);
 
-  if(m_rect != sf::FloatRect())
-  {
-    auto boundary = sf::FloatRect(
-      m_rect.left + target->getPosition().x,
-      m_rect.height + target->getPosition().y,
-      m_rect.width, m_rect.height);
-
-    if(boundary.contains(followed->getPosition()))
-      return;
-
-    static_assert(false, "Not implemented yet");
-  }
-  else
-  {
-    target->setPosition(followed->getPosition() - m_offset);
-  }
+  auto tmp_pos = followed->getPosition() - getOffset();
+  target->setPosition(std::clamp(tmp_pos.x, tmp_pos.x - getLeftMargin(), tmp_pos.x + getRightMargin()),
+                      std::clamp(tmp_pos.y, tmp_pos.y - getTopMargin(), tmp_pos.y + getBottomMargin()));
 }
 
 bool FollowAction::isDone() const
