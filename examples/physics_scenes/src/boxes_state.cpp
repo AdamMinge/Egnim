@@ -74,7 +74,7 @@ void BoxesState::createCamera(const sf::Vector2f& position, const sf::FloatRect&
   // create camera
   auto& scene_node = getSceneNode();
   auto camera_node = std::make_unique<egnim::scene::CameraNode>();
-  camera_node->setSize(sf::Vector2f(800, 600));
+  camera_node->setSize(static_cast<sf::Vector2f>(scene_node.getContext().getRenderWindow().getSize()));
   camera_node->setPosition(position);
   camera_node->setViewport(rect);
   camera_node->setEnabled(true);
@@ -115,6 +115,13 @@ void BoxesState::keyboardKeyPressed(const egnim::events::KeyboardKeyPressedEvent
     scene_node.findChildByName("camera_2")->move(camera_move);
 }
 
+void BoxesState::windowResized(const egnim::events::WindowResizeEvent& window_resize_event)
+{
+  auto& scene_node = getSceneNode();
+  scene_node.findChildByName<egnim::scene::CameraNode>("camera_1")->setSize(
+    static_cast<sf::Vector2f>(window_resize_event.getSize()));
+}
+
 void BoxesState::onActive()
 {
   // init resources
@@ -129,6 +136,9 @@ void BoxesState::onActive()
 
   m_keyboard_listener.setKeyboardKeyPressedEventCallback([this](auto&& event){ this->keyboardKeyPressed(event); });
   getContext().getEventDispatcher().addEventListener(std::addressof(m_keyboard_listener), -1);
+
+  m_window_listener.setWindowResizeEventCallbackCallback([this](auto&& event){ this->windowResized(event); });
+  getContext().getEventDispatcher().addEventListener(std::addressof(m_window_listener), -1);
 
   // init scene
   auto& scene_node = getSceneNode();
@@ -153,6 +163,7 @@ void BoxesState::onInactive()
   // disconnect listener
   getContext().getEventDispatcher().removeEventListener(std::addressof(m_mouse_listener));
   getContext().getEventDispatcher().removeEventListener(std::addressof(m_keyboard_listener));
+  getContext().getEventDispatcher().removeEventListener(std::addressof(m_window_listener));
 }
 
 
