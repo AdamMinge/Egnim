@@ -20,6 +20,9 @@ set(sources
         ${source_root}/document_manager.cpp
         ${source_root}/language_manager.cpp
         ${source_root}/style_manager.cpp
+        ${source_root}/game_document.cpp
+        ${source_root}/game_editor.cpp
+        ${source_root}/undo_dock.cpp
 
         ${source_root}/widgets/dialog_with_toggle_view.cpp)
 
@@ -32,12 +35,16 @@ set(includes
         ${include_root}/document_manager.h
         ${include_root}/language_manager.h
         ${include_root}/style_manager.h
+        ${include_root}/game_document.h
+        ${include_root}/game_editor.h
+        ${include_root}/undo_dock.h
 
         ${include_root}/widgets/dialog_with_toggle_view.h)
 
 set(resources)
 
-set(uis)
+set(uis
+        ${uis_root}/main_window.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

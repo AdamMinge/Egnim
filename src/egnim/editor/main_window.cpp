@@ -5,17 +5,25 @@
 #include <egnim/editor/document_manager.h>
 #include <egnim/editor/language_manager.h>
 #include <egnim/editor/style_manager.h>
+#include <egnim/editor/game_editor.h>
+/* ------------------------------------ Ui ---------------------------------- */
+#include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
-
-
-
+#include <egnim/editor/game_document.h>
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
+  m_ui(new Ui::MainWindow()),
   m_document_manager(DocumentManager::getInstance()),
   m_language_manager(LanguageManager::getInstance()),
   m_style_manager(StyleManager::getInstance()),
   m_current_document(nullptr)
 {
+  m_ui->setupUi(this);
+
+  m_document_manager.addEditor(Document::Type::Game, std::make_unique<GameEditor>());
+
+  setCentralWidget(m_document_manager.getWidget());
+
   connect(&m_document_manager, &DocumentManager::documentCloseRequested, this, &MainWindow::closeDocument);
   connect(&m_document_manager, &DocumentManager::currentDocumentChanged, this, &MainWindow::documentChanged);
 

@@ -14,7 +14,6 @@ class Editor : public QObject
   Q_OBJECT
 
 public:
-  explicit Editor(QObject* parent = nullptr);
   ~Editor() override;
 
   virtual void setCurrentDocument(Document* document) = 0;
@@ -27,6 +26,9 @@ public:
 
   [[nodiscard]] virtual QList<QDockWidget*> getDockWidgets() const = 0;
   [[nodiscard]] virtual QList<DialogWithToggleView*> getDialogWidgets() const = 0;
+
+protected:
+  explicit Editor(QObject* parent = nullptr);
 };
 
 #endif //EDITOR_H

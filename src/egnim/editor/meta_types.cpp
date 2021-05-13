@@ -2,7 +2,6 @@
 #include <egnim/editor/meta_types.h>
 /* -------------------------------------------------------------------------- */
 
-
 void registerMetaTypes()
 {
 

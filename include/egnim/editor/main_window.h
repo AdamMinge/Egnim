@@ -5,6 +5,8 @@
 #include <QMainWindow>
 /* -------------------------------------------------------------------------- */
 
+namespace Ui { class MainWindow; }
+
 class DocumentManager;
 class LanguageManager;
 class StyleManager;
@@ -43,6 +45,8 @@ private:
   void retranslateUi();
 
 private:
+  QScopedPointer<Ui::MainWindow> m_ui;
+
   DocumentManager& m_document_manager;
   LanguageManager& m_language_manager;
   StyleManager& m_style_manager;
