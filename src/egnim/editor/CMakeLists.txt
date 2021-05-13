@@ -23,6 +23,9 @@ set(sources
         ${source_root}/game_document.cpp
         ${source_root}/game_editor.cpp
         ${source_root}/undo_dock.cpp
+        ${source_root}/file_system_dock.cpp
+        ${source_root}/inspector_dock.cpp
+        ${source_root}/scene_dock.cpp
 
         ${source_root}/widgets/dialog_with_toggle_view.cpp)
 
@@ -38,6 +41,9 @@ set(includes
         ${include_root}/game_document.h
         ${include_root}/game_editor.h
         ${include_root}/undo_dock.h
+        ${include_root}/file_system_dock.h
+        ${include_root}/inspector_dock.h
+        ${include_root}/scene_dock.h
 
         ${include_root}/widgets/dialog_with_toggle_view.h)
 

@@ -6,7 +6,11 @@
 /* -------------------------------------------------------------------------- */
 
 class GameDocument;
+
 class UndoDock;
+class SceneDock;
+class InspectorDock;
+class FileSystemDock;
 
 class GameEditor : public Editor
 {
@@ -32,6 +36,9 @@ private:
   QScopedPointer<QMainWindow> m_main_window;
 
   UndoDock* m_undo_dock;
+  SceneDock* m_scene_dock;
+  InspectorDock* m_inspector_dock;
+  FileSystemDock* m_file_system_dock;
 };
 
 #endif //GAME_EDITOR_H

@@ -1,30 +1,23 @@
-#ifndef UNDO_DOCK_H
-#define UNDO_DOCK_H
+#ifndef FILE_SYSTEM_DOCK_H
+#define FILE_SYSTEM_DOCK_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDockWidget>
-#include <QUndoStack>
-#include <QUndoView>
 /* -------------------------------------------------------------------------- */
 
-class UndoDock final : public QDockWidget
+class FileSystemDock final : public QDockWidget
 {
   Q_OBJECT
 
 public:
-  explicit UndoDock(QWidget* parent = nullptr);
-  ~UndoDock() override;
-
-  void setStack(QUndoStack* stack);
+  explicit FileSystemDock(QWidget* parent = nullptr);
+  ~FileSystemDock() override;
 
 protected:
   void changeEvent(QEvent* event) override;
 
 private:
   void retranslateUi();
-
-private:
-  QUndoView* m_undo_view;
 };
 
-#endif //UNDO_DOCK_H
+#endif //FILE_SYSTEM_DOCK_H

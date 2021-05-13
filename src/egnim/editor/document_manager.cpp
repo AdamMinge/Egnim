@@ -107,17 +107,21 @@ void DocumentManager::removeDocument(int index)
   auto document_to_remove = getDocument(index);
   Q_ASSERT(document_to_remove);
 
-  m_undo_group->removeStack(document_to_remove->getUndoStack());
-  m_tab_bar->removeTab(index);
-
   auto& editor = m_editor_for_document_type[document_to_remove->getType()];
   Q_ASSERT(editor);
 
-  editor->setCurrentDocument(nullptr);
+  if(getCurrentDocument() == document_to_remove)
+    editor->setCurrentDocument(nullptr);
 
-  m_documents.erase(std::remove_if(m_documents.begin(), m_documents.end(), [&document_to_remove](auto&& document){
+  auto removed_document_iter = std::remove_if(
+    m_documents.begin(), m_documents.end(), [&document_to_remove](auto&& document){
     return document.get() == document_to_remove;
-  }), m_documents.end());
+  });
+
+  m_undo_group->removeStack(document_to_remove->getUndoStack());
+  m_tab_bar->removeTab(index);
+
+  m_documents.erase(removed_document_iter, m_documents.end());
 }
 
 void DocumentManager::removeAllDocuments()

@@ -23,6 +23,8 @@ UndoDock::UndoDock(QWidget* parent) :
   retranslateUi();
 }
 
+UndoDock::~UndoDock() = default;
+
 void UndoDock::setStack(QUndoStack* stack)
 {
   m_undo_view->setStack(stack);
