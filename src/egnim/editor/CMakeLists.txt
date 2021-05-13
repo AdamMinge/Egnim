@@ -16,6 +16,7 @@ set(sources
         ${source_root}/main_window.cpp
         ${source_root}/document.cpp
         ${source_root}/editor.cpp
+        ${source_root}/no_editor_widget.cpp
         ${source_root}/document_manager.cpp
         ${source_root}/language_manager.cpp
         ${source_root}/style_manager.cpp
@@ -27,6 +28,7 @@ set(includes
         ${include_root}/main_window.h
         ${include_root}/document.h
         ${include_root}/editor.h
+        ${include_root}/no_editor_widget.h
         ${include_root}/document_manager.h
         ${include_root}/language_manager.h
         ${include_root}/style_manager.h
