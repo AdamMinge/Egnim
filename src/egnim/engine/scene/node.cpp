@@ -30,8 +30,10 @@ Node::~Node() = default;
 
 void Node::attachChild(std::unique_ptr<Node> node)
 {
-  node->setParent(this);
+  auto& node_ref = *node;
   m_children.push_back(std::move(node));
+  node_ref.setParent(this);
+  node_ref.onEnter();
 }
 
 std::unique_ptr<Node> Node::detachChild(const Node &node)
@@ -45,8 +47,9 @@ std::unique_ptr<Node> Node::detachChild(const Node &node)
     return nullptr;
 
   auto child = std::move(*found);
-  child->setParent(nullptr);
   m_children.erase(found);
+  child->setParent(nullptr);
+  child->onExit();
   return child;
 }
 
@@ -319,6 +322,20 @@ void Node::initializeClone(Node& node) const
 
   for(auto& component : m_components->getComponents())
     node.attachComponent(component->clone());
+}
+
+void Node::onEnter()
+{
+  m_components->onEnter();
+  for(auto& child : m_children)
+    child->onEnter();
+}
+
+void Node::onExit()
+{
+  m_components->onExit();
+  for(auto& child : m_children)
+    child->onExit();
 }
 
 } // namespace egnim::scene

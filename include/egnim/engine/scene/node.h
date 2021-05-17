@@ -110,6 +110,9 @@ namespace egnim::scene
 
     void initializeClone(Node& node) const;
 
+    virtual void onEnter();
+    virtual void onExit();
+
   private:
     std::vector<std::unique_ptr<Node>> m_children;
     std::unique_ptr<ComponentContainer> m_components;

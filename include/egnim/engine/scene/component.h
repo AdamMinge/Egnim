@@ -34,6 +34,9 @@ namespace egnim::scene
 
     void initializeClone(Component& component) const;
 
+    virtual void onEnter();
+    virtual void onExit();
+
   private:
     Node* m_owner;
   };

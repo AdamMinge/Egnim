@@ -21,8 +21,10 @@ void ComponentContainer::update(sf::Time dt)
 
 void ComponentContainer::add(std::unique_ptr<Component> component)
 {
-  component->setOwner(&m_owner);
+  auto& component_ref = *component;
   m_components.push_back(std::move(component));
+  component_ref.setOwner(&m_owner);
+  component_ref.onEnter();
 }
 
 void ComponentContainer::remove(const Component& component)
@@ -31,7 +33,13 @@ void ComponentContainer::remove(const Component& component)
     return comp.get() == &component;
   });
 
+  if(found == m_components.end())
+    return;
+
+  auto comp = std::move(*found);
   m_components.erase(found);
+  comp->setOwner(nullptr);
+  comp->onExit();
 }
 
 std::unique_ptr<Component> ComponentContainer::take(const Component& component)
@@ -44,8 +52,8 @@ std::unique_ptr<Component> ComponentContainer::take(const Component& component)
     return nullptr;
 
   auto comp = std::move(*found);
-  comp->setOwner(nullptr);
   m_components.erase(found);
+  comp->setOwner(nullptr);
   return comp;
 }
 
@@ -62,6 +70,18 @@ bool ComponentContainer::empty() const
 size_t ComponentContainer::size() const
 {
   return m_components.size();
+}
+
+void ComponentContainer::onEnter()
+{
+  for(auto& component : m_components)
+    component->onEnter();
+}
+
+void ComponentContainer::onExit()
+{
+  for(auto& component : m_components)
+    component->onExit();
 }
 
 

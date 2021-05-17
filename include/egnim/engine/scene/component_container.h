@@ -17,6 +17,8 @@ namespace egnim::scene
 
   class EGNIM_UTILITY_API ComponentContainer
   {
+    friend Node;
+
   public:
     explicit ComponentContainer(Node& owner);
     ~ComponentContainer();
@@ -30,6 +32,10 @@ namespace egnim::scene
 
     [[nodiscard]] bool empty() const;
     [[nodiscard]] size_t size() const;
+
+  protected:
+    void onEnter();
+    void onExit();
 
   private:
     std::vector<std::unique_ptr<Component>> m_components;
