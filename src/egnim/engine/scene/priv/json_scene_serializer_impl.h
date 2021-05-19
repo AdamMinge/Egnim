@@ -43,6 +43,12 @@ namespace egnim::scene::priv
     void serialize(const TileMapNode &tile_map_node, std::ostream& stream) override;
     void deserialize(TileMapNode &tile_map_node, std::istream& stream) override;
 
+    void serialize(const physics::PhysicsBody &physics_body, std::ostream& stream) override;
+    void deserialize(physics::PhysicsBody &physics_body, std::istream& stream) override;
+
+    void serialize(const physics::PhysicsJoint &physics_joint, std::ostream& stream) override;
+    void deserialize(physics::PhysicsJoint &physics_joint, std::istream& stream) override;
+
   private:
     void serialize(const Node &node, std::ostream& stream);
     void deserialize(Node &node, std::istream& stream);

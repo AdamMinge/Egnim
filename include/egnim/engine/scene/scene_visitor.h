@@ -5,6 +5,12 @@
 #include <egnim/engine/export.h>
 /* -------------------------------------------------------------------------- */
 
+namespace egnim::physics
+{
+  class PhysicsBody;
+  class PhysicsJoint;
+}
+
 namespace egnim::scene
 {
 
@@ -37,6 +43,9 @@ namespace egnim::scene
     virtual void visitSpriteNode(SpriteNode& sprite_node) = 0;
     virtual void visitCameraNode(CameraNode& camera_node) = 0;
     virtual void visitTileMapNode(TileMapNode& tile_map_node) = 0;
+
+    virtual void visitPhysicsBody(physics::PhysicsBody& physics_body) = 0;
+    virtual void visitPhysicsJoint(physics::PhysicsJoint& physics_joint) = 0;
   };
 
 } // namespace egnim::scene

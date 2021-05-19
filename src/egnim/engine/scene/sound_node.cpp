@@ -85,17 +85,6 @@ void SoundNode::accept(SceneVisitor& visitor)
   visitor.visitSoundNode(*this);
 }
 
-std::unique_ptr<Node> SoundNode::clone() const
-{
-  auto clone_node = std::make_unique<SoundNode>();
-  Node::initializeClone(*clone_node);
-
-  clone_node->m_sounds = {};
-  clone_node->m_default_settings = m_default_settings;
-
-  return clone_node;
-}
-
 void SoundNode::updateCurrent(sf::Time dt)
 {
   checkStopConditions();

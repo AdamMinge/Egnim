@@ -47,8 +47,6 @@ namespace egnim::physics
 
     [[nodiscard]] Type getType() const;
 
-    [[nodiscard]] std::unique_ptr<scene::Node> clone() const override;
-
     void accept(scene::SceneVisitor& visitor) override;
 
   protected:
@@ -246,10 +244,7 @@ namespace egnim::physics
   public:
     explicit PulleyPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                 const sf::Vector2f& first_ground_anchor, const sf::Vector2f& second_ground_anchor,
-                                const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ration);
-
-    [[nodiscard]] sf::Vector2f getFirstGroundAnchor() const;
-    [[nodiscard]] sf::Vector2f getSecondGroundAnchor() const;
+                                const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ratio);
 
     [[nodiscard]] float getFirstLength() const;
     [[nodiscard]] float getSecondLength() const;
@@ -258,6 +253,9 @@ namespace egnim::physics
 
     [[nodiscard]] float getCurrentFirstLength() const;
     [[nodiscard]] float getCurrentSecondLength() const;
+
+    [[nodiscard]] sf::Vector2f getFirstGroundAnchor() const;
+    [[nodiscard]] sf::Vector2f getSecondGroundAnchor() const;
 
     [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
     [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
@@ -270,11 +268,13 @@ namespace egnim::physics
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    const sf::Vector2f& m_first_ground_anchor;
-    const sf::Vector2f& m_second_ground_anchor;
-    const sf::Vector2f& m_first_anchor;
-    const sf::Vector2f& m_second_anchor;
-    float m_ration;
+    sf::Vector2f m_first_ground_anchor;
+    sf::Vector2f m_second_ground_anchor;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    float m_first_length;
+    float m_second_length;
+    float m_ratio;
   };
 
   class RevolutePhysicsJoint : public PhysicsJoint
@@ -291,7 +291,7 @@ namespace egnim::physics
     void enableLimit(bool enable);
 
     [[nodiscard]] float getLowerLimit() const;
-    [[nodiscard]] float getUppedLimit() const;
+    [[nodiscard]] float getUpperLimit() const;
     void setLimits(float lower, float upper);
 
     [[nodiscard]] bool isMotorEnabled() const;
@@ -302,7 +302,6 @@ namespace egnim::physics
 
     void setMaxMotorTorque(float torque);
     [[nodiscard]] float getMaxMotorTorque() const;
-
     [[nodiscard]] float getMotorTorque(float inv_dt) const;
 
     [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
@@ -316,7 +315,15 @@ namespace egnim::physics
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_anchor;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    bool m_enable_limit;
+    bool m_enable_motor;
+    float m_motor_speed;
+    float m_max_motor_torque;
+    float m_reference_angle;
+    float m_lower_angle;
+    float m_upper_angle;
   };
 
   class WeldPhysicsJoint : public PhysicsJoint
@@ -327,7 +334,7 @@ namespace egnim::physics
 
     [[nodiscard]] float getReferenceAngle() const;
 
-    void setStiffness(float hz);
+    void setStiffness(float stiffness);
     [[nodiscard]] float getStiffness() const;
 
     [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
@@ -341,7 +348,10 @@ namespace egnim::physics
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_anchor;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    float m_reference_angle;
+    float m_stiffness;
   };
 
   class WheelPhysicsJoint : public PhysicsJoint
@@ -389,8 +399,17 @@ namespace egnim::physics
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_anchor;
-    sf::Vector2f m_axis;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    sf::Vector2f m_first_local_axis;
+    bool m_enable_limit;
+    bool m_enable_motor;
+    float m_lower_translation;
+    float m_upper_translation;
+    float m_motor_speed;
+    float m_max_motor_torque;
+    float m_stiffness;
+    float m_damping;
   };
 
   enum class PhysicsJoint::Type

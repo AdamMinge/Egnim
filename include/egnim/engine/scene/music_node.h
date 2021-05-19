@@ -45,8 +45,6 @@ namespace egnim::scene
 
     void accept(SceneVisitor& visitor) override;
 
-    [[nodiscard]] std::unique_ptr<Node> clone() const override;
-
   private:
     Settings m_default_settings;
     sf::Music* m_current_music;

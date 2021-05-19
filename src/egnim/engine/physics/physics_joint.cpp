@@ -4,6 +4,7 @@
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/priv/physics_helper.h>
 #include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/scene/scene_visitor.h>
 #include <egnim/engine/math/vector_helper.h>
 /* --------------------------------- Standard ------------------------------- */
 #include <cassert>
@@ -126,14 +127,9 @@ PhysicsJoint::Type PhysicsJoint::getType() const
   return m_type;
 }
 
-std::unique_ptr<scene::Node> PhysicsJoint::clone() const
-{
-  // TODO //
-}
-
 void PhysicsJoint::accept(scene::SceneVisitor& visitor)
 {
-  // TODO //
+  visitor.visitPhysicsJoint(*this);
 }
 
 void PhysicsJoint::onEnter()
@@ -267,7 +263,7 @@ std::unique_ptr<b2JointDef> DistancePhysicsJoint::createInternalJointDef(
   b2_distance_joint_def->bodyA = b2_first_physics_body;
   b2_distance_joint_def->bodyB = b2_second_physics_body;
   b2_distance_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
-  b2_distance_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_distance_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
   b2_distance_joint_def->stiffness = m_stiffness;
   b2_distance_joint_def->damping = m_damping;
   b2_distance_joint_def->length = m_length;
@@ -351,7 +347,7 @@ std::unique_ptr<b2JointDef> FrictionPhysicsJoint::createInternalJointDef(
   b2_friction_joint_def->bodyA = b2_first_physics_body;
   b2_friction_joint_def->bodyB = b2_second_physics_body;
   b2_friction_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
-  b2_friction_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_friction_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
   b2_friction_joint_def->maxForce = m_max_force;
   b2_friction_joint_def->maxTorque = m_max_torque;
 
@@ -479,7 +475,7 @@ PrismaticPhysicsJoint::PrismaticPhysicsJoint(PhysicsBody& first_physics_body, Ph
 
 float PrismaticPhysicsJoint::getReferenceAngle() const
 {
-  PullProperties(b2PrismaticJoint, GetReferenceAngle, m_reference_angle);
+  PullPostProcessProperties(b2PrismaticJoint, GetReferenceAngle, m_reference_angle, priv::PhysicsHelper::radianToAngle);
 }
 
 float PrismaticPhysicsJoint::getJointTranslation() const
@@ -597,8 +593,8 @@ std::unique_ptr<b2JointDef> PrismaticPhysicsJoint::createInternalJointDef(
   b2_prismatic_joint_def->bodyA = b2_first_physics_body;
   b2_prismatic_joint_def->bodyB = b2_second_physics_body;
   b2_prismatic_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
-  b2_prismatic_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
-  b2_prismatic_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_axis);
+  b2_prismatic_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_prismatic_joint_def->localAxisA = priv::PhysicsHelper::pixel_to_meter(m_first_local_axis);
   b2_prismatic_joint_def->enableLimit = m_enable_limit;
   b2_prismatic_joint_def->enableMotor = m_enable_motor;
   b2_prismatic_joint_def->motorSpeed = m_motor_speed;
@@ -614,84 +610,95 @@ std::unique_ptr<b2JointDef> PrismaticPhysicsJoint::createInternalJointDef(
 
 PulleyPhysicsJoint::PulleyPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                        const sf::Vector2f& first_ground_anchor, const sf::Vector2f& second_ground_anchor,
-                                       const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ration) :
+                                       const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ratio) :
   PhysicsJoint(Type::Pulley, first_physics_body, second_physics_body),
   m_first_ground_anchor(first_ground_anchor),
   m_second_ground_anchor(second_ground_anchor),
-  m_first_anchor(first_anchor),
-  m_second_anchor(second_anchor),
-  m_ration(ration)
+  m_ratio(ratio)
 {
-
-}
-
-sf::Vector2f PulleyPhysicsJoint::getFirstGroundAnchor() const
-{
-  auto first_ground_anchor = getInternalJoint<b2PulleyJoint>()->GetGroundAnchorA();
-  return priv::PhysicsHelper::meter_to_pixel(first_ground_anchor);
-}
-
-sf::Vector2f PulleyPhysicsJoint::getSecondGroundAnchor() const
-{
-  auto second_ground_anchor = getInternalJoint<b2PulleyJoint>()->GetGroundAnchorB();
-  return priv::PhysicsHelper::meter_to_pixel(second_ground_anchor);
+  m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(first_anchor);
+  m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(second_anchor);
+  m_first_length = math::VectorHelper::distance(first_anchor, first_ground_anchor);
+  m_second_length = math::VectorHelper::distance(second_anchor, second_ground_anchor);
 }
 
 float PulleyPhysicsJoint::getFirstLength() const
 {
-  return priv::PhysicsHelper::meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetLengthA());
+  PullProperties(b2PulleyJoint, GetLengthA, m_first_length);
 }
 
 float PulleyPhysicsJoint::getSecondLength() const
 {
-  return priv::PhysicsHelper::meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetLengthB());
+  PullProperties(b2PulleyJoint, GetLengthB, m_second_length);
 }
 
 float PulleyPhysicsJoint::getRation() const
 {
-  return getInternalJoint<b2PulleyJoint>()->GetRatio();
+  PullProperties(b2PulleyJoint, GetRatio, m_ratio);
+}
+
+sf::Vector2f PulleyPhysicsJoint::getFirstGroundAnchor() const
+{
+  PullPostProcessProperties(b2PulleyJoint, GetGroundAnchorA, m_first_ground_anchor,priv::PhysicsHelper::meter_to_pixel);
+}
+
+sf::Vector2f PulleyPhysicsJoint::getSecondGroundAnchor() const
+{
+  PullPostProcessProperties(b2PulleyJoint, GetGroundAnchorB, m_second_ground_anchor,priv::PhysicsHelper::meter_to_pixel);
 }
 
 float PulleyPhysicsJoint::getCurrentFirstLength() const
 {
-  return priv::PhysicsHelper::meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetCurrentLengthA());
+  auto p = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  auto s = m_first_ground_anchor;
+  return math::VectorHelper::distance(p, s);
 }
 
 float PulleyPhysicsJoint::getCurrentSecondLength() const
 {
-  return priv::PhysicsHelper::meter_to_pixel(getInternalJoint<b2PulleyJoint>()->GetCurrentLengthB());
+  auto p = getFirstPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  auto s = m_second_ground_anchor;
+  return math::VectorHelper::distance(p, s);
 }
 
 sf::Vector2f PulleyPhysicsJoint::getFirstAnchor() const
 {
-  // TODO //
+  auto world_point = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  PullPostProcessProperties(b2PulleyJoint, GetAnchorA, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f PulleyPhysicsJoint::getSecondAnchor() const
 {
-  // TODO //
+  auto world_point = getSecondPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  PullPostProcessProperties(b2PulleyJoint, GetAnchorB, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f PulleyPhysicsJoint::getReactionForce(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2PulleyJoint>(); joint) return priv::PhysicsHelper::cast(joint->GetReactionForce(inv_dt));
+  else                                                      return sf::Vector2f();
 }
 
 float PulleyPhysicsJoint::getReactionTorque(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2PulleyJoint>(); joint) return joint->GetReactionTorque(inv_dt);
+  else                                                      return 0.f;
 }
 
 std::unique_ptr<b2JointDef> PulleyPhysicsJoint::createInternalJointDef(
   b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const
 {
   auto b2_pulley_joint_def = std::make_unique<b2PulleyJointDef>();
-  b2_pulley_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                  priv::PhysicsHelper::pixel_to_meter(m_first_ground_anchor),
-                                  priv::PhysicsHelper::pixel_to_meter(m_second_ground_anchor),
-                                  priv::PhysicsHelper::pixel_to_meter(m_first_anchor),
-                                  priv::PhysicsHelper::pixel_to_meter(m_second_anchor),
-                                  m_ration);
+
+  b2_pulley_joint_def->bodyA = b2_first_physics_body;
+  b2_pulley_joint_def->bodyB = b2_second_physics_body;
+  b2_pulley_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
+  b2_pulley_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_pulley_joint_def->groundAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_ground_anchor);
+  b2_pulley_joint_def->groundAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_ground_anchor);
+  b2_pulley_joint_def->lengthA = m_first_length;
+  b2_pulley_joint_def->lengthB = m_second_length;
+  b2_pulley_joint_def->ratio = m_ratio;
 
   return b2_pulley_joint_def;
 }
@@ -701,112 +708,141 @@ std::unique_ptr<b2JointDef> PulleyPhysicsJoint::createInternalJointDef(
 RevolutePhysicsJoint::RevolutePhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                            const sf::Vector2f& anchor) :
   PhysicsJoint(Type::Revolute, first_physics_body, second_physics_body),
-  m_anchor(anchor)
+  m_enable_limit(false),
+  m_max_motor_torque(0.f),
+  m_lower_angle(0.f),
+  m_upper_angle(0.f),
+  m_enable_motor(false),
+  m_motor_speed(0.f)
 {
-
+  m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_reference_angle = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
 
 float RevolutePhysicsJoint::getReferenceAngle() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetReferenceAngle();
+  PullPostProcessProperties(b2RevoluteJoint, GetReferenceAngle, m_reference_angle, priv::PhysicsHelper::radianToAngle);
 }
 
 float RevolutePhysicsJoint::getJointAngle() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetJointAngle();
+  PullPostProcessProperties(b2RevoluteJoint, GetJointAngle, 0.f, priv::PhysicsHelper::radianToAngle);
 }
 
 float RevolutePhysicsJoint::getJointSpeed() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetJointSpeed();
+  PullProperties(b2RevoluteJoint, GetJointSpeed, 0.f);
 }
 
 bool RevolutePhysicsJoint::isLimitEnabled() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->IsLimitEnabled();
+  PullProperties(b2RevoluteJoint, IsLimitEnabled, m_enable_limit);
 }
 
 void RevolutePhysicsJoint::enableLimit(bool enable)
 {
-  getInternalJoint<b2RevoluteJoint>()->EnableLimit(enable);
+  PushProperties(b2RevoluteJoint, EnableLimit, enable, m_enable_limit);
 }
 
 float RevolutePhysicsJoint::getLowerLimit() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetLowerLimit();
+  PullPostProcessProperties(b2RevoluteJoint, GetLowerLimit, m_lower_angle, priv::PhysicsHelper::radianToAngle);
 }
 
-float RevolutePhysicsJoint::getUppedLimit() const
+float RevolutePhysicsJoint::getUpperLimit() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetUpperLimit();
+  PullPostProcessProperties(b2RevoluteJoint, GetUpperLimit, m_upper_angle, priv::PhysicsHelper::radianToAngle);
 }
 
 void RevolutePhysicsJoint::setLimits(float lower, float upper)
 {
-  getInternalJoint<b2RevoluteJoint>()->SetLimits(lower, upper);
+  if(auto joint = getInternalJoint<b2RevoluteJoint>(); joint)
+    joint->SetLimits(priv::PhysicsHelper::angleToRadian(lower),
+                     priv::PhysicsHelper::angleToRadian(upper));
+  else
+  {
+    m_lower_angle = lower;
+    m_upper_angle = upper;
+  }
 }
 
 bool RevolutePhysicsJoint::isMotorEnabled() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->IsMotorEnabled();
+  PullProperties(b2RevoluteJoint, IsMotorEnabled, m_enable_motor);
 }
 
 void RevolutePhysicsJoint::enableMotor(bool enable)
 {
-  getInternalJoint<b2RevoluteJoint>()->EnableMotor(enable);
+  PushProperties(b2RevoluteJoint, EnableMotor, enable, m_enable_motor);
 }
 
 void RevolutePhysicsJoint::setMotorSpeed(float speed)
 {
-  getInternalJoint<b2RevoluteJoint>()->SetMotorSpeed(speed);
+  PushProperties(b2RevoluteJoint, SetMotorSpeed, speed, m_motor_speed);
 }
 
 float RevolutePhysicsJoint::getMotorSpeed() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetMotorSpeed();
+  PullProperties(b2RevoluteJoint, GetMotorSpeed, m_motor_speed);
 }
 
 void RevolutePhysicsJoint::setMaxMotorTorque(float torque)
 {
-  getInternalJoint<b2RevoluteJoint>()->SetMaxMotorTorque(torque);
+  PushProperties(b2RevoluteJoint, SetMaxMotorTorque, torque, m_max_motor_torque);
 }
 
 float RevolutePhysicsJoint::getMaxMotorTorque() const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetMaxMotorTorque();
+  PullProperties(b2RevoluteJoint, GetMaxMotorTorque, m_max_motor_torque);
 }
 
 float RevolutePhysicsJoint::getMotorTorque(float inv_dt) const
 {
-  return getInternalJoint<b2RevoluteJoint>()->GetMotorTorque(inv_dt);
+  if(auto joint = getInternalJoint<b2RevoluteJoint>(); joint) return joint->GetMotorTorque(inv_dt);
+  else                                                        return 0.f;
 }
 
 sf::Vector2f RevolutePhysicsJoint::getFirstAnchor() const
 {
-  // TODO //
+  auto world_point = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  PullPostProcessProperties(b2RevoluteJoint, GetAnchorA, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f RevolutePhysicsJoint::getSecondAnchor() const
 {
-  // TODO //
+  auto world_point = getSecondPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  PullPostProcessProperties(b2RevoluteJoint, GetAnchorB, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f RevolutePhysicsJoint::getReactionForce(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2RevoluteJoint>(); joint) return priv::PhysicsHelper::cast(joint->GetReactionForce(inv_dt));
+  else                                                        return sf::Vector2f();
 }
 
 float RevolutePhysicsJoint::getReactionTorque(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2RevoluteJoint>(); joint) return joint->GetReactionTorque(inv_dt);
+  else                                                        return 0.f;
 }
 
 std::unique_ptr<b2JointDef> RevolutePhysicsJoint::createInternalJointDef(
   b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const
 {
   auto b2_revolute_joint_def = std::make_unique<b2RevoluteJointDef>();
-  b2_revolute_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                    priv::PhysicsHelper::pixel_to_meter(m_anchor));
+
+  b2_revolute_joint_def->bodyA = b2_first_physics_body;
+  b2_revolute_joint_def->bodyB = b2_second_physics_body;
+  b2_revolute_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
+  b2_revolute_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_revolute_joint_def->enableLimit = m_enable_limit;
+  b2_revolute_joint_def->enableMotor = m_enable_motor;
+  b2_revolute_joint_def->motorSpeed = m_motor_speed;
+  b2_revolute_joint_def->maxMotorTorque = m_max_motor_torque;
+  b2_revolute_joint_def->referenceAngle = priv::PhysicsHelper::angleToRadian(m_reference_angle);
+  b2_revolute_joint_def->lowerAngle = priv::PhysicsHelper::angleToRadian(m_lower_angle);
+  b2_revolute_joint_def->upperAngle = priv::PhysicsHelper::angleToRadian(m_upper_angle);
 
   return b2_revolute_joint_def;
 }
@@ -816,52 +852,63 @@ std::unique_ptr<b2JointDef> RevolutePhysicsJoint::createInternalJointDef(
 WeldPhysicsJoint::WeldPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                    const sf::Vector2f& anchor) :
   PhysicsJoint(Type::Weld, first_physics_body, second_physics_body),
-  m_anchor(anchor)
+  m_stiffness(0.f)
 {
-
+  m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_reference_angle = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
 
 float WeldPhysicsJoint::getReferenceAngle() const
 {
-  return getInternalJoint<b2WeldJoint>()->GetReferenceAngle();
+  PullPostProcessProperties(b2WeldJoint, GetReferenceAngle, m_reference_angle, priv::PhysicsHelper::radianToAngle);
 }
 
-void WeldPhysicsJoint::setStiffness(float hz)
+void WeldPhysicsJoint::setStiffness(float stiffness)
 {
-  getInternalJoint<b2WeldJoint>()->SetStiffness(hz);
+  PushProperties(b2WeldJoint, SetStiffness, stiffness, m_stiffness);
 }
 
 float WeldPhysicsJoint::getStiffness() const
 {
-  return getInternalJoint<b2WeldJoint>()->GetStiffness();
+  PullProperties(b2WeldJoint, GetStiffness, m_stiffness);
 }
 
 sf::Vector2f WeldPhysicsJoint::getFirstAnchor() const
 {
-  // TODO //
+  auto world_point = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  PullPostProcessProperties(b2WeldJoint, GetAnchorA, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f WeldPhysicsJoint::getSecondAnchor() const
 {
-  // TODO //
+  auto world_point = getSecondPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  PullPostProcessProperties(b2WeldJoint, GetAnchorB, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f WeldPhysicsJoint::getReactionForce(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2WeldJoint>(); joint) return priv::PhysicsHelper::cast(joint->GetReactionForce(inv_dt));
+  else                                                    return sf::Vector2f();
 }
 
 float WeldPhysicsJoint::getReactionTorque(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2WeldJoint>(); joint) return joint->GetReactionTorque(inv_dt);
+  else                                                    return 0.f;
 }
 
 std::unique_ptr<b2JointDef> WeldPhysicsJoint::createInternalJointDef(
   b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const
 {
   auto b2_weld_joint_def = std::make_unique<b2WeldJointDef>();
-  b2_weld_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                priv::PhysicsHelper::pixel_to_meter(m_anchor));
+
+  b2_weld_joint_def->bodyA = b2_first_physics_body;
+  b2_weld_joint_def->bodyB = b2_second_physics_body;
+  b2_weld_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
+  b2_weld_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_weld_joint_def->referenceAngle = priv::PhysicsHelper::angleToRadian(m_reference_angle);
+  b2_weld_joint_def->stiffness = m_stiffness;
 
   return b2_weld_joint_def;
 }
@@ -871,143 +918,177 @@ std::unique_ptr<b2JointDef> WeldPhysicsJoint::createInternalJointDef(
 WheelPhysicsJoint::WheelPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                      const sf::Vector2f& anchor, const sf::Vector2f& axis) :
   PhysicsJoint(Type::Wheel, first_physics_body, second_physics_body),
-  m_anchor(anchor),
-  m_axis(axis)
+  m_enable_limit(false),
+  m_enable_motor(false),
+  m_lower_translation(0.f),
+  m_upper_translation(0.f),
+  m_motor_speed(0.f),
+  m_max_motor_torque(0.f),
+  m_stiffness(0.f),
+  m_damping(0.f)
 {
-
+  m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
+  m_first_local_axis = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(axis);
 }
 
 float WheelPhysicsJoint::getJointTranslation() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetJointTranslation();
+  auto pA = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  auto pB = getSecondPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  auto axis = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_axis);
+
+  auto d = pB - pA;
+  auto translation = math::VectorHelper::dot(d, axis);
+  return translation;
 }
 
 float WheelPhysicsJoint::getJointLinearSpeed() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetJointLinearSpeed();
+  PullProperties(b2WheelJoint, GetJointLinearSpeed, 0.f);
 }
 
 float WheelPhysicsJoint::getJointAngle() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetJointAngle();
+  PullPostProcessProperties(b2WheelJoint, GetJointAngle, 0.f, priv::PhysicsHelper::radianToAngle);
 }
 
 float WheelPhysicsJoint::getJointAngularSpeed() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetJointAngularSpeed();
+  PullProperties(b2WheelJoint, GetJointAngularSpeed, 0.f);
 }
 
 bool WheelPhysicsJoint::isLimitEnabled() const
 {
-  return getInternalJoint<b2WheelJoint>()->IsLimitEnabled();
+  PullProperties(b2WheelJoint, IsLimitEnabled, m_enable_limit);
 }
 
 void WheelPhysicsJoint::enableLimit(bool enable)
 {
-  getInternalJoint<b2WheelJoint>()->EnableLimit(enable);
+  PushProperties(b2WheelJoint, EnableLimit, enable, m_enable_limit);
 }
 
 float WheelPhysicsJoint::getLowerLimit() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetLowerLimit();
+  PullProperties(b2WheelJoint, GetLowerLimit, m_lower_translation);
 }
 
 float WheelPhysicsJoint::getUpperLimit() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetUpperLimit();
+  PullProperties(b2WheelJoint, GetUpperLimit, m_upper_translation);
 }
 
 void WheelPhysicsJoint::setLimits(float lower, float upper)
 {
-  getInternalJoint<b2WheelJoint>()->SetLimits(lower, upper);
+  if(auto joint = getInternalJoint<b2WheelJoint>(); joint)
+    joint->SetLimits(lower, upper);
+  else
+  {
+    m_lower_translation = lower;
+    m_upper_translation = upper;
+  }
 }
 
 bool WheelPhysicsJoint::isMotorEnabled() const
 {
-  return getInternalJoint<b2WheelJoint>()->IsMotorEnabled();
+  PullProperties(b2WheelJoint, IsMotorEnabled, m_enable_motor);
 }
 
 void WheelPhysicsJoint::enableMotor(bool enable)
 {
-  getInternalJoint<b2WheelJoint>()->EnableMotor(enable);
+  PushProperties(b2WheelJoint, EnableMotor, enable, m_enable_motor);
 }
 
 void WheelPhysicsJoint::setMotorSpeed(float speed)
 {
-  getInternalJoint<b2WheelJoint>()->SetMotorSpeed(speed);
+  PushProperties(b2RevoluteJoint, SetMotorSpeed, speed, m_motor_speed);
 }
 
 float WheelPhysicsJoint::getMotorSpeed() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetMotorSpeed();
+  PullProperties(b2WheelJoint, GetMotorSpeed, m_motor_speed);
 }
 
 void WheelPhysicsJoint::setMaxMotorTorque(float torque)
 {
-  getInternalJoint<b2WheelJoint>()->SetMaxMotorTorque(torque);
+  PushProperties(b2WheelJoint, SetMaxMotorTorque, torque, m_max_motor_torque);
 }
 
 float WheelPhysicsJoint::getMaxMotorTorque() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetMaxMotorTorque();
+  PullProperties(b2WheelJoint, GetMaxMotorTorque, m_max_motor_torque);
 }
 
 float WheelPhysicsJoint::getMotorTorque(float inv_dt)
 {
-  return getInternalJoint<b2WheelJoint>()->GetMotorTorque(inv_dt);
+  if(auto joint = getInternalJoint<b2WheelJoint>(); joint) return joint->GetMotorTorque(inv_dt);
+  else                                                     return 0.f;
 }
 
 void WheelPhysicsJoint::setStiffness(float stiffness)
 {
-  getInternalJoint<b2WheelJoint>()->SetStiffness(stiffness);
+  PushProperties(b2WheelJoint, SetStiffness, stiffness, m_stiffness);
 }
 
 float WheelPhysicsJoint::getStiffness() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetStiffness();
+  PullProperties(b2WheelJoint, GetStiffness, m_stiffness);
 }
 
 void WheelPhysicsJoint::setDamping(float damping)
 {
-  getInternalJoint<b2WheelJoint>()->SetDamping(damping);
+  PushProperties(b2WheelJoint, SetDamping, damping, m_damping);
 }
 
 float WheelPhysicsJoint::getDamping() const
 {
-  return getInternalJoint<b2WheelJoint>()->GetDamping();
+  PullProperties(b2WheelJoint, GetDamping, m_damping);
 }
 
 sf::Vector2f WheelPhysicsJoint::getFirstAnchor() const
 {
-  // TODO //
+  auto world_point = getFirstPhysicsBody().getWorldTransform().transformPoint(m_first_local_anchor);
+  PullPostProcessProperties(b2WheelJoint, GetAnchorA, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f WheelPhysicsJoint::getSecondAnchor() const
 {
-  // TODO //
+  auto world_point = getSecondPhysicsBody().getWorldTransform().transformPoint(m_second_local_anchor);
+  PullPostProcessProperties(b2WheelJoint, GetAnchorB, world_point, priv::PhysicsHelper::meter_to_pixel);
 }
 
 sf::Vector2f WheelPhysicsJoint::getReactionForce(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2WheelJoint>(); joint) return priv::PhysicsHelper::cast(joint->GetReactionForce(inv_dt));
+  else                                                     return sf::Vector2f();
 }
 
 float WheelPhysicsJoint::getReactionTorque(float inv_dt) const
 {
-  // TODO //
+  if(auto joint = getInternalJoint<b2WheelJoint>(); joint) return joint->GetReactionTorque(inv_dt);
+  else                                                     return 0.f;
 }
 
 std::unique_ptr<b2JointDef> WheelPhysicsJoint::createInternalJointDef(
   b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const
 {
   auto b2_wheel_joint_def = std::make_unique<b2WheelJointDef>();
-  b2_wheel_joint_def->Initialize(b2_first_physics_body, b2_second_physics_body,
-                                 priv::PhysicsHelper::pixel_to_meter(m_anchor),
-                                 priv::PhysicsHelper::pixel_to_meter(m_axis));
+
+  b2_wheel_joint_def->bodyA = b2_first_physics_body;
+  b2_wheel_joint_def->bodyB = b2_second_physics_body;
+  b2_wheel_joint_def->localAnchorA = priv::PhysicsHelper::pixel_to_meter(m_first_local_anchor);
+  b2_wheel_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
+  b2_wheel_joint_def->localAxisA = priv::PhysicsHelper::pixel_to_meter(m_first_local_axis);
+  b2_wheel_joint_def->enableLimit = m_enable_limit;
+  b2_wheel_joint_def->enableMotor = m_enable_motor;
+  b2_wheel_joint_def->motorSpeed = m_motor_speed;
+  b2_wheel_joint_def->maxMotorTorque = m_max_motor_torque;
+  b2_wheel_joint_def->lowerTranslation = m_lower_translation;
+  b2_wheel_joint_def->upperTranslation = m_upper_translation;
+  b2_wheel_joint_def->stiffness = m_stiffness;
+  b2_wheel_joint_def->damping = m_damping;
 
   return b2_wheel_joint_def;
 }
-
-
 
 } // namespace egnim::physics

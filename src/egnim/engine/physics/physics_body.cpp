@@ -8,13 +8,14 @@
 #include <egnim/engine/physics/priv/physics_helper.h>
 #include <egnim/engine/scene/node.h>
 #include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/scene/scene_visitor.h>
 #include <egnim/engine/core/unique_pointer.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
 
-PhysicsBody::PhysicsBody() :
-  m_type(Type::DynamicBody),
+PhysicsBody::PhysicsBody(Type type) :
+  m_type(type),
   m_physics_world(nullptr),
   m_b2_body(nullptr)
 {
@@ -197,19 +198,9 @@ bool PhysicsBody::isEnabled() const
   return m_b2_body->IsEnabled();
 }
 
-std::unique_ptr<scene::Node> PhysicsBody::clone() const
-{
-  auto clone_physics_body = std::make_unique<PhysicsBody>();
-  scene::Node::initializeClone(*clone_physics_body);
-
-  clone_physics_body->setType(getType());
-
-  return clone_physics_body;
-}
-
 void PhysicsBody::accept(scene::SceneVisitor& visitor)
 {
-
+  visitor.visitPhysicsBody(*this);
 }
 
 void PhysicsBody::onEnter()

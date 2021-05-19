@@ -69,6 +69,16 @@ void SceneSerializer::visitTileMapNode(TileMapNode& tile_map_node)
   visit(tile_map_node, getImpl());
 }
 
+void SceneSerializer::visitPhysicsBody(physics::PhysicsBody& physics_body)
+{
+  visit(physics_body, getImpl());
+}
+
+void SceneSerializer::visitPhysicsJoint(physics::PhysicsJoint& physics_joint)
+{
+  visit(physics_joint, getImpl());
+}
+
 SceneSerializer::Format SceneSerializer::getFormat()
 {
   return m_format;

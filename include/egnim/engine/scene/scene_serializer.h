@@ -41,6 +41,9 @@ namespace egnim::scene
     void visitCameraNode(CameraNode& camera_node) override;
     void visitTileMapNode(TileMapNode& tile_map_node) override;
 
+    void visitPhysicsBody(physics::PhysicsBody& physics_body) override;
+    void visitPhysicsJoint(physics::PhysicsJoint& physics_joint) override;
+
     Format getFormat();
     Action getAction();
 

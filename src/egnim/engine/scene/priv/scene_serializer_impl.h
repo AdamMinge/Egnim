@@ -5,16 +5,26 @@
 #include <ios>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::scene
+namespace egnim
 {
-  class AnimatedSpriteNode;
-  class TileMapNode;
-  class SpriteNode;
-  class CameraNode;
-  class LabelNode;
-  class MusicNode;
-  class SceneNode;
-  class SoundNode;
+  namespace scene
+  {
+    class AnimatedSpriteNode;
+    class TileMapNode;
+    class SpriteNode;
+    class CameraNode;
+    class LabelNode;
+    class MusicNode;
+    class SceneNode;
+    class SoundNode;
+  }
+
+  namespace physics
+  {
+    class PhysicsBody;
+    class PhysicsJoint;
+  }
+
 }
 
 namespace egnim::scene::priv
@@ -48,6 +58,12 @@ namespace egnim::scene::priv
 
     virtual void serialize(const TileMapNode &tile_map_node, std::ostream& stream) = 0;
     virtual void deserialize(TileMapNode &tile_map_node, std::istream& stream) = 0;
+
+    virtual void serialize(const physics::PhysicsBody &physics_body, std::ostream& stream) = 0;
+    virtual void deserialize(physics::PhysicsBody &physics_body, std::istream& stream) = 0;
+
+    virtual void serialize(const physics::PhysicsJoint &physics_joint, std::ostream& stream) = 0;
+    virtual void deserialize(physics::PhysicsJoint &physics_joint, std::istream& stream) = 0;
 
   protected:
     explicit SceneSerializerImpl() = default;

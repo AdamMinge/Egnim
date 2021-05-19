@@ -105,4 +105,24 @@ void JsonSceneSerializerImpl::deserialize(TileMapNode &tile_map_node, std::istre
 
 }
 
+void JsonSceneSerializerImpl::serialize(const physics::PhysicsBody &physics_body, std::ostream& stream)
+{
+
+}
+
+void JsonSceneSerializerImpl::deserialize(physics::PhysicsBody &physics_body, std::istream& stream)
+{
+
+}
+
+void JsonSceneSerializerImpl::serialize(const physics::PhysicsJoint &physics_joint, std::ostream& stream)
+{
+
+}
+
+void JsonSceneSerializerImpl::deserialize(physics::PhysicsJoint &physics_joint, std::istream& stream)
+{
+
+}
+
 } // namespace egnim::scene::priv

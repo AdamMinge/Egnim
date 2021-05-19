@@ -9,7 +9,6 @@
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
-#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 class b2Body;
@@ -23,7 +22,7 @@ namespace egnim::physics
   class PhysicsShape;
   class PhysicsJoint;
 
-  class EGNIM_UTILITY_API PhysicsBody : public scene::Node, public scene::RegisteredInNodeFactory<PhysicsBody>
+  class EGNIM_UTILITY_API PhysicsBody : public scene::Node
   {
     EGNIM_CLASS(PhysicsBody, Node)
 
@@ -35,7 +34,7 @@ namespace egnim::physics
     enum class Type;
 
   public:
-    explicit PhysicsBody();
+    explicit PhysicsBody(Type type);
     ~PhysicsBody() override;
 
     PhysicsBody(const PhysicsBody&) = delete;
@@ -89,8 +88,6 @@ namespace egnim::physics
 
     void setEnabled(bool enabled);
     [[nodiscard]] bool isEnabled() const;
-
-    [[nodiscard]] std::unique_ptr<scene::Node> clone() const override;
 
     void accept(scene::SceneVisitor& visitor) override;
 
