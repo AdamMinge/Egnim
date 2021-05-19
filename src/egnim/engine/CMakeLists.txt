@@ -63,10 +63,10 @@ set(sources
         ${source_root}/physics/physics_contact.cpp
         ${source_root}/physics/physics_material.cpp
         ${source_root}/physics/physics_aabb.cpp
-        ${source_root}/physics/priv/b2_physics_casters.h
-        ${source_root}/physics/priv/b2_physics_casters.cpp
-        ${source_root}/physics/priv/b2_physics_world_callbacks.h
-        ${source_root}/physics/priv/b2_physics_world_callbacks.cpp
+        ${source_root}/physics/priv/physics_helper.h
+        ${source_root}/physics/priv/physics_helper.cpp
+        ${source_root}/physics/priv/physics_world_callbacks.h
+        ${source_root}/physics/priv/physics_world_callbacks.cpp
 
         ${source_root}/events/event_dispatcher.cpp
         ${source_root}/events/event.cpp
@@ -93,6 +93,8 @@ set(sources
 set(includes
         ${include_root}/../config.h
         ${include_root}/export.h
+
+        ${include_root}/math/vector_helper.h
 
         ${include_root}/core/object.h
         ${include_root}/core/context.h

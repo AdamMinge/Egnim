@@ -22,7 +22,7 @@ namespace egnim::scene
     explicit Component();
     virtual ~Component();
 
-    virtual void update(sf::Time dt) = 0;
+    virtual void update(sf::Time dt);
 
     [[nodiscard]] Node* getOwner();
     [[nodiscard]] const Node* getOwner() const;

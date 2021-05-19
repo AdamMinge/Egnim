@@ -8,6 +8,7 @@
 #include <cassert>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
+#include <egnim/engine/scene/node.h>
 /* -------------------------------------------------------------------------- */
 
 class b2Joint;
@@ -20,35 +21,41 @@ namespace egnim::physics
   class PhysicsBody;
   class PhysicsWorld;
 
-  class EGNIM_UTILITY_API PhysicsJoint
+  class EGNIM_UTILITY_API PhysicsJoint : public scene::Node
   {
+    EGNIM_CLASS(PhysicsJoint, Node)
+
     friend PhysicsWorld;
 
   public:
     enum class Type;
 
   public:
-    virtual ~PhysicsJoint();
+    ~PhysicsJoint() override;
 
-    [[nodiscard]] const PhysicsBody* getFirstPhysicsBody() const;
-    [[nodiscard]] PhysicsBody* getFirstPhysicsBody();
+    [[nodiscard]] const PhysicsBody& getFirstPhysicsBody() const;
+    [[nodiscard]] PhysicsBody& getFirstPhysicsBody();
 
-    [[nodiscard]] const PhysicsBody* getSecondPhysicsBody() const;
-    [[nodiscard]] PhysicsBody* getSecondPhysicsBody();
+    [[nodiscard]] const PhysicsBody& getSecondPhysicsBody() const;
+    [[nodiscard]] PhysicsBody& getSecondPhysicsBody();
 
-    [[nodiscard]] const PhysicsWorld* getPhysicsWorld() const;
-    [[nodiscard]] PhysicsWorld* getPhysicsWorld();
+    [[nodiscard]] virtual sf::Vector2f getFirstAnchor() const = 0;
+    [[nodiscard]] virtual sf::Vector2f getSecondAnchor() const = 0;
 
-    [[nodiscard]] sf::Vector2f getFirstAnchor() const;
-    [[nodiscard]] sf::Vector2f getSecondAnchor() const;
-
-    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const;
-    [[nodiscard]] float getReactionTorque(float inv_dt) const;
+    [[nodiscard]] virtual sf::Vector2f getReactionForce(float inv_dt) const = 0;
+    [[nodiscard]] virtual float getReactionTorque(float inv_dt) const = 0;
 
     [[nodiscard]] Type getType() const;
 
+    [[nodiscard]] std::unique_ptr<scene::Node> clone() const override;
+
+    void accept(scene::SceneVisitor& visitor) override;
+
   protected:
     explicit PhysicsJoint(Type type, PhysicsBody& first_physics_body, PhysicsBody& second_physics_body);
+
+    void onEnter() override;
+    void onExit() override;
 
     void createInternalJoint();
     void destroyInternalJoint();
@@ -61,7 +68,7 @@ namespace egnim::physics
 
   private:
     Type m_type;
-    PhysicsWorld& m_physics_world;
+    PhysicsWorld* m_physics_world;
     PhysicsBody& m_first_physics_body;
     PhysicsBody& m_second_physics_body;
     b2Joint* m_b2_joint;
@@ -90,13 +97,27 @@ namespace egnim::physics
     void setDamping(float damping);
     [[nodiscard]] float getDamping() const;
 
+    [[nodiscard]] sf::Vector2f getLocalFirstAnchor() const;
+    [[nodiscard]] sf::Vector2f getLocalSecondAnchor() const;
+
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_first_anchor;
-    sf::Vector2f m_second_anchor;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    float m_length;
+    float m_min_length;
+    float m_max_length;
+    float m_stiffness;
+    float m_damping;
   };
 
   class FrictionPhysicsJoint : public PhysicsJoint
@@ -105,20 +126,30 @@ namespace egnim::physics
     explicit FrictionPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                   const sf::Vector2f& anchor);
 
-    [[nodiscard]] const sf::Vector2f& getAnchor() const;
-
     void setMaxForce(float force);
     [[nodiscard]] float getMaxForce() const;
 
     void setMaxTorque(float torque);
     [[nodiscard]] float getMaxTorque() const;
 
+    [[nodiscard]] sf::Vector2f getLocalFirstAnchor() const;
+    [[nodiscard]] sf::Vector2f getLocalSecondAnchor() const;
+
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_anchor;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    float m_max_force;
+    float m_max_torque;
   };
 
   class MotorPhysicsJoint : public PhysicsJoint
@@ -141,9 +172,22 @@ namespace egnim::physics
     void setAngularOffset(float angular_offset);
     [[nodiscard]] float getAngularOffset() const;
 
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
+
+  private:
+    float m_max_force;
+    float m_max_torque;
+    float m_correction_factory;
+    sf::Vector2f m_linear_offset;
+    float m_angular_offset;
   };
 
   class PrismaticPhysicsJoint : public PhysicsJoint
@@ -174,13 +218,27 @@ namespace egnim::physics
     [[nodiscard]] float getMaxMotorForce() const;
     [[nodiscard]] float getMotorForce(float inv_dt) const;
 
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
 
   private:
-    sf::Vector2f m_anchor;
-    sf::Vector2f m_axis;
+    sf::Vector2f m_first_local_anchor;
+    sf::Vector2f m_second_local_anchor;
+    sf::Vector2f m_first_local_axis;
+    bool m_enable_limit;
+    bool m_enable_motor;
+    float m_motor_speed;
+    float m_max_motor_force;
+    float m_reference_angle;
+    float m_lower_translation;
+    float m_upper_translation;
   };
 
   class PulleyPhysicsJoint : public PhysicsJoint
@@ -200,6 +258,12 @@ namespace egnim::physics
 
     [[nodiscard]] float getCurrentFirstLength() const;
     [[nodiscard]] float getCurrentSecondLength() const;
+
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
 
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
@@ -241,6 +305,12 @@ namespace egnim::physics
 
     [[nodiscard]] float getMotorTorque(float inv_dt) const;
 
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
@@ -259,6 +329,12 @@ namespace egnim::physics
 
     void setStiffness(float hz);
     [[nodiscard]] float getStiffness() const;
+
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
 
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
@@ -302,6 +378,12 @@ namespace egnim::physics
     void setDamping(float damping);
     [[nodiscard]] float getDamping() const;
 
+    [[nodiscard]] sf::Vector2f getFirstAnchor() const override;
+    [[nodiscard]] sf::Vector2f getSecondAnchor() const override;
+
+    [[nodiscard]] sf::Vector2f getReactionForce(float inv_dt) const override;
+    [[nodiscard]] float getReactionTorque(float inv_dt) const override;
+
   protected:
     std::unique_ptr<b2JointDef> createInternalJointDef(
       b2Body* b2_first_physics_body, b2Body* b2_second_physics_body) const override;
@@ -326,18 +408,14 @@ namespace egnim::physics
   template<typename TYPE>
   const TYPE* PhysicsJoint::getInternalJoint() const
   {
-    assert(m_b2_joint);
     auto joint = dynamic_cast<const TYPE*>(m_b2_joint);
-    assert(joint);
     return joint;
   }
 
   template<typename TYPE>
   TYPE* PhysicsJoint::getInternalJoint()
   {
-    assert(m_b2_joint);
     auto joint = dynamic_cast<TYPE*>(m_b2_joint);
-    assert(joint);
     return joint;
   }
 

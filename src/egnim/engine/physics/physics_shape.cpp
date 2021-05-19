@@ -9,7 +9,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
-#include <egnim/engine/physics/priv/b2_physics_casters.h>
+#include <egnim/engine/physics/priv/physics_helper.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -149,34 +149,35 @@ const PhysicsBody* PhysicsShape::getPhysicsBody() const
 
 void PhysicsShape::createInternalFixture()
 {
-  destroyInternalFixture();
+  if(m_physics_body && m_physics_body->m_b2_body)
+  {
+    auto internal_shape = createInternalShape();
+    assert(internal_shape);
 
-  if(!getPhysicsBody())
-    return;
+    b2FixtureDef fixture_def;
+    fixture_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    fixture_def.density = getDensity();
+    fixture_def.friction = getFriction();
+    fixture_def.restitution = getRestitution();
+    fixture_def.shape = internal_shape.get();
+    fixture_def.filter.categoryBits = m_contact_test_bitmask;
+    fixture_def.filter.maskBits = m_collision_bitmask;
+    fixture_def.filter.groupIndex = m_group_index;
+    fixture_def.isSensor = m_sensor;
 
-  auto internal_shape = createInternalShape();
-  assert(internal_shape);
-
-  b2FixtureDef fixture_def;
-  fixture_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
-  fixture_def.density = getDensity();
-  fixture_def.friction = getFriction();
-  fixture_def.restitution = getRestitution();
-  fixture_def.shape = internal_shape.get();
-  fixture_def.filter.categoryBits = m_contact_test_bitmask;
-  fixture_def.filter.maskBits = m_collision_bitmask;
-  fixture_def.filter.groupIndex = m_group_index;
-  fixture_def.isSensor = m_sensor;
-
-  m_b2_fixture = getPhysicsBody()->createInternalFixture(&fixture_def);
+    assert(!m_b2_fixture);
+    m_b2_fixture = m_physics_body->createInternalFixture(&fixture_def);
+  }
 }
 
 void PhysicsShape::destroyInternalFixture()
 {
-  if(m_b2_fixture)
+  if(m_physics_body && m_physics_body->m_b2_body)
+  {
+    assert(m_b2_fixture);
     getPhysicsBody()->destroyInternalFixture(m_b2_fixture);
-
-  m_b2_fixture = nullptr;
+    m_b2_fixture = nullptr;
+  }
 }
 
 void PhysicsShape::updateInternalFixture()
@@ -209,11 +210,16 @@ void PhysicsShape::initializeClone(PhysicsShape& physics_shape) const
   physics_shape.m_type = m_type;
 }
 
-void PhysicsShape::setPhysicsBody(PhysicsBody* physics_body)
+void PhysicsShape::onEnter()
+{
+  m_physics_body = dynamic_cast<PhysicsBody*>(getOwner());
+  createInternalFixture();
+}
+
+void PhysicsShape::onExit()
 {
   destroyInternalFixture();
-  m_physics_body = physics_body;
-  createInternalFixture();
+  m_physics_body = nullptr;
 }
 
 /* ------------------------------ PhysicsShapeCircle ------------------------ */
@@ -230,9 +236,9 @@ PhysicsShapeCircle::PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
 std::unique_ptr<b2Shape> PhysicsShapeCircle::createInternalShape() const
 {
   auto b2_circle_shape = std::make_unique<b2CircleShape>();
-  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
+  auto b2_offset = priv::PhysicsHelper::pixel_to_meter(m_offset);
   b2_circle_shape->m_p.Set(b2_offset.x, b2_offset.y);
-  b2_circle_shape->m_radius = priv::b2_pixel_to_meter(m_radius);
+  b2_circle_shape->m_radius = priv::PhysicsHelper::pixel_to_meter(m_radius);
 
   return b2_circle_shape;
 }
@@ -252,7 +258,7 @@ int32_t PhysicsShapeCircle::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeCircle::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeCircle::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeCircle>(getRadius(), getOffset(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -274,8 +280,8 @@ PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& o
 std::unique_ptr<b2Shape> PhysicsShapeBox::createInternalShape() const
 {
   auto b2_box_shape = std::make_unique<b2PolygonShape>();
-  auto b2_size = priv::b2_pixel_to_meter(m_size);
-  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
+  auto b2_size = priv::PhysicsHelper::pixel_to_meter(m_size);
+  auto b2_offset = priv::PhysicsHelper::pixel_to_meter(m_offset);
   b2_box_shape->SetAsBox(b2_size.x / 2.0f, b2_size.y / 2.0f, b2_offset, 0);
 
   return b2_box_shape;
@@ -296,7 +302,7 @@ int32_t PhysicsShapeBox::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeBox::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeBox::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeBox>(getSize(), getOffset(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -322,7 +328,7 @@ std::unique_ptr<b2Shape> PhysicsShapePolygon::createInternalShape() const
 
   for(auto point : m_points)
   {
-    auto b2_point = priv::b2_pixel_to_meter(point);
+    auto b2_point = priv::PhysicsHelper::pixel_to_meter(point);
     b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
   }
 
@@ -341,7 +347,7 @@ int32_t PhysicsShapePolygon::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapePolygon::clone() const
+std::unique_ptr<scene::Component> PhysicsShapePolygon::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapePolygon>(getPoints(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -363,8 +369,8 @@ PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, cons
 std::unique_ptr<b2Shape> PhysicsShapeEdgeSegment::createInternalShape() const
 {
   auto b2_edge_shape = std::make_unique<b2EdgeShape>();
-  b2_edge_shape->SetTwoSided(priv::b2_pixel_to_meter(m_first),
-                             priv::b2_pixel_to_meter(m_second));
+  b2_edge_shape->SetTwoSided(priv::PhysicsHelper::pixel_to_meter(m_first),
+                             priv::PhysicsHelper::pixel_to_meter(m_second));
 
   return b2_edge_shape;
 }
@@ -384,7 +390,7 @@ int32_t PhysicsShapeEdgeSegment::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeEdgeSegment::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeEdgeSegment::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeSegment>(getFirstPosition(), getSecondPosition(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -407,8 +413,8 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgeBox::createInternalShape() const
 {
   auto b2_chain_shape = std::make_unique<b2ChainShape>();
   auto b2_vertices = std::array<b2Vec2, 4>();
-  auto b2_offset = priv::b2_pixel_to_meter(m_offset);
-  auto b2_size = priv::b2_pixel_to_meter(m_size);
+  auto b2_offset = priv::PhysicsHelper::pixel_to_meter(m_offset);
+  auto b2_size = priv::PhysicsHelper::pixel_to_meter(m_size);
 
   b2_vertices[0] = b2Vec2(-0.5f * b2_size.x / 2.f, 0.5f * b2_size.x / 2.f) + b2_offset;
   b2_vertices[1] = b2Vec2(-0.5f * b2_size.x / 2.f, -0.5f * b2_size.x / 2.f) + b2_offset;
@@ -434,7 +440,7 @@ int32_t PhysicsShapeEdgeBox::getChildCount() const
   return 5;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeEdgeBox::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeEdgeBox::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeBox>(getSize(), getOffset(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -460,7 +466,7 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgePolygon::createInternalShape() const
 
   for(auto point : m_points)
   {
-    auto b2_point = priv::b2_pixel_to_meter(point);
+    auto b2_point = priv::PhysicsHelper::pixel_to_meter(point);
     b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
   }
 
@@ -479,7 +485,7 @@ int32_t PhysicsShapeEdgePolygon::getChildCount() const
   return static_cast<int32_t>(m_points.size()) + 1;
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeEdgePolygon::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeEdgePolygon::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeEdgePolygon>(getPoints(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);
@@ -505,7 +511,7 @@ std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
 
   for(auto point : m_points)
   {
-    auto b2_point = priv::b2_pixel_to_meter(point);
+    auto b2_point = priv::PhysicsHelper::pixel_to_meter(point);
     b2_vertices[b2_vec_index++].Set(b2_point.x, b2_point.y);
   }
 
@@ -524,7 +530,7 @@ int32_t PhysicsShapeEdgeChain::getChildCount() const
   return static_cast<int32_t>(m_points.size());
 }
 
-std::unique_ptr<PhysicsShape> PhysicsShapeEdgeChain::clone() const
+std::unique_ptr<scene::Component> PhysicsShapeEdgeChain::clone() const
 {
   auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeChain>(getPoints(), getPhysicsMaterial());
   PhysicsShape::initializeClone(*clone_physics_shape);

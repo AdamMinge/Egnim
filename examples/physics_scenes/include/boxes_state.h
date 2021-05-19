@@ -26,10 +26,10 @@ private:
   void createFloor(const sf::Vector2f& position);
   void createCamera(const sf::Vector2f& position, const sf::FloatRect& rect, std::string_view name);
 
-  std::unique_ptr<egnim::scene::SpriteNode> createSpriteNode(const sf::Vector2f& position,
-                                                             const sf::Texture& texture,
-                                                             const egnim::physics::PhysicsMaterial& material,
-                                                             egnim::physics::PhysicsBody::Type type);
+  std::unique_ptr<egnim::scene::Node> createSpriteNode(const sf::Vector2f& position,
+                                                       const sf::Texture& texture,
+                                                       const egnim::physics::PhysicsMaterial& material,
+                                                       egnim::physics::PhysicsBody::Type type);
 
 private:
   void mouseButtonPressed(const egnim::events::MouseButtonPressedEvent& pressed_button_event);

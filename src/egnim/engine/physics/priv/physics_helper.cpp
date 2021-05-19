@@ -2,20 +2,23 @@
 #include <box2d/b2_world_callbacks.h>
 #include <box2d/b2_collision.h>
 #include <box2d/b2_contact.h>
+#include <box2d/b2_math.h>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/physics/priv/b2_physics_casters.h>
+#include <egnim/engine/physics/priv/physics_helper.h>
 #include <egnim/engine/physics/physics_shape.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics::priv {
 
-PhysicsContact b2_cast(const b2Contact& b2_contact)
+float PhysicsHelper::s_meter_to_pixel = 30;
+
+PhysicsContact PhysicsHelper::cast(const b2Contact& b2_contact)
 {
   auto& b2_contact_without_const = const_cast<b2Contact&>(b2_contact);
 
   auto first_shape = reinterpret_cast<PhysicsShape*>(b2_contact_without_const.GetFixtureA()->GetUserData().pointer);
   auto second_shape = reinterpret_cast<PhysicsShape*>(b2_contact_without_const.GetFixtureB()->GetUserData().pointer);
-  auto physics_manifold = b2_cast(*b2_contact_without_const.GetManifold());
+  auto physics_manifold = cast(*b2_contact_without_const.GetManifold());
 
   auto physics_contact = PhysicsContact(first_shape, b2_contact.GetChildIndexA(),
                                         second_shape, b2_contact.GetChildIndexB(), physics_manifold);
@@ -30,25 +33,25 @@ PhysicsContact b2_cast(const b2Contact& b2_contact)
   return physics_contact;
 }
 
-PhysicsManifold b2_cast(const b2Manifold& b2_manifold)
+PhysicsManifold PhysicsHelper::cast(const b2Manifold& b2_manifold)
 {
   std::list<PhysicsManifoldPoint> points;
   for(auto i = 0; i < b2_manifold.pointCount; ++i)
-    points.push_back(b2_cast(b2_manifold.points[i]));
+    points.push_back(cast(b2_manifold.points[i]));
 
   return PhysicsManifold(static_cast<PhysicsManifold::Type>(b2_manifold.type),
-                         priv::b2_meter_to_pixel(b2_manifold.localPoint),
-                         priv::b2_cast(b2_manifold.localNormal),
+                         PhysicsHelper::meter_to_pixel(b2_manifold.localPoint),
+                         PhysicsHelper::meter_to_pixel(b2_manifold.localNormal),
                          points);
 }
 
-PhysicsManifoldPoint b2_cast(const b2ManifoldPoint& b2_manifold_point)
+PhysicsManifoldPoint PhysicsHelper::cast(const b2ManifoldPoint& b2_manifold_point)
 {
-  return PhysicsManifoldPoint(priv::b2_meter_to_pixel(b2_manifold_point.localPoint),
+  return PhysicsManifoldPoint(PhysicsHelper::meter_to_pixel(b2_manifold_point.localPoint),
                               b2_manifold_point.normalImpulse, b2_manifold_point.tangentImpulse);
 }
 
-PhysicsContactImpulse b2_cast(const b2ContactImpulse& b2_contact_impulse)
+PhysicsContactImpulse PhysicsHelper::cast(const b2ContactImpulse& b2_contact_impulse)
 {
   std::list<float> normal_impulses;
   std::list<float> tangent_impulses;
@@ -61,36 +64,46 @@ PhysicsContactImpulse b2_cast(const b2ContactImpulse& b2_contact_impulse)
   return PhysicsContactImpulse(normal_impulses, tangent_impulses);
 }
 
-b2Vec2 b2_cast(const sf::Vector2f& point)
-{
-  return b2Vec2(point.x, point.y);
-}
-
-sf::Vector2f b2_cast(const b2Vec2& point)
+sf::Vector2f PhysicsHelper::cast(const b2Vec2& point)
 {
   return sf::Vector2f(point.x, point.y);
 }
 
-b2Vec2 b2_pixel_to_meter(const sf::Vector2f& pixel_point)
+b2Vec2 PhysicsHelper::cast(const sf::Vector2f& point)
 {
-  return b2Vec2(b2_pixel_to_meter(pixel_point.x),
-                b2_pixel_to_meter(pixel_point.y));
+  return b2Vec2(point.x, point.y);
 }
 
-sf::Vector2f b2_meter_to_pixel(const b2Vec2& meter_point)
+b2Vec2 PhysicsHelper::pixel_to_meter(const sf::Vector2f& pixel_point)
 {
-  return sf::Vector2f(b2_meter_to_pixel(meter_point.x),
-                      b2_meter_to_pixel(meter_point.y));
+  return b2Vec2(pixel_to_meter(pixel_point.x),
+                pixel_to_meter(pixel_point.y));
 }
 
-float b2_pixel_to_meter(float pixel)
+sf::Vector2f PhysicsHelper::meter_to_pixel(const b2Vec2& meter_point)
 {
-  return pixel / 30.f;
+  return sf::Vector2f(meter_to_pixel(meter_point.x),
+                      meter_to_pixel(meter_point.y));
 }
 
-float b2_meter_to_pixel(float meter)
+float PhysicsHelper::pixel_to_meter(float pixel)
 {
-  return meter * 30.f;
+  return pixel / s_meter_to_pixel;
+}
+
+float PhysicsHelper::meter_to_pixel(float meter)
+{
+  return meter * s_meter_to_pixel;
+}
+
+float PhysicsHelper::angleToRadian(float angle)
+{
+  return angle * b2_pi / 180;
+}
+
+float PhysicsHelper::radianToAngle(float radian)
+{
+  return radian * 180 / b2_pi;
 }
 
 } // namespace egnim::physics::priv

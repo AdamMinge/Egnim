@@ -5,17 +5,20 @@
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/physics/physics_world.h>
 #include <egnim/engine/physics/physics_shape.h>
+#include <egnim/engine/physics/priv/physics_helper.h>
 #include <egnim/engine/scene/node.h>
-#include <egnim/engine/physics/priv/b2_physics_casters.h>
+#include <egnim/engine/scene/scene_node.h>
+#include <egnim/engine/core/unique_pointer.h>
 /* -------------------------------------------------------------------------- */
-#include <iostream>
+
 namespace egnim::physics {
 
-PhysicsBody::PhysicsBody(PhysicsWorld& physics_world, Type type) :
-  m_physics_world(physics_world),
+PhysicsBody::PhysicsBody() :
+  m_type(Type::DynamicBody),
+  m_physics_world(nullptr),
   m_b2_body(nullptr)
 {
-  createInternalBody(type);
+
 }
 
 PhysicsBody::~PhysicsBody()
@@ -23,49 +26,24 @@ PhysicsBody::~PhysicsBody()
   destroyInternalBody();
 }
 
-void PhysicsBody::setPosition(const sf::Vector2f& position)
-{
-  m_b2_body->SetTransform(priv::b2_pixel_to_meter(position), m_b2_body->GetAngle());
-}
-
-sf::Vector2f PhysicsBody::getPosition() const
-{
-  return priv::b2_meter_to_pixel(m_b2_body->GetPosition());
-}
-
-void PhysicsBody::setRotation(float angle)
-{
-  m_b2_body->SetTransform(m_b2_body->GetPosition(), angle * b2_pi / 180);
-}
-
-float PhysicsBody::getRotation() const
-{
-  return m_b2_body->GetAngle() * 180 / b2_pi;
-}
-
-void PhysicsBody::update(sf::Time dt)
-{
-
-}
-
 PhysicsWorld* PhysicsBody::getPhysicsWorld()
 {
-  return std::addressof(m_physics_world);
+  return m_physics_world;
 }
 
 const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 {
-  return std::addressof(m_physics_world);
+  return m_physics_world;
 }
 
 void PhysicsBody::setLinearVelocity(const sf::Vector2f& linear_velocity)
 {
-  m_b2_body->SetLinearVelocity(priv::b2_cast(linear_velocity));
+  m_b2_body->SetLinearVelocity(priv::PhysicsHelper::pixel_to_meter(linear_velocity));
 }
 
 sf::Vector2f PhysicsBody::getLinearVelocity() const
 {
-  return priv::b2_cast(m_b2_body->GetLinearVelocity());
+  return priv::PhysicsHelper::meter_to_pixel(m_b2_body->GetLinearVelocity());
 }
 
 void PhysicsBody::setAngularVelocity(float omega)
@@ -80,12 +58,12 @@ float PhysicsBody::getAngularVelocity() const
 
 void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyForce(priv::b2_cast(force), priv::b2_cast(point), awake);
+  m_b2_body->ApplyForce(priv::PhysicsHelper::pixel_to_meter(force), priv::PhysicsHelper::pixel_to_meter(point), awake);
 }
 
 void PhysicsBody::applyForceToCenter(const sf::Vector2f& force, bool awake)
 {
-  m_b2_body->ApplyForceToCenter(priv::b2_cast(force), awake);
+  m_b2_body->ApplyForceToCenter(priv::PhysicsHelper::pixel_to_meter(force), awake);
 }
 
 void PhysicsBody::applyTorque(float torque, bool awake)
@@ -95,12 +73,13 @@ void PhysicsBody::applyTorque(float torque, bool awake)
 
 void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyLinearImpulse(priv::b2_cast(impulse), priv::b2_cast(point), awake);
+  m_b2_body->ApplyLinearImpulse(priv::PhysicsHelper::pixel_to_meter(impulse),
+                                priv::PhysicsHelper::pixel_to_meter(point), awake);
 }
 
 void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake)
 {
-  m_b2_body->ApplyLinearImpulseToCenter(priv::b2_cast(impulse), awake);
+  m_b2_body->ApplyLinearImpulseToCenter(priv::PhysicsHelper::pixel_to_meter(impulse), awake);
 }
 
 void PhysicsBody::applyAngularImpulse(float impulse, bool awake)
@@ -170,7 +149,6 @@ float PhysicsBody::getGravityScale() const
 
 void PhysicsBody::attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape)
 {
-  physics_shape->setPhysicsBody(this);
   m_physics_shapes.push_back(std::move(physics_shape));
 }
 
@@ -185,7 +163,6 @@ std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape
     return nullptr;
 
   auto shape = std::move(*found);
-  shape->setPhysicsBody(nullptr);
   m_physics_shapes.erase(found);
   return shape;
 }
@@ -220,17 +197,38 @@ bool PhysicsBody::isEnabled() const
   return m_b2_body->IsEnabled();
 }
 
-std::unique_ptr<scene::Component> PhysicsBody::clone() const
+std::unique_ptr<scene::Node> PhysicsBody::clone() const
 {
-  auto clone_physics_body = std::make_unique<PhysicsBody>(m_physics_world, getType());
-  scene::Component::initializeClone(*clone_physics_body);
+  auto clone_physics_body = std::make_unique<PhysicsBody>();
+  scene::Node::initializeClone(*clone_physics_body);
 
-  clone_physics_body->m_physics_joints = {};
-
-  for(auto& shape : m_physics_shapes)
-    clone_physics_body->attachPhysicsShape(shape->clone());
+  clone_physics_body->setType(getType());
 
   return clone_physics_body;
+}
+
+void PhysicsBody::accept(scene::SceneVisitor& visitor)
+{
+
+}
+
+void PhysicsBody::onEnter()
+{
+  auto scene_node = getScene();
+  m_physics_world = scene_node ? std::addressof(scene_node->getPhysicsWorld()) : nullptr;
+
+  createInternalBody(m_type);
+  Node::onEnter();
+};
+
+void PhysicsBody::onExit()
+{
+  destroyInternalBody();
+
+  auto scene_node = getScene();
+  m_physics_world = scene_node ? std::addressof(scene_node->getPhysicsWorld()) : nullptr;
+
+  Node::onExit();
 }
 
 void PhysicsBody::attachPhysicsJoint(PhysicsJoint* physics_joint)
@@ -246,20 +244,21 @@ void PhysicsBody::detachPhysicsJoint(PhysicsJoint* physics_joint)
 
 void PhysicsBody::createInternalBody(Type type)
 {
-  destroyInternalBody();
+  if(m_physics_world && !m_b2_body)
+  {
+    b2BodyDef body_def;
+    body_def.type = static_cast<b2BodyType>(type);
+    body_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
-  b2BodyDef body_def;
-  body_def.type = static_cast<b2BodyType>(type);
-  body_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
+    m_b2_body = getPhysicsWorld()->createInternalBody(&body_def);
 
-  m_b2_body = getPhysicsWorld()->createInternalBody(&body_def);
-
-  getPhysicsWorld()->attachPhysicsBody(this);
+    getPhysicsWorld()->attachPhysicsBody(this);
+  }
 }
 
 void PhysicsBody::destroyInternalBody()
 {
-  if(m_b2_body)
+  if(m_physics_world && m_b2_body)
   {
     m_physics_shapes.clear();
     getPhysicsWorld()->destroyInternalBody(m_b2_body);
@@ -270,30 +269,26 @@ void PhysicsBody::destroyInternalBody()
 
 void PhysicsBody::beforeSimulation()
 {
-  if(!getOwner()) return;
+  auto world_pos = getWorldTransform().transformPoint(getOrigin());
+  auto world_rotate = getWorldRotation();
 
-  auto world_pos = getOwner()->getWorldTransform().transformPoint(getOwner()->getOrigin());
-  auto world_rotate = getOwner()->getWorldRotation();
-
-  setPosition(world_pos);
-  setRotation(world_rotate);
+  m_b2_body->SetTransform(priv::PhysicsHelper::pixel_to_meter(world_pos),
+                          priv::PhysicsHelper::angleToRadian(world_rotate));
 }
 
 void PhysicsBody::afterSimulation()
 {
-  if(!getOwner()) return;
+  auto owner_pos = priv::PhysicsHelper::meter_to_pixel(m_b2_body->GetPosition());
+  auto owner_rotate = priv::PhysicsHelper::radianToAngle(m_b2_body->GetAngle());
 
-  auto owner_pos = getPosition();
-  auto owner_rotate = getRotation();
-
-  if(auto owner_parent = getOwner()->getParent(); owner_parent)
+  if(auto owner_parent = getParent(); owner_parent)
   {
     owner_pos = owner_parent->getTransform().getInverse().transformPoint(owner_pos);
     owner_rotate -= owner_parent->getRotation();
   }
 
-  getOwner()->setPosition(owner_pos);
-  getOwner()->setRotation(owner_rotate);
+  setPosition(owner_pos);
+  setRotation(owner_rotate);
 }
 
 b2Fixture* PhysicsBody::createInternalFixture(const b2FixtureDef* b2_fixture_def)

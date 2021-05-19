@@ -17,11 +17,6 @@
 #include <egnim/engine/scene/node_iterator.h>
 /* -------------------------------------------------------------------------- */
 
-namespace egnim::physics
-{
-  class PhysicsBody;
-}
-
 namespace egnim::actions
 {
   class ActionManager;
@@ -73,9 +68,6 @@ namespace egnim::scene
     [[nodiscard]] Node* getRoot();
     [[nodiscard]] const Node* getRoot() const;
 
-    [[nodiscard]] const physics::PhysicsBody* getPhysicsBody() const;
-    [[nodiscard]] physics::PhysicsBody* getPhysicsBody();
-
     [[nodiscard]] NodeIterator begin();
     [[nodiscard]] ConstNodeIterator begin() const;
 
@@ -120,7 +112,6 @@ namespace egnim::scene
     Node* m_parent;
     size_t m_camera_mask;
     std::string_view m_name;
-    physics::PhysicsBody* m_physics_body;
   };
 
   template<typename TYPE>

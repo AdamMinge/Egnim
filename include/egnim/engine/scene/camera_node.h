@@ -7,12 +7,13 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/scene/node.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::scene
 {
 
-  class EGNIM_UTILITY_API CameraNode : public Node
+  class EGNIM_UTILITY_API CameraNode : public Node, public RegisteredInNodeFactory<CameraNode>
   {
     EGNIM_CLASS(CameraNode, Node)
 

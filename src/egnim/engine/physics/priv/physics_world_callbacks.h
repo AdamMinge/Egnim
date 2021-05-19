@@ -1,5 +1,5 @@
-#ifndef B2_PHYSICS_WORLD_CALLBACKS_H
-#define B2_PHYSICS_WORLD_CALLBACKS_H
+#ifndef PHYSICS_WORLD_CALLBACKS_H
+#define PHYSICS_WORLD_CALLBACKS_H
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Vector2.hpp>
@@ -70,4 +70,4 @@ namespace egnim::physics::priv
 
 } // namespace egnim::physics::priv
 
-#endif //B2_PHYSICS_WORLD_CALLBACKS_H
+#endif //PHYSICS_WORLD_CALLBACKS_H

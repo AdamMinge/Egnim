@@ -4,7 +4,6 @@
 #include <egnim/engine/scene/camera_node.h>
 #include <egnim/engine/scene/component.h>
 #include <egnim/engine/scene/camera_manager.h>
-#include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/actions/action_manager.h>
 #include <egnim/engine/actions/action.h>
 /* --------------------------------- Standard ------------------------------- */
@@ -20,8 +19,7 @@ Node::Node() :
   m_parent(nullptr),
   m_components(std::make_unique<ComponentContainer>(*this)),
   m_action_manager(std::make_unique<actions::ActionManager>(*this)),
-  m_camera_mask(CameraNode::CameraFlag::DEFAULT),
-  m_physics_body(nullptr)
+  m_camera_mask(CameraNode::CameraFlag::DEFAULT)
 {
 
 }
@@ -61,13 +59,6 @@ const std::vector<std::unique_ptr<Node>>& Node::getChildren() const
 void Node::attachComponent(std::unique_ptr<Component> component)
 {
   assert(m_components);
-
-  if(auto physics_body = dynamic_cast<physics::PhysicsBody*>(component.get()); physics_body)
-  {
-    assert(m_physics_body == nullptr);
-    m_physics_body = physics_body;
-  }
-
   m_components->add(std::move(component));
 }
 
@@ -75,13 +66,6 @@ std::unique_ptr<Component> Node::detachComponent(const Component &component)
 {
   assert(m_components);
   auto detached_component = m_components->take(component);
-
-  if(auto physics_body = dynamic_cast<physics::PhysicsBody*>(detached_component.get()); physics_body)
-  {
-    assert(m_physics_body);
-    m_physics_body = nullptr;
-  }
-
   return detached_component;
 }
 
@@ -204,16 +188,6 @@ const Node* Node::getRoot() const
   return current_node;
 }
 
-const physics::PhysicsBody* Node::getPhysicsBody() const
-{
-  return m_physics_body;
-}
-
-physics::PhysicsBody* Node::getPhysicsBody()
-{
-  return m_physics_body;
-}
-
 NodeIterator Node::begin()
 {
   return NodeIterator(this);
@@ -309,7 +283,6 @@ void Node::setParent(Node* parent)
 void Node::initializeClone(Node& node) const
 {
   node.m_parent = nullptr;
-  node.m_physics_body = nullptr;
   node.m_camera_mask = m_camera_mask;
 
   node.setPosition(getPosition());

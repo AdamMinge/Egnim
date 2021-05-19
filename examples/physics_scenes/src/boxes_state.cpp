@@ -18,7 +18,7 @@ BoxesState::BoxesState(egnim::core::StateStack& state_stack, egnim::core::Contex
 
 BoxesState::~BoxesState() = default;
 
-std::unique_ptr<egnim::scene::SpriteNode> BoxesState::createSpriteNode(const sf::Vector2f& position,
+std::unique_ptr<egnim::scene::Node> BoxesState::createSpriteNode(const sf::Vector2f& position,
   const sf::Texture& texture, const egnim::physics::PhysicsMaterial& material, egnim::physics::PhysicsBody::Type type)
 {
   // get needed values
@@ -27,7 +27,7 @@ std::unique_ptr<egnim::scene::SpriteNode> BoxesState::createSpriteNode(const sf:
 
   // create sprite / physics_body / physics_shape for node
   auto node = std::make_unique<egnim::scene::SpriteNode>();
-  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>(physics_world, type);
+  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>(type);
   auto physics_shape = std::make_unique<egnim::physics::PhysicsShapeBox>(
     sf::Vector2f(static_cast<float>(texture.getSize().x),
                  static_cast<float>(texture.getSize().y)), sf::Vector2f(0,0));
@@ -36,15 +36,15 @@ std::unique_ptr<egnim::scene::SpriteNode> BoxesState::createSpriteNode(const sf:
   physics_shape->setPhysicsMaterial(material);
 
   // attach shape to body and body to node
-  physics_body->attachPhysicsShape(std::move(physics_shape));
-  node->attachComponent(std::move(physics_body));
+  physics_body->attachComponent(std::move(physics_shape));
 
   // set node properties
   node->setTexture(texture);
-  node->setOrigin(static_cast<float>(texture.getSize().x) / 2.f, static_cast<float>(texture.getSize().y) / 2.f);
-  node->setPosition(position);
+  physics_body->setOrigin(static_cast<float>(texture.getSize().x) / 2.f, static_cast<float>(texture.getSize().y) / 2.f);
+  physics_body->setPosition(position);
 
-  return node;
+  physics_body->attachChild(std::move(node));
+  return physics_body;
 }
 
 void BoxesState::createBox(const sf::Vector2f& position)

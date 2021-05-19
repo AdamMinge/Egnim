@@ -8,8 +8,8 @@
 #include <egnim/engine/physics/physics_aabb.h>
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/core/context.h>
-#include <egnim/engine/physics/priv/b2_physics_world_callbacks.h>
-#include <egnim/engine/physics/priv/b2_physics_casters.h>
+#include <egnim/engine/physics/priv/physics_world_callbacks.h>
+#include <egnim/engine/physics/priv/physics_helper.h>
 /* -------------------------------------------------------------------------- */
 #include <egnim/engine/physics/physics_shape.h>
 namespace egnim::physics {
@@ -28,11 +28,11 @@ PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gra
 
 PhysicsWorld::~PhysicsWorld()
 {
-  while(!m_physics_bodies.empty())
-    m_physics_bodies.back()->destroyInternalBody();
-
   while(!m_physics_joints.empty())
     m_physics_joints.back()->destroyInternalJoint();
+
+  while(!m_physics_bodies.empty())
+    m_physics_bodies.back()->destroyInternalBody();
 }
 
 void PhysicsWorld::update(float time_step, int32_t velocity_iterations, int32_t position_iterations)
@@ -107,16 +107,16 @@ void PhysicsWorld::queryAABB(const QueryAABBCallback& callback, const PhysicsAAB
 {
   m_physics_query_aabb_callback->setCallback(std::addressof(callback));
   m_b2_world->QueryAABB(m_physics_query_aabb_callback.get(),
-                        b2AABB{priv::b2_pixel_to_meter(physics_aabb.getLowerBound()),
-                               priv::b2_pixel_to_meter(physics_aabb.getUpperBound())});
+                        b2AABB{priv::PhysicsHelper::pixel_to_meter(physics_aabb.getLowerBound()),
+                               priv::PhysicsHelper::pixel_to_meter(physics_aabb.getUpperBound())});
 }
 void PhysicsWorld::rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point,
                            const sf::Vector2f& second_point)
 {
   m_physics_ray_cast_callback->setCallback(std::addressof(callback));
   m_b2_world->RayCast(m_physics_ray_cast_callback.get(),
-                      priv::b2_pixel_to_meter(first_point),
-                      priv::b2_pixel_to_meter(second_point));
+                      priv::PhysicsHelper::pixel_to_meter(first_point),
+                      priv::PhysicsHelper::pixel_to_meter(second_point));
 }
 
 void PhysicsWorld::attachPhysicsBody(PhysicsBody* physics_body)
@@ -167,8 +167,8 @@ void PhysicsWorld::beforeSimulation()
 {
   for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
   {
-    auto physics_body = nodeIter->getPhysicsBody();
-    if(physics_body && physics_body->getPhysicsWorld() == this)
+    auto physics_body = dynamic_cast<PhysicsBody*>(std::addressof(*nodeIter));
+    if(physics_body)
       physics_body->beforeSimulation();
   }
 }
@@ -177,8 +177,8 @@ void PhysicsWorld::afterSimulation()
 {
   for(auto nodeIter = m_scene_node.begin(); nodeIter != m_scene_node.end(); ++nodeIter)
   {
-    auto physics_body = nodeIter->getPhysicsBody();
-    if(physics_body && physics_body->getPhysicsWorld() == this)
+    auto physics_body = dynamic_cast<PhysicsBody*>(std::addressof(*nodeIter));
+    if(physics_body)
       physics_body->afterSimulation();
   }
 }

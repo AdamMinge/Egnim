@@ -8,7 +8,8 @@
 #include <list>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
-#include <egnim/engine/scene/component.h>
+#include <egnim/engine/scene/node.h>
+#include <egnim/engine/scene/node_factory.h>
 /* -------------------------------------------------------------------------- */
 
 class b2Body;
@@ -22,8 +23,10 @@ namespace egnim::physics
   class PhysicsShape;
   class PhysicsJoint;
 
-  class EGNIM_UTILITY_API PhysicsBody : public scene::Component
+  class EGNIM_UTILITY_API PhysicsBody : public scene::Node, public scene::RegisteredInNodeFactory<PhysicsBody>
   {
+    EGNIM_CLASS(PhysicsBody, Node)
+
     friend PhysicsWorld;
     friend PhysicsShape;
     friend PhysicsJoint;
@@ -32,7 +35,7 @@ namespace egnim::physics
     enum class Type;
 
   public:
-    explicit PhysicsBody(PhysicsWorld& physics_world, Type type);
+    explicit PhysicsBody();
     ~PhysicsBody() override;
 
     PhysicsBody(const PhysicsBody&) = delete;
@@ -40,14 +43,6 @@ namespace egnim::physics
 
     PhysicsBody& operator=(const PhysicsBody&) = delete;
     PhysicsBody& operator=(PhysicsBody&&) = delete;
-
-    void setPosition(const sf::Vector2f& position);
-    [[nodiscard]] sf::Vector2f getPosition() const;
-
-    void setRotation(float angle);
-    [[nodiscard]] float getRotation() const;
-
-    void update(sf::Time dt) override;
 
     [[nodiscard]] PhysicsWorld* getPhysicsWorld();
     [[nodiscard]] const PhysicsWorld* getPhysicsWorld() const;
@@ -95,9 +90,14 @@ namespace egnim::physics
     void setEnabled(bool enabled);
     [[nodiscard]] bool isEnabled() const;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] std::unique_ptr<scene::Node> clone() const override;
+
+    void accept(scene::SceneVisitor& visitor) override;
 
   private:
+    void onEnter() override;
+    void onExit() override;
+
     void attachPhysicsJoint(PhysicsJoint* physics_joint);
     void detachPhysicsJoint(PhysicsJoint* physics_joint);
 
@@ -114,7 +114,8 @@ namespace egnim::physics
     [[nodiscard]] b2Body* getInternalBody();
 
   private:
-    PhysicsWorld& m_physics_world;
+    Type m_type;
+    PhysicsWorld* m_physics_world;
     b2Body* m_b2_body;
     std::list<std::unique_ptr<PhysicsShape>> m_physics_shapes;
     std::list<PhysicsJoint*> m_physics_joints;
