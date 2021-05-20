@@ -3,11 +3,13 @@
 
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_math.h>
+#include <box2d/b2_shape.h>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/physics/physics_contact_impulse.h>
 #include <egnim/engine/physics/physics_contact.h>
 #include <egnim/engine/physics/physics_manifold.h>
 #include <egnim/engine/physics/physics_manifold_point.h>
+#include <egnim/engine/physics/physics_mass_info.h>
 /* -------------------------------------------------------------------------- */
 
 class b2Contact;
@@ -25,8 +27,11 @@ namespace egnim::physics::priv
     static PhysicsManifold cast(const b2Manifold& b2_manifold);
     static PhysicsManifoldPoint cast(const b2ManifoldPoint& b2_manifold_point);
     static PhysicsContactImpulse cast(const b2ContactImpulse& b2_contact_impulse);
+
     static sf::Vector2f cast(const b2Vec2& point);
     static b2Vec2 cast(const sf::Vector2f& point);
+    static PhysicsMassInfo cast(const b2MassData& b2_mass_data);
+    static b2MassData cast(const PhysicsMassInfo& mass_info);
 
     static b2Vec2 pixel_to_meter(const sf::Vector2f& pixel_point);
     static sf::Vector2f meter_to_pixel(const b2Vec2& meter_point);

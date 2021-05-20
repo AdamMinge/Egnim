@@ -10,6 +10,7 @@
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/scene_visitor.h>
 #include <egnim/engine/core/unique_pointer.h>
+#include <egnim/engine/math/vector_helper.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -58,7 +59,7 @@ PhysicsBody::PhysicsBody() :
   m_gravity_scale(1.f),
   m_bullet(false),
   m_fixed_rotation(false),
-  m_awake(true),
+  m_awake(false),
   m_enabled(true)
 {
 
@@ -81,8 +82,22 @@ const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 
 void PhysicsBody::setLinearVelocity(const sf::Vector2f& linear_velocity)
 {
-  PushPostProcessProperties(SetLinearVelocity, linear_velocity,
-                            priv::PhysicsHelper::cast(linear_velocity), m_linear_velocity);
+  if (m_b2_body)
+  {
+    m_b2_body->SetLinearVelocity(priv::PhysicsHelper::cast(linear_velocity));
+  }
+  else
+  {
+    if(getType() == Type::StaticBody)
+      return;
+
+    delay([this, linear_velocity]()
+          { m_b2_body->SetLinearVelocity(priv::PhysicsHelper::cast(linear_velocity)); });
+    m_linear_velocity = linear_velocity;
+
+    if(math::VectorHelper::dot(linear_velocity, linear_velocity) > 0.f)
+      m_awake = true;
+  }
 }
 
 sf::Vector2f PhysicsBody::getLinearVelocity() const
@@ -92,7 +107,22 @@ sf::Vector2f PhysicsBody::getLinearVelocity() const
 
 void PhysicsBody::setAngularVelocity(float omega)
 {
-  PushProperties(SetAngularVelocity, omega, m_angular_velocity);
+  if (m_b2_body)
+  {
+    m_b2_body->SetAngularVelocity(omega);
+  }
+  else
+  {
+    if(getType() == Type::StaticBody)
+      return;
+
+    delay([this, omega]()
+          { m_b2_body->SetAngularVelocity(omega); });
+    m_angular_velocity = omega;
+
+    if(omega * omega > 0.f)
+      setAwake(true);
+  }
 }
 
 float PhysicsBody::getAngularVelocity() const
@@ -156,32 +186,116 @@ void PhysicsBody::applyAngularImpulse(float impulse, bool awake)
 
 void PhysicsBody::resetMassInfo()
 {
+  if (m_b2_body)
+  {
+    m_b2_body->ResetMassData();
+  }
+  else
+  {
+    delay([this](){ m_b2_body->ResetMassData(); });
 
+    m_mass_info.setMass(0.f);
+    m_mass_info.setCenter(getPosition());
+    m_mass_info.setRotationalInertia(0.f);
+
+    if(getType() != Type::DynamicBody)
+      return;
+
+    for(auto& shape : m_physics_shapes)
+    {
+      if(shape->getDensity() == 0.f)
+        continue;
+
+      auto shape_mass_info = shape->getMassInfo();
+
+      m_mass_info.setMass(m_mass_info.getMass() + shape_mass_info.getMass());
+      m_mass_info.setCenter(m_mass_info.getCenter() + shape_mass_info.getCenter() * shape_mass_info.getMass());
+      m_mass_info.setRotationalInertia(m_mass_info.getRotationalInertia() + shape_mass_info.getRotationalInertia());
+    }
+
+    if(m_mass_info.getMass() > 0.f)
+    {
+      auto inv_mass = 1.f / m_mass_info.getMass();
+      m_mass_info.setCenter(m_mass_info.getCenter() * inv_mass);
+    }
+
+    if(m_mass_info.getRotationalInertia() <= 0.f || isFixedRotation())
+      m_mass_info.setRotationalInertia(0.f);
+  }
 }
 
 void PhysicsBody::setMassInfo(const PhysicsMassInfo& mass_info)
 {
+  if (m_b2_body)
+  {
+    auto mass_data = priv::PhysicsHelper::cast(mass_info);
+    m_b2_body->SetMassData(std::addressof(mass_data));
+  }
+  else
+  {
+    delay([this, mass_info](){
+      auto mass_data = priv::PhysicsHelper::cast(mass_info);
+      m_b2_body->SetMassData(std::addressof(mass_data));
+    });
 
+    auto new_mass_info = m_mass_info;
+
+    new_mass_info.setCenter(mass_info.getCenter());
+    new_mass_info.setMass(mass_info.getMass());
+
+    if(new_mass_info.getMass() <= 0.f)
+      new_mass_info.setMass(1.f);
+
+    if(mass_info.getRotationalInertia() > 0.f && !isFixedRotation())
+      new_mass_info.setRotationalInertia(mass_info.getRotationalInertia());
+  }
 }
 
 PhysicsMassInfo PhysicsBody::getMassInfo() const
 {
-
+  if (m_b2_body)
+  {
+    b2MassData b2_mass_data;
+    m_b2_body->GetMassData(&b2_mass_data);
+    return priv::PhysicsHelper::cast(b2_mass_data);
+  }
+  else
+  {
+    return m_mass_info;
+  }
 }
 
 float PhysicsBody::getMass() const
 {
-
+  PullProperties(GetMass, m_mass_info.getMass());
 }
 
 float PhysicsBody::getInertia() const
 {
-
+  PullProperties(GetMass,  m_mass_info.getRotationalInertia());
 }
 
 void PhysicsBody::setType(Type type)
 {
-  PushPostProcessProperties(SetType, type, static_cast<b2BodyType>(type), m_type);
+  if (m_b2_body)
+  {
+    m_b2_body->SetType(static_cast<b2BodyType>(type));
+  }
+  else
+  {
+    delay([this, type](){
+      m_b2_body->SetType(static_cast<b2BodyType>(type));
+    });
+
+    m_type = type;
+
+    if(getType() == Type::StaticBody)
+    {
+      m_awake = false;
+      m_angular_velocity = 0.f;
+      m_linear_velocity = sf::Vector2f(0.f, 0.f);
+    }
+  }
 }
 
 PhysicsBody::Type PhysicsBody::getType() const
@@ -231,7 +345,19 @@ float PhysicsBody::getGravityScale() const
 
 void PhysicsBody::setFixedRotation(bool fixed)
 {
-  PushProperties(SetFixedRotation, fixed, m_fixed_rotation);
+  if (m_b2_body)
+  {
+    m_b2_body->SetFixedRotation(fixed);
+  }
+  else
+  {
+    delay([this, fixed]()
+          { m_b2_body->SetFixedRotation(fixed); });
+
+    m_fixed_rotation = fixed;
+    m_angular_velocity = 0.f;
+    resetMassInfo();
+  }
 }
 
 bool PhysicsBody::isFixedRotation() const
@@ -241,7 +367,23 @@ bool PhysicsBody::isFixedRotation() const
 
 void PhysicsBody::setAwake(bool awake)
 {
-  PushProperties(SetAwake, awake, m_awake);
+  if (m_b2_body)
+  {
+    m_b2_body->SetAwake(awake);
+  }
+  else
+  {
+    delay([this, awake]()
+          { m_b2_body->SetAwake(awake); });
+
+    m_awake = awake;
+
+    if(!m_awake)
+    {
+      m_linear_velocity = sf::Vector2f(0.f, 0.f);
+      m_angular_velocity = 0.f;
+    }
+  }
 }
 
 bool PhysicsBody::isAwake() const
@@ -262,6 +404,7 @@ bool PhysicsBody::isEnabled() const
 void PhysicsBody::attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape)
 {
   m_physics_shapes.push_back(std::move(physics_shape));
+  resetMassInfo();
 }
 
 std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape& physics_shape)
@@ -276,6 +419,7 @@ std::unique_ptr<PhysicsShape> PhysicsBody::detachPhysicsShape(const PhysicsShape
 
   auto shape = std::move(*found);
   m_physics_shapes.erase(found);
+  resetMassInfo();
   return shape;
 }
 

@@ -64,6 +64,26 @@ PhysicsContactImpulse PhysicsHelper::cast(const b2ContactImpulse& b2_contact_imp
   return PhysicsContactImpulse(normal_impulses, tangent_impulses);
 }
 
+PhysicsMassInfo PhysicsHelper::cast(const b2MassData& b2_mass_data)
+{
+  PhysicsMassInfo mass_info;
+  mass_info.setCenter(meter_to_pixel(b2_mass_data.center));
+  mass_info.setRotationalInertia(b2_mass_data.I);
+  mass_info.setMass(b2_mass_data.mass);
+
+  return mass_info;
+}
+
+b2MassData PhysicsHelper::cast(const PhysicsMassInfo& mass_info)
+{
+  b2MassData mass_data;
+  mass_data.center = pixel_to_meter(mass_info.getCenter());
+  mass_data.I = mass_info.getRotationalInertia();
+  mass_data.mass = mass_info.getMass();
+
+  return mass_data;
+}
+
 sf::Vector2f PhysicsHelper::cast(const b2Vec2& point)
 {
   return sf::Vector2f(point.x, point.y);

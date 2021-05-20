@@ -131,6 +131,7 @@ namespace egnim::physics
     std::list<PhysicsJoint*> m_physics_joints;
     std::list<DelayTask> m_delay_tasks;
 
+    PhysicsMassInfo m_mass_info;
     sf::Vector2f m_linear_velocity;
     float m_angular_velocity;
     float m_linear_damping;
