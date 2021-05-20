@@ -69,11 +69,8 @@ PhysicsJoint::~PhysicsJoint()
 
 void PhysicsJoint::createInternalJoint()
 {
-  if(m_physics_world)
+  if(m_physics_world && !m_b2_joint)
   {
-    assert(!m_b2_joint);
-    assert(m_physics_world);
-
     auto b2_joint_def = createInternalJointDef(m_first_physics_body.getInternalBody(),
                                                m_second_physics_body.getInternalBody());
     b2_joint_def->userData.pointer = reinterpret_cast<uintptr_t>(this);
@@ -88,11 +85,8 @@ void PhysicsJoint::createInternalJoint()
 
 void PhysicsJoint::destroyInternalJoint()
 {
-  if (m_physics_world)
+  if (m_physics_world && m_b2_joint)
   {
-    assert(m_b2_joint);
-    assert(m_physics_world);
-
     m_physics_world->destroyInternalJoint(m_b2_joint);
 
     m_physics_world->detachPhysicsJoint(this);
@@ -266,9 +260,9 @@ std::unique_ptr<b2JointDef> DistancePhysicsJoint::createInternalJointDef(
   b2_distance_joint_def->localAnchorB = priv::PhysicsHelper::pixel_to_meter(m_second_local_anchor);
   b2_distance_joint_def->stiffness = m_stiffness;
   b2_distance_joint_def->damping = m_damping;
-  b2_distance_joint_def->length = m_length;
-  b2_distance_joint_def->minLength = m_min_length;
-  b2_distance_joint_def->maxLength = m_max_length;
+  b2_distance_joint_def->length = priv::PhysicsHelper::pixel_to_meter(m_length);
+  b2_distance_joint_def->minLength = priv::PhysicsHelper::pixel_to_meter(m_min_length);
+  b2_distance_joint_def->maxLength = priv::PhysicsHelper::pixel_to_meter(m_max_length);
 
   return b2_distance_joint_def;
 }
@@ -506,18 +500,19 @@ void PrismaticPhysicsJoint::enableLimit(bool enable)
 
 float PrismaticPhysicsJoint::getLowerLimit() const
 {
-  PullProperties(b2PrismaticJoint, GetLowerLimit, m_lower_translation);
+  PullPostProcessProperties(b2PrismaticJoint, GetLowerLimit, m_lower_translation, priv::PhysicsHelper::meter_to_pixel);
 }
 
 float PrismaticPhysicsJoint::getUpperLimit() const
 {
-  PullProperties(b2PrismaticJoint, GetUpperLimit, m_upper_translation);
+  PullPostProcessProperties(b2PrismaticJoint, GetUpperLimit, m_upper_translation, priv::PhysicsHelper::meter_to_pixel);
 }
 
 void PrismaticPhysicsJoint::setLimits(float lower, float upper)
 {
   if(auto joint = getInternalJoint<b2PrismaticJoint>(); joint)
-    joint->SetLimits(lower, upper);
+    joint->SetLimits(priv::PhysicsHelper::pixel_to_meter(lower),
+                     priv::PhysicsHelper::pixel_to_meter(upper));
   else
   {
     m_lower_translation = lower;
@@ -600,8 +595,8 @@ std::unique_ptr<b2JointDef> PrismaticPhysicsJoint::createInternalJointDef(
   b2_prismatic_joint_def->motorSpeed = m_motor_speed;
   b2_prismatic_joint_def->maxMotorForce = m_max_motor_force;
   b2_prismatic_joint_def->referenceAngle = priv::PhysicsHelper::angleToRadian(m_reference_angle);
-  b2_prismatic_joint_def->lowerTranslation = m_lower_translation;
-  b2_prismatic_joint_def->upperTranslation = m_upper_translation;
+  b2_prismatic_joint_def->lowerTranslation = priv::PhysicsHelper::pixel_to_meter(m_lower_translation);
+  b2_prismatic_joint_def->upperTranslation = priv::PhysicsHelper::pixel_to_meter(m_upper_translation);
 
   return b2_prismatic_joint_def;
 }
@@ -970,18 +965,19 @@ void WheelPhysicsJoint::enableLimit(bool enable)
 
 float WheelPhysicsJoint::getLowerLimit() const
 {
-  PullProperties(b2WheelJoint, GetLowerLimit, m_lower_translation);
+  PullPostProcessProperties(b2PrismaticJoint, GetLowerLimit, m_lower_translation, priv::PhysicsHelper::meter_to_pixel);
 }
 
 float WheelPhysicsJoint::getUpperLimit() const
 {
-  PullProperties(b2WheelJoint, GetUpperLimit, m_upper_translation);
+  PullPostProcessProperties(b2PrismaticJoint, GetUpperLimit, m_upper_translation, priv::PhysicsHelper::meter_to_pixel);
 }
 
 void WheelPhysicsJoint::setLimits(float lower, float upper)
 {
   if(auto joint = getInternalJoint<b2WheelJoint>(); joint)
-    joint->SetLimits(lower, upper);
+    joint->SetLimits(priv::PhysicsHelper::pixel_to_meter(lower),
+                     priv::PhysicsHelper::pixel_to_meter(upper));
   else
   {
     m_lower_translation = lower;
@@ -1083,8 +1079,8 @@ std::unique_ptr<b2JointDef> WheelPhysicsJoint::createInternalJointDef(
   b2_wheel_joint_def->enableMotor = m_enable_motor;
   b2_wheel_joint_def->motorSpeed = m_motor_speed;
   b2_wheel_joint_def->maxMotorTorque = m_max_motor_torque;
-  b2_wheel_joint_def->lowerTranslation = m_lower_translation;
-  b2_wheel_joint_def->upperTranslation = m_upper_translation;
+  b2_wheel_joint_def->lowerTranslation = priv::PhysicsHelper::pixel_to_meter(m_lower_translation);
+  b2_wheel_joint_def->upperTranslation = priv::PhysicsHelper::pixel_to_meter(m_upper_translation);
   b2_wheel_joint_def->stiffness = m_stiffness;
   b2_wheel_joint_def->damping = m_damping;
 
