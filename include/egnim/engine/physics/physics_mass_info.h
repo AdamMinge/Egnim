@@ -1,5 +1,5 @@
-#ifndef PHYSICS_MASS_H
-#define PHYSICS_MASS_H
+#ifndef PHYSICS_MASS_INFO_H
+#define PHYSICS_MASS_INFO_H
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Vector2.hpp>
@@ -10,11 +10,11 @@
 namespace egnim::physics
 {
 
-  class EGNIM_UTILITY_API PhysicsMass
+  class EGNIM_UTILITY_API PhysicsMassInfo
   {
   public:
-    explicit PhysicsMass();
-    ~PhysicsMass();
+    explicit PhysicsMassInfo();
+    ~PhysicsMassInfo();
 
     void setMass(float mass);
     [[nodiscard]] float getMass() const;
@@ -33,4 +33,4 @@ namespace egnim::physics
 
 } // namespace egnim::physics
 
-#endif //PHYSICS_MASS_H
+#endif //PHYSICS_MASS_INFO_H

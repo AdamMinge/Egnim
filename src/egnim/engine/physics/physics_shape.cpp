@@ -247,9 +247,9 @@ int32_t PhysicsShapeCircle::getChildCount() const
   return 1;
 }
 
-PhysicsMass PhysicsShapeCircle::getMass() const
+PhysicsMassInfo PhysicsShapeCircle::getMassInfo() const
 {
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(getDensity() * b2_pi * getRadius() * getRadius());
   mass.setCenter(getOffset());
   mass.setRotationalInertia(mass.getMass() * (0.5f * getRadius() * getRadius() +
@@ -294,7 +294,7 @@ int32_t PhysicsShapeBox::getChildCount() const
   return 1;
 }
 
-PhysicsMass PhysicsShapeBox::getMass() const
+PhysicsMassInfo PhysicsShapeBox::getMassInfo() const
 {
   sf::Vector2f vertices[] = {
     sf::Vector2f(-m_size.x / 2.0f, -m_size.x / 2.0f),
@@ -333,7 +333,7 @@ PhysicsMass PhysicsShapeBox::getMass() const
 
   center *= 1.0f / area;
 
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(getDensity() * area);
   mass.setCenter(center + s);
   mass.setRotationalInertia(
@@ -380,7 +380,7 @@ int32_t PhysicsShapePolygon::getChildCount() const
   return 1;
 }
 
-PhysicsMass PhysicsShapePolygon::getMass() const
+PhysicsMassInfo PhysicsShapePolygon::getMassInfo() const
 {
   sf::Vector2f ps[b2_maxPolygonVertices];
   sf::Vector2f vertices[b2_maxPolygonVertices];
@@ -493,7 +493,7 @@ PhysicsMass PhysicsShapePolygon::getMass() const
 
   center *= 1.0f / area;
 
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(getDensity() * area);
   mass.setCenter(center + s);
   mass.setRotationalInertia(
@@ -538,9 +538,9 @@ int32_t PhysicsShapeEdgeSegment::getChildCount() const
   return 1;
 }
 
-PhysicsMass PhysicsShapeEdgeSegment::getMass() const
+PhysicsMassInfo PhysicsShapeEdgeSegment::getMassInfo() const
 {
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(0.f);
   mass.setCenter(0.5f * (m_first + m_second));
   mass.setRotationalInertia(0.f);
@@ -590,9 +590,9 @@ int32_t PhysicsShapeEdgeBox::getChildCount() const
   return 5;
 }
 
-PhysicsMass PhysicsShapeEdgeBox::getMass() const
+PhysicsMassInfo PhysicsShapeEdgeBox::getMassInfo() const
 {
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(0.f);
   mass.setCenter(sf::Vector2f(0.f, 0.f));
   mass.setRotationalInertia(0.f);
@@ -637,9 +637,9 @@ int32_t PhysicsShapeEdgePolygon::getChildCount() const
   return static_cast<int32_t>(m_points.size()) + 1;
 }
 
-PhysicsMass PhysicsShapeEdgePolygon::getMass() const
+PhysicsMassInfo PhysicsShapeEdgePolygon::getMassInfo() const
 {
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(0.f);
   mass.setCenter(sf::Vector2f(0.f, 0.f));
   mass.setRotationalInertia(0.f);
@@ -684,9 +684,9 @@ int32_t PhysicsShapeEdgeChain::getChildCount() const
   return static_cast<int32_t>(m_points.size());
 }
 
-PhysicsMass PhysicsShapeEdgeChain::getMass() const
+PhysicsMassInfo PhysicsShapeEdgeChain::getMassInfo() const
 {
-  PhysicsMass mass;
+  PhysicsMassInfo mass;
   mass.setMass(0.f);
   mass.setCenter(sf::Vector2f(0.f, 0.f));
   mass.setRotationalInertia(0.f);
