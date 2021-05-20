@@ -15,8 +15,6 @@ namespace egnim::physics
 
   class EGNIM_UTILITY_API PhysicsManifold
   {
-    friend class PhysicsContact;
-
   public:
     enum class Type;
 

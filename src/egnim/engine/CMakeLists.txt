@@ -60,6 +60,7 @@ set(sources
         ${source_root}/physics/physics_contact_impulse.cpp
         ${source_root}/physics/physics_manifold.cpp
         ${source_root}/physics/physics_manifold_point.cpp
+        ${source_root}/physics/physics_mass.cpp
         ${source_root}/physics/physics_contact.cpp
         ${source_root}/physics/physics_material.cpp
         ${source_root}/physics/physics_aabb.cpp
@@ -142,6 +143,7 @@ set(includes
         ${include_root}/physics/physics_contact_impulse.h
         ${include_root}/physics/physics_manifold.h
         ${include_root}/physics/physics_manifold_point.h
+        ${include_root}/physics/physics_mass.h
         ${include_root}/physics/physics_contact.h
         ${include_root}/physics/physics_material.h
         ${include_root}/physics/physics_aabb.h

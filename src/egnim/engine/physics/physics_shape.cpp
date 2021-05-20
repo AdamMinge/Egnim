@@ -10,6 +10,7 @@
 #include <egnim/engine/physics/physics_shape.h>
 #include <egnim/engine/physics/physics_body.h>
 #include <egnim/engine/physics/priv/physics_helper.h>
+#include <egnim/engine/math/vector_helper.h>
 /* -------------------------------------------------------------------------- */
 
 namespace egnim::physics {
@@ -198,18 +199,6 @@ void PhysicsShape::updateInternalFixture()
   }
 }
 
-void PhysicsShape::initializeClone(PhysicsShape& physics_shape) const
-{
-  physics_shape.m_physics_material = m_physics_material;
-  physics_shape.m_b2_fixture = nullptr;
-  physics_shape.m_physics_body = nullptr;
-  physics_shape.m_sensor = m_sensor;
-  physics_shape.m_group_index = m_group_index;
-  physics_shape.m_contact_test_bitmask = m_contact_test_bitmask;
-  physics_shape.m_collision_bitmask = m_collision_bitmask;
-  physics_shape.m_type = m_type;
-}
-
 void PhysicsShape::onEnter()
 {
   m_physics_body = dynamic_cast<PhysicsBody*>(getOwner());
@@ -258,12 +247,15 @@ int32_t PhysicsShapeCircle::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeCircle::clone() const
+PhysicsMass PhysicsShapeCircle::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeCircle>(getRadius(), getOffset(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  PhysicsMass mass;
+  mass.setMass(getDensity() * b2_pi * getRadius() * getRadius());
+  mass.setCenter(getOffset());
+  mass.setRotationalInertia(mass.getMass() * (0.5f * getRadius() * getRadius() +
+                            math::VectorHelper::dot(getOffset(), getOffset())));
 
-  return clone_physics_shape;
+  return mass;
 }
 
 /* -------------------------------- PhysicsShapeBox ------------------------- */
@@ -302,12 +294,53 @@ int32_t PhysicsShapeBox::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeBox::clone() const
+PhysicsMass PhysicsShapeBox::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeBox>(getSize(), getOffset(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  sf::Vector2f vertices[] = {
+    sf::Vector2f(-m_size.x / 2.0f, -m_size.x / 2.0f),
+    sf::Vector2f(m_size.x / 2.0f, -m_size.x / 2.0f),
+    sf::Vector2f(m_size.x / 2.0f, m_size.x / 2.0f),
+    sf::Vector2f(-m_size.x / 2.0f, m_size.x / 2.0f)
+  };
 
-  return clone_physics_shape;
+  auto center = sf::Vector2f(0.0f, 0.0f);
+  auto area = 0.0f;
+  auto I = 0.0f;
+
+  auto s = vertices[0];
+  auto k_inv3 = 1.0f / 3.0f;
+
+  for (int32 i = 0; i < 4; ++i)
+  {
+    auto e1 = vertices[i] - s;
+    auto e2 = i + 1 < 4 ? vertices[i+1] - s : vertices[0] - s;
+
+    float D = math::VectorHelper::cross(e1, e2);
+
+    float triangleArea = 0.5f * D;
+    area += triangleArea;
+
+    center += triangleArea * k_inv3 * (e1 + e2);
+
+    float ex1 = e1.x, ey1 = e1.y;
+    float ex2 = e2.x, ey2 = e2.y;
+
+    float int_x2 = ex1*ex1 + ex2*ex1 + ex2*ex2;
+    float int_y2 = ey1*ey1 + ey2*ey1 + ey2*ey2;
+
+    I += (0.25f * k_inv3 * D) * (int_x2 + int_y2);
+  }
+
+  center *= 1.0f / area;
+
+  PhysicsMass mass;
+  mass.setMass(getDensity() * area);
+  mass.setCenter(center + s);
+  mass.setRotationalInertia(
+    (getDensity() * I) + (mass.getMass() * math::VectorHelper::dot(mass.getCenter(), mass.getCenter()) -
+                                math::VectorHelper::dot(center, center)));
+
+  return mass;
 }
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
@@ -347,12 +380,127 @@ int32_t PhysicsShapePolygon::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapePolygon::clone() const
+PhysicsMass PhysicsShapePolygon::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapePolygon>(getPoints(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  sf::Vector2f ps[b2_maxPolygonVertices];
+  sf::Vector2f vertices[b2_maxPolygonVertices];
+  auto vertices_count = 0;
 
-  return clone_physics_shape;
+  int32 tempCount = 0;
+
+  for(auto& point : m_points)
+  {
+    auto v = point;
+    bool unique = true;
+
+    for (int32 j = 0; j < tempCount; ++j)
+    {
+      auto c = v - ps[j];
+      if (math::VectorHelper::dot(c, c) < ((0.5f * b2_linearSlop) * (0.5f * b2_linearSlop)))
+      {
+        unique = false;
+        break;
+      }
+    }
+
+    if (unique)
+      ps[tempCount++] = v;
+  }
+
+  int32 i0 = 0;
+  auto x0 = ps[0].x;
+  for (int32 i = 1; i < m_points.size(); ++i)
+  {
+    auto x = ps[i].x;
+    if (x > x0 || (x == x0 && ps[i].y < ps[i0].y))
+    {
+      i0 = i;
+      x0 = x;
+    }
+  }
+
+  int32 hull[b2_maxPolygonVertices];
+  auto m = 0;
+  auto ih = i0;
+
+  for (;;)
+  {
+    b2Assert(m < b2_maxPolygonVertices);
+    hull[m] = ih;
+
+    int32 ie = 0;
+    for (int32 j = 1; j < m_points.size(); ++j)
+    {
+      if (ie == ih)
+      {
+        ie = j;
+        continue;
+      }
+
+      auto r = ps[ie] - ps[hull[m]];
+      auto v = ps[j] - ps[hull[m]];
+      float c = math::VectorHelper::cross(r, v);
+      if (c < 0.0f)
+      {
+        ie = j;
+      }
+
+      auto v_length_squared = v.x * v.x + v.y * v.y;
+      auto r_length_squared = v.x * v.x + v.y * v.y;
+
+      if (c == 0.0f && v_length_squared > r_length_squared)
+        ie = j;
+    }
+
+    ++m;
+    ih = ie;
+
+    if (ie == i0)
+      break;
+  }
+
+  vertices_count = m;
+  for (int32 i = 0; i < vertices_count; ++i)
+    vertices[i] = ps[hull[i]];
+
+  auto center = sf::Vector2f(0.0f, 0.0f);
+  float area = 0.0f;
+  float I = 0.0f;
+
+  auto s = vertices[0];
+  const float k_inv3 = 1.0f / 3.0f;
+
+  for (int32 i = 0; i < vertices_count; ++i)
+  {
+    auto e1 = vertices[i] - s;
+    auto e2 = i + 1 < vertices_count ? vertices[i+1] - s : vertices[0] - s;
+
+    float D = math::VectorHelper::cross(e1, e2);
+
+    float triangleArea = 0.5f * D;
+    area += triangleArea;
+
+    center += triangleArea * k_inv3 * (e1 + e2);
+
+    float ex1 = e1.x, ey1 = e1.y;
+    float ex2 = e2.x, ey2 = e2.y;
+
+    float int_x2 = ex1*ex1 + ex2*ex1 + ex2*ex2;
+    float int_y2 = ey1*ey1 + ey2*ey1 + ey2*ey2;
+
+    I += (0.25f * k_inv3 * D) * (int_x2 + int_y2);
+  }
+
+  center *= 1.0f / area;
+
+  PhysicsMass mass;
+  mass.setMass(getDensity() * area);
+  mass.setCenter(center + s);
+  mass.setRotationalInertia(
+    (getDensity() * I) + (mass.getMass() * math::VectorHelper::dot(mass.getCenter(), mass.getCenter()) -
+      math::VectorHelper::dot(center, center)));
+
+  return mass;
 }
 
 /* --------------------------- PhysicsShapeEdgeSegment ---------------------- */
@@ -390,12 +538,14 @@ int32_t PhysicsShapeEdgeSegment::getChildCount() const
   return 1;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeEdgeSegment::clone() const
+PhysicsMass PhysicsShapeEdgeSegment::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeSegment>(getFirstPosition(), getSecondPosition(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  PhysicsMass mass;
+  mass.setMass(0.f);
+  mass.setCenter(0.5f * (m_first + m_second));
+  mass.setRotationalInertia(0.f);
 
-  return clone_physics_shape;
+  return mass;
 }
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
@@ -440,12 +590,14 @@ int32_t PhysicsShapeEdgeBox::getChildCount() const
   return 5;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeEdgeBox::clone() const
+PhysicsMass PhysicsShapeEdgeBox::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeBox>(getSize(), getOffset(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  PhysicsMass mass;
+  mass.setMass(0.f);
+  mass.setCenter(sf::Vector2f(0.f, 0.f));
+  mass.setRotationalInertia(0.f);
 
-  return clone_physics_shape;
+  return mass;
 }
 
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
@@ -485,12 +637,14 @@ int32_t PhysicsShapeEdgePolygon::getChildCount() const
   return static_cast<int32_t>(m_points.size()) + 1;
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeEdgePolygon::clone() const
+PhysicsMass PhysicsShapeEdgePolygon::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgePolygon>(getPoints(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  PhysicsMass mass;
+  mass.setMass(0.f);
+  mass.setCenter(sf::Vector2f(0.f, 0.f));
+  mass.setRotationalInertia(0.f);
 
-  return clone_physics_shape;
+  return mass;
 }
 
 /* ----------------------------- PhysicsShapeEdgeChain ---------------------- */
@@ -530,12 +684,14 @@ int32_t PhysicsShapeEdgeChain::getChildCount() const
   return static_cast<int32_t>(m_points.size());
 }
 
-std::unique_ptr<scene::Component> PhysicsShapeEdgeChain::clone() const
+PhysicsMass PhysicsShapeEdgeChain::getMass() const
 {
-  auto clone_physics_shape = std::make_unique<PhysicsShapeEdgeChain>(getPoints(), getPhysicsMaterial());
-  PhysicsShape::initializeClone(*clone_physics_shape);
+  PhysicsMass mass;
+  mass.setMass(0.f);
+  mass.setCenter(sf::Vector2f(0.f, 0.f));
+  mass.setRotationalInertia(0.f);
 
-  return clone_physics_shape;
+  return mass;
 }
 
 } // namespace egnim::physics

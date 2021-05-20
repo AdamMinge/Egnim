@@ -9,6 +9,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/engine/export.h>
 #include <egnim/engine/physics/physics_material.h>
+#include <egnim/engine/physics/physics_mass.h>
 #include <egnim/engine/scene/component.h>
 /* -------------------------------------------------------------------------- */
 
@@ -67,6 +68,8 @@ namespace egnim::physics
     [[nodiscard]] PhysicsBody* getPhysicsBody();
     [[nodiscard]] const PhysicsBody* getPhysicsBody() const;
 
+    [[nodiscard]] virtual PhysicsMass getMass() const = 0;
+
   protected:
     explicit PhysicsShape(Type type, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
 
@@ -78,8 +81,6 @@ namespace egnim::physics
     void updateInternalFixture();
 
     [[nodiscard]] virtual std::unique_ptr<b2Shape> createInternalShape() const = 0;
-
-    void initializeClone(PhysicsShape& physics_shape) const;
 
   private:
     PhysicsBody* m_physics_body;
@@ -104,7 +105,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -126,7 +127,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -147,7 +148,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -168,7 +169,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -190,7 +191,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -211,7 +212,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
@@ -231,7 +232,7 @@ namespace egnim::physics
 
     [[nodiscard]] int32_t getChildCount() const override;
 
-    [[nodiscard]] std::unique_ptr<scene::Component> clone() const override;
+    [[nodiscard]] PhysicsMass getMass() const override;
 
   protected:
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
