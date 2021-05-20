@@ -14,10 +14,52 @@
 
 namespace egnim::physics {
 
-PhysicsBody::PhysicsBody(Type type) :
-  m_type(type),
+#define PushPostProcessProperties(Setter, value, postprocess_value, properties)                         \
+do {                                                                                                    \
+  if(m_b2_body)                                                                                         \
+    { m_b2_body->Setter(postprocess_value); }                                                           \
+  else                                                                                                  \
+  {                                                                                                     \
+    delay([this, value](){ m_b2_body->Setter(postprocess_value); });                                    \
+    (properties) = value;                                                                               \
+  }                                                                                                     \
+                                                                                                        \
+} while(false)
+
+#define PushProperties(Setter, value, properties)                                                       \
+PushPostProcessProperties(Setter, value, value, properties)
+
+#define PullProperties(Getter, properties)                                                              \
+do {                                                                                                    \
+  if(m_b2_body)                                                                                         \
+    { return m_b2_body->Getter(); }                                                                     \
+  else                                                                                                  \
+    { return properties; }                                                                              \
+} while(false)
+
+#define PullPostProcessProperties(Getter, properties, postprocess)                                      \
+do {                                                                                                    \
+  if(m_b2_body)                                                                                         \
+    { return postprocess(m_b2_body->Getter()); }                                                        \
+  else                                                                                                  \
+    { return properties; }                                                                              \
+} while(false)
+
+/* -------------------------------- PhysicsBody ----------------------------- */
+
+PhysicsBody::PhysicsBody() :
+  m_type(Type::DynamicBody),
   m_physics_world(nullptr),
-  m_b2_body(nullptr)
+  m_b2_body(nullptr),
+  m_linear_velocity(sf::Vector2f(0.f, 0.f)),
+  m_angular_velocity(0.f),
+  m_linear_damping(0.f),
+  m_angular_damping(0.f),
+  m_gravity_scale(1.f),
+  m_bullet(false),
+  m_fixed_rotation(false),
+  m_awake(true),
+  m_enabled(true)
 {
 
 }
@@ -39,113 +81,182 @@ const PhysicsWorld* PhysicsBody::getPhysicsWorld() const
 
 void PhysicsBody::setLinearVelocity(const sf::Vector2f& linear_velocity)
 {
-  m_b2_body->SetLinearVelocity(priv::PhysicsHelper::pixel_to_meter(linear_velocity));
+  PushPostProcessProperties(SetLinearVelocity, linear_velocity,
+                            priv::PhysicsHelper::cast(linear_velocity), m_linear_velocity);
 }
 
 sf::Vector2f PhysicsBody::getLinearVelocity() const
 {
-  return priv::PhysicsHelper::meter_to_pixel(m_b2_body->GetLinearVelocity());
+  PullPostProcessProperties(GetLinearVelocity, m_linear_velocity,  priv::PhysicsHelper::cast);
 }
 
 void PhysicsBody::setAngularVelocity(float omega)
 {
-  m_b2_body->SetAngularVelocity(omega);
+  PushProperties(SetAngularVelocity, omega, m_angular_velocity);
 }
 
 float PhysicsBody::getAngularVelocity() const
 {
-  return m_b2_body->GetAngularVelocity();
+  PullProperties(GetAngularVelocity, m_angular_velocity);
 }
 
 void PhysicsBody::applyForce(const sf::Vector2f& force, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyForce(priv::PhysicsHelper::pixel_to_meter(force), priv::PhysicsHelper::pixel_to_meter(point), awake);
+  if(m_b2_body)
+    m_b2_body->ApplyForce(priv::PhysicsHelper::cast(force), priv::PhysicsHelper::cast(point), awake);
+  else
+    { delay([this, force, point, awake](){
+      m_b2_body->ApplyForce(priv::PhysicsHelper::cast(force), priv::PhysicsHelper::cast(point), awake); }); }
 }
 
 void PhysicsBody::applyForceToCenter(const sf::Vector2f& force, bool awake)
 {
-  m_b2_body->ApplyForceToCenter(priv::PhysicsHelper::pixel_to_meter(force), awake);
+  if(m_b2_body)
+    m_b2_body->ApplyForceToCenter(priv::PhysicsHelper::cast(force), awake);
+  else
+  { delay([this, force, awake](){
+      m_b2_body->ApplyForceToCenter(priv::PhysicsHelper::cast(force), awake); }); }
 }
 
 void PhysicsBody::applyTorque(float torque, bool awake)
 {
-  m_b2_body->ApplyTorque(torque, awake);
+  if(m_b2_body)
+    m_b2_body->ApplyTorque(torque, awake);
+  else
+  { delay([this, torque, awake](){
+      m_b2_body->ApplyTorque(torque, awake); }); }
 }
 
 void PhysicsBody::applyLinearImpulse(const sf::Vector2f& impulse, const sf::Vector2f& point, bool awake)
 {
-  m_b2_body->ApplyLinearImpulse(priv::PhysicsHelper::pixel_to_meter(impulse),
-                                priv::PhysicsHelper::pixel_to_meter(point), awake);
+  if(m_b2_body)
+    m_b2_body->ApplyLinearImpulse(priv::PhysicsHelper::cast(impulse), priv::PhysicsHelper::cast(point), awake);
+  else
+  { delay([this, impulse, point, awake](){
+      m_b2_body->ApplyLinearImpulse(priv::PhysicsHelper::cast(impulse), priv::PhysicsHelper::cast(point), awake); }); }
 }
 
 void PhysicsBody::applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake)
 {
-  m_b2_body->ApplyLinearImpulseToCenter(priv::PhysicsHelper::pixel_to_meter(impulse), awake);
+  if(m_b2_body)
+    m_b2_body->ApplyLinearImpulseToCenter(priv::PhysicsHelper::cast(impulse), awake);
+  else
+  { delay([this, impulse, awake](){
+      m_b2_body->ApplyLinearImpulseToCenter(priv::PhysicsHelper::cast(impulse), awake); }); }
 }
 
 void PhysicsBody::applyAngularImpulse(float impulse, bool awake)
 {
-  m_b2_body->ApplyAngularImpulse(impulse, awake);
+  if(m_b2_body)
+    m_b2_body->ApplyAngularImpulse(impulse, awake);
+  else
+  { delay([this, impulse, awake](){
+      m_b2_body->ApplyAngularImpulse(impulse, awake); }); }
+}
+
+void PhysicsBody::resetMassInfo()
+{
+
+}
+
+void PhysicsBody::setMassInfo(const PhysicsMassInfo& mass_info)
+{
+
+}
+
+PhysicsMassInfo PhysicsBody::getMassInfo() const
+{
+
 }
 
 float PhysicsBody::getMass() const
 {
-  return m_b2_body->GetMass();
+
 }
 
 float PhysicsBody::getInertia() const
 {
-  return m_b2_body->GetInertia();
+
 }
 
 void PhysicsBody::setType(Type type)
 {
-  m_b2_body->SetType(static_cast<b2BodyType>(type));
+  PushPostProcessProperties(SetType, type, static_cast<b2BodyType>(type), m_type);
 }
 
 PhysicsBody::Type PhysicsBody::getType() const
 {
-  return static_cast<PhysicsBody::Type>(m_b2_body->GetType());
+  PullPostProcessProperties(GetType, m_type, static_cast<Type>);
 }
 
 void PhysicsBody::setLinearDamping(float linear_damping)
 {
-  m_b2_body->SetLinearDamping(linear_damping);
+  PushProperties(SetLinearDamping, linear_damping, m_linear_damping);
 }
 
 float PhysicsBody::getLinearDamping() const
 {
-  return m_b2_body->GetLinearDamping();
+  PullProperties(GetLinearDamping, m_linear_damping);
 }
 
 void PhysicsBody::setAngularDamping(float angular_damping)
 {
-  m_b2_body->SetAngularDamping(angular_damping);
+  PushProperties(SetAngularDamping, angular_damping, m_angular_damping);;
 }
 
 float PhysicsBody::getAngularDamping() const
 {
-  return m_b2_body->GetAngularDamping();
+  PullProperties(GetAngularDamping, m_angular_damping);
 }
 
 void PhysicsBody::setBullet(bool bullet)
 {
-  m_b2_body->SetBullet(bullet);
+  PushProperties(SetBullet, bullet, m_bullet);
 }
 
 bool PhysicsBody::isBullet() const
 {
-  return m_b2_body->IsBullet();
+  PullProperties(IsBullet, m_bullet);
 }
 
 void PhysicsBody::setGravityScale(float gravity_scale)
 {
-  m_b2_body->SetGravityScale(gravity_scale);
+  PushProperties(SetGravityScale, gravity_scale, m_gravity_scale);
 }
 
 float PhysicsBody::getGravityScale() const
 {
-  return m_b2_body->GetGravityScale();
+  PullProperties(GetGravityScale, m_gravity_scale);
+}
+
+void PhysicsBody::setFixedRotation(bool fixed)
+{
+  PushProperties(SetFixedRotation, fixed, m_fixed_rotation);
+}
+
+bool PhysicsBody::isFixedRotation() const
+{
+  PullProperties(IsFixedRotation, m_fixed_rotation);
+}
+
+void PhysicsBody::setAwake(bool awake)
+{
+  PushProperties(SetAwake, awake, m_awake);
+}
+
+bool PhysicsBody::isAwake() const
+{
+  PullProperties(IsAwake, m_awake);
+}
+
+void PhysicsBody::setEnabled(bool enabled)
+{
+  PushProperties(SetEnabled, enabled, m_enabled);
+}
+
+bool PhysicsBody::isEnabled() const
+{
+  PullProperties(IsEnabled, m_enabled);
 }
 
 void PhysicsBody::attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape)
@@ -178,26 +289,6 @@ const std::list<PhysicsJoint*>& PhysicsBody::getPhysicsJoints() const
   return m_physics_joints;
 }
 
-void PhysicsBody::setAwake(bool awake)
-{
-  m_b2_body->SetAwake(awake);
-}
-
-bool PhysicsBody::isAwake() const
-{
-  return m_b2_body->IsAwake();
-}
-
-void PhysicsBody::setEnabled(bool enabled)
-{
-  m_b2_body->SetEnabled(enabled);
-}
-
-bool PhysicsBody::isEnabled() const
-{
-  return m_b2_body->IsEnabled();
-}
-
 void PhysicsBody::accept(scene::SceneVisitor& visitor)
 {
   visitor.visitPhysicsBody(*this);
@@ -208,7 +299,9 @@ void PhysicsBody::onEnter()
   auto scene_node = getScene();
   m_physics_world = scene_node ? std::addressof(scene_node->getPhysicsWorld()) : nullptr;
 
-  createInternalBody(m_type);
+  createInternalBody();
+  flushDelayTasks();
+
   Node::onEnter();
 };
 
@@ -233,12 +326,12 @@ void PhysicsBody::detachPhysicsJoint(PhysicsJoint* physics_joint)
     m_physics_joints.erase(found);
 }
 
-void PhysicsBody::createInternalBody(Type type)
+void PhysicsBody::createInternalBody()
 {
   if(m_physics_world && !m_b2_body)
   {
     b2BodyDef body_def;
-    body_def.type = static_cast<b2BodyType>(type);
+    body_def.type = static_cast<b2BodyType>(b2_dynamicBody);
     body_def.userData.pointer = reinterpret_cast<uintptr_t>(this);
 
     m_b2_body = getPhysicsWorld()->createInternalBody(&body_def);
@@ -300,6 +393,18 @@ const b2Body* PhysicsBody::getInternalBody() const
 b2Body* PhysicsBody::getInternalBody()
 {
   return m_b2_body;
+}
+
+void PhysicsBody::delay(const DelayTask& task)
+{
+  m_delay_tasks.push_back(task);
+}
+
+void PhysicsBody::flushDelayTasks()
+{
+  for(auto& task : m_delay_tasks)
+    task();
+  m_delay_tasks.clear();
 }
 
 } // namespace egnim::physics

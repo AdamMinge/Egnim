@@ -27,7 +27,7 @@ std::unique_ptr<egnim::scene::Node> BoxesState::createSpriteNode(const sf::Vecto
 
   // create sprite / physics_body / physics_shape for node
   auto node = std::make_unique<egnim::scene::SpriteNode>();
-  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>(type);
+  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>();
   auto physics_shape = std::make_unique<egnim::physics::PhysicsShapeBox>(
     sf::Vector2f(static_cast<float>(texture.getSize().x),
                  static_cast<float>(texture.getSize().y)), sf::Vector2f(0,0));
@@ -42,6 +42,7 @@ std::unique_ptr<egnim::scene::Node> BoxesState::createSpriteNode(const sf::Vecto
   node->setTexture(texture);
   physics_body->setOrigin(static_cast<float>(texture.getSize().x) / 2.f, static_cast<float>(texture.getSize().y) / 2.f);
   physics_body->setPosition(position);
+  physics_body->setType(type);
 
   physics_body->attachChild(std::move(node));
   return physics_body;

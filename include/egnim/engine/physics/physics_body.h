@@ -8,6 +8,7 @@
 #include <list>
 /* ---------------------------------- Local --------------------------------- */
 #include <egnim/engine/export.h>
+#include <egnim/engine/physics/physics_mass_info.h>
 #include <egnim/engine/scene/node.h>
 /* -------------------------------------------------------------------------- */
 
@@ -30,11 +31,13 @@ namespace egnim::physics
     friend PhysicsShape;
     friend PhysicsJoint;
 
+    using DelayTask = std::function<void()>;
+
   public:
     enum class Type;
 
   public:
-    explicit PhysicsBody(Type type);
+    explicit PhysicsBody();
     ~PhysicsBody() override;
 
     PhysicsBody(const PhysicsBody&) = delete;
@@ -60,6 +63,10 @@ namespace egnim::physics
     void applyLinearImpulseToCenter(const sf::Vector2f& impulse, bool awake = true);
     void applyAngularImpulse(float impulse, bool awake = true);
 
+    void resetMassInfo();
+    void setMassInfo(const PhysicsMassInfo& mass_info);
+    [[nodiscard]] PhysicsMassInfo getMassInfo() const;
+
     [[nodiscard]] float getMass() const;
     [[nodiscard]] float getInertia() const;
 
@@ -77,6 +84,9 @@ namespace egnim::physics
 
     void setGravityScale(float gravity_scale);
     [[nodiscard]] float getGravityScale() const;
+
+    void setFixedRotation(bool fixed);
+    [[nodiscard]] bool isFixedRotation() const;
 
     void attachPhysicsShape(std::unique_ptr<PhysicsShape> physics_shape);
     std::unique_ptr<PhysicsShape> detachPhysicsShape(const PhysicsShape& physics_shape);
@@ -98,7 +108,7 @@ namespace egnim::physics
     void attachPhysicsJoint(PhysicsJoint* physics_joint);
     void detachPhysicsJoint(PhysicsJoint* physics_joint);
 
-    void createInternalBody(Type type);
+    void createInternalBody();
     void destroyInternalBody();
 
     void beforeSimulation();
@@ -110,12 +120,26 @@ namespace egnim::physics
     [[nodiscard]] const b2Body* getInternalBody() const;
     [[nodiscard]] b2Body* getInternalBody();
 
+    void delay(const DelayTask& task);
+    void flushDelayTasks();
+
   private:
     Type m_type;
     PhysicsWorld* m_physics_world;
     b2Body* m_b2_body;
     std::list<std::unique_ptr<PhysicsShape>> m_physics_shapes;
     std::list<PhysicsJoint*> m_physics_joints;
+    std::list<DelayTask> m_delay_tasks;
+
+    sf::Vector2f m_linear_velocity;
+    float m_angular_velocity;
+    float m_linear_damping;
+    float m_angular_damping;
+    float m_gravity_scale;
+    bool m_bullet;
+    bool m_fixed_rotation;
+    bool m_awake;
+    bool m_enabled;
   };
 
   enum class PhysicsBody::Type
