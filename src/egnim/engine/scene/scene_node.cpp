@@ -65,6 +65,11 @@ void SceneNode::draw(sf::RenderTarget& target, sf::RenderStates states) const
     Node::draw(target, states);
 }
 
+void SceneNode::drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
+{
+  m_physics_world->debugDraw();
+}
+
 void SceneNode::updateCurrent(sf::Time dt)
 {
   m_physics_world->update(1/60.f, 8, 3);

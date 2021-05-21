@@ -84,6 +84,25 @@ b2MassData PhysicsHelper::cast(const PhysicsMassInfo& mass_info)
   return mass_data;
 }
 
+sf::Color PhysicsHelper::cast(const b2Color& color)
+{
+  return sf::Color(static_cast<sf::Uint8>(color.r * 255),
+                   static_cast<sf::Uint8>(color.g * 255),
+                   static_cast<sf::Uint8>(color.b * 255),
+                   static_cast<sf::Uint8>(color.b * 255));
+}
+
+b2Color PhysicsHelper::cast(const sf::Color& color)
+{
+  b2Color b2_color;
+  b2_color.r = static_cast<float>(color.r) / 255.f;
+  b2_color.g = static_cast<float>(color.g) / 255.f;
+  b2_color.b = static_cast<float>(color.b) / 255.f;
+  b2_color.a = static_cast<float>(color.a) / 255.f;
+
+  return b2_color;
+}
+
 sf::Vector2f PhysicsHelper::cast(const b2Vec2& point)
 {
   return sf::Vector2f(point.x, point.y);

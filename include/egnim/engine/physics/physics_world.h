@@ -37,6 +37,7 @@ namespace egnim::physics
     class PhysicsWorldCallback;
     class PhysicsQueryAABBCallback;
     class PhysicsRayCastCallback;
+    class PhysicsDebugDraw;
   }
 
   class EGNIM_UTILITY_API PhysicsWorld
@@ -46,6 +47,15 @@ namespace egnim::physics
     friend priv::PhysicsWorldCallback;
 
   public:
+    enum DebugDrawFlags
+    {
+      Shape           = 1 << 0,
+      Joint           = 1 << 1,
+      AABB            = 1 << 2,
+      Pair            = 1 << 3,
+      CenterOfMass    = 1 << 4
+    };
+
     using QueryAABBCallback = std::function<bool(PhysicsShape*)>;
     using RayCastCallback = std::function<float(PhysicsShape*, const sf::Vector2f&, const sf::Vector2f&, float)>;
 
@@ -74,6 +84,11 @@ namespace egnim::physics
     void queryAABB(const QueryAABBCallback& callback, const PhysicsAABB& physics_aabb);
     void rayCast(const RayCastCallback& callback, const sf::Vector2f& first_point, const sf::Vector2f& second_point);
 
+    void setDebugDrawFlags(unsigned flags);
+    [[nodiscard]] unsigned getDebugDrawFlags() const;
+
+    void debugDraw();
+
   private:
     void attachPhysicsBody(PhysicsBody* physics_body);
     void detachPhysicsBody(PhysicsBody* physics_body);
@@ -98,6 +113,7 @@ namespace egnim::physics
     std::unique_ptr<b2World> m_b2_world;
     std::list<PhysicsBody*> m_physics_bodies;
     std::list<PhysicsJoint*> m_physics_joints;
+    std::unique_ptr<priv::PhysicsDebugDraw> m_debug_draw;
   };
 
 } // namespace egnim::physics

@@ -68,6 +68,8 @@ set(sources
         ${source_root}/physics/priv/physics_helper.cpp
         ${source_root}/physics/priv/physics_world_callbacks.h
         ${source_root}/physics/priv/physics_world_callbacks.cpp
+        ${source_root}/physics/priv/physics_debug_draw.h
+        ${source_root}/physics/priv/physics_debug_draw.cpp
 
         ${source_root}/events/event_dispatcher.cpp
         ${source_root}/events/event.cpp

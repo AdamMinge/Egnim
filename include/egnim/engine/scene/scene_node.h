@@ -42,6 +42,8 @@ namespace egnim::scene
 
   protected:
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+    void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
+
     void updateCurrent(sf::Time dt) override;
 
   private:

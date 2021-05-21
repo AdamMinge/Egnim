@@ -10,8 +10,9 @@
 #include <egnim/engine/core/context.h>
 #include <egnim/engine/physics/priv/physics_world_callbacks.h>
 #include <egnim/engine/physics/priv/physics_helper.h>
+#include <egnim/engine/physics/priv/physics_debug_draw.h>
 /* -------------------------------------------------------------------------- */
-#include <egnim/engine/physics/physics_shape.h>
+
 namespace egnim::physics {
 
 /* --------------------------------- PhysicsWorld --------------------------- */
@@ -21,9 +22,11 @@ PhysicsWorld::PhysicsWorld(scene::SceneNode& scene_node, const sf::Vector2f& gra
   m_physics_world_callback(std::make_unique<priv::PhysicsWorldCallback>(scene_node.getContext().getEventDispatcher())),
   m_physics_query_aabb_callback(std::make_unique<priv::PhysicsQueryAABBCallback>()),
   m_physics_ray_cast_callback(std::make_unique<priv::PhysicsRayCastCallback>()),
-  m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y)))
+  m_b2_world(std::make_unique<b2World>(b2Vec2(gravity.x, gravity.y))),
+  m_debug_draw(std::make_unique<priv::PhysicsDebugDraw>(scene_node.getContext().getRenderWindow()))
 {
   m_b2_world->SetContactListener(m_physics_world_callback.get());
+  m_b2_world->SetDebugDraw(m_debug_draw.get());
 }
 
 PhysicsWorld::~PhysicsWorld()
@@ -117,6 +120,21 @@ void PhysicsWorld::rayCast(const RayCastCallback& callback, const sf::Vector2f& 
   m_b2_world->RayCast(m_physics_ray_cast_callback.get(),
                       priv::PhysicsHelper::pixel_to_meter(first_point),
                       priv::PhysicsHelper::pixel_to_meter(second_point));
+}
+
+void PhysicsWorld::setDebugDrawFlags(unsigned flags)
+{
+  m_debug_draw->SetFlags(flags);
+}
+
+unsigned PhysicsWorld::getDebugDrawFlags() const
+{
+  return m_debug_draw->GetFlags();
+}
+
+void PhysicsWorld::debugDraw()
+{
+  m_b2_world->DebugDraw();
 }
 
 void PhysicsWorld::attachPhysicsBody(PhysicsBody* physics_body)
