@@ -7,6 +7,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<MusicNode> MusicNode::create()
+{
+  return std::unique_ptr<MusicNode>(new (std::nothrow) MusicNode);
+}
+
 MusicNode::MusicNode() :
   m_default_settings(Settings{}),
   m_current_music(nullptr)

@@ -6,8 +6,6 @@
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/scene_visitor.h>
 #include <egnim/engine/math/vector_helper.h>
-/* --------------------------------- Standard ------------------------------- */
-#include <cassert>
 /* ----------------------------------- Box2d -------------------------------- */
 #include <box2d/b2_distance_joint.h>
 #include <box2d/b2_friction_joint.h>
@@ -147,6 +145,14 @@ void PhysicsJoint::onExit()
 
 /* ------------------------------ DistancePhysicsJoint ---------------------- */
 
+std::unique_ptr<DistancePhysicsJoint> DistancePhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
+  const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor)
+{
+  return std::unique_ptr<DistancePhysicsJoint>(new (std::nothrow) DistancePhysicsJoint(
+    first_physics_body, second_physics_body, first_anchor, second_anchor));
+}
+
 DistancePhysicsJoint::DistancePhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                            const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor) :
   PhysicsJoint(Type::Distance, first_physics_body, second_physics_body),
@@ -159,6 +165,8 @@ DistancePhysicsJoint::DistancePhysicsJoint(PhysicsBody& first_physics_body, Phys
   m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(first_anchor);
   m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(second_anchor);
 }
+
+DistancePhysicsJoint::~DistancePhysicsJoint() = default;
 
 void DistancePhysicsJoint::setLength(float length)
 {
@@ -269,6 +277,13 @@ std::unique_ptr<b2JointDef> DistancePhysicsJoint::createInternalJointDef(
 
 /* ------------------------------ FrictionPhysicsJoint ---------------------- */
 
+std::unique_ptr<FrictionPhysicsJoint> FrictionPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body, const sf::Vector2f& anchor)
+{
+  return std::unique_ptr<FrictionPhysicsJoint>(new (std::nothrow) FrictionPhysicsJoint(
+    first_physics_body, second_physics_body, anchor));
+}
+
 FrictionPhysicsJoint::FrictionPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                            const sf::Vector2f& anchor) :
   PhysicsJoint(Type::Friction, first_physics_body, second_physics_body),
@@ -278,6 +293,8 @@ FrictionPhysicsJoint::FrictionPhysicsJoint(PhysicsBody& first_physics_body, Phys
   m_first_local_anchor = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
   m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
 }
+
+FrictionPhysicsJoint::~FrictionPhysicsJoint() = default;
 
 void FrictionPhysicsJoint::setMaxForce(float force)
 {
@@ -350,6 +367,13 @@ std::unique_ptr<b2JointDef> FrictionPhysicsJoint::createInternalJointDef(
 
 /* -------------------------------- MotorPhysicsJoint ----------------------- */
 
+std::unique_ptr<MotorPhysicsJoint> MotorPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body)
+{
+  return std::unique_ptr<MotorPhysicsJoint>(new (std::nothrow) MotorPhysicsJoint(
+    first_physics_body, second_physics_body));
+}
+
 MotorPhysicsJoint::MotorPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body) :
   PhysicsJoint(Type::Motor, first_physics_body, second_physics_body),
   m_max_force(1.f),
@@ -359,6 +383,8 @@ MotorPhysicsJoint::MotorPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBod
   m_linear_offset = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(getSecondPhysicsBody().getWorldPosition());
   m_angular_offset = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
+
+MotorPhysicsJoint::~MotorPhysicsJoint() = default;
 
 void MotorPhysicsJoint::setMaxForce(float force)
 {
@@ -451,6 +477,14 @@ std::unique_ptr<b2JointDef> MotorPhysicsJoint::createInternalJointDef(
 
 /* ------------------------------ PrismaticPhysicsJoint --------------------- */
 
+std::unique_ptr<PrismaticPhysicsJoint> PrismaticPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
+  const sf::Vector2f& anchor, const sf::Vector2f& axis)
+{
+  return std::unique_ptr<PrismaticPhysicsJoint>(new (std::nothrow) PrismaticPhysicsJoint(
+    first_physics_body, second_physics_body, anchor, axis));
+}
+
 PrismaticPhysicsJoint::PrismaticPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                              const sf::Vector2f& anchor, const sf::Vector2f& axis) :
   PhysicsJoint(Type::Prismatic, first_physics_body, second_physics_body),
@@ -466,6 +500,8 @@ PrismaticPhysicsJoint::PrismaticPhysicsJoint(PhysicsBody& first_physics_body, Ph
   m_first_local_axis = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(axis);
   m_reference_angle = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
+
+PrismaticPhysicsJoint::~PrismaticPhysicsJoint() = default;
 
 float PrismaticPhysicsJoint::getReferenceAngle() const
 {
@@ -603,6 +639,16 @@ std::unique_ptr<b2JointDef> PrismaticPhysicsJoint::createInternalJointDef(
 
 /* ------------------------------- PulleyPhysicsJoint ----------------------- */
 
+std::unique_ptr<PulleyPhysicsJoint> PulleyPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
+  const sf::Vector2f& first_ground_anchor, const sf::Vector2f& second_ground_anchor,
+  const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ratio)
+{
+  return std::unique_ptr<PulleyPhysicsJoint>(new (std::nothrow) PulleyPhysicsJoint(
+    first_physics_body, second_physics_body, first_ground_anchor, second_ground_anchor,
+    first_anchor, second_anchor, ratio));
+}
+
 PulleyPhysicsJoint::PulleyPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                        const sf::Vector2f& first_ground_anchor, const sf::Vector2f& second_ground_anchor,
                                        const sf::Vector2f& first_anchor, const sf::Vector2f& second_anchor, float ratio) :
@@ -616,6 +662,8 @@ PulleyPhysicsJoint::PulleyPhysicsJoint(PhysicsBody& first_physics_body, PhysicsB
   m_first_length = math::VectorHelper::distance(first_anchor, first_ground_anchor);
   m_second_length = math::VectorHelper::distance(second_anchor, second_ground_anchor);
 }
+
+PulleyPhysicsJoint::~PulleyPhysicsJoint() = default;
 
 float PulleyPhysicsJoint::getFirstLength() const
 {
@@ -700,6 +748,13 @@ std::unique_ptr<b2JointDef> PulleyPhysicsJoint::createInternalJointDef(
 
 /* ------------------------------ RevolutePhysicsJoint ---------------------- */
 
+std::unique_ptr<RevolutePhysicsJoint> RevolutePhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body, const sf::Vector2f& anchor)
+{
+  return std::unique_ptr<RevolutePhysicsJoint>(new (std::nothrow) RevolutePhysicsJoint(
+    first_physics_body, second_physics_body, anchor));
+}
+
 RevolutePhysicsJoint::RevolutePhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                            const sf::Vector2f& anchor) :
   PhysicsJoint(Type::Revolute, first_physics_body, second_physics_body),
@@ -714,6 +769,8 @@ RevolutePhysicsJoint::RevolutePhysicsJoint(PhysicsBody& first_physics_body, Phys
   m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
   m_reference_angle = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
+
+RevolutePhysicsJoint::~RevolutePhysicsJoint() = default;
 
 float RevolutePhysicsJoint::getReferenceAngle() const
 {
@@ -844,6 +901,13 @@ std::unique_ptr<b2JointDef> RevolutePhysicsJoint::createInternalJointDef(
 
 /* -------------------------------- WeldPhysicsJoint ------------------------ */
 
+std::unique_ptr<WeldPhysicsJoint> WeldPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body, const sf::Vector2f& anchor)
+{
+  return std::unique_ptr<WeldPhysicsJoint>(new (std::nothrow) WeldPhysicsJoint(
+    first_physics_body, second_physics_body, anchor));
+}
+
 WeldPhysicsJoint::WeldPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                    const sf::Vector2f& anchor) :
   PhysicsJoint(Type::Weld, first_physics_body, second_physics_body),
@@ -853,6 +917,8 @@ WeldPhysicsJoint::WeldPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody&
   m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
   m_reference_angle = getSecondPhysicsBody().getRotation() - getFirstPhysicsBody().getRotation();
 }
+
+WeldPhysicsJoint::~WeldPhysicsJoint() = default;
 
 float WeldPhysicsJoint::getReferenceAngle() const
 {
@@ -910,6 +976,14 @@ std::unique_ptr<b2JointDef> WeldPhysicsJoint::createInternalJointDef(
 
 /* ------------------------------- WheelPhysicsJoint ------------------------ */
 
+std::unique_ptr<WheelPhysicsJoint> WheelPhysicsJoint::create(
+  PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
+  const sf::Vector2f& anchor, const sf::Vector2f& axis)
+{
+  return std::unique_ptr<WheelPhysicsJoint>(new (std::nothrow) WheelPhysicsJoint(
+    first_physics_body, second_physics_body, anchor, axis));
+}
+
 WheelPhysicsJoint::WheelPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBody& second_physics_body,
                                      const sf::Vector2f& anchor, const sf::Vector2f& axis) :
   PhysicsJoint(Type::Wheel, first_physics_body, second_physics_body),
@@ -926,6 +1000,8 @@ WheelPhysicsJoint::WheelPhysicsJoint(PhysicsBody& first_physics_body, PhysicsBod
   m_second_local_anchor = getSecondPhysicsBody().getWorldTransform().getInverse().transformPoint(anchor);
   m_first_local_axis = getFirstPhysicsBody().getWorldTransform().getInverse().transformPoint(axis);
 }
+
+WheelPhysicsJoint::~WheelPhysicsJoint() = default;
 
 float WheelPhysicsJoint::getJointTranslation() const
 {

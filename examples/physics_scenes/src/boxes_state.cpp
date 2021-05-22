@@ -26,9 +26,9 @@ std::unique_ptr<egnim::scene::Node> BoxesState::createSpriteNode(const sf::Vecto
   auto& physics_world = scene_node.getPhysicsWorld();
 
   // create sprite / physics_body / physics_shape for node
-  auto node = std::make_unique<egnim::scene::SpriteNode>();
-  auto physics_body = std::make_unique<egnim::physics::PhysicsBody>();
-  auto physics_shape = std::make_unique<egnim::physics::PhysicsShapeBox>(
+  auto node = egnim::scene::SpriteNode::create();
+  auto physics_body = egnim::physics::PhysicsBody::create();
+  auto physics_shape = egnim::physics::PhysicsShapeBox::create(
     sf::Vector2f(static_cast<float>(texture.getSize().x),
                  static_cast<float>(texture.getSize().y)), sf::Vector2f(0,0));
 
@@ -74,7 +74,7 @@ void BoxesState::createCamera(const sf::Vector2f& position, const sf::FloatRect&
 {
   // create camera
   auto& scene_node = getSceneNode();
-  auto camera_node = std::make_unique<egnim::scene::CameraNode>();
+  auto camera_node = egnim::scene::CameraNode::create();
   camera_node->setSize(static_cast<sf::Vector2f>(scene_node.getContext().getRenderWindow().getSize()));
   camera_node->setPosition(position);
   camera_node->setViewport(rect);

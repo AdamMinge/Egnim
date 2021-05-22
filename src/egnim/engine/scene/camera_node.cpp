@@ -11,6 +11,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<CameraNode> CameraNode::create()
+{
+  return std::unique_ptr<CameraNode>(new (std::nothrow) CameraNode);
+}
+
 CameraNode::CameraNode() :
   m_size(0, 0),
   m_viewport(0, 0, 0, 0),

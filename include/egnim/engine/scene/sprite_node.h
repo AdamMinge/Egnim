@@ -18,7 +18,9 @@ namespace egnim::scene
     EGNIM_CLASS(SpriteNode, Node)
 
   public:
-    explicit SpriteNode();
+    [[nodiscard]] static std::unique_ptr<SpriteNode> create();
+
+  public:
     ~SpriteNode() override;
 
     void setTexture(const sf::Texture& texture);
@@ -30,6 +32,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit SpriteNode();
+
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:

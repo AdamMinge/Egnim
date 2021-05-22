@@ -96,9 +96,11 @@ namespace egnim::physics
   class PhysicsShapeCircle : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
-                                const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeCircle() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeCircle> create(
+      float radius, const sf::Vector2f& offset, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeCircle() override;
 
     [[nodiscard]] float getRadius() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
@@ -108,6 +110,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
+                                const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -118,9 +123,11 @@ namespace egnim::physics
   class PhysicsShapeBox : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
-                             const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeBox() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeBox> create(
+      const sf::Vector2f& size, const sf::Vector2f& offset, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeBox() override;
 
     [[nodiscard]] const sf::Vector2f& getSize() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
@@ -130,6 +137,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
+                             const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -140,9 +150,11 @@ namespace egnim::physics
   class PhysicsShapePolygon : public PhysicsShape
   {
   public:
-    explicit PhysicsShapePolygon(std::list<sf::Vector2f> points,
-                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapePolygon() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapePolygon> create(
+      std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapePolygon() override;
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
@@ -151,6 +163,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapePolygon(std::list<sf::Vector2f> points,
+                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -160,9 +175,11 @@ namespace egnim::physics
   class PhysicsShapeEdgeSegment : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
-                                     const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeEdgeSegment() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeEdgeSegment> create(
+      const sf::Vector2f& first, const sf::Vector2f& second, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeEdgeSegment() override;
 
     [[nodiscard]] const sf::Vector2f& getFirstPosition() const;
     [[nodiscard]] const sf::Vector2f& getSecondPosition() const;
@@ -172,6 +189,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
+                                     const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -182,9 +202,11 @@ namespace egnim::physics
   class PhysicsShapeEdgeBox : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
-                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeEdgeBox() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeEdgeBox> create(
+      const sf::Vector2f& size, const sf::Vector2f& offset, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeEdgeBox() override;
 
     [[nodiscard]] const sf::Vector2f& getSize() const;
     [[nodiscard]] const sf::Vector2f& getOffset() const;
@@ -194,6 +216,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
+                                 const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -204,9 +229,11 @@ namespace egnim::physics
   class PhysicsShapeEdgePolygon : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
-                                     const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeEdgePolygon() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeEdgePolygon> create(
+      std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeEdgePolygon() override;
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
@@ -215,6 +242,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
+                                     const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:
@@ -224,9 +254,11 @@ namespace egnim::physics
   class PhysicsShapeEdgeChain : public PhysicsShape
   {
   public:
-    explicit PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
-                                   const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
-    ~PhysicsShapeEdgeChain() override = default;
+    [[nodiscard]] static std::unique_ptr<PhysicsShapeEdgeChain> create(
+      std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
+  public:
+    ~PhysicsShapeEdgeChain() override;
 
     [[nodiscard]] const std::list<sf::Vector2f>& getPoints() const;
 
@@ -235,6 +267,9 @@ namespace egnim::physics
     [[nodiscard]] PhysicsMassInfo getMassInfo() const override;
 
   protected:
+    explicit PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
+                                   const PhysicsMaterial& physics_material = PhysicsMaterial::DefaultMaterial);
+
     [[nodiscard]] std::unique_ptr<b2Shape> createInternalShape() const override;
 
   private:

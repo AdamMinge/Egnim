@@ -213,6 +213,13 @@ void PhysicsShape::onExit()
 
 /* ------------------------------ PhysicsShapeCircle ------------------------ */
 
+std::unique_ptr<PhysicsShapeCircle> PhysicsShapeCircle::create(
+  float radius, const sf::Vector2f& offset, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeCircle>(new (std::nothrow) PhysicsShapeCircle(
+    radius, offset, physics_material));
+}
+
 PhysicsShapeCircle::PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
                                        const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::Circle, physics_material),
@@ -221,6 +228,8 @@ PhysicsShapeCircle::PhysicsShapeCircle(float radius, const sf::Vector2f& offset,
 {
 
 }
+
+PhysicsShapeCircle::~PhysicsShapeCircle() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeCircle::createInternalShape() const
 {
@@ -260,6 +269,14 @@ PhysicsMassInfo PhysicsShapeCircle::getMassInfo() const
 
 /* -------------------------------- PhysicsShapeBox ------------------------- */
 
+std::unique_ptr<PhysicsShapeBox> PhysicsShapeBox::create(
+  const sf::Vector2f& size, const sf::Vector2f& offset, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeBox>(new (std::nothrow) PhysicsShapeBox(
+    size, offset, physics_material));
+}
+
+
 PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                  const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::Box, physics_material),
@@ -268,6 +285,8 @@ PhysicsShapeBox::PhysicsShapeBox(const sf::Vector2f& size, const sf::Vector2f& o
 {
 
 }
+
+PhysicsShapeBox::~PhysicsShapeBox() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeBox::createInternalShape() const
 {
@@ -345,6 +364,13 @@ PhysicsMassInfo PhysicsShapeBox::getMassInfo() const
 
 /* ------------------------------ PhysicsShapePolygon ----------------------- */
 
+std::unique_ptr<PhysicsShapePolygon> PhysicsShapePolygon::create(
+  std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapePolygon>(new (std::nothrow) PhysicsShapePolygon(
+    std::move(points), physics_material));
+}
+
 PhysicsShapePolygon::PhysicsShapePolygon(std::list<sf::Vector2f> points,
                                          const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::Polygon, physics_material),
@@ -352,6 +378,8 @@ PhysicsShapePolygon::PhysicsShapePolygon(std::list<sf::Vector2f> points,
 {
 
 }
+
+PhysicsShapePolygon::~PhysicsShapePolygon() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapePolygon::createInternalShape() const
 {
@@ -505,6 +533,13 @@ PhysicsMassInfo PhysicsShapePolygon::getMassInfo() const
 
 /* --------------------------- PhysicsShapeEdgeSegment ---------------------- */
 
+std::unique_ptr<PhysicsShapeEdgeSegment> PhysicsShapeEdgeSegment::create(
+  const sf::Vector2f& first, const sf::Vector2f& second, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeEdgeSegment>(new (std::nothrow) PhysicsShapeEdgeSegment(
+    first, second, physics_material));
+}
+
 PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, const sf::Vector2f& second,
                                                  const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::EdgeSegment, physics_material),
@@ -513,6 +548,8 @@ PhysicsShapeEdgeSegment::PhysicsShapeEdgeSegment(const sf::Vector2f& first, cons
 {
 
 }
+
+PhysicsShapeEdgeSegment::~PhysicsShapeEdgeSegment() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeSegment::createInternalShape() const
 {
@@ -550,6 +587,13 @@ PhysicsMassInfo PhysicsShapeEdgeSegment::getMassInfo() const
 
 /* ----------------------------- PhysicsShapeEdgeBox ------------------------ */
 
+std::unique_ptr<PhysicsShapeEdgeBox> PhysicsShapeEdgeBox::create(
+  const sf::Vector2f& size, const sf::Vector2f& offset, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeEdgeBox>(new (std::nothrow) PhysicsShapeEdgeBox(
+    size, offset, physics_material));
+}
+
 PhysicsShapeEdgeBox::PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vector2f& offset,
                                          const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::EdgeBox, physics_material),
@@ -558,6 +602,8 @@ PhysicsShapeEdgeBox::PhysicsShapeEdgeBox(const sf::Vector2f& size, const sf::Vec
 {
 
 }
+
+PhysicsShapeEdgeBox::~PhysicsShapeEdgeBox() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeBox::createInternalShape() const
 {
@@ -602,6 +648,13 @@ PhysicsMassInfo PhysicsShapeEdgeBox::getMassInfo() const
 
 /* ---------------------------- PhysicsShapeEdgePolygon --------------------- */
 
+[[nodiscard]] std::unique_ptr<PhysicsShapeEdgePolygon> PhysicsShapeEdgePolygon::create(
+  std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeEdgePolygon>(new (std::nothrow) PhysicsShapeEdgePolygon(
+    std::move(points), physics_material));
+}
+
 PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
                                                  const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::EdgePolygon, physics_material),
@@ -609,6 +662,8 @@ PhysicsShapeEdgePolygon::PhysicsShapeEdgePolygon(std::list<sf::Vector2f> points,
 {
 
 }
+
+PhysicsShapeEdgePolygon::~PhysicsShapeEdgePolygon() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgePolygon::createInternalShape() const
 {
@@ -649,6 +704,13 @@ PhysicsMassInfo PhysicsShapeEdgePolygon::getMassInfo() const
 
 /* ----------------------------- PhysicsShapeEdgeChain ---------------------- */
 
+std::unique_ptr<PhysicsShapeEdgeChain> PhysicsShapeEdgeChain::create(
+  std::list<sf::Vector2f> points, const PhysicsMaterial& physics_material)
+{
+  return std::unique_ptr<PhysicsShapeEdgeChain>(new (std::nothrow) PhysicsShapeEdgeChain(
+    std::move(points), physics_material));
+}
+
 PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
                                              const PhysicsMaterial& physics_material) :
   PhysicsShape(Type::EdgeChain, physics_material),
@@ -656,6 +718,8 @@ PhysicsShapeEdgeChain::PhysicsShapeEdgeChain(std::list<sf::Vector2f> points,
 {
 
 }
+
+PhysicsShapeEdgeChain::~PhysicsShapeEdgeChain() = default;
 
 std::unique_ptr<b2Shape> PhysicsShapeEdgeChain::createInternalShape() const
 {

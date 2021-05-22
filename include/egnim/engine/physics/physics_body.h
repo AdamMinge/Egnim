@@ -37,7 +37,9 @@ namespace egnim::physics
     enum class Type;
 
   public:
-    explicit PhysicsBody();
+    [[nodiscard]] static std::unique_ptr<PhysicsBody> create();
+
+  public:
     ~PhysicsBody() override;
 
     PhysicsBody(const PhysicsBody&) = delete;
@@ -100,6 +102,9 @@ namespace egnim::physics
     [[nodiscard]] bool isEnabled() const;
 
     void accept(scene::SceneVisitor& visitor) override;
+
+  protected:
+    explicit PhysicsBody();
 
   private:
     void onEnter() override;

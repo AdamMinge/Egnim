@@ -20,7 +20,9 @@ namespace egnim::scene
     EGNIM_CLASS(LabelNode, Node)
 
   public:
-    explicit LabelNode();
+    [[nodiscard]] static std::unique_ptr<LabelNode> create();
+
+  public:
     ~LabelNode() override;
 
     void setFont(const sf::Font& font);
@@ -46,6 +48,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit LabelNode();
+
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:

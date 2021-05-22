@@ -60,10 +60,8 @@ namespace egnim::scene
 
   template<typename TYPE>
   [[maybe_unused]] const bool RegisteredInNodeFactory<TYPE>::s_registered = NodeFactory::getInstance().registerNode(
-    TYPE::staticClassName(), { std::function<std::unique_ptr<Node>()>([](){ return std::make_unique<TYPE>(); }) });
+    TYPE::staticClassName(), { std::function<std::unique_ptr<Node>()>([](){ return TYPE::create(); }) });
 
 } // namespace egnim::scene
 
-
-
-#endif //NODE_FACTORY_Hs
+#endif //NODE_FACTORY_H

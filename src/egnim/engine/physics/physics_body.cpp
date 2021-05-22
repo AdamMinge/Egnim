@@ -48,6 +48,11 @@ do {                                                                            
 
 /* -------------------------------- PhysicsBody ----------------------------- */
 
+std::unique_ptr<PhysicsBody> PhysicsBody::create()
+{
+  return std::unique_ptr<PhysicsBody>(new (std::nothrow) PhysicsBody);
+}
+
 PhysicsBody::PhysicsBody() :
   m_type(Type::DynamicBody),
   m_physics_world(nullptr),

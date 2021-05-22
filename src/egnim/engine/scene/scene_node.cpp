@@ -10,6 +10,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<SceneNode> SceneNode::create(core::Context& context)
+{
+  return std::unique_ptr<SceneNode>(new (std::nothrow) SceneNode(context));
+}
+
 SceneNode::SceneNode(core::Context& context) :
   m_context(context),
   m_physics_world(std::make_unique<physics::PhysicsWorld>(*this, sf::Vector2f())),

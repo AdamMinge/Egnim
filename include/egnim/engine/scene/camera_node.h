@@ -18,6 +18,9 @@ namespace egnim::scene
     EGNIM_CLASS(CameraNode, Node)
 
   public:
+    [[nodiscard]] static std::unique_ptr<CameraNode> create();
+
+  public:
     enum CameraFlag
     {
       DEFAULT = 1 << 0,
@@ -32,7 +35,6 @@ namespace egnim::scene
     };
 
   public:
-    explicit CameraNode();
     ~CameraNode() override;
 
     void setSize(float width, float height);
@@ -52,6 +54,9 @@ namespace egnim::scene
     [[nodiscard]] bool isEnabled() const;
 
     void accept(SceneVisitor& visitor) override;
+
+  protected:
+    explicit CameraNode();
 
   private:
     sf::Vector2f m_size;

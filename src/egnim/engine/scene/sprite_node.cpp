@@ -7,6 +7,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<SpriteNode> SpriteNode::create()
+{
+  return std::unique_ptr<SpriteNode>(new (std::nothrow) SpriteNode);
+}
+
 SpriteNode::SpriteNode() = default;
 
 SpriteNode::~SpriteNode() = default;

@@ -19,7 +19,9 @@ namespace egnim::scene
     EGNIM_CLASS(AnimatedSpriteNode, Node)
 
   public:
-    explicit AnimatedSpriteNode();
+    [[nodiscard]] static std::unique_ptr<AnimatedSpriteNode> create();
+
+  public:
     ~AnimatedSpriteNode() override;
 
     void addAnimation(std::string_view id, graphics::AnimatedSprite&& animated_sprite);
@@ -31,6 +33,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit AnimatedSpriteNode();
+
     void updateCurrent(sf::Time dt) override;
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 

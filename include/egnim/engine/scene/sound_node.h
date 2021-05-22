@@ -33,7 +33,9 @@ namespace egnim::scene
     };
 
   public:
-    explicit SoundNode();
+    [[nodiscard]] static std::unique_ptr<SoundNode> create();
+
+  public:
     ~SoundNode() override;
 
     void setDefaultSettings(const Settings& settings);
@@ -54,6 +56,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit SoundNode();
+
     void updateCurrent(sf::Time dt) override;
 
   private:

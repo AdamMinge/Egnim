@@ -7,6 +7,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<SoundNode> SoundNode::create()
+{
+  return std::unique_ptr<SoundNode>(new (std::nothrow) SoundNode);
+}
+
 SoundNode::SoundNode() :
   m_default_settings(Settings{})
 {

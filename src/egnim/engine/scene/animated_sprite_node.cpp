@@ -10,6 +10,11 @@
 namespace egnim::scene
 {
 
+std::unique_ptr<AnimatedSpriteNode> AnimatedSpriteNode::create()
+{
+  return std::unique_ptr<AnimatedSpriteNode>(new (std::nothrow) AnimatedSpriteNode);
+}
+
 AnimatedSpriteNode::AnimatedSpriteNode() :
   m_current_animation(m_animated_sprites.end())
 {

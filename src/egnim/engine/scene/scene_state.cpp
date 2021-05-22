@@ -8,7 +8,7 @@ namespace egnim::scene {
 
 SceneState::SceneState(core::StateStack& state_stack, core::Context& context) :
   core::State(state_stack, context),
-  m_scene_node(std::make_unique<SceneNode>(context))
+  m_scene_node(SceneNode::create(context))
 {
 
 }

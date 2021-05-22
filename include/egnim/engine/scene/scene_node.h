@@ -26,7 +26,9 @@ namespace egnim::scene
     EGNIM_CLASS(SceneNode, Node)
 
   public:
-    explicit SceneNode(core::Context& context);
+    [[nodiscard]] static std::unique_ptr<SceneNode> create(core::Context& context);
+
+  public:
     ~SceneNode() override;
 
     [[nodiscard]] physics::PhysicsWorld& getPhysicsWorld();
@@ -41,6 +43,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit SceneNode(core::Context& context);
+
     void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 

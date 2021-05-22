@@ -7,6 +7,11 @@
 
 namespace egnim::scene {
 
+std::unique_ptr<TileMapNode> TileMapNode::create()
+{
+  return std::unique_ptr<TileMapNode>(new (std::nothrow) TileMapNode);
+}
+
 TileMapNode::TileMapNode() :
   m_tile_map(graphics::TileMap::Orientation::Orthogonal,
              graphics::TileMap::RenderOrder::LeftDown,

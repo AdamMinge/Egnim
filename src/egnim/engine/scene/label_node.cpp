@@ -8,6 +8,11 @@
 namespace egnim::scene
 {
 
+std::unique_ptr<LabelNode> LabelNode::create()
+{
+  return std::unique_ptr<LabelNode>(new (std::nothrow) LabelNode);
+}
+
 LabelNode::LabelNode() = default;
 
 LabelNode::~LabelNode() = default;

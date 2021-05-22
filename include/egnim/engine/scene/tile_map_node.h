@@ -18,7 +18,9 @@ namespace egnim::scene
     EGNIM_CLASS(TileMapNode, Node)
 
   public:
-    explicit TileMapNode();
+    [[nodiscard]] static std::unique_ptr<TileMapNode> create();
+
+  public:
     ~TileMapNode() override;
 
     [[nodiscard]] graphics::TileMap& getTileMap();
@@ -27,6 +29,8 @@ namespace egnim::scene
     void accept(SceneVisitor& visitor) override;
 
   protected:
+    explicit TileMapNode();
+
     void drawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 
   private:

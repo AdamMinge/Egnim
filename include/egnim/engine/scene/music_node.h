@@ -26,7 +26,9 @@ namespace egnim::scene
     };
 
   public:
-    explicit MusicNode();
+    [[nodiscard]] static std::unique_ptr<MusicNode> create();
+
+  public:
     ~MusicNode() override;
 
     void setDefaultSettings(const Settings& settings);
@@ -44,6 +46,9 @@ namespace egnim::scene
     bool isStopped();
 
     void accept(SceneVisitor& visitor) override;
+
+  protected:
+    explicit MusicNode();
 
   private:
     Settings m_default_settings;
