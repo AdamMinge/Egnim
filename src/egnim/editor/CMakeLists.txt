@@ -20,6 +20,7 @@ set(sources
         ${source_root}/document_manager.cpp
         ${source_root}/language_manager.cpp
         ${source_root}/style_manager.cpp
+        ${source_root}/action_manager.cpp
         ${source_root}/game_document.cpp
         ${source_root}/game_editor.cpp
         ${source_root}/undo_dock.cpp
@@ -41,6 +42,7 @@ set(includes
         ${include_root}/document_manager.h
         ${include_root}/language_manager.h
         ${include_root}/style_manager.h
+        ${include_root}/action_manager.h
         ${include_root}/game_document.h
         ${include_root}/game_editor.h
         ${include_root}/undo_dock.h
@@ -56,7 +58,8 @@ set(includes
 set(resources)
 
 set(uis
-        ${uis_root}/main_window.ui)
+        ${uis_root}/main_window.ui
+        ${uis_root}/no_editor_widget.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

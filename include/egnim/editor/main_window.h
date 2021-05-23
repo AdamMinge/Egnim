@@ -9,8 +9,8 @@ namespace Ui { class MainWindow; }
 
 class DocumentManager;
 class LanguageManager;
+class ActionManager;
 class StyleManager;
-
 class Document;
 
 class MainWindow final : public QMainWindow
@@ -49,8 +49,9 @@ private:
 
   DocumentManager& m_document_manager;
   LanguageManager& m_language_manager;
+  ActionManager& m_action_manager;
   StyleManager& m_style_manager;
-
+  
   Document* m_current_document;
 };
 

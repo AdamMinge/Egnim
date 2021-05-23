@@ -4,17 +4,19 @@
 #include <egnim/editor/main_window.h>
 #include <egnim/editor/document_manager.h>
 #include <egnim/editor/language_manager.h>
+#include <egnim/editor/action_manager.h>
 #include <egnim/editor/style_manager.h>
 #include <egnim/editor/game_editor.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
-#include <egnim/editor/game_document.h>
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   m_ui(new Ui::MainWindow()),
   m_document_manager(DocumentManager::getInstance()),
   m_language_manager(LanguageManager::getInstance()),
+  m_action_manager(ActionManager::getInstance()),
   m_style_manager(StyleManager::getInstance()),
   m_current_document(nullptr)
 {
@@ -38,6 +40,7 @@ MainWindow::~MainWindow()
 
   DocumentManager::deleteInstance();
   LanguageManager::deleteInstance();
+  ActionManager::deleteInstance();
   StyleManager::deleteInstance();
 }
 
