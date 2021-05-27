@@ -21,6 +21,7 @@ set(sources
         ${source_root}/language_manager.cpp
         ${source_root}/style_manager.cpp
         ${source_root}/action_manager.cpp
+        ${source_root}/preferences_manager.cpp
         ${source_root}/game_document.cpp
         ${source_root}/game_editor.cpp
         ${source_root}/undo_dock.cpp
@@ -43,6 +44,7 @@ set(includes
         ${include_root}/language_manager.h
         ${include_root}/style_manager.h
         ${include_root}/action_manager.h
+        ${include_root}/preferences_manager.h
         ${include_root}/game_document.h
         ${include_root}/game_editor.h
         ${include_root}/undo_dock.h

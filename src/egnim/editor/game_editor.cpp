@@ -7,7 +7,18 @@
 #include <egnim/editor/scene_dock.h>
 #include <egnim/editor/inspector_dock.h>
 #include <egnim/editor/file_system_dock.h>
+#include <egnim/editor/preferences_manager.h>
 /* -------------------------------------------------------------------------- */
+
+/* -------------------------------- Preferences ----------------------------- */
+
+struct GameEditor::Preferences
+{
+  Preference<QSize> editor_size = Preference<QSize>(QString("game_editor/size"));
+  Preference<QByteArray> editor_state = Preference<QByteArray>(QString("game_editor/state"));
+};
+
+/* -------------------------------- GameEditor ------------------------------ */
 
 GameEditor::GameEditor(QObject* parent) :
   Editor(parent),
@@ -16,7 +27,8 @@ GameEditor::GameEditor(QObject* parent) :
   m_undo_dock(new UndoDock(m_main_window.data())),
   m_scene_dock(new SceneDock(m_main_window.data())),
   m_inspector_dock(new InspectorDock(m_main_window.data())),
-  m_file_system_dock(new FileSystemDock(m_main_window.data()))
+  m_file_system_dock(new FileSystemDock(m_main_window.data())),
+  m_preferences(new Preferences)
 {
   m_main_window->setDockOptions(m_main_window->dockOptions() | QMainWindow::GroupedDragging);
   m_main_window->setDockNestingEnabled(true);
@@ -55,12 +67,20 @@ QWidget* GameEditor::getEditorWidget() const
 
 void GameEditor::saveState()
 {
- // TODO : implementation //
+  m_preferences->editor_state = m_main_window->saveState();
+  m_preferences->editor_size = m_main_window->size();
 }
 
 void GameEditor::restoreState()
 {
-  // TODO : implementation //
+  auto editor_size = static_cast<QSize>(m_preferences->editor_size);
+  auto editor_state = static_cast<QByteArray>(m_preferences->editor_state);
+
+  if(!editor_size.isNull())
+    m_main_window->resize(editor_size);
+
+  if(!editor_state.isNull())
+    m_main_window->restoreState(editor_state);
 }
 
 QList<QDockWidget*> GameEditor::getDockWidgets() const

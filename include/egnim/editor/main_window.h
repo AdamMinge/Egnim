@@ -7,6 +7,7 @@
 
 namespace Ui { class MainWindow; }
 
+class PreferencesManager;
 class DocumentManager;
 class LanguageManager;
 class ActionManager;
@@ -16,6 +17,9 @@ class Document;
 class MainWindow final : public QMainWindow
 {
   Q_OBJECT
+
+private:
+  struct Preferences;
 
 public:
   explicit MainWindow(QWidget *parent = nullptr);
@@ -47,11 +51,14 @@ private:
 private:
   QScopedPointer<Ui::MainWindow> m_ui;
 
+  PreferencesManager& m_preferences_manager;
   DocumentManager& m_document_manager;
   LanguageManager& m_language_manager;
   ActionManager& m_action_manager;
   StyleManager& m_style_manager;
-  
+
+  QScopedPointer<Preferences> m_preferences;
+
   Document* m_current_document;
 };
 

@@ -16,6 +16,9 @@ class GameEditor : public Editor
 {
   Q_OBJECT
 
+private:
+  struct Preferences;
+
 public:
   explicit GameEditor(QObject* parent = nullptr);
   ~GameEditor() override;
@@ -39,6 +42,8 @@ private:
   SceneDock* m_scene_dock;
   InspectorDock* m_inspector_dock;
   FileSystemDock* m_file_system_dock;
+
+  QScopedPointer<Preferences> m_preferences;
 };
 
 #endif //GAME_EDITOR_H
