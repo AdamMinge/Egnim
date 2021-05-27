@@ -18,18 +18,18 @@ public:
 
   [[nodiscard]] Type getType() const;
 
-  [[nodiscard]] QStringView getFileName() const;
-  [[nodiscard]] QStringView getDisplayName() const;
+  [[nodiscard]] const QString& getFileName() const;
+  [[nodiscard]] const QString& getDisplayName() const;
 
   [[nodiscard]] QUndoStack* getUndoStack() const;
 
 protected:
-  explicit Document(Type type, QStringView file_name, QStringView display_name, QObject* parent = nullptr);
+  explicit Document(Type type, QString file_name, QString display_name, QObject* parent = nullptr);
 
 private:
   Type m_type;
-  QStringView m_file_name;
-  QStringView m_display_name;
+  QString m_file_name;
+  QString m_display_name;
   QUndoStack* m_undo_stack;
 };
 

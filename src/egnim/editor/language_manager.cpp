@@ -41,9 +41,9 @@ LanguageManager::~LanguageManager()
 QStringList LanguageManager::getAvailableLanguages() const
 {
   auto languages = QStringList{};
-  auto filters = QStringList{m_translations_prefix.toString() + QLatin1String("*.qm")};
+  auto filters = QStringList{m_translations_prefix + QLatin1String("*.qm")};
 
-  QDirIterator iterator(m_translations_dir.toString(), filters, QDir::Files | QDir::Readable);
+  QDirIterator iterator(m_translations_dir, filters, QDir::Files | QDir::Readable);
   while(iterator.hasNext())
   {
     iterator.next();
@@ -54,17 +54,17 @@ QStringList LanguageManager::getAvailableLanguages() const
   return languages;
 }
 
-QStringView LanguageManager::getTranslationsDir() const
+const QString& LanguageManager::getTranslationsDir() const
 {
   return m_translations_dir;
 }
 
-QStringView LanguageManager::getTranslationsPrefix() const
+const QString& LanguageManager::getTranslationsPrefix() const
 {
   return m_translations_prefix;
 }
 
-void LanguageManager::setLanguage(QStringView language)
+void LanguageManager::setLanguage(const QString& language)
 {
   Q_ASSERT(getAvailableLanguages().contains(language));
 
@@ -76,10 +76,10 @@ void LanguageManager::setLanguage(QStringView language)
   m_qt_translator.reset(new QTranslator);
   m_app_translator.reset(new QTranslator);
 
-  if(!m_qt_translator->load(QLatin1String("qt_") + language.toString(),m_translations_dir.toString()))
+  if(!m_qt_translator->load(QLatin1String("qt_") + language, m_translations_dir))
     m_qt_translator.reset(nullptr);
 
-  if(!m_app_translator->load(m_translations_prefix.toString() + language.toString(),m_translations_dir.toString()))
+  if(!m_app_translator->load(m_translations_prefix + language, m_translations_dir))
     m_app_translator.reset(nullptr);
 
   if(m_qt_translator)
@@ -91,13 +91,13 @@ void LanguageManager::setLanguage(QStringView language)
     Q_EMIT languageChanged(language);
 }
 
-void LanguageManager::setTranslationsDir(QStringView translations_dir)
+void LanguageManager::setTranslationsDir(const QString& translations_dir)
 {
   m_translations_dir = translations_dir;
   Q_EMIT translationsDirChanged(translations_dir);
 }
 
-void LanguageManager::setTranslationsPrefix(QStringView translations_prefix)
+void LanguageManager::setTranslationsPrefix(const QString& translations_prefix)
 {
   m_translations_prefix = translations_prefix;
   Q_EMIT translationsPrefixChanged(translations_prefix);

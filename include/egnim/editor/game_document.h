@@ -10,7 +10,7 @@ class GameDocument : public Document
   Q_OBJECT
 
 public:
-  explicit GameDocument(QStringView file_name, QStringView display_name, QObject* parent = nullptr);
+  explicit GameDocument(QString file_name, QString display_name, QObject* parent = nullptr);
   ~GameDocument() override;
 };
 

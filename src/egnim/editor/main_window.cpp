@@ -16,8 +16,8 @@
 
 struct MainWindow::Preferences
 {
-  Preference<QByteArray> main_window_geometry = Preference<QByteArray>(QString("main_window/geometry"));
-  Preference<QByteArray> main_window_state = Preference<QByteArray>(QString("main_window/state"));
+  Preference<QByteArray> main_window_geometry = Preference<QByteArray>("main_window/geometry");
+  Preference<QByteArray> main_window_state = Preference<QByteArray>("main_window/state");
 };
 
 /* -------------------------------- MainWindow ------------------------------ */

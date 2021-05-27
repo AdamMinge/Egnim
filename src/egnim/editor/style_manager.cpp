@@ -24,7 +24,7 @@ StyleManager::StyleManager() = default;
 
 StyleManager::~StyleManager() = default;
 
-void StyleManager::unregisterStyle(QStringView style_name)
+void StyleManager::unregisterStyle(const QString& style_name)
 {
   Q_ASSERT(m_factories.contains(style_name));
   m_factories.erase(style_name);
@@ -35,16 +35,16 @@ QStringList StyleManager::getAvailableStyles() const
 {
   auto available_styles = QStyleFactory::keys();
   for(auto& [name, factory] : m_factories)
-    if(!available_styles.contains(name.toString()))
-      available_styles.push_back(name.toString());
+    if(!available_styles.contains(name))
+      available_styles.push_back(name);
 
   return available_styles;
 }
 
-void StyleManager::setStyle(QStringView style_name)
+void StyleManager::setStyle(const QString& style_name)
 {
   auto style = m_factories.contains(style_name) ? m_factories[style_name]() : nullptr;
-  if(!style) style = QStyleFactory::create(style_name.toString());
+  if(!style) style = QStyleFactory::create(style_name);
   Q_ASSERT(style);
 
   QApplication::setStyle(style);

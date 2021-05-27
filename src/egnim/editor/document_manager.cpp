@@ -96,8 +96,8 @@ void DocumentManager::addDocument(std::unique_ptr<Document> document)
   m_documents.emplace_back(std::move(document));
   m_undo_group->addStack(document_ref.getUndoStack());
 
-  auto document_index = m_tab_bar->addTab(document_ref.getDisplayName().toString());
-  m_tab_bar->setTabToolTip(document_index, document_ref.getFileName().toString());
+  auto document_index = m_tab_bar->addTab(document_ref.getDisplayName());
+  m_tab_bar->setTabToolTip(document_index, document_ref.getFileName());
 
   switchToDocument(document_index);
 }

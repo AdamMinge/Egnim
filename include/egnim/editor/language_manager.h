@@ -19,18 +19,18 @@ public:
   ~LanguageManager() override;
 
   [[nodiscard]] QStringList getAvailableLanguages() const;
-  [[nodiscard]] QStringView getTranslationsDir() const;
-  [[nodiscard]] QStringView getTranslationsPrefix() const;
+  [[nodiscard]] const QString& getTranslationsDir() const;
+  [[nodiscard]] const QString& getTranslationsPrefix() const;
 
 public Q_SLOTS:
-  void setLanguage(QStringView language);
-  void setTranslationsDir(QStringView translations_dir);
-  void setTranslationsPrefix(QStringView translations_prefix);
+  void setLanguage(const QString& language);
+  void setTranslationsDir(const QString& translations_dir);
+  void setTranslationsPrefix(const QString& translations_prefix);
 
 Q_SIGNALS:
-  void languageChanged(QStringView language);
-  void translationsDirChanged(QStringView translations_dir);
-  void translationsPrefixChanged(QStringView translations_prefix);
+  void languageChanged(const QString& language);
+  void translationsDirChanged(const QString& translations_dir);
+  void translationsPrefixChanged(const QString& translations_prefix);
 
 private:
   explicit LanguageManager();
@@ -38,8 +38,8 @@ private:
 private:
   static QScopedPointer<LanguageManager> m_instance;
 
-  QStringView m_translations_dir;
-  QStringView m_translations_prefix;
+  QString m_translations_dir;
+  QString m_translations_prefix;
   QScopedPointer<QTranslator> m_qt_translator;
   QScopedPointer<QTranslator> m_app_translator;
 };

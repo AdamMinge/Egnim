@@ -24,18 +24,18 @@ public:
   ~StyleManager() override;
 
   template<typename REGISTERED_TYPE, typename ...ARGS>
-  void registerStyle(QStringView style_name, ARGS&& ...args);
-  void unregisterStyle(QStringView style_name);
+  void registerStyle(const QString& style_name, ARGS&& ...args);
+  void unregisterStyle(const QString& style_name);
 
   [[nodiscard]] QStringList getAvailableStyles() const;
 
 public Q_SLOTS:
-  void setStyle(QStringView style_name);
+  void setStyle(const QString& style_name);
 
 Q_SIGNALS:
-  void styleChanged(QStringView style_name);
-  void styleRegistered(QStringView style_name);
-  void styleUnregistered(QStringView style_name);
+  void styleChanged(const QString& style_name);
+  void styleRegistered(const QString& style_name);
+  void styleUnregistered(const QString& style_name);
 
 private:
   explicit StyleManager();
@@ -43,11 +43,11 @@ private:
 private:
   static QScopedPointer<StyleManager> m_instance;
 
-  std::unordered_map<QStringView, StyleFactory> m_factories;
+  std::unordered_map<QString, StyleFactory> m_factories;
 };
 
 template<typename REGISTERED_TYPE, typename ...ARGS>
-void StyleManager::registerStyle(QStringView style_name, ARGS&& ...args)
+void StyleManager::registerStyle(const QString& style_name, ARGS&& ...args)
 {
   Q_ASSERT(!m_factories.contains(style_name));
   auto creator = StyleFactory([&args...](){

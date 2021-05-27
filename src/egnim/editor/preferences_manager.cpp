@@ -21,14 +21,14 @@ PreferencesManager::PreferencesManager() = default;
 
 PreferencesManager::~PreferencesManager() = default;
 
-bool PreferencesManager::contains(QStringView key)
+bool PreferencesManager::contains(const QString& key)
 {
-  return m_settings.contains(key.toString());
+  return m_settings.contains(key);
 }
 
-void PreferencesManager::remove(QStringView key)
+void PreferencesManager::remove(const QString& key)
 {
-  m_settings.remove(key.toString());
+  m_settings.remove(key);
 }
 
 void PreferencesManager::clear()

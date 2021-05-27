@@ -3,8 +3,8 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
+#include <QString>
 #include <QSettings>
-#include <QStringView>
 #include <QScopedPointer>
 /* -------------------------------------------------------------------------- */
 
@@ -19,11 +19,11 @@ public:
 public:
   ~PreferencesManager() override;
 
-  template<typename TYPE> void setValue(QStringView key, const TYPE& value);
-  template<typename TYPE> [[nodiscard]] TYPE getValue(QStringView key, const TYPE& default_value = TYPE()) const;
+  template<typename TYPE> void setValue(const QString& key, const TYPE& value);
+  template<typename TYPE> [[nodiscard]] TYPE getValue(const QString& key, const TYPE& default_value = TYPE()) const;
 
-  [[nodiscard]] bool contains(QStringView key);
-  void remove(QStringView key);
+  [[nodiscard]] bool contains(const QString& key);
+  void remove(const QString& key);
   void clear();
 
   [[nodiscard]] QStringList getAllKeys() const;
@@ -38,22 +38,22 @@ private:
 };
 
 template<typename TYPE>
-void PreferencesManager::setValue(QStringView key, const TYPE& value)
+void PreferencesManager::setValue(const QString& key, const TYPE& value)
 {
-  m_settings.setValue(key.toString(), value);
+  m_settings.setValue(key, value);
 }
 
 template<typename TYPE>
-TYPE PreferencesManager::getValue(QStringView key, const TYPE& default_value) const
+TYPE PreferencesManager::getValue(const QString& key, const TYPE& default_value) const
 {
-  return m_settings.value(key.toString(), default_value).template value<TYPE>();
+  return m_settings.value(key, default_value).template value<TYPE>();
 }
 
 template<typename TYPE>
 class Preference
 {
 public:
-  explicit Preference(QStringView key, TYPE default_value = TYPE());
+  explicit Preference(QString key, TYPE default_value = TYPE());
 
   Preference& operator=(TYPE&& value);
 
@@ -63,13 +63,13 @@ public:
   operator TYPE() const; // NOLINT(google-explicit-constructor)
 
 private:
-  QStringView m_key;
+  QString m_key;
   TYPE m_default_value;
 };
 
 template<typename TYPE>
-Preference<TYPE>::Preference(QStringView key, TYPE default_value) :
-  m_key(key),
+Preference<TYPE>::Preference(QString key, TYPE default_value) :
+  m_key(std::move(key)),
   m_default_value(default_value)
 {
 
