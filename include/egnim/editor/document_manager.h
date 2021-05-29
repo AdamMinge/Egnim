@@ -44,6 +44,8 @@ public:
   [[nodiscard]] Document* getDocument(int index) const;
   [[nodiscard]] Document* getCurrentDocument() const;
 
+  [[nodiscard]] int findDocument(Document *document) const;
+
   void switchToDocument(int index);
   void switchToDocument(Document* document);
 
@@ -59,6 +61,7 @@ Q_SIGNALS:
 private Q_SLOTS:
   void currentIndexChanged();
   void documentTabMoved(int from, int to);
+  void updateDocumentTab(Document* document);
 
 private:
   explicit DocumentManager();

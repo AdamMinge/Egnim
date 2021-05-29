@@ -29,7 +29,7 @@ ActionManager::~ActionManager() = default;
 
 void ActionManager::registerAction(QAction* action, const QString& id)
 {
-  Q_ASSERT_X(m_actions.contains(id, action), "ActionManager::registerAction", "duplicate action");
+  Q_ASSERT_X(!m_actions.contains(id, action), "ActionManager::registerAction", "duplicate action");
 
   m_actions.insert(id, action);
   m_last_known_shortcuts.insert(id, action->shortcut());

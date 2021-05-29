@@ -8,6 +8,7 @@
 #include <egnim/editor/action_manager.h>
 #include <egnim/editor/style_manager.h>
 #include <egnim/editor/game_editor.h>
+#include <egnim/editor/new_project_dialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
@@ -25,22 +26,24 @@ struct MainWindow::Preferences
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   m_ui(new Ui::MainWindow()),
-  m_preferences_manager(PreferencesManager::getInstance()),
-  m_document_manager(DocumentManager::getInstance()),
-  m_language_manager(LanguageManager::getInstance()),
-  m_action_manager(ActionManager::getInstance()),
-  m_style_manager(StyleManager::getInstance()),
   m_preferences(new Preferences),
   m_current_document(nullptr)
 {
   m_ui->setupUi(this);
 
-  m_document_manager.addEditor(Document::Type::Game, std::make_unique<GameEditor>());
+  registerMenus();
+  registerActions();
 
-  setCentralWidget(m_document_manager.getWidget());
+  getDocumentManager().addEditor(Document::Type::Game, std::make_unique<GameEditor>());
 
-  connect(&m_document_manager, &DocumentManager::documentCloseRequested, this, &MainWindow::closeDocument);
-  connect(&m_document_manager, &DocumentManager::currentDocumentChanged, this, &MainWindow::documentChanged);
+  setCentralWidget(getDocumentManager().getWidget());
+
+  connect(getActionManager().findAction("new_project"), &QAction::triggered, this, &MainWindow::newProject);
+  connect(getActionManager().findAction("open_project"), &QAction::triggered, this, &MainWindow::openProject);
+  connect(getActionManager().findAction("exit"), &QAction::triggered, this, &MainWindow::close);
+
+  connect(&getDocumentManager(), &DocumentManager::documentCloseRequested, this, &MainWindow::closeDocument);
+  connect(&getDocumentManager(), &DocumentManager::currentDocumentChanged, this, &MainWindow::documentChanged);
 
   readSettings();
   retranslateUi();
@@ -48,8 +51,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-  m_document_manager.removeAllDocuments();
-  m_document_manager.removeAllEditors();
+  getDocumentManager().removeAllDocuments();
+  getDocumentManager().removeAllEditors();
 
   DocumentManager::deleteInstance();
   LanguageManager::deleteInstance();
@@ -60,17 +63,27 @@ MainWindow::~MainWindow()
 
 DocumentManager& MainWindow::getDocumentManager() const
 {
-  return m_document_manager;
+  return DocumentManager::getInstance();
 }
 
 LanguageManager& MainWindow::getLanguageManager() const
 {
-  return m_language_manager;
+  return LanguageManager::getInstance();
 }
 
 StyleManager& MainWindow::getStyleManager() const
 {
-  return m_style_manager;
+  return StyleManager::getInstance();
+}
+
+ActionManager& MainWindow::getActionManager() const
+{
+  return ActionManager::getInstance();
+}
+
+PreferencesManager& MainWindow::getPreferencesManager() const
+{
+  return PreferencesManager::getInstance();
 }
 
 Document* MainWindow::getCurrentDocument() const
@@ -106,13 +119,25 @@ void MainWindow::changeEvent(QEvent *event)
 
 void MainWindow::closeDocument(int index)
 {
-  if (confirmSave(m_document_manager.getDocument(index)))
-    m_document_manager.removeDocument(index);
+  if (confirmSave(getDocumentManager().getDocument(index)))
+    getDocumentManager().removeDocument(index);
 }
 
 void MainWindow::documentChanged(Document* document)
 {
   m_current_document = document;
+}
+
+void MainWindow::newProject()
+{
+  auto new_project_dialog = new NewProjectDialog(this);
+  new_project_dialog->setAttribute(Qt::WA_DeleteOnClose);
+  new_project_dialog->show();
+}
+
+void MainWindow::openProject()
+{
+  // TODO : implementation //
 }
 
 bool MainWindow::confirmSave(Document* document)
@@ -132,7 +157,7 @@ void MainWindow::writeSettings()
   m_preferences->main_window_geometry = saveGeometry();
   m_preferences->main_window_state = saveState();
 
-  m_document_manager.saveState();
+  getDocumentManager().saveState();
 }
 
 void MainWindow::readSettings()
@@ -146,7 +171,42 @@ void MainWindow::readSettings()
   if(!main_window_state.isNull())
     restoreState(main_window_state);
 
-  m_document_manager.restoreState();
+  getDocumentManager().restoreState();
+}
+
+void MainWindow::registerMenus()
+{
+  getActionManager().registerMenu(m_ui->m_menu_file, "file");
+  getActionManager().registerMenu(m_ui->m_menu_new, "new");
+  getActionManager().registerMenu(m_ui->m_menu_open_recent, "open_recent");
+
+  getActionManager().registerMenu(m_ui->m_menu_edit, "edit");
+
+  getActionManager().registerMenu(m_ui->m_menu_view, "view");
+  getActionManager().registerMenu(m_ui->m_menu_views_and_toolbars, "views_and_toolbars");
+
+  getActionManager().registerMenu(m_ui->m_menu_help, "help");
+}
+
+void MainWindow::registerActions()
+{
+  getActionManager().registerAction(m_ui->m_action_new_project, "new_project");
+  getActionManager().registerAction(m_ui->m_action_open, "open_project");
+  getActionManager().registerAction(m_ui->m_action_clear_recent, "clear_recent");
+  getActionManager().registerAction(m_ui->m_action_close_project, "close_project");
+  getActionManager().registerAction(m_ui->m_action_settings, "settings");
+  getActionManager().registerAction(m_ui->m_action_save, "save");
+  getActionManager().registerAction(m_ui->m_action_save_as, "save_as");
+  getActionManager().registerAction(m_ui->m_action_save_all, "save_all");
+  getActionManager().registerAction(m_ui->m_action_exit, "exit");
+
+  getActionManager().registerAction(m_ui->m_action_undo, "undo");
+  getActionManager().registerAction(m_ui->m_action_redo, "redo");
+  getActionManager().registerAction(m_ui->m_action_cut, "cut");
+  getActionManager().registerAction(m_ui->m_action_copy, "copy");
+  getActionManager().registerAction(m_ui->m_action_delete, "delete");
+
+  getActionManager().registerAction(m_ui->m_action_about, "about");
 }
 
 void MainWindow::retranslateUi()

@@ -54,7 +54,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="m_new_project">
+        <widget class="QPushButton" name="m_new_project_button">
          <property name="text">
           <string>New Project</string>
          </property>

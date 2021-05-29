@@ -28,6 +28,8 @@ public:
   [[nodiscard]] DocumentManager& getDocumentManager() const;
   [[nodiscard]] LanguageManager& getLanguageManager() const;
   [[nodiscard]] StyleManager& getStyleManager() const;
+  [[nodiscard]] ActionManager& getActionManager() const;
+  [[nodiscard]] PreferencesManager& getPreferencesManager() const;
 
   [[nodiscard]] Document* getCurrentDocument() const;
 
@@ -39,6 +41,9 @@ private Q_SLOTS:
   void closeDocument(int index);
   void documentChanged(Document* document);
 
+  void newProject();
+  void openProject();
+
 private:
   bool confirmSave(Document* document);
   bool confirmAllSave();
@@ -46,19 +51,14 @@ private:
   void writeSettings();
   void readSettings();
 
+  void registerMenus();
+  void registerActions();
+
   void retranslateUi();
 
 private:
   QScopedPointer<Ui::MainWindow> m_ui;
-
-  PreferencesManager& m_preferences_manager;
-  DocumentManager& m_document_manager;
-  LanguageManager& m_language_manager;
-  ActionManager& m_action_manager;
-  StyleManager& m_style_manager;
-
   QScopedPointer<Preferences> m_preferences;
-
   Document* m_current_document;
 };
 

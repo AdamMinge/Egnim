@@ -28,6 +28,7 @@ set(sources
         ${source_root}/file_system_dock.cpp
         ${source_root}/inspector_dock.cpp
         ${source_root}/scene_dock.cpp
+        ${source_root}/new_project_dialog.cpp
 
         ${source_root}/commands/command.cpp
         ${source_root}/commands/group_command.cpp
@@ -51,6 +52,7 @@ set(includes
         ${include_root}/file_system_dock.h
         ${include_root}/inspector_dock.h
         ${include_root}/scene_dock.h
+        ${include_root}/new_project_dialog.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h

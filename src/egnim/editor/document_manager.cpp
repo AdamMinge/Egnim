@@ -99,6 +99,11 @@ void DocumentManager::addDocument(std::unique_ptr<Document> document)
   auto document_index = m_tab_bar->addTab(document_ref.getDisplayName());
   m_tab_bar->setTabToolTip(document_index, document_ref.getFileName());
 
+  connect(std::addressof(document_ref), &Document::modifiedChanged, this,
+          [this, document = std::addressof(document_ref)] { updateDocumentTab(document); });
+  connect(std::addressof(document_ref), &Document::fileNameChanged, this,
+          [this, document = std::addressof(document_ref)] { updateDocumentTab(document); });
+
   switchToDocument(document_index);
 }
 
@@ -142,6 +147,18 @@ Document* DocumentManager::getCurrentDocument() const
 {
   auto index = m_tab_bar->currentIndex();
   return getDocument(index);
+}
+
+int DocumentManager::findDocument(Document *document) const
+{
+  auto found = std::find_if(m_documents.begin(), m_documents.end(), [document](auto& current_document){
+    return current_document.get() == document;
+  });
+
+  if(found == m_documents.end())
+    return -1;
+
+  return static_cast<int>(std::distance(m_documents.begin(), found));
 }
 
 void DocumentManager::switchToDocument(int index)
@@ -208,4 +225,18 @@ void DocumentManager::documentTabMoved(int from, int to)
     std::rotate(m_documents.begin() + from,
                 m_documents.begin() + from + 1,
                 m_documents.begin() + to + 1);
+}
+
+void DocumentManager::updateDocumentTab(Document* document)
+{
+  const int index = findDocument(document);
+  if (index == -1)
+    return;
+
+  QString tabText = document->getDisplayName();
+  if (document->isModified())
+    tabText.prepend(QLatin1Char('*'));
+
+  m_tab_bar->setTabText(index, tabText);
+  m_tab_bar->setTabToolTip(index, document->getFileName());
 }
