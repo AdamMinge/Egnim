@@ -54,6 +54,11 @@ public:
   void saveState();
   void restoreState();
 
+  bool saveDocument(Document* document, const QString& file_name);
+  bool saveDocumentAs(Document* document);
+
+  [[nodiscard]] const std::vector<std::unique_ptr<Document>>& getDocuments() const;
+
 Q_SIGNALS:
   void currentDocumentChanged(Document* document);
   void documentCloseRequested(int index);

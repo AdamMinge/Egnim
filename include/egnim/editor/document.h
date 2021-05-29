@@ -27,6 +27,8 @@ public:
 
   [[nodiscard]] bool isModified() const;
 
+  virtual bool save(const QString& file_name) = 0;
+
 Q_SIGNALS:
   void modifiedChanged();
   void fileNameChanged(const QString& new_file_name, const QString& old_file_name);

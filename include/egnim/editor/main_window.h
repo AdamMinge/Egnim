@@ -44,6 +44,9 @@ private Q_SLOTS:
   void newProject();
   void openProject();
 
+  bool saveDocument();
+  bool saveDocumentAs();
+
 private:
   bool confirmSave(Document* document);
   bool confirmAllSave();

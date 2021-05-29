@@ -1,5 +1,6 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCloseEvent>
+#include <QMessageBox>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/main_window.h>
 #include <egnim/editor/preferences_manager.h>
@@ -41,6 +42,8 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(getActionManager().findAction("new_project"), &QAction::triggered, this, &MainWindow::newProject);
   connect(getActionManager().findAction("open_project"), &QAction::triggered, this, &MainWindow::openProject);
   connect(getActionManager().findAction("exit"), &QAction::triggered, this, &MainWindow::close);
+  connect(getActionManager().findAction("save"), &QAction::triggered, this, &MainWindow::saveDocument);
+  connect(getActionManager().findAction("save_as"), &QAction::triggered, this, &MainWindow::saveDocumentAs);
 
   connect(&getDocumentManager(), &DocumentManager::documentCloseRequested, this, &MainWindow::closeDocument);
   connect(&getDocumentManager(), &DocumentManager::currentDocumentChanged, this, &MainWindow::documentChanged);
@@ -140,15 +143,54 @@ void MainWindow::openProject()
   // TODO : implementation //
 }
 
+bool MainWindow::saveDocument() // NOLINT(readability-make-member-function-const)
+{
+  auto current_document = getDocumentManager().getCurrentDocument();
+  if(!current_document)
+    return false;
+
+  auto current_file_name = current_document->getFileName();
+  if(current_file_name.isEmpty())
+    return getDocumentManager().saveDocumentAs(current_document);
+  else
+    return getDocumentManager().saveDocument(current_document, current_file_name);
+}
+
+bool MainWindow::saveDocumentAs() // NOLINT(readability-make-member-function-const)
+{
+  auto current_document = getDocumentManager().getCurrentDocument();
+  if(!current_document)
+    return false;
+
+  return getDocumentManager().saveDocumentAs(current_document);
+}
+
 bool MainWindow::confirmSave(Document* document)
 {
-  // TODO : implementation //
-  return true;
+  if(!document || !document->isModified())
+    return true;
+
+  getDocumentManager().switchToDocument(document);
+
+  auto ret = QMessageBox::warning(
+    this, tr("Unsaved Changes"),
+    tr("There are unsaved changes. Do you want to save now?"),
+    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+  switch (ret) {
+    case QMessageBox::Save:    return saveDocument();
+    case QMessageBox::Discard: return true;
+    case QMessageBox::Cancel:
+    default:
+      return false;
+  }
 }
 
 bool MainWindow::confirmAllSave()
 {
-  // TODO : implementation //
+  for(const auto& document : getDocumentManager().getDocuments()) // NOLINT(readability-use-anyofallof)
+    if(!confirmSave(document.get())) return false;
+
   return true;
 }
 

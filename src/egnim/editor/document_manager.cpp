@@ -1,3 +1,6 @@
+/* ------------------------------------ Qt ---------------------------------- */
+#include <QMessageBox>
+#include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/document_manager.h>
 #include <egnim/editor/no_editor_widget.h>
@@ -192,6 +195,35 @@ void DocumentManager::restoreState()
 {
   for(auto& [document_type, editor] : m_editor_for_document_type)
     editor->restoreState();
+}
+
+bool DocumentManager::saveDocument(Document* document, const QString& file_name)
+{
+  if(file_name.isEmpty())
+    return false;
+
+  if(!document->save(file_name))
+  {
+    switchToDocument(document);
+    QMessageBox::critical(
+      m_widget->window(),
+      QCoreApplication::translate("Egnim-Editor::DocumentManager",
+                                  "Error Saving File"), "Something went wrong");
+    return false;
+  }
+
+  return true;
+}
+
+bool DocumentManager::saveDocumentAs(Document* document)
+{
+  // TODO : implementation //
+  return false;
+}
+
+const std::vector<std::unique_ptr<Document>>& DocumentManager::getDocuments() const
+{
+  return m_documents;
 }
 
 void DocumentManager::currentIndexChanged()
