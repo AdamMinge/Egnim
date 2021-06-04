@@ -2,7 +2,7 @@
 #include <QAction>
 #include <QActionEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <widgets/dialog_with_toggle_view.h>
+#include <egnim/editor/widgets/dialog_with_toggle_view.h>
 /* -------------------------------------------------------------------------- */
 
 DialogWithToggleView::DialogWithToggleView(QWidget* parent) :
@@ -16,7 +16,7 @@ DialogWithToggleView::DialogWithToggleView(QWidget* parent) :
 }
 DialogWithToggleView::~DialogWithToggleView() = default;
 
-QAction* DialogWithToggleView::getToggleViewAction() const
+QAction* DialogWithToggleView::toggleViewAction() const
 {
   return m_toggle_view;
 }

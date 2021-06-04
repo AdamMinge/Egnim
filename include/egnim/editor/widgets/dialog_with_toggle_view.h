@@ -13,7 +13,7 @@ public:
   explicit DialogWithToggleView(QWidget* parent = nullptr);
   ~DialogWithToggleView() override;
 
-  [[nodiscard]] QAction* getToggleViewAction() const;
+  [[nodiscard]] QAction* toggleViewAction() const;
 
 protected:
   void closeEvent(QCloseEvent* event) override;

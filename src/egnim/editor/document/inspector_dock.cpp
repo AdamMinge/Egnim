@@ -1,20 +1,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/scene_dock.h>
+#include <egnim/editor/document/inspector_dock.h>
 /* -------------------------------------------------------------------------- */
 
-SceneDock::SceneDock(QWidget* parent) :
+InspectorDock::InspectorDock(QWidget* parent) :
   QDockWidget(parent)
 {
-  setObjectName(QLatin1String("Scene"));
+  setObjectName(QLatin1String("Inspector"));
 
   retranslateUi();
 }
 
-SceneDock::~SceneDock() = default;
+InspectorDock::~InspectorDock() = default;
 
-void SceneDock::changeEvent(QEvent* event)
+void InspectorDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void SceneDock::changeEvent(QEvent* event)
   }
 }
 
-void SceneDock::retranslateUi()
+void InspectorDock::retranslateUi()
 {
-  setWindowTitle(tr("Scene"));
+  setWindowTitle(tr("Inspector"));
 }
 

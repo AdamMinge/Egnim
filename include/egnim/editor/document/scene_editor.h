@@ -1,18 +1,17 @@
-#ifndef GAME_EDITOR_H
-#define GAME_EDITOR_H
+#ifndef SCENE_EDITOR_H
+#define SCENE_EDITOR_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/editor.h>
+#include <egnim/editor/document/document_editor.h>
 /* -------------------------------------------------------------------------- */
 
-class GameDocument;
+class SceneDocument;
 
 class UndoDock;
 class SceneDock;
 class InspectorDock;
-class FileSystemDock;
 
-class GameEditor : public Editor
+class SceneEditor : public DocumentEditor
 {
   Q_OBJECT
 
@@ -20,8 +19,8 @@ private:
   struct Preferences;
 
 public:
-  explicit GameEditor(QObject* parent = nullptr);
-  ~GameEditor() override;
+  explicit SceneEditor(QObject* parent = nullptr);
+  ~SceneEditor() override;
 
   void setCurrentDocument(Document* document) override;
 
@@ -35,15 +34,14 @@ public:
   [[nodiscard]] QList<DialogWithToggleView*> getDialogWidgets() const override;
 
 private:
-  GameDocument* m_current_document;
+  SceneDocument* m_current_document;
   QScopedPointer<QMainWindow> m_main_window;
 
   UndoDock* m_undo_dock;
   SceneDock* m_scene_dock;
   InspectorDock* m_inspector_dock;
-  FileSystemDock* m_file_system_dock;
 
   QScopedPointer<Preferences> m_preferences;
 };
 
-#endif //GAME_EDITOR_H
+#endif //SCENE_EDITOR_H

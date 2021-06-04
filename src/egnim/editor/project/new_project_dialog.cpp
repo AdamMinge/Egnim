@@ -1,11 +1,11 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/new_project_dialog.h>
-#include <egnim/editor/document_manager.h>
-#include <egnim/editor/game_document.h>
+#include <egnim/editor/project/new_project_dialog.h>
+#include <egnim/editor/project/project_manager.h>
+#include <egnim/editor/project/game_project.h>
 /* ------------------------------------ Ui ---------------------------------- */
-#include "ui_new_project_dialog.h"
+#include "project/ui_new_project_dialog.h"
 /* -------------------------------------------------------------------------- */
 
 NewProjectDialog::NewProjectDialog(QWidget* parent) :
@@ -41,8 +41,8 @@ void NewProjectDialog::onCreateAndExitPressed()
   auto project_dir = QDir(m_ui->m_project_path_edit->text());
   auto project_name = m_ui->m_project_name_edit->text();
 
-  auto new_game_document = std::make_unique<GameDocument>(project_dir.filePath(project_name));
-  DocumentManager::getInstance().addDocument(std::move(new_game_document));
+  auto new_project = GameProject::create(QDir(project_dir).filePath(project_name));
+  ProjectManager::getInstance().addProject(std::move(new_project));
 
   close();
 }

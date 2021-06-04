@@ -1,20 +1,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/inspector_dock.h>
+#include <egnim/editor/project/file_system_dock.h>
 /* -------------------------------------------------------------------------- */
 
-InspectorDock::InspectorDock(QWidget* parent) :
+FileSystemDock::FileSystemDock(QWidget* parent) :
   QDockWidget(parent)
 {
-  setObjectName(QLatin1String("Inspector"));
+  setObjectName(QLatin1String("FileSystem"));
 
   retranslateUi();
 }
 
-InspectorDock::~InspectorDock() = default;
+FileSystemDock::~FileSystemDock() = default;
 
-void InspectorDock::changeEvent(QEvent* event)
+void FileSystemDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void InspectorDock::changeEvent(QEvent* event)
   }
 }
 
-void InspectorDock::retranslateUi()
+void FileSystemDock::retranslateUi()
 {
-  setWindowTitle(tr("Inspector"));
+  setWindowTitle(tr("File System"));
 }
 

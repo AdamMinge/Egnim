@@ -1,13 +1,13 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/no_editor_widget.h>
+#include <egnim/editor/project/no_project_widget.h>
 #include <egnim/editor/action_manager.h>
 /* ------------------------------------ Ui ---------------------------------- */
-#include "ui_no_editor_widget.h"
+#include "project/ui_no_project_widget.h"
 /* -------------------------------------------------------------------------- */
 
-NoEditorWidget::NoEditorWidget(QWidget* parent) :
+NoProjectWidget::NoProjectWidget(QWidget* parent) :
   QWidget(parent),
-  m_ui(new Ui::NoEditorWidget())
+  m_ui(new Ui::NoProjectWidget())
 {
   m_ui->setupUi(this);
 
@@ -15,4 +15,4 @@ NoEditorWidget::NoEditorWidget(QWidget* parent) :
   connect(m_ui->m_open_button, &QPushButton::pressed, ActionManager::getInstance().findAction("open_project"), &QAction::trigger);
 }
 
-NoEditorWidget::~NoEditorWidget() = default;
+NoProjectWidget::~NoProjectWidget() = default;

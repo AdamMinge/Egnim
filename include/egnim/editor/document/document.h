@@ -27,7 +27,7 @@ public:
 
   [[nodiscard]] bool isModified() const;
 
-  virtual bool save(const QString& file_name) = 0;
+  virtual bool save() = 0;
 
 Q_SIGNALS:
   void modifiedChanged();
@@ -44,7 +44,7 @@ private:
 
 enum class Document::Type
 {
-  Game,
+  Scene,
 };
 
 #endif //DOCUMENT_H

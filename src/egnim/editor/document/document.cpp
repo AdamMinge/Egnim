@@ -1,7 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document.h>
+#include <egnim/editor/document/document.h>
 /* -------------------------------------------------------------------------- */
 
 Document::Document(Type type, QString file_name, QObject* parent) :

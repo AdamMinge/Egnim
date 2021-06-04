@@ -2,31 +2,16 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document_manager.h>
-#include <egnim/editor/no_editor_widget.h>
+#include <egnim/editor/document/document_manager.h>
+#include <egnim/editor/document/no_document_widget.h>
 /* -------------------------------------------------------------------------- */
-
-QScopedPointer<DocumentManager> DocumentManager::m_instance = QScopedPointer<DocumentManager>(nullptr);
-
-DocumentManager& DocumentManager::getInstance()
-{
-  if(m_instance.isNull())
-    m_instance.reset(new DocumentManager);
-
-  return *m_instance;
-}
-
-void DocumentManager::deleteInstance()
-{
-  m_instance.reset(nullptr);
-}
 
 DocumentManager::DocumentManager() :
   m_widget(new QWidget()),
-  m_no_editor_widget(new NoEditorWidget(m_widget.data())),
   m_tab_bar(new QTabBar(m_widget.data())),
   m_editor_stack(new QStackedLayout()),
-  m_undo_group(new QUndoGroup(this))
+  m_undo_group(new QUndoGroup(this)),
+  m_no_document_widget(new NoDocumentWidget())
 {
   m_tab_bar->setExpanding(false);
   m_tab_bar->setDocumentMode(true);
@@ -40,7 +25,7 @@ DocumentManager::DocumentManager() :
   vertical_layout->setSpacing(0);
   vertical_layout->addLayout(m_editor_stack);
 
-  m_editor_stack->addWidget(m_no_editor_widget);
+  m_editor_stack->addWidget(m_no_document_widget.data());
 
   connect(m_tab_bar, &QTabBar::currentChanged, this, &DocumentManager::currentIndexChanged);
   connect(m_tab_bar, &QTabBar::tabMoved, this, &DocumentManager::documentTabMoved);
@@ -58,7 +43,7 @@ QWidget* DocumentManager::getWidget() const
   return m_widget.data();
 }
 
-void DocumentManager::addEditor(Document::Type document_type, std::unique_ptr<Editor> editor)
+void DocumentManager::addEditor(Document::Type document_type, std::unique_ptr<DocumentEditor> editor)
 {
   m_editor_stack->addWidget(editor->getEditorWidget());
   m_editor_for_document_type.insert(std::make_pair(document_type, std::move(editor)));
@@ -76,7 +61,7 @@ void DocumentManager::removeAllEditors()
     removeEditor(m_editor_for_document_type.begin()->first);
 }
 
-Editor* DocumentManager::getEditor(Document::Type document_type) const
+DocumentEditor* DocumentManager::getEditor(Document::Type document_type) const
 {
   if(m_editor_for_document_type.contains(document_type))
     return m_editor_for_document_type.at(document_type).get();
@@ -84,19 +69,19 @@ Editor* DocumentManager::getEditor(Document::Type document_type) const
   return nullptr;
 }
 
-Editor* DocumentManager::getCurrentEditor() const
+DocumentEditor* DocumentManager::getCurrentEditor() const
 {
   auto current_document = getCurrentDocument();
   return current_document ? getEditor(current_document->getType()) : nullptr;
 }
 
-void DocumentManager::addDocument(std::unique_ptr<Document> document)
+void DocumentManager::addDocument(Document* document)
 {
   Q_ASSERT(document);
 
   auto& document_ref = *document;
 
-  m_documents.emplace_back(std::move(document));
+  m_documents.emplace_back(document);
   m_undo_group->addStack(document_ref.getUndoStack());
 
   auto document_index = m_tab_bar->addTab(document_ref.getDisplayName());
@@ -123,7 +108,7 @@ void DocumentManager::removeDocument(int index)
 
   auto removed_document_iter = std::remove_if(
     m_documents.begin(), m_documents.end(), [&document_to_remove](auto&& document){
-    return document.get() == document_to_remove;
+    return document == document_to_remove;
   });
 
   m_undo_group->removeStack(document_to_remove->getUndoStack());
@@ -141,7 +126,7 @@ void DocumentManager::removeAllDocuments()
 Document* DocumentManager::getDocument(int index) const
 {
   if(index < m_documents.size() && index >= 0)
-    return m_documents.at(index).get();
+    return m_documents.at(index);
 
   return nullptr;
 }
@@ -155,7 +140,7 @@ Document* DocumentManager::getCurrentDocument() const
 int DocumentManager::findDocument(Document *document) const
 {
   auto found = std::find_if(m_documents.begin(), m_documents.end(), [document](auto& current_document){
-    return current_document.get() == document;
+    return current_document == document;
   });
 
   if(found == m_documents.end())
@@ -172,7 +157,7 @@ void DocumentManager::switchToDocument(int index)
 void DocumentManager::switchToDocument(Document* document)
 {
   auto found_iter = std::find_if(m_documents.begin(), m_documents.end(), [&document](auto&& current_document){
-    return current_document.get() == document;
+    return current_document == document;
   });
 
   Q_ASSERT(found_iter != m_documents.end());
@@ -197,12 +182,10 @@ void DocumentManager::restoreState()
     editor->restoreState();
 }
 
-bool DocumentManager::saveDocument(Document* document, const QString& file_name)
+bool DocumentManager::saveDocument(Document* document)
 {
-  if(file_name.isEmpty())
-    return false;
-
-  if(!document->save(file_name))
+  Q_ASSERT(document);
+  if(!document->save())
   {
     switchToDocument(document);
     QMessageBox::critical(
@@ -215,13 +198,7 @@ bool DocumentManager::saveDocument(Document* document, const QString& file_name)
   return true;
 }
 
-bool DocumentManager::saveDocumentAs(Document* document)
-{
-  // TODO : implementation //
-  return false;
-}
-
-const std::vector<std::unique_ptr<Document>>& DocumentManager::getDocuments() const
+const std::vector<Document*>& DocumentManager::getDocuments() const
 {
   return m_documents;
 }
@@ -241,7 +218,7 @@ void DocumentManager::currentIndexChanged()
   }
   else
   {
-    m_editor_stack->setCurrentWidget(m_no_editor_widget);
+    m_editor_stack->setCurrentWidget(m_no_document_widget.data());
   }
 
   Q_EMIT currentDocumentChanged(document);

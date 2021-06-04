@@ -13,31 +13,30 @@
 #include <memory>
 #include <vector>
 /* ----------------------------------- Local -------------------------------- */
-#include <document.h>
-#include <editor.h>
+#include <egnim/editor/document/document.h>
+#include <egnim/editor/document/document_editor.h>
 /* -------------------------------------------------------------------------- */
+
+class NoDocumentWidget;
 
 class DocumentManager : public QObject
 {
   Q_OBJECT
 
 public:
-  static DocumentManager& getInstance();
-  static void deleteInstance();
-
-public:
+  explicit DocumentManager();
   ~DocumentManager() override;
 
   [[nodiscard]] QWidget* getWidget() const;
 
-  void addEditor(Document::Type document_type, std::unique_ptr<Editor> editor);
+  void addEditor(Document::Type document_type, std::unique_ptr<DocumentEditor> editor);
   void removeEditor(Document::Type document_type);
   void removeAllEditors();
 
-  [[nodiscard]] Editor* getEditor(Document::Type document_type) const;
-  [[nodiscard]] Editor* getCurrentEditor() const;
+  [[nodiscard]] DocumentEditor* getEditor(Document::Type document_type) const;
+  [[nodiscard]] DocumentEditor* getCurrentEditor() const;
 
-  void addDocument(std::unique_ptr<Document> document);
+  void addDocument(Document* document);
   void removeDocument(int index);
   void removeAllDocuments();
 
@@ -54,10 +53,9 @@ public:
   void saveState();
   void restoreState();
 
-  bool saveDocument(Document* document, const QString& file_name);
-  bool saveDocumentAs(Document* document);
+  bool saveDocument(Document* document);
 
-  [[nodiscard]] const std::vector<std::unique_ptr<Document>>& getDocuments() const;
+  [[nodiscard]] const std::vector<Document*>& getDocuments() const;
 
 Q_SIGNALS:
   void currentDocumentChanged(Document* document);
@@ -69,16 +67,11 @@ private Q_SLOTS:
   void updateDocumentTab(Document* document);
 
 private:
-  explicit DocumentManager();
-
-private:
-  static QScopedPointer<DocumentManager> m_instance;
-
-  std::vector<std::unique_ptr<Document>> m_documents;
-  std::unordered_map<Document::Type, std::unique_ptr<Editor>> m_editor_for_document_type;
+  std::vector<Document*> m_documents;
+  std::unordered_map<Document::Type, std::unique_ptr<DocumentEditor>> m_editor_for_document_type;
 
   QScopedPointer<QWidget> m_widget;
-  QWidget* m_no_editor_widget;
+  QScopedPointer<NoDocumentWidget> m_no_document_widget;
   QTabBar* m_tab_bar;
   QStackedLayout* m_editor_stack;
 

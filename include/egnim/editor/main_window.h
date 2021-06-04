@@ -8,11 +8,11 @@
 namespace Ui { class MainWindow; }
 
 class PreferencesManager;
-class DocumentManager;
 class LanguageManager;
+class ProjectManager;
 class ActionManager;
 class StyleManager;
-class Document;
+class Project;
 
 class MainWindow final : public QMainWindow
 {
@@ -25,32 +25,39 @@ public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
 
-  [[nodiscard]] DocumentManager& getDocumentManager() const;
+  [[nodiscard]] ProjectManager& getProjectManager() const;
   [[nodiscard]] LanguageManager& getLanguageManager() const;
   [[nodiscard]] StyleManager& getStyleManager() const;
   [[nodiscard]] ActionManager& getActionManager() const;
   [[nodiscard]] PreferencesManager& getPreferencesManager() const;
 
-  [[nodiscard]] Document* getCurrentDocument() const;
+  [[nodiscard]] Project* getCurrentProject() const;
 
 protected:
   void closeEvent(QCloseEvent *event) override;
   void changeEvent(QEvent *event) override;
 
 private Q_SLOTS:
-  void closeDocument(int index);
-  void documentChanged(Document* document);
+  void closeProject(int index);
+  void projectChanged(Project* project);
+
+  bool confirmSave(Project* project);
+  bool confirmAllSave();
+
+  bool saveProject(Project* project = nullptr);
+  bool saveAllProjects();
 
   void newProject();
   void openProject();
+  void clearRecent();
+  void openSettings();
+  void openAbout();
 
-  bool saveDocument();
-  bool saveDocumentAs();
+  void updateActions();
+  void updateWindowTitle();
+  void updateViewsAndToolbarsMenu();
 
 private:
-  bool confirmSave(Document* document);
-  bool confirmAllSave();
-
   void writeSettings();
   void readSettings();
 
@@ -62,7 +69,7 @@ private:
 private:
   QScopedPointer<Ui::MainWindow> m_ui;
   QScopedPointer<Preferences> m_preferences;
-  Document* m_current_document;
+  Project* m_current_project;
 };
 
 #endif //MAIN_WINDOW_H

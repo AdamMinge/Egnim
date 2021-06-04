@@ -1,12 +1,10 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/game_editor.h>
-#include <egnim/editor/game_document.h>
-#include <egnim/editor/undo_dock.h>
-#include <egnim/editor/scene_dock.h>
-#include <egnim/editor/inspector_dock.h>
-#include <egnim/editor/file_system_dock.h>
+#include <egnim/editor/project/game_editor.h>
+#include <egnim/editor/project/game_project.h>
+#include <egnim/editor/project/file_system_dock.h>
+#include <egnim/editor/document/document_manager.h>
 #include <egnim/editor/preferences_manager.h>
 /* -------------------------------------------------------------------------- */
 
@@ -21,43 +19,37 @@ struct GameEditor::Preferences
 /* -------------------------------- GameEditor ------------------------------ */
 
 GameEditor::GameEditor(QObject* parent) :
-  Editor(parent),
-  m_current_document(nullptr),
+  ProjectEditor(parent),
+  m_current_project(nullptr),
   m_main_window(new QMainWindow()),
-  m_undo_dock(new UndoDock(m_main_window.data())),
-  m_scene_dock(new SceneDock(m_main_window.data())),
-  m_inspector_dock(new InspectorDock(m_main_window.data())),
+  m_document_manager(new DocumentManager()),
   m_file_system_dock(new FileSystemDock(m_main_window.data())),
   m_preferences(new Preferences)
 {
   m_main_window->setDockOptions(m_main_window->dockOptions() | QMainWindow::GroupedDragging);
   m_main_window->setDockNestingEnabled(true);
 
-  m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_undo_dock);
-  m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_file_system_dock);
+  m_main_window->setCentralWidget(m_document_manager->getWidget());
 
-  m_main_window->addDockWidget(Qt::RightDockWidgetArea, m_scene_dock);
-  m_main_window->addDockWidget(Qt::RightDockWidgetArea, m_inspector_dock);
+  m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_file_system_dock);
 }
 
 GameEditor::~GameEditor() = default;
 
-void GameEditor::setCurrentDocument(Document* document)
+void GameEditor::setCurrentProject(Project* project)
 {
-  if(m_current_document == document)
+  if(m_current_project == project)
     return;
 
-  auto game_document = qobject_cast<GameDocument*>(document);
-  Q_ASSERT(game_document || !document);
+  auto game_project = qobject_cast<GameProject*>(project);
+  Q_ASSERT(game_project || !project);
 
-  m_current_document = game_document;
-
-  m_undo_dock->setStack(game_document ? game_document->getUndoStack() : nullptr);
+  m_current_project = game_project;
 }
 
-Document* GameEditor::getCurrentDocument() const
+Project* GameEditor::getCurrentProject() const
 {
-  return m_current_document;
+  return m_current_project;
 }
 
 QWidget* GameEditor::getEditorWidget() const
@@ -85,10 +77,30 @@ void GameEditor::restoreState()
 
 QList<QDockWidget*> GameEditor::getDockWidgets() const
 {
-  return QList<QDockWidget*> { m_undo_dock, m_scene_dock, m_inspector_dock, m_file_system_dock };
+  auto dockWidgets = QList<QDockWidget*> { m_file_system_dock };
+
+  if(auto document_editor = m_document_manager->getCurrentEditor(); document_editor)
+    dockWidgets.append(document_editor->getDockWidgets());
+
+  return dockWidgets;
 }
 
 QList<DialogWithToggleView*> GameEditor::getDialogWidgets() const
 {
-  return QList<DialogWithToggleView*> {};
+  auto dialogWidgets = QList<DialogWithToggleView*> { };
+
+  if(auto document_editor = m_document_manager->getCurrentEditor(); document_editor)
+    dialogWidgets.append(document_editor->getDialogWidgets());
+
+  return dialogWidgets;
+}
+
+void GameEditor::closeDocument(int index)
+{
+  m_document_manager->removeDocument(index);
+}
+
+void GameEditor::documentChanged(Document* document)
+{
+
 }

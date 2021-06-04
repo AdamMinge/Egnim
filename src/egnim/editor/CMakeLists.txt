@@ -14,21 +14,29 @@ set(sources
         ${source_root}/meta_types.cpp
         ${source_root}/main.cpp
         ${source_root}/main_window.cpp
-        ${source_root}/document.cpp
-        ${source_root}/editor.cpp
-        ${source_root}/no_editor_widget.cpp
-        ${source_root}/document_manager.cpp
         ${source_root}/language_manager.cpp
         ${source_root}/style_manager.cpp
         ${source_root}/action_manager.cpp
         ${source_root}/preferences_manager.cpp
-        ${source_root}/game_document.cpp
-        ${source_root}/game_editor.cpp
-        ${source_root}/undo_dock.cpp
-        ${source_root}/file_system_dock.cpp
-        ${source_root}/inspector_dock.cpp
-        ${source_root}/scene_dock.cpp
-        ${source_root}/new_project_dialog.cpp
+
+        ${source_root}/document/document.cpp
+        ${source_root}/document/document_manager.cpp
+        ${source_root}/document/document_editor.cpp
+        ${source_root}/document/scene_document.cpp
+        ${source_root}/document/scene_editor.cpp
+        ${source_root}/document/undo_dock.cpp
+        ${source_root}/document/inspector_dock.cpp
+        ${source_root}/document/scene_dock.cpp
+        ${source_root}/document/no_document_widget.cpp
+
+        ${source_root}/project/project.cpp
+        ${source_root}/project/project_editor.cpp
+        ${source_root}/project/no_project_widget.cpp
+        ${source_root}/project/project_manager.cpp
+        ${source_root}/project/game_project.cpp
+        ${source_root}/project/game_editor.cpp
+        ${source_root}/project/new_project_dialog.cpp
+        ${source_root}/project/file_system_dock.cpp
 
         ${source_root}/commands/command.cpp
         ${source_root}/commands/group_command.cpp
@@ -38,21 +46,29 @@ set(sources
 set(includes
         ${include_root}/meta_types.h
         ${include_root}/main_window.h
-        ${include_root}/document.h
-        ${include_root}/editor.h
-        ${include_root}/no_editor_widget.h
-        ${include_root}/document_manager.h
         ${include_root}/language_manager.h
         ${include_root}/style_manager.h
         ${include_root}/action_manager.h
         ${include_root}/preferences_manager.h
-        ${include_root}/game_document.h
-        ${include_root}/game_editor.h
-        ${include_root}/undo_dock.h
-        ${include_root}/file_system_dock.h
-        ${include_root}/inspector_dock.h
-        ${include_root}/scene_dock.h
-        ${include_root}/new_project_dialog.h
+
+        ${include_root}/document/document.h
+        ${include_root}/document/document_manager.h
+        ${include_root}/document/document_editor.h
+        ${include_root}/document/scene_document.h
+        ${include_root}/document/scene_editor.h
+        ${include_root}/document/undo_dock.h
+        ${include_root}/document/inspector_dock.h
+        ${include_root}/document/scene_dock.h
+        ${include_root}/document/no_document_widget.h
+
+        ${include_root}/project/project.h
+        ${include_root}/project/project_editor.h
+        ${include_root}/project/no_project_widget.h
+        ${include_root}/project/project_manager.h
+        ${include_root}/project/game_project.h
+        ${include_root}/project/game_editor.h
+        ${include_root}/project/new_project_dialog.h
+        ${include_root}/project/file_system_dock.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
@@ -63,7 +79,11 @@ set(resources)
 
 set(uis
         ${uis_root}/main_window.ui
-        ${uis_root}/no_editor_widget.ui)
+
+        ${uis_root}/document/no_document_widget.ui
+
+        ${uis_root}/project/no_project_widget.ui
+        ${uis_root}/project/new_project_dialog.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

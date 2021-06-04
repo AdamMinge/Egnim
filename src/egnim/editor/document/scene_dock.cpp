@@ -1,20 +1,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/file_system_dock.h>
+#include <egnim/editor/document/scene_dock.h>
 /* -------------------------------------------------------------------------- */
 
-FileSystemDock::FileSystemDock(QWidget* parent) :
+SceneDock::SceneDock(QWidget* parent) :
   QDockWidget(parent)
 {
-  setObjectName(QLatin1String("FileSystem"));
+  setObjectName(QLatin1String("Scene"));
 
   retranslateUi();
 }
 
-FileSystemDock::~FileSystemDock() = default;
+SceneDock::~SceneDock() = default;
 
-void FileSystemDock::changeEvent(QEvent* event)
+void SceneDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void FileSystemDock::changeEvent(QEvent* event)
   }
 }
 
-void FileSystemDock::retranslateUi()
+void SceneDock::retranslateUi()
 {
-  setWindowTitle(tr("File System"));
+  setWindowTitle(tr("Scene"));
 }
 

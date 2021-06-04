@@ -48,7 +48,6 @@
     <addaction name="m_action_settings"/>
     <addaction name="separator"/>
     <addaction name="m_action_save"/>
-    <addaction name="m_action_save_as"/>
     <addaction name="m_action_save_all"/>
     <addaction name="separator"/>
     <addaction name="m_action_exit"/>

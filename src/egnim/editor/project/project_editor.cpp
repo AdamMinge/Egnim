@@ -1,11 +1,11 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/editor.h>
+#include <egnim/editor/project/project_editor.h>
 /* -------------------------------------------------------------------------- */
 
-Editor::Editor(QObject* parent) :
+ProjectEditor::ProjectEditor(QObject* parent) :
   QObject(parent)
 {
 
 }
 
-Editor::~Editor() = default;
+ProjectEditor::~ProjectEditor() = default;

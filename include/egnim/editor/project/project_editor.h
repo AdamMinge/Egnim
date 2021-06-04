@@ -1,24 +1,24 @@
-#ifndef EDITOR_H
-#define EDITOR_H
+#ifndef PROJECT_EDITOR_H
+#define PROJECT_EDITOR_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
 #include <QDockWidget>
 /* -------------------------------------------------------------------------- */
 
-class Document;
+class Project;
 class DialogWithToggleView;
 
-class Editor : public QObject
+class ProjectEditor : public QObject
 {
   Q_OBJECT
 
 public:
-  ~Editor() override;
+  ~ProjectEditor() override;
 
-  virtual void setCurrentDocument(Document* document) = 0;
+  virtual void setCurrentProject(Project* project) = 0;
 
-  [[nodiscard]] virtual Document* getCurrentDocument() const = 0;
+  [[nodiscard]] virtual Project* getCurrentProject() const = 0;
   [[nodiscard]] virtual QWidget* getEditorWidget() const = 0;
 
   virtual void saveState() = 0;
@@ -28,7 +28,7 @@ public:
   [[nodiscard]] virtual QList<DialogWithToggleView*> getDialogWidgets() const = 0;
 
 protected:
-  explicit Editor(QObject* parent = nullptr);
+  explicit ProjectEditor(QObject* parent = nullptr);
 };
 
-#endif //EDITOR_H
+#endif //PROJECT_EDITOR_H
