@@ -6,6 +6,7 @@
 /* -------------------------------------------------------------------------- */
 
 class Document;
+class UndoDock;
 class GameProject;
 class FileSystemDock;
 class DocumentManager;
@@ -25,6 +26,7 @@ public:
 
   [[nodiscard]] Project* getCurrentProject() const override;
   [[nodiscard]] QWidget* getEditorWidget() const override;
+  [[nodiscard]] DocumentManager* getDocumentManager() const override;
 
   void saveState() override;
   void restoreState() override;
@@ -32,15 +34,17 @@ public:
   [[nodiscard]] QList<QDockWidget*> getDockWidgets() const override;
   [[nodiscard]] QList<DialogWithToggleView*> getDialogWidgets() const override;
 
+  [[nodiscard]] StandardActions getEnabledStandardActions() const override;
+
 private Q_SLOTS:
   void closeDocument(int index);
-  void documentChanged(Document* document);
 
 private:
   GameProject* m_current_project;
   QScopedPointer<QMainWindow> m_main_window;
   QScopedPointer<DocumentManager> m_document_manager;
 
+  UndoDock* m_undo_dock;
   FileSystemDock* m_file_system_dock;
 
   QScopedPointer<Preferences> m_preferences;

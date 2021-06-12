@@ -2,15 +2,15 @@
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/document/document.h>
+#include <egnim/editor/document/document_serializer.h>
 /* -------------------------------------------------------------------------- */
 
 Document::Document(Type type, QString file_name, QObject* parent) :
   QObject(parent),
   m_type(type),
-  m_file_name(std::move(file_name)),
-  m_undo_stack(new QUndoStack(this))
+  m_file_name(std::move(file_name))
 {
-  connect(m_undo_stack, &QUndoStack::cleanChanged, this, &Document::modifiedChanged);
+
 }
 
 Document::~Document() = default;
@@ -39,18 +39,33 @@ const QString& Document::getFileName() const
 QString Document::getDisplayName() const
 {
   QString displayName = QFileInfo(m_file_name).fileName();
-  if (displayName.isEmpty())
-    displayName = tr("untitled.egn");
-
   return displayName;
 }
 
-QUndoStack* Document::getUndoStack() const
+bool Document::save(const QString& file_name)
 {
-  return m_undo_stack;
+  auto serializer = DocumentSerializer();
+  auto bytearray = serializer.serialize(*this);
+
+  auto file = QFile(m_file_name);
+  if(!file.open(QIODevice::WriteOnly))
+    return false;
+
+  file.write(bytearray);
+  file.close();
+
+  Q_EMIT saved();
+  return true;
 }
 
-bool Document::isModified() const
+std::unique_ptr<Document> Document::load(const QString& file_name)
 {
-  return !m_undo_stack->isClean();
+  auto file = QFile(file_name);
+  if(!file.open(QIODevice::ReadOnly))
+    return nullptr;
+
+  auto array = file.readAll();
+  auto serializer = DocumentSerializer();
+
+  return serializer.deserialize(array);
 }

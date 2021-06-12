@@ -44,7 +44,7 @@ private Q_SLOTS:
   bool confirmSave(Project* project);
   bool confirmAllSave();
 
-  bool saveProject(Project* project = nullptr);
+  bool saveProject(Project* project);
   bool saveAllProjects();
 
   void newProject();

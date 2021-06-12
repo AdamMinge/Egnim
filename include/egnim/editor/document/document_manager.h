@@ -4,7 +4,6 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QStackedLayout>
 #include <QScopedPointer>
-#include <QUndoGroup>
 #include <QObject>
 #include <QTabBar>
 #include <QHash>
@@ -48,8 +47,6 @@ public:
   void switchToDocument(int index);
   void switchToDocument(Document* document);
 
-  [[nodiscard]] QUndoGroup* undoGroup() const;
-
   void saveState();
   void restoreState();
 
@@ -74,8 +71,6 @@ private:
   QScopedPointer<NoDocumentWidget> m_no_document_widget;
   QTabBar* m_tab_bar;
   QStackedLayout* m_editor_stack;
-
-  QUndoGroup* m_undo_group;
 };
 
 #endif //DOCUMENT_MANAGER_H

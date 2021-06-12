@@ -11,7 +11,7 @@ NoProjectWidget::NoProjectWidget(QWidget* parent) :
 {
   m_ui->setupUi(this);
 
-  connect(m_ui->m_new_project_button, &QPushButton::pressed, ActionManager::getInstance().findAction("new_project"), &QAction::trigger);
+  connect(m_ui->m_new_project_button, &QPushButton::pressed, ActionManager::getInstance().findAction("new_game_project"), &QAction::trigger);
   connect(m_ui->m_open_button, &QPushButton::pressed, ActionManager::getInstance().findAction("open_project"), &QAction::trigger);
 }
 

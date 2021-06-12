@@ -3,6 +3,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/project/game_editor.h>
 #include <egnim/editor/project/game_project.h>
+#include <egnim/editor/project/undo_dock.h>
 #include <egnim/editor/project/file_system_dock.h>
 #include <egnim/editor/document/document_manager.h>
 #include <egnim/editor/preferences_manager.h>
@@ -22,6 +23,7 @@ GameEditor::GameEditor(QObject* parent) :
   ProjectEditor(parent),
   m_current_project(nullptr),
   m_main_window(new QMainWindow()),
+  m_undo_dock(new UndoDock(m_main_window.data())),
   m_document_manager(new DocumentManager()),
   m_file_system_dock(new FileSystemDock(m_main_window.data())),
   m_preferences(new Preferences)
@@ -31,6 +33,7 @@ GameEditor::GameEditor(QObject* parent) :
 
   m_main_window->setCentralWidget(m_document_manager->getWidget());
 
+  m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_undo_dock);
   m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_file_system_dock);
 }
 
@@ -45,6 +48,8 @@ void GameEditor::setCurrentProject(Project* project)
   Q_ASSERT(game_project || !project);
 
   m_current_project = game_project;
+
+  m_undo_dock->setStack(game_project ? game_project->getUndoStack() : nullptr);
 }
 
 Project* GameEditor::getCurrentProject() const
@@ -55,6 +60,11 @@ Project* GameEditor::getCurrentProject() const
 QWidget* GameEditor::getEditorWidget() const
 {
   return m_main_window.data();
+}
+
+DocumentManager* GameEditor::getDocumentManager() const
+{
+  return m_document_manager.data();
 }
 
 void GameEditor::saveState()
@@ -77,7 +87,7 @@ void GameEditor::restoreState()
 
 QList<QDockWidget*> GameEditor::getDockWidgets() const
 {
-  auto dockWidgets = QList<QDockWidget*> { m_file_system_dock };
+  auto dockWidgets = QList<QDockWidget*> { m_undo_dock, m_file_system_dock };
 
   if(auto document_editor = m_document_manager->getCurrentEditor(); document_editor)
     dockWidgets.append(document_editor->getDockWidgets());
@@ -95,12 +105,14 @@ QList<DialogWithToggleView*> GameEditor::getDialogWidgets() const
   return dialogWidgets;
 }
 
+GameEditor::StandardActions GameEditor::getEnabledStandardActions() const
+{
+  // TODO : implementation //
+  GameEditor::StandardActions standard_actions;
+  return standard_actions;
+}
+
 void GameEditor::closeDocument(int index)
 {
   m_document_manager->removeDocument(index);
-}
-
-void GameEditor::documentChanged(Document* document)
-{
-
 }

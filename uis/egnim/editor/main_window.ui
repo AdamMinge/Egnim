@@ -23,32 +23,32 @@
      <height>22</height>
     </rect>
    </property>
-   <widget class="QMenu" name="m_menu_file">
+   <widget class="QMenu" name="m_menu_project">
     <property name="title">
-     <string>&amp;File</string>
+     <string>&amp;Project</string>
     </property>
-    <widget class="QMenu" name="m_menu_open_recent">
+    <widget class="QMenu" name="m_menu_open_recent_project">
      <property name="title">
       <string>Open &amp;Recent</string>
      </property>
      <addaction name="separator"/>
-     <addaction name="m_action_clear_recent"/>
+     <addaction name="m_action_clear_recent_projects"/>
     </widget>
-    <widget class="QMenu" name="m_menu_new">
+    <widget class="QMenu" name="m_menu_new_project">
      <property name="title">
       <string>&amp;New</string>
      </property>
-     <addaction name="m_action_new_project"/>
+     <addaction name="m_action_new_game_project"/>
     </widget>
-    <addaction name="m_menu_new"/>
-    <addaction name="m_action_open"/>
-    <addaction name="m_menu_open_recent"/>
+    <addaction name="m_menu_new_project"/>
+    <addaction name="m_action_open_project"/>
+    <addaction name="m_menu_open_recent_project"/>
     <addaction name="m_action_close_project"/>
     <addaction name="separator"/>
     <addaction name="m_action_settings"/>
     <addaction name="separator"/>
-    <addaction name="m_action_save"/>
-    <addaction name="m_action_save_all"/>
+    <addaction name="m_action_save_project"/>
+    <addaction name="m_action_save_all_projects"/>
     <addaction name="separator"/>
     <addaction name="m_action_exit"/>
    </widget>
@@ -56,8 +56,6 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
-    <addaction name="m_action_undo"/>
-    <addaction name="m_action_redo"/>
     <addaction name="separator"/>
     <addaction name="m_action_cut"/>
     <addaction name="m_action_copy"/>
@@ -69,7 +67,7 @@
     </property>
     <widget class="QMenu" name="m_menu_views_and_toolbars">
      <property name="title">
-      <string>Views and Toolbars</string>
+      <string>Views and &amp;Toolbars</string>
      </property>
     </widget>
     <addaction name="m_menu_views_and_toolbars"/>
@@ -80,38 +78,55 @@
     </property>
     <addaction name="m_action_about"/>
    </widget>
-   <addaction name="m_menu_file"/>
+   <widget class="QMenu" name="m_menu_document">
+    <property name="title">
+     <string>&amp;Document</string>
+    </property>
+    <widget class="QMenu" name="m_menu_new_document">
+     <property name="title">
+      <string>&amp;New</string>
+     </property>
+     <addaction name="m_action_new_scene_document"/>
+    </widget>
+    <addaction name="m_menu_new_document"/>
+    <addaction name="m_action_open_document"/>
+    <addaction name="separator"/>
+    <addaction name="m_action_save_document"/>
+    <addaction name="m_action_save_all_documents"/>
+   </widget>
+   <addaction name="m_menu_project"/>
+   <addaction name="m_menu_document"/>
    <addaction name="m_menu_edit"/>
    <addaction name="m_menu_view"/>
    <addaction name="m_menu_help"/>
   </widget>
   <widget class="QStatusBar" name="m_status_bar"/>
-  <action name="m_action_clear_recent">
+  <action name="m_action_clear_recent_projects">
    <property name="text">
-    <string>Clear Recent</string>
+    <string>Clear &amp;Recent</string>
    </property>
   </action>
-  <action name="m_action_new_project">
+  <action name="m_action_new_game_project">
    <property name="text">
-    <string>New Project</string>
+    <string>New &amp;Game Project</string>
    </property>
   </action>
-  <action name="m_action_open">
+  <action name="m_action_open_project">
    <property name="text">
     <string>&amp;Open...</string>
    </property>
   </action>
   <action name="m_action_close_project">
    <property name="text">
-    <string>Close Project</string>
+    <string>&amp;Close Project</string>
    </property>
   </action>
   <action name="m_action_settings">
    <property name="text">
-    <string>Settings...</string>
+    <string>&amp;Settings...</string>
    </property>
   </action>
-  <action name="m_action_save">
+  <action name="m_action_save_project">
    <property name="text">
     <string>&amp;Save</string>
    </property>
@@ -121,7 +136,7 @@
     <string>&amp;Save As</string>
    </property>
   </action>
-  <action name="m_action_save_all">
+  <action name="m_action_save_all_projects">
    <property name="text">
     <string>&amp;Save All</string>
    </property>
@@ -159,6 +174,26 @@
   <action name="m_action_about">
    <property name="text">
     <string>&amp;About...</string>
+   </property>
+  </action>
+  <action name="m_action_new_scene_document">
+   <property name="text">
+    <string>New &amp;Scene Document</string>
+   </property>
+  </action>
+  <action name="m_action_open_document">
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+  </action>
+  <action name="m_action_save_document">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="m_action_save_all_documents">
+   <property name="text">
+    <string>&amp;Save All</string>
    </property>
   </action>
  </widget>

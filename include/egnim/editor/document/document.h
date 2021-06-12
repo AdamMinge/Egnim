@@ -3,7 +3,6 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
-#include <QUndoStack>
 /* -------------------------------------------------------------------------- */
 
 class Document : public QObject
@@ -20,18 +19,15 @@ public:
 
   void setFileName(const QString& file_name);
   [[nodiscard]] const QString& getFileName() const;
-
   [[nodiscard]] QString getDisplayName() const;
 
-  [[nodiscard]] QUndoStack* getUndoStack() const;
-
-  [[nodiscard]] bool isModified() const;
-
-  virtual bool save() = 0;
+  bool save(const QString& file_name);
+  static std::unique_ptr<Document> load(const QString& file_name);
 
 Q_SIGNALS:
-  void modifiedChanged();
   void fileNameChanged(const QString& new_file_name, const QString& old_file_name);
+
+  void saved();
 
 protected:
   explicit Document(Type type, QString file_name, QObject* parent = nullptr);
@@ -39,7 +35,6 @@ protected:
 private:
   Type m_type;
   QString m_file_name;
-  QUndoStack* m_undo_stack;
 };
 
 enum class Document::Type

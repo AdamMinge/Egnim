@@ -13,7 +13,7 @@ set(sources
         ${source_root}/core/context.cpp
         ${source_root}/core/state.cpp
         ${source_root}/core/state_stack.cpp
-        ${source_root}/core/main_loop.cpp
+        ${source_root}/core/game.cpp
 
         ${source_root}/graphics/animated_sprite.cpp
         ${source_root}/graphics/cell.cpp
@@ -106,7 +106,7 @@ set(includes
         ${include_root}/core/resource_holder.h
         ${include_root}/core/state.h
         ${include_root}/core/state_stack.h
-        ${include_root}/core/main_loop.h
+        ${include_root}/core/game.h
 
         ${include_root}/graphics/animated_sprite.h
         ${include_root}/graphics/cell.h

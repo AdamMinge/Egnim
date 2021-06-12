@@ -1,7 +1,7 @@
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Clock.hpp>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/engine/core/main_loop.h>
+#include <egnim/engine/core/game.h>
 #include <egnim/engine/core/state_stack.h>
 #include <egnim/engine/core/context.h>
 #include <egnim/engine/events/event_dispatcher.h>
@@ -13,7 +13,7 @@
 
 namespace egnim::core {
 
-MainLoop::MainLoop() :
+Game::Game() :
   m_context(std::make_unique<Context>()),
   m_states(std::make_unique<StateStack>(*m_context)),
   m_time_per_frame(sf::seconds(1.f/60.f))
@@ -21,39 +21,39 @@ MainLoop::MainLoop() :
 
 }
 
-MainLoop::~MainLoop() = default;
+Game::~Game() = default;
 
-void MainLoop::setTimePerFrame(const sf::Time& time_per_frame)
+void Game::setTimePerFrame(const sf::Time& time_per_frame)
 {
   m_time_per_frame = time_per_frame;
 }
 
-sf::Time MainLoop::getTimePerFrame() const
+sf::Time Game::getTimePerFrame() const
 {
   return m_time_per_frame;
 }
 
-Context& MainLoop::getContext()
+Context& Game::getContext()
 {
   return *m_context;
 }
 
-const Context& MainLoop::getContext() const
+const Context& Game::getContext() const
 {
   return *m_context;
 }
 
-StateStack& MainLoop::getStateStack()
+StateStack& Game::getStateStack()
 {
   return *m_states;
 }
 
-const StateStack& MainLoop::getStateStack() const
+const StateStack& Game::getStateStack() const
 {
   return *m_states;
 }
 
-void MainLoop::run()
+void Game::run()
 {
   sf::Clock clock;
   sf::Time time_since_last_update = sf::Time::Zero;
@@ -79,7 +79,7 @@ void MainLoop::run()
   }
 }
 
-void MainLoop::processInput()
+void Game::processInput()
 {
   sf::Event event{};
   auto& render_window = m_context->getRenderWindow();
@@ -93,12 +93,12 @@ void MainLoop::processInput()
   }
 }
 
-void MainLoop::update(sf::Time dt)
+void Game::update(sf::Time dt)
 {
   m_states->update(dt);
 }
 
-void MainLoop::render()
+void Game::render()
 {
   auto& render_window = m_context->getRenderWindow();
 
@@ -107,7 +107,7 @@ void MainLoop::render()
   render_window.display();
 }
 
-void MainLoop::processWindowEvent(const sf::Event& window_event)
+void Game::processWindowEvent(const sf::Event& window_event)
 {
   switch(window_event.type)
   {
@@ -145,7 +145,7 @@ void MainLoop::processWindowEvent(const sf::Event& window_event)
   }
 }
 
-void MainLoop::processKeyboardEvent(const sf::Event& keyboard_event)
+void Game::processKeyboardEvent(const sf::Event& keyboard_event)
 {
   switch(keyboard_event.type)
   {
@@ -178,7 +178,7 @@ void MainLoop::processKeyboardEvent(const sf::Event& keyboard_event)
   }
 }
 
-void MainLoop::processMouseEvent(const sf::Event& mouse_event)
+void Game::processMouseEvent(const sf::Event& mouse_event)
 {
   switch(mouse_event.type)
   {
@@ -242,7 +242,7 @@ void MainLoop::processMouseEvent(const sf::Event& mouse_event)
   }
 }
 
-void MainLoop::processJoystickEvent(const sf::Event& joystick_event)
+void Game::processJoystickEvent(const sf::Event& joystick_event)
 {
   switch(joystick_event.type)
   {

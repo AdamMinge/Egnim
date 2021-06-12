@@ -1,5 +1,5 @@
-#ifndef MAIN_LOOP_H
-#define MAIN_LOOP_H
+#ifndef GAME_H
+#define GAME_H
 
 /* ----------------------------------- SFML --------------------------------- */
 #include <SFML/System/Time.hpp>
@@ -15,11 +15,11 @@ namespace egnim::core
   class StateStack;
   class Context;
 
-  class EGNIM_UTILITY_API MainLoop
+  class EGNIM_UTILITY_API Game
   {
   public:
-    explicit MainLoop();
-    virtual ~MainLoop();
+    explicit Game();
+    virtual ~Game();
 
     void setTimePerFrame(const sf::Time& time_per_frame);
     [[nodiscard]] sf::Time getTimePerFrame() const;
@@ -50,4 +50,4 @@ namespace egnim::core
 
 } // namespace egnim::core
 
-#endif //MAIN_LOOP_H
+#endif //GAME_H

@@ -10,11 +10,11 @@ set(include_root ${EGNIM_SOURCE_DIR}/examples/physics_scenes/include)
 
 set(sources
     ${source_root}/main.cpp
-    ${source_root}/game.cpp
+    ${source_root}/example_game.cpp
     ${source_root}/boxes_state.cpp)
 
 set(includes
-    ${include_root}/game.h
+    ${include_root}/example_game.h
     ${include_root}/boxes_state.h)
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------------- Define the abovo-test target ----------------------------------- #

@@ -10,7 +10,6 @@ DocumentManager::DocumentManager() :
   m_widget(new QWidget()),
   m_tab_bar(new QTabBar(m_widget.data())),
   m_editor_stack(new QStackedLayout()),
-  m_undo_group(new QUndoGroup(this)),
   m_no_document_widget(new NoDocumentWidget())
 {
   m_tab_bar->setExpanding(false);
@@ -34,8 +33,8 @@ DocumentManager::DocumentManager() :
 
 DocumentManager::~DocumentManager()
 {
-  removeAllEditors();
   removeAllDocuments();
+  removeAllEditors();
 }
 
 QWidget* DocumentManager::getWidget() const
@@ -82,13 +81,10 @@ void DocumentManager::addDocument(Document* document)
   auto& document_ref = *document;
 
   m_documents.emplace_back(document);
-  m_undo_group->addStack(document_ref.getUndoStack());
 
   auto document_index = m_tab_bar->addTab(document_ref.getDisplayName());
   m_tab_bar->setTabToolTip(document_index, document_ref.getFileName());
 
-  connect(std::addressof(document_ref), &Document::modifiedChanged, this,
-          [this, document = std::addressof(document_ref)] { updateDocumentTab(document); });
   connect(std::addressof(document_ref), &Document::fileNameChanged, this,
           [this, document = std::addressof(document_ref)] { updateDocumentTab(document); });
 
@@ -111,7 +107,6 @@ void DocumentManager::removeDocument(int index)
     return document == document_to_remove;
   });
 
-  m_undo_group->removeStack(document_to_remove->getUndoStack());
   m_tab_bar->removeTab(index);
 
   m_documents.erase(removed_document_iter, m_documents.end());
@@ -165,11 +160,6 @@ void DocumentManager::switchToDocument(Document* document)
   switchToDocument(static_cast<int>(index));
 }
 
-QUndoGroup* DocumentManager::undoGroup() const
-{
-  return m_undo_group;
-}
-
 void DocumentManager::saveState()
 {
   for(auto& [document_type, editor] : m_editor_for_document_type)
@@ -185,7 +175,7 @@ void DocumentManager::restoreState()
 bool DocumentManager::saveDocument(Document* document)
 {
   Q_ASSERT(document);
-  if(!document->save())
+  if(!document->save(document->getFileName()))
   {
     switchToDocument(document);
     QMessageBox::critical(
@@ -207,9 +197,6 @@ void DocumentManager::currentIndexChanged()
 {
   auto document = getCurrentDocument();
   auto editor = getCurrentEditor();
-
-  if(document)
-    m_undo_group->setActiveStack(document->getUndoStack());
 
   if(editor)
   {
@@ -242,10 +229,6 @@ void DocumentManager::updateDocumentTab(Document* document)
   if (index == -1)
     return;
 
-  QString tabText = document->getDisplayName();
-  if (document->isModified())
-    tabText.prepend(QLatin1Char('*'));
-
-  m_tab_bar->setTabText(index, tabText);
+  m_tab_bar->setTabText(index, document->getDisplayName());
   m_tab_bar->setTabToolTip(index, document->getFileName());
 }

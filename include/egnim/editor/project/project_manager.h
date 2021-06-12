@@ -4,6 +4,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QStackedLayout>
 #include <QScopedPointer>
+#include <QUndoGroup>
 #include <QObject>
 #include <QTabBar>
 #include <QHash>
@@ -51,6 +52,8 @@ public:
   void switchToProject(int index);
   void switchToProject(Project *project);
 
+  [[nodiscard]] QUndoGroup* getUndoGroup() const;
+
   void saveState();
   void restoreState();
 
@@ -77,6 +80,8 @@ private:
   QScopedPointer<NoProjectWidget> m_no_project_widget;
   QTabBar *m_tab_bar;
   QStackedLayout *m_editor_stack;
+
+  QUndoGroup* m_undo_group;
 };
 
 #endif //PROJECT_MANAGER_H

@@ -4,18 +4,12 @@
 #include <egnim/editor/document/scene_document.h>
 /* -------------------------------------------------------------------------- */
 
-std::unique_ptr<SceneDocument> SceneDocument::create(QString file_name)
+std::unique_ptr<SceneDocument> SceneDocument::create(const QString& file_name)
 {
-  auto document = std::unique_ptr<SceneDocument>(new SceneDocument(std::move(file_name)));
-  document->save();
+  auto document = std::unique_ptr<SceneDocument>(new SceneDocument(file_name));
+  document->save(file_name);
 
   return document;
-}
-
-std::unique_ptr<SceneDocument> SceneDocument::load(QString file_name)
-{
-  // TODO : implementation //
-  return nullptr;
 }
 
 SceneDocument::SceneDocument(QString file_name, QObject* parent) :
@@ -29,15 +23,4 @@ SceneDocument::~SceneDocument() = default;
 const QDateTime& SceneDocument::getLastModified() const
 {
   return m_last_modified;
-}
-
-bool SceneDocument::save()
-{
-  // TODO : save implementation //
-
-  getUndoStack()->setClean();
-  m_last_modified = QFileInfo(getFileName()).lastModified();
-
-  Q_EMIT saved();
-  return true;
 }

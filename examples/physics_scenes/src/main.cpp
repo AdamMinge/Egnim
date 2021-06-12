@@ -1,9 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
-#include "game.h"
+#include "example_game.h"
 /* -------------------------------------------------------------------------- */
 
 int main(int argc, char** argv)
 {
-  Game game(800, 600, "physics_scenes");
-  return game.run();
+  ExampleGame example_game(800, 600, "physics_scenes");
+  return example_game.run();
 }

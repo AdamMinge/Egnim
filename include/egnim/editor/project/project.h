@@ -3,6 +3,7 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
+#include <QDateTime>
 #include <QUndoStack>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
@@ -27,8 +28,10 @@ public:
   [[nodiscard]] const QString& getFileName() const;
 
   [[nodiscard]] QString getDisplayName() const;
+  [[nodiscard]] const QDateTime& getLastModified() const;
 
   [[nodiscard]] bool isModified() const;
+  [[nodiscard]] QUndoStack* getUndoStack() const;
 
   void addDocument(std::unique_ptr<Document> document);
   void removeDocument(const Document& document);
@@ -36,7 +39,8 @@ public:
 
   [[nodiscard]] const std::list<std::unique_ptr<Document>>& getDocuments() const;
 
-  virtual bool save() = 0;
+  bool save(const QString& file_name);
+  static std::unique_ptr<Project> load(const QString& file_name);
 
 Q_SIGNALS:
   void modifiedChanged();
@@ -45,6 +49,8 @@ Q_SIGNALS:
   void addedDocument(Document* document);
   void removedDocument(Document* document);
 
+  void saved();
+
 protected:
   explicit Project(Type m_type, QString file_name, QObject* parent = nullptr);
 
@@ -52,6 +58,8 @@ private:
   Type m_type;
   QString m_file_name;
   std::list<std::unique_ptr<Document>> m_documents;
+  QDateTime m_last_modified;
+  QUndoStack* m_undo_stack;
 };
 
 enum class Project::Type

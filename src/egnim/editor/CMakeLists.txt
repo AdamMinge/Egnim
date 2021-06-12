@@ -24,10 +24,14 @@ set(sources
         ${source_root}/document/document_editor.cpp
         ${source_root}/document/scene_document.cpp
         ${source_root}/document/scene_editor.cpp
-        ${source_root}/document/undo_dock.cpp
         ${source_root}/document/inspector_dock.cpp
         ${source_root}/document/scene_dock.cpp
         ${source_root}/document/no_document_widget.cpp
+        ${source_root}/document/document_serializer.cpp
+        ${source_root}/document/priv/document_serializer_impl.h
+        ${source_root}/document/priv/document_serializer_impl.cpp
+        ${source_root}/document/priv/json_document_serializer_impl.h
+        ${source_root}/document/priv/json_document_serializer_impl.cpp
 
         ${source_root}/project/project.cpp
         ${source_root}/project/project_editor.cpp
@@ -37,6 +41,12 @@ set(sources
         ${source_root}/project/game_editor.cpp
         ${source_root}/project/new_project_dialog.cpp
         ${source_root}/project/file_system_dock.cpp
+        ${source_root}/project/undo_dock.cpp
+        ${source_root}/project/project_serializer.cpp
+        ${source_root}/project/priv/project_serializer_impl.h
+        ${source_root}/project/priv/project_serializer_impl.cpp
+        ${source_root}/project/priv/json_project_serializer_impl.h
+        ${source_root}/project/priv/json_project_serializer_impl.cpp
 
         ${source_root}/commands/command.cpp
         ${source_root}/commands/group_command.cpp
@@ -56,10 +66,10 @@ set(includes
         ${include_root}/document/document_editor.h
         ${include_root}/document/scene_document.h
         ${include_root}/document/scene_editor.h
-        ${include_root}/document/undo_dock.h
         ${include_root}/document/inspector_dock.h
         ${include_root}/document/scene_dock.h
         ${include_root}/document/no_document_widget.h
+        ${include_root}/document/document_serializer.h
 
         ${include_root}/project/project.h
         ${include_root}/project/project_editor.h
@@ -69,6 +79,8 @@ set(includes
         ${include_root}/project/game_editor.h
         ${include_root}/project/new_project_dialog.h
         ${include_root}/project/file_system_dock.h
+        ${include_root}/project/undo_dock.h
+        ${include_root}/project/project_serializer.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
@@ -103,8 +115,9 @@ egnim_add_application(egnim-editor
         SOURCES ${sources} ${includes} ${uis} ${resources}
         DEPENDS Qt6::Widgets egnim::egnim-engine)
 
-target_include_directories(egnim-editor PUBLIC
-        $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include/egnim/editor>)
+target_include_directories(egnim-editor
+        PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include/egnim/editor>
+        PRIVATE ${PROJECT_SOURCE_DIR}/src)
 
 set_target_properties(egnim-editor
         PROPERTIES CXX_STANDARD 20)

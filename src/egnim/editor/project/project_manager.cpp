@@ -25,7 +25,8 @@ ProjectManager::ProjectManager() :
   m_widget(new QWidget()),
   m_tab_bar(new QTabBar(m_widget.data())),
   m_editor_stack(new QStackedLayout()),
-  m_no_project_widget(new NoProjectWidget())
+  m_no_project_widget(new NoProjectWidget()),
+  m_undo_group(new QUndoGroup(this))
 {
   m_tab_bar->setExpanding(false);
   m_tab_bar->setDocumentMode(true);
@@ -48,8 +49,8 @@ ProjectManager::ProjectManager() :
 
 ProjectManager::~ProjectManager()
 {
-  removeAllEditors();
   removeAllProjects();
+  removeAllEditors();
 }
 
 QWidget* ProjectManager::getWidget() const
@@ -96,10 +97,13 @@ void ProjectManager::addProject(std::unique_ptr<Project> project)
   auto& project_ref = *project;
 
   m_projects.emplace_back(std::move(project));
+  m_undo_group->addStack(project_ref.getUndoStack());
 
   auto project_index = m_tab_bar->addTab(project_ref.getDisplayName());
   m_tab_bar->setTabToolTip(project_index, project_ref.getFileName());
 
+  connect(std::addressof(project_ref), &Project::modifiedChanged, this,
+          [this, project = std::addressof(project_ref)] { updateProjectTab(project); });
   connect(std::addressof(project_ref), &Project::fileNameChanged, this,
           [this, project = std::addressof(project_ref)] { updateProjectTab(project); });
 
@@ -122,6 +126,7 @@ void ProjectManager::removeProject(int index)
       return project.get() == project_to_remove;
     });
 
+  m_undo_group->removeStack(project_to_remove->getUndoStack());
   m_tab_bar->removeTab(index);
 
   m_projects.erase(removed_project_iter, m_projects.end());
@@ -175,6 +180,11 @@ void ProjectManager::switchToProject(Project* project)
   switchToProject(static_cast<int>(index));
 }
 
+QUndoGroup* ProjectManager::getUndoGroup() const
+{
+  return m_undo_group;
+}
+
 void ProjectManager::saveState()
 {
   for(auto& [project_type, editor] : m_editor_for_project_type)
@@ -190,7 +200,8 @@ void ProjectManager::restoreState()
 bool ProjectManager::saveProject(Project* project)
 {
   Q_ASSERT(project);
-  if(!project->save())
+
+  if(!project->save(project->getFileName()))
   {
     switchToProject(project);
     QMessageBox::critical(
@@ -212,6 +223,9 @@ void ProjectManager::currentIndexChanged()
 {
   auto project = getCurrentProject();
   auto editor = getCurrentEditor();
+
+  if(project)
+    m_undo_group->setActiveStack(project->getUndoStack());
 
   if(editor)
   {
@@ -245,6 +259,8 @@ void ProjectManager::updateProjectTab(Project* project)
     return;
 
   QString tabText = project->getDisplayName();
+  if (project->isModified())
+    tabText.prepend(QLatin1Char('*'));
 
   m_tab_bar->setTabText(index, tabText);
   m_tab_bar->setTabToolTip(index, project->getFileName());

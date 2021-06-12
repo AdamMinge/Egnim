@@ -27,7 +27,7 @@ namespace egnim::scene
   {
   public:
     SceneVisitor() = default;
-    ~SceneVisitor() = default;
+    virtual ~SceneVisitor() = default;
 
     SceneVisitor(const SceneVisitor&) = default;
     SceneVisitor(SceneVisitor&&) = default;

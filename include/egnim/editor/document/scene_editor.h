@@ -7,7 +7,6 @@
 
 class SceneDocument;
 
-class UndoDock;
 class SceneDock;
 class InspectorDock;
 
@@ -37,7 +36,6 @@ private:
   SceneDocument* m_current_document;
   QScopedPointer<QMainWindow> m_main_window;
 
-  UndoDock* m_undo_dock;
   SceneDock* m_scene_dock;
   InspectorDock* m_inspector_dock;
 
