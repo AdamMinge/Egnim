@@ -55,10 +55,10 @@ class Preference
 public:
   explicit Preference(QString key, TYPE default_value = TYPE());
 
-  Preference& operator=(TYPE&& value);
+  Preference& operator=(const TYPE& value);
 
   [[nodiscard]] TYPE get() const;
-  void set(TYPE&& value);
+  void set(const TYPE& value);
 
   operator TYPE() const; // NOLINT(google-explicit-constructor)
 
@@ -76,9 +76,9 @@ Preference<TYPE>::Preference(QString key, TYPE default_value) :
 }
 
 template<typename TYPE>
-Preference<TYPE>& Preference<TYPE>::operator=(TYPE&& value)
+Preference<TYPE>& Preference<TYPE>::operator=(const TYPE& value)
 {
-  set(std::forward<TYPE>(value));
+  set(value);
   return *this;
 }
 
@@ -89,9 +89,9 @@ TYPE Preference<TYPE>::get() const
 }
 
 template<typename TYPE>
-void Preference<TYPE>::set(TYPE&& value)
+void Preference<TYPE>::set(const TYPE& value)
 {
-  PreferencesManager::getInstance().setValue(m_key, std::forward<TYPE>(value));
+  PreferencesManager::getInstance().setValue(m_key, value);
 }
 
 template<typename TYPE>

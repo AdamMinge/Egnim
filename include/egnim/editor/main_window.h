@@ -57,6 +57,8 @@ private Q_SLOTS:
   void updateWindowTitle();
   void updateViewsAndToolbarsMenu();
 
+  bool openProject(const QString& file_name);
+
 private:
   void writeSettings();
   void readSettings();

@@ -28,6 +28,8 @@ public:
   [[nodiscard]] const QString& getFileName() const;
 
   [[nodiscard]] QString getDisplayName() const;
+
+  void setLastModified(const QDateTime& date_time);
   [[nodiscard]] const QDateTime& getLastModified() const;
 
   [[nodiscard]] bool isModified() const;
@@ -42,6 +44,11 @@ public:
   bool save(const QString& file_name);
   static std::unique_ptr<Project> load(const QString& file_name);
 
+  static QString getProjectFileFilter();
+
+  [[nodiscard]] QString getProjectExtension() const;
+  static QString getProjectExtension(Type type);
+
 Q_SIGNALS:
   void modifiedChanged();
   void fileNameChanged(const QString& new_file_name, const QString& old_file_name);
@@ -52,7 +59,7 @@ Q_SIGNALS:
   void saved();
 
 protected:
-  explicit Project(Type m_type, QString file_name, QObject* parent = nullptr);
+  explicit Project(Type m_type, QObject* parent = nullptr);
 
 private:
   Type m_type;

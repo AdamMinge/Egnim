@@ -4,13 +4,24 @@
 #include <egnim/editor/project/new_project_dialog.h>
 #include <egnim/editor/project/project_manager.h>
 #include <egnim/editor/project/game_project.h>
+#include <egnim/editor/preferences_manager.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_project_dialog.h"
 /* -------------------------------------------------------------------------- */
 
+/* -------------------------------- Preferences ----------------------------- */
+
+struct NewProjectDialog::Preferences
+{
+  Preference<QString> open_project_start_location = Preference<QString>("project/open_project_start_location", QDir::homePath());
+};
+
+/* ----------------------------- NewProjectDialog --------------------------- */
+
 NewProjectDialog::NewProjectDialog(QWidget* parent) :
   QDialog(parent),
-  m_ui(new Ui::NewProjectDialog())
+  m_ui(new Ui::NewProjectDialog()),
+  m_preferences(new Preferences)
 {
   m_ui->setupUi(this);
 
@@ -28,20 +39,28 @@ NewProjectDialog::~NewProjectDialog() = default;
 
 void NewProjectDialog::onBrowsePressed()
 {
-  QFileDialog file_dialog;
-  file_dialog.setFileMode(QFileDialog::Directory);
-  file_dialog.setOption(QFileDialog::ShowDirsOnly);
+  auto dir_path = QFileDialog::getExistingDirectory(this,
+                                                    tr("New Project"),
+                                                    m_preferences->open_project_start_location.get(),
+                                                    QFileDialog::Options() | QFileDialog::Option::DontUseNativeDialog);
 
-  if(file_dialog.exec())
-    m_ui->m_project_path_edit->setText(file_dialog.directory().path());
+  if(dir_path.isEmpty())
+    return;
+
+  m_preferences->open_project_start_location = dir_path;
+
+  m_ui->m_project_path_edit->setText(dir_path);
 }
 
 void NewProjectDialog::onCreateAndExitPressed()
 {
-  auto project_dir = QDir(m_ui->m_project_path_edit->text());
-  auto project_name = m_ui->m_project_name_edit->text();
+  auto new_project = GameProject::create();
 
-  auto new_project = GameProject::create(QDir(project_dir).filePath(project_name));
+  auto project_dir = QDir(m_ui->m_project_path_edit->text());
+  auto project_file_name = m_ui->m_project_name_edit->text() + new_project->getProjectExtension();
+
+  new_project->save(QDir(project_dir).filePath(project_file_name));
+
   ProjectManager::getInstance().addProject(std::move(new_project));
 
   close();

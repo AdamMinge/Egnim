@@ -180,6 +180,20 @@ void ProjectManager::switchToProject(Project* project)
   switchToProject(static_cast<int>(index));
 }
 
+bool ProjectManager::switchToProject(const QString& file_name)
+{
+  auto found_iter = std::find_if(m_projects.begin(), m_projects.end(), [&file_name](auto&& current_project){
+    return current_project->getFileName() == file_name;
+  });
+
+  if(found_iter == m_projects.end())
+    return false;
+
+  auto index = std::distance(m_projects.begin(), found_iter);
+  switchToProject(static_cast<int>(index));
+  return true;
+}
+
 QUndoGroup* ProjectManager::getUndoGroup() const
 {
   return m_undo_group;

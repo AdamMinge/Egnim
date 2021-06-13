@@ -51,6 +51,7 @@ public:
 
   void switchToProject(int index);
   void switchToProject(Project *project);
+  bool switchToProject(const QString& file_name);
 
   [[nodiscard]] QUndoGroup* getUndoGroup() const;
 

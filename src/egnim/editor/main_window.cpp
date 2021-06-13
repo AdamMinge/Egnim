@@ -1,6 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCloseEvent>
 #include <QMessageBox>
+#include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/main_window.h>
 #include <egnim/editor/preferences_manager.h>
@@ -24,6 +25,7 @@ struct MainWindow::Preferences
 {
   Preference<QByteArray> main_window_geometry = Preference<QByteArray>("main_window/geometry");
   Preference<QByteArray> main_window_state = Preference<QByteArray>("main_window/state");
+  Preference<QString> open_project_start_location = Preference<QString>("project/open_project_start_location", QDir::homePath());
 };
 
 /* -------------------------------- MainWindow ------------------------------ */
@@ -57,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
   getProjectManager().addEditor(Project::Type::Game, std::make_unique<GameEditor>());
 
   connect(getActionManager().findAction("new_game_project"), &QAction::triggered, this, &MainWindow::newProject);
-  connect(getActionManager().findAction("open_project"), &QAction::triggered, this, &MainWindow::openProject);
+  connect(getActionManager().findAction("open_project"), &QAction::triggered, this, qOverload<>(&MainWindow::openProject));
   connect(getActionManager().findAction("close_project"), &QAction::triggered, this, [this](){
     closeProject(getProjectManager().findProject(getProjectManager().getCurrentProject()));
   });
@@ -166,7 +168,20 @@ void MainWindow::newProject()
 
 void MainWindow::openProject()
 {
-  // TODO : implementation //
+  auto file_names = QFileDialog::getOpenFileNames(this,
+                                                  tr("Open Project"),
+                                                  m_preferences->open_project_start_location.get(),
+                                                  Project::getProjectFileFilter(),
+                                                  nullptr,
+                                                  QFileDialog::Options() | QFileDialog::Option::DontUseNativeDialog);
+
+  if(file_names.isEmpty())
+    return;
+
+  m_preferences->open_project_start_location = QFileInfo(file_names.front()).path();
+
+  for(auto& file_name : file_names)
+    openProject(file_name);
 }
 
 void MainWindow::clearRecent()
@@ -256,6 +271,24 @@ void MainWindow::updateViewsAndToolbarsMenu() // NOLINT(readability-make-member-
     for(auto& dialogWidget : dialogWidgets)
       view_and_toolbars_menu->addAction(dialogWidget->toggleViewAction());
   }
+}
+
+bool MainWindow::openProject(const QString& file_name)
+{
+  if(getProjectManager().switchToProject(file_name))
+    return true;
+
+  auto project = Project::load(file_name);
+  if(!project)
+  {
+    QMessageBox::critical(this,
+                          tr("Error Opening File"),
+                          tr("Error opening '%1'").arg(file_name));
+    return false;
+  }
+
+  getProjectManager().addProject(std::move(project));
+  return true;
 }
 
 bool MainWindow::confirmSave(Project* project)

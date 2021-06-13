@@ -1,6 +1,12 @@
+/* ------------------------------------ Qt ---------------------------------- */
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonArray>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/project/priv/json_project_serializer_impl.h>
 #include <egnim/editor/project/game_project.h>
+#include <egnim/editor/document/document_serializer.h>
+#include <egnim/editor/document/document.h>
 /* -------------------------------------------------------------------------- */
 
 namespace priv {
@@ -11,14 +17,52 @@ JsonProjectSerializerImpl::~JsonProjectSerializerImpl() = default;
 
 QByteArray JsonProjectSerializerImpl::serializeGameProject(const GameProject& project) const
 {
-  // TODO : implementation //
-  return QByteArray();
+  DocumentSerializer document_serializer;
+  QJsonArray game_project_documents;
+  for(auto& document : project.getDocuments())
+  {
+    auto save_game_document = QJsonDocument::fromJson(
+      document_serializer.serialize(*document, DocumentSerializer::Format::Json));
+
+    game_project_documents.append(save_game_document.object());
+  }
+
+  QJsonObject game_project_object;
+  game_project_object["type"] = static_cast<int>(project.getType());
+  game_project_object["documents"] = game_project_documents;
+
+  QJsonDocument save_game_project(game_project_object);
+  return save_game_project.toJson(QJsonDocument::Compact);
 }
 
 std::unique_ptr<GameProject> JsonProjectSerializerImpl::deserializeGameProject(const QByteArray& array) const
 {
-  // TODO : implementation //
-  return nullptr;
+  auto load_project = QJsonDocument::fromJson(array);
+
+  if(load_project.isNull())
+    return nullptr;
+
+  auto project_object = load_project.object();
+  auto project_type = project_object["type"];
+
+  if(project_type.type() != QJsonValue::Double || project_type != static_cast<int>(Project::Type::Game))
+    return nullptr;
+
+  auto game_project = GameProject::create();
+
+  DocumentSerializer document_serializer;
+  auto project_documents = project_object["documents"].toArray();
+  for(auto project_document : project_documents)
+  {
+    QJsonDocument load_document(project_document.toObject());
+    auto document = document_serializer.deserialize(
+      load_document.toJson(QJsonDocument::Compact), DocumentSerializer::Format::Json);
+
+    if(document)
+      game_project->addDocument(std::move(document));
+  }
+
+  return game_project;
 }
 
 } // namespace priv

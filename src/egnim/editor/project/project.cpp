@@ -7,10 +7,9 @@
 #include <egnim/editor/document/document.h>
 /* -------------------------------------------------------------------------- */
 
-Project::Project(Type type, QString file_name, QObject* parent) :
+Project::Project(Type type, QObject* parent) :
   QObject(parent),
   m_type(type),
-  m_file_name(std::move(file_name)),
   m_undo_stack(new QUndoStack(this))
 {
   connect(m_undo_stack, &QUndoStack::cleanChanged, this, &Project::modifiedChanged);
@@ -43,9 +42,14 @@ QString Project::getDisplayName() const
 {
   QString displayName = QFileInfo(m_file_name).fileName();
   if (displayName.isEmpty())
-    displayName = tr("untitled.egn");
+    displayName = tr("untitled.egn-pro");
 
   return displayName;
+}
+
+void Project::setLastModified(const QDateTime& date)
+{
+  m_last_modified = date;
 }
 
 const QDateTime& Project::getLastModified() const
@@ -99,7 +103,7 @@ bool Project::save(const QString& file_name)
   auto serializer = ProjectSerializer();
   auto bytearray = serializer.serialize(*this);
 
-  auto file = QFile(m_file_name);
+  auto file = QFile(file_name);
   if(!file.open(QIODevice::WriteOnly))
     return false;
 
@@ -107,7 +111,8 @@ bool Project::save(const QString& file_name)
   file.close();
 
   getUndoStack()->setClean();
-  m_last_modified = QFileInfo(getFileName()).lastModified();
+  setLastModified(QFileInfo(getFileName()).lastModified());
+  setFileName(file_name);
 
   Q_EMIT saved();
   return true;
@@ -122,5 +127,37 @@ std::unique_ptr<Project> Project::load(const QString& file_name)
   auto array = file.readAll();
   auto serializer = ProjectSerializer();
 
-  return serializer.deserialize(array);
+  auto project = serializer.deserialize(array);
+  if(project)
+  {
+    project->setFileName(file_name);
+    project->setLastModified(QFileInfo(file_name).lastModified());
+  }
+
+  return project;
+}
+
+QString Project::getProjectFileFilter()
+{
+  auto filter = QString{};
+
+  filter.append(tr("Game Project (*%1)").arg(getProjectExtension(Type::Game)));
+
+  return filter;
+}
+
+QString Project::getProjectExtension() const
+{
+  return getProjectExtension(m_type);
+}
+
+QString Project::getProjectExtension(Type type)
+{
+  switch(type)
+  {
+    case Type::Game:
+      return ".egn-pro";
+  }
+
+  return QString{};
 }

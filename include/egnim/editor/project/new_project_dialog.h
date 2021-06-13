@@ -11,6 +11,9 @@ class NewProjectDialog : public QDialog
 {
   Q_OBJECT
 
+private:
+  struct Preferences;
+
 public:
   explicit NewProjectDialog(QWidget* parent = nullptr);
   ~NewProjectDialog() override;
@@ -23,6 +26,7 @@ private Q_SLOTS:
 
 private:
   QScopedPointer<Ui::NewProjectDialog> m_ui;
+  QScopedPointer<Preferences> m_preferences;
 };
 
 #endif //NEW_PROJECT_DIALOG_H
