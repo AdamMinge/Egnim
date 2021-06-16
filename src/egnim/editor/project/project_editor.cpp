@@ -1,9 +1,11 @@
 /* ----------------------------------- Local -------------------------------- */
-#include "example_game.h"
+#include <egnim/editor/project/project_editor.h>
 /* -------------------------------------------------------------------------- */
 
-int main(int argc, char** argv)
+ProjectEditor::ProjectEditor(QObject* parent) :
+  QObject(parent)
 {
-  ExampleGame example_game(800, 600, "physics_scenes");
-  return example_game.run();
+
 }
+
+ProjectEditor::~ProjectEditor() = default;

@@ -1,64 +1,122 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCloseEvent>
+#include <QMessageBox>
+#include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/main_window.h>
-#include <egnim/editor/document_manager.h>
+#include <egnim/editor/preferences_manager.h>
+#include <egnim/editor/project/project_manager.h>
 #include <egnim/editor/language_manager.h>
+#include <egnim/editor/action_manager.h>
 #include <egnim/editor/style_manager.h>
-#include <egnim/editor/game_editor.h>
+#include <egnim/editor/widgets/dialog_with_toggle_view.h>
+#include <egnim/editor/project/new_project_dialog.h>
+#include <egnim/editor/project/game_editor.h>
+#include <egnim/editor/document/document_manager.h>
+#include <egnim/editor/document/document_editor.h>
+#include <egnim/editor/document/document.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
-#include <egnim/editor/game_document.h>
+
+/* -------------------------------- Preferences ----------------------------- */
+
+struct MainWindow::Preferences
+{
+  Preference<QByteArray> main_window_geometry = Preference<QByteArray>("main_window/geometry");
+  Preference<QByteArray> main_window_state = Preference<QByteArray>("main_window/state");
+  Preference<QString> open_project_start_location = Preference<QString>("project/open_project_start_location", QDir::homePath());
+};
+
+/* -------------------------------- MainWindow ------------------------------ */
+
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   m_ui(new Ui::MainWindow()),
-  m_document_manager(DocumentManager::getInstance()),
-  m_language_manager(LanguageManager::getInstance()),
-  m_style_manager(StyleManager::getInstance()),
-  m_current_document(nullptr)
+  m_preferences(new Preferences),
+  m_current_project(nullptr)
 {
   m_ui->setupUi(this);
 
-  m_document_manager.addEditor(Document::Type::Game, std::make_unique<GameEditor>());
+  registerMenus();
+  registerActions();
 
-  setCentralWidget(m_document_manager.getWidget());
+  setCentralWidget(getProjectManager().getWidget());
 
-  connect(&m_document_manager, &DocumentManager::documentCloseRequested, this, &MainWindow::closeDocument);
-  connect(&m_document_manager, &DocumentManager::currentDocumentChanged, this, &MainWindow::documentChanged);
+  auto undoGroup = getProjectManager().getUndoGroup();
+  auto undoAction = undoGroup->createUndoAction(this, tr("&Undo"));
+  auto redoAction = undoGroup->createRedoAction(this, tr("&Redo"));
 
+  m_ui->m_menu_edit->insertAction(m_ui->m_action_cut, undoAction);
+  m_ui->m_menu_edit->insertAction(m_ui->m_action_cut, redoAction);
+  m_ui->m_menu_edit->insertSeparator(m_ui->m_action_cut);
+
+  getActionManager().registerAction(undoAction, "undo");
+  getActionManager().registerAction(redoAction, "redo");
+
+  connect(undoGroup, &QUndoGroup::cleanChanged, this, &MainWindow::updateWindowTitle);
+
+  getProjectManager().addEditor(Project::Type::Game, std::make_unique<GameEditor>());
+
+  connect(getActionManager().findAction("new_game_project"), &QAction::triggered, this, &MainWindow::newProject);
+  connect(getActionManager().findAction("open_project"), &QAction::triggered, this, qOverload<>(&MainWindow::openProject));
+  connect(getActionManager().findAction("close_project"), &QAction::triggered, this, [this](){
+    closeProject(getProjectManager().findProject(getProjectManager().getCurrentProject()));
+  });
+  connect(getActionManager().findAction("save_project"), &QAction::triggered, this, [this](){
+    saveProject(getCurrentProject());
+  });
+  connect(getActionManager().findAction("save_all_projects"), &QAction::triggered, this, &MainWindow::saveAllProjects);
+  connect(getActionManager().findAction("exit"), &QAction::triggered, this, &MainWindow::close);
+
+  connect(getActionManager().findMenu("views_and_toolbars"), &QMenu::aboutToShow, this, &MainWindow::updateViewsAndToolbarsMenu);
+
+  connect(&getProjectManager(), &ProjectManager::currentProjectChanged, this, &MainWindow::projectChanged);
+  connect(&getProjectManager(), &ProjectManager::projectCloseRequested, this, &MainWindow::closeProject);
+
+  updateActions();
+  updateWindowTitle();
   readSettings();
   retranslateUi();
 }
 
 MainWindow::~MainWindow()
 {
-  m_document_manager.removeAllDocuments();
-  m_document_manager.removeAllEditors();
-
-  DocumentManager::deleteInstance();
+  ProjectManager::deleteInstance();
   LanguageManager::deleteInstance();
+  ActionManager::deleteInstance();
   StyleManager::deleteInstance();
+  PreferencesManager::deleteInstance();
 }
 
-DocumentManager& MainWindow::getDocumentManager() const
+ProjectManager& MainWindow::getProjectManager() const
 {
-  return m_document_manager;
+  return ProjectManager::getInstance();
 }
 
 LanguageManager& MainWindow::getLanguageManager() const
 {
-  return m_language_manager;
+  return LanguageManager::getInstance();
 }
 
 StyleManager& MainWindow::getStyleManager() const
 {
-  return m_style_manager;
+  return StyleManager::getInstance();
 }
 
-Document* MainWindow::getCurrentDocument() const
+ActionManager& MainWindow::getActionManager() const
 {
-  return m_current_document;
+  return ActionManager::getInstance();
+}
+
+PreferencesManager& MainWindow::getPreferencesManager() const
+{
+  return PreferencesManager::getInstance();
+}
+
+Project* MainWindow::getCurrentProject() const
+{
+  return m_current_project;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)
@@ -87,41 +145,275 @@ void MainWindow::changeEvent(QEvent *event)
   }
 }
 
-void MainWindow::closeDocument(int index)
+void MainWindow::closeProject(int index)
 {
-  if (confirmSave(m_document_manager.getDocument(index)))
-    m_document_manager.removeDocument(index);
+  if (confirmSave(getProjectManager().getProject(index)))
+    getProjectManager().removeProject(index);
 }
 
-void MainWindow::documentChanged(Document* document)
+void MainWindow::projectChanged(Project* project)
 {
-  m_current_document = document;
+  m_current_project = project;
+
+  updateActions();
+  updateWindowTitle();
 }
 
-bool MainWindow::confirmSave(Document* document)
+void MainWindow::newProject()
+{
+  auto new_project_dialog = new NewProjectDialog(this);
+  new_project_dialog->setAttribute(Qt::WA_DeleteOnClose);
+  new_project_dialog->show();
+}
+
+void MainWindow::openProject()
+{
+  auto file_names = QFileDialog::getOpenFileNames(this,
+                                                  tr("Open Project"),
+                                                  m_preferences->open_project_start_location.get(),
+                                                  Project::getProjectFileFilter(),
+                                                  nullptr,
+                                                  QFileDialog::Options() | QFileDialog::Option::DontUseNativeDialog);
+
+  if(file_names.isEmpty())
+    return;
+
+  m_preferences->open_project_start_location = QFileInfo(file_names.front()).path();
+
+  for(auto& file_name : file_names)
+    openProject(file_name);
+}
+
+void MainWindow::clearRecent()
 {
   // TODO : implementation //
+}
+
+void MainWindow::openSettings()
+{
+  // TODO : implementation //
+}
+
+void MainWindow::openAbout()
+{
+  // TODO : implementation //
+}
+
+bool MainWindow::saveProject(Project* project) // NOLINT(readability-make-member-function-const)
+{
+  Q_ASSERT(project);
+  getProjectManager().switchToProject(project);
+  return getProjectManager().saveProject(project);
+}
+
+bool MainWindow::saveAllProjects() // NOLINT(readability-make-member-function-const)
+{
+  for(const auto& document : getProjectManager().getProjects()) // NOLINT(readability-use-anyofallof)
+    if(!saveProject(document.get())) return false;
+
   return true;
+}
+
+void MainWindow::updateActions() // NOLINT(readability-make-member-function-const)
+{
+  auto project_editor = getProjectManager().getCurrentEditor();
+  auto project = getProjectManager().getCurrentProject();
+  auto document_manager = project_editor ? project_editor->getDocumentManager() : nullptr;
+  auto document = document_manager ? document_manager->getCurrentDocument() : nullptr;
+
+  ProjectEditor::StandardActions standard_actions;
+  if(project_editor)
+    standard_actions = project_editor->getEnabledStandardActions();
+
+  getActionManager().findAction("close_project")->setEnabled(project);
+  getActionManager().findAction("save_project")->setEnabled(project);
+  getActionManager().findAction("save_all_projects")->setEnabled(project);
+
+  getActionManager().findMenu("document")->menuAction()->setVisible(project);
+  getActionManager().findAction("save_document")->setEnabled(document);
+  getActionManager().findAction("save_all_documents")->setEnabled(document);
+
+  getActionManager().findAction("cut")->setEnabled(standard_actions & ProjectEditor::CutAction);
+  getActionManager().findAction("copy")->setEnabled(standard_actions & ProjectEditor::CopyAction);
+  getActionManager().findAction("delete")->setEnabled(standard_actions & ProjectEditor::DeleteAction);
+
+  getActionManager().findMenu("views_and_toolbars")->setEnabled(project);
+}
+
+void MainWindow::updateWindowTitle()
+{
+  auto current_project = getProjectManager().getCurrentProject();
+
+  auto project_name = current_project ? tr("[*]%1").arg(current_project->getDisplayName()) : QString();
+  auto project_file_path = current_project ? current_project->getFileName() : QString();
+  auto project_is_modified = current_project != nullptr && current_project->isModified();
+
+  setWindowTitle(project_name);
+  setWindowFilePath(project_file_path);
+  setWindowModified(project_is_modified);
+}
+
+void MainWindow::updateViewsAndToolbarsMenu() // NOLINT(readability-make-member-function-const)
+{
+  auto view_and_toolbars_menu = getActionManager().findMenu("views_and_toolbars");
+  view_and_toolbars_menu->clear();
+
+  if(auto editor = getProjectManager().getCurrentEditor())
+  {
+    auto dockWidgets = editor->getDockWidgets();
+    auto dialogWidgets = editor->getDialogWidgets();
+
+    for(auto& dockWidget : dockWidgets)
+      view_and_toolbars_menu->addAction(dockWidget->toggleViewAction());
+
+    view_and_toolbars_menu->addSeparator();
+
+    for(auto& dialogWidget : dialogWidgets)
+      view_and_toolbars_menu->addAction(dialogWidget->toggleViewAction());
+  }
+}
+
+bool MainWindow::openProject(const QString& file_name)
+{
+  if(getProjectManager().switchToProject(file_name))
+    return true;
+
+  auto project = Project::load(file_name);
+  if(!project)
+  {
+    QMessageBox::critical(this,
+                          tr("Error Opening File"),
+                          tr("Error opening '%1'").arg(file_name));
+    return false;
+  }
+
+  getProjectManager().addProject(std::move(project));
+  return true;
+}
+
+bool MainWindow::confirmSave(Project* project)
+{
+  if(!project || !project->isModified())
+    return true;
+
+  getProjectManager().switchToProject(project);
+
+  auto ret = QMessageBox::warning(
+    this, tr("Unsaved Changes"),
+    tr("There are unsaved changes. Do you want to save now?"),
+    QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
+
+  switch (ret) {
+    case QMessageBox::Save:    return saveProject(project);
+    case QMessageBox::Discard: return true;
+    case QMessageBox::Cancel:
+    default:
+      return false;
+  }
 }
 
 bool MainWindow::confirmAllSave()
 {
-  // TODO : implementation //
+  for(const auto& document : getProjectManager().getProjects()) // NOLINT(readability-use-anyofallof)
+    if(!confirmSave(document.get())) return false;
+
   return true;
 }
 
 void MainWindow::writeSettings()
 {
-  m_document_manager.saveState();
+  m_preferences->main_window_geometry = saveGeometry();
+  m_preferences->main_window_state = saveState();
+
+  getProjectManager().saveState();
 }
 
 void MainWindow::readSettings()
 {
-  m_document_manager.restoreState();
+  auto main_window_geometry = static_cast<QByteArray>(m_preferences->main_window_geometry);
+  auto main_window_state = static_cast<QByteArray>(m_preferences->main_window_state);
+
+  if(!main_window_geometry.isNull())
+    restoreGeometry(main_window_geometry);
+
+  if(!main_window_state.isNull())
+    restoreState(main_window_state);
+
+  getProjectManager().restoreState();
 }
 
-void MainWindow::retranslateUi()
+void MainWindow::registerMenus()
 {
-  // TODO : implementation //
+  getActionManager().registerMenu(m_ui->m_menu_project, "project");
+  getActionManager().registerMenu(m_ui->m_menu_new_project, "new_project");
+  getActionManager().registerMenu(m_ui->m_menu_open_recent_project, "open_recent_project");
+
+  getActionManager().registerMenu(m_ui->m_menu_document, "document");
+  getActionManager().registerMenu(m_ui->m_menu_new_document, "new_document");
+
+  getActionManager().registerMenu(m_ui->m_menu_edit, "edit");
+
+  getActionManager().registerMenu(m_ui->m_menu_view, "view");
+  getActionManager().registerMenu(m_ui->m_menu_views_and_toolbars, "views_and_toolbars");
+
+  getActionManager().registerMenu(m_ui->m_menu_help, "help");
+}
+
+void MainWindow::registerActions()
+{
+  getActionManager().registerAction(m_ui->m_action_new_game_project, "new_game_project");
+  getActionManager().registerAction(m_ui->m_action_open_project, "open_project");
+  getActionManager().registerAction(m_ui->m_action_clear_recent_projects, "clear_recent_projects");
+  getActionManager().registerAction(m_ui->m_action_close_project, "close_project");
+  getActionManager().registerAction(m_ui->m_action_settings, "settings");
+  getActionManager().registerAction(m_ui->m_action_save_project, "save_project");
+  getActionManager().registerAction(m_ui->m_action_save_all_projects, "save_all_projects");
+  getActionManager().registerAction(m_ui->m_action_exit, "exit");
+
+  getActionManager().registerAction(m_ui->m_action_new_scene_document, "new_scene_document");
+  getActionManager().registerAction(m_ui->m_action_open_document, "open_document");
+  getActionManager().registerAction(m_ui->m_action_save_document, "save_document");
+  getActionManager().registerAction(m_ui->m_action_save_all_documents, "save_all_documents");
+
+  getActionManager().registerAction(m_ui->m_action_cut, "cut");
+  getActionManager().registerAction(m_ui->m_action_copy, "copy");
+  getActionManager().registerAction(m_ui->m_action_delete, "delete");
+
+  getActionManager().registerAction(m_ui->m_action_about, "about");
+}
+
+void MainWindow::retranslateUi()  // NOLINT(readability-make-member-function-const)
+{
+  getActionManager().findMenu("project")->setTitle(tr("&Project"));
+  getActionManager().findMenu("new_project")->setTitle(tr("&New"));
+  getActionManager().findMenu("open_recent_project")->setTitle(tr("Open &Recent"));
+  getActionManager().findAction("new_game_project")->setText(tr("New &Game Project"));
+  getActionManager().findAction("open_project")->setText(tr("&Open..."));
+  getActionManager().findAction("clear_recent_projects")->setText(tr("Clear &Recent"));
+  getActionManager().findAction("close_project")->setText(tr("&Close Project"));
+  getActionManager().findAction("settings")->setText(tr("&Settings..."));
+  getActionManager().findAction("save_project")->setText(tr("&Save"));
+  getActionManager().findAction("save_all_projects")->setText(tr("&Save All"));
+  getActionManager().findAction("exit")->setText(tr("&Exit"));
+
+  getActionManager().findMenu("document")->setTitle(tr("&Document"));
+  getActionManager().findMenu("new_document")->setTitle(tr("&New"));
+  getActionManager().findAction("new_scene_document")->setText(tr("New &Scene Document"));
+  getActionManager().findAction("open_document")->setText(tr("&Open..."));
+  getActionManager().findAction("save_document")->setText(tr("&Save"));
+  getActionManager().findAction("save_all_documents")->setText(tr("&Save All"));
+
+  getActionManager().findMenu("edit")->setTitle(tr("&Edit"));
+  getActionManager().findAction("undo")->setText(tr("&Undo"));
+  getActionManager().findAction("redo")->setText(tr("&Redo"));
+  getActionManager().findAction("cut")->setText(tr("&Cut"));
+  getActionManager().findAction("copy")->setText(tr("&Copy"));
+  getActionManager().findAction("delete")->setText(tr("&Delete"));
+
+  getActionManager().findMenu("view")->setTitle(tr("&View"));
+  getActionManager().findMenu("views_and_toolbars")->setTitle(tr("Views and &Toolbars"));
+
+  getActionManager().findMenu("help")->setTitle(tr("&Help"));
+  getActionManager().findAction("about")->setText(tr("&About..."));
 }
 

@@ -1,9 +1,11 @@
 /* ----------------------------------- Local -------------------------------- */
-#include "example_game.h"
+#include <egnim/editor/document/document_editor.h>
 /* -------------------------------------------------------------------------- */
 
-int main(int argc, char** argv)
+DocumentEditor::DocumentEditor(QObject* parent) :
+  QObject(parent)
 {
-  ExampleGame example_game(800, 600, "physics_scenes");
-  return example_game.run();
+
 }
+
+DocumentEditor::~DocumentEditor() = default;

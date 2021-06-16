@@ -30,7 +30,7 @@ namespace egnim::scene
   public:
     explicit SceneSerializer(Format format, std::ostream& stream);
     explicit SceneSerializer(Format format, std::istream& stream);
-    ~SceneSerializer();
+    ~SceneSerializer() override;
 
     void visitAnimatedSpriteNode(AnimatedSpriteNode& animated_sprite_node) override;
     void visitLabelNode(LabelNode& label_node) override;

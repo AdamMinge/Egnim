@@ -7,51 +7,71 @@
 
 namespace Ui { class MainWindow; }
 
-class DocumentManager;
+class PreferencesManager;
 class LanguageManager;
+class ProjectManager;
+class ActionManager;
 class StyleManager;
-
-class Document;
+class Project;
 
 class MainWindow final : public QMainWindow
 {
   Q_OBJECT
 
+private:
+  struct Preferences;
+
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow() override;
 
-  [[nodiscard]] DocumentManager& getDocumentManager() const;
+  [[nodiscard]] ProjectManager& getProjectManager() const;
   [[nodiscard]] LanguageManager& getLanguageManager() const;
   [[nodiscard]] StyleManager& getStyleManager() const;
+  [[nodiscard]] ActionManager& getActionManager() const;
+  [[nodiscard]] PreferencesManager& getPreferencesManager() const;
 
-  [[nodiscard]] Document* getCurrentDocument() const;
+  [[nodiscard]] Project* getCurrentProject() const;
 
 protected:
   void closeEvent(QCloseEvent *event) override;
   void changeEvent(QEvent *event) override;
 
 private Q_SLOTS:
-  void closeDocument(int index);
-  void documentChanged(Document* document);
+  void closeProject(int index);
+  void projectChanged(Project* project);
 
-private:
-  bool confirmSave(Document* document);
+  bool confirmSave(Project* project);
   bool confirmAllSave();
 
+  bool saveProject(Project* project);
+  bool saveAllProjects();
+
+  void newProject();
+  void openProject();
+  void clearRecent();
+  void openSettings();
+  void openAbout();
+
+  void updateActions();
+  void updateWindowTitle();
+  void updateViewsAndToolbarsMenu();
+
+  bool openProject(const QString& file_name);
+
+private:
   void writeSettings();
   void readSettings();
+
+  void registerMenus();
+  void registerActions();
 
   void retranslateUi();
 
 private:
   QScopedPointer<Ui::MainWindow> m_ui;
-
-  DocumentManager& m_document_manager;
-  LanguageManager& m_language_manager;
-  StyleManager& m_style_manager;
-
-  Document* m_current_document;
+  QScopedPointer<Preferences> m_preferences;
+  Project* m_current_project;
 };
 
 #endif //MAIN_WINDOW_H
