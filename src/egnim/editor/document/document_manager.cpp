@@ -1,5 +1,4 @@
 /* ------------------------------------ Qt ---------------------------------- */
-#include <QMessageBox>
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/document/document_manager.h>
@@ -170,22 +169,6 @@ void DocumentManager::restoreState()
 {
   for(auto& [document_type, editor] : m_editor_for_document_type)
     editor->restoreState();
-}
-
-bool DocumentManager::saveDocument(Document* document)
-{
-  Q_ASSERT(document);
-  if(!document->save(document->getFileName()))
-  {
-    switchToDocument(document);
-    QMessageBox::critical(
-      m_widget->window(),
-      QCoreApplication::translate("Egnim-Editor::DocumentManager",
-                                  "Error Saving File"), "Something went wrong");
-    return false;
-  }
-
-  return true;
 }
 
 const std::vector<Document*>& DocumentManager::getDocuments() const

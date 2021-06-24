@@ -19,6 +19,10 @@ public:
 public:
   ~PreferencesManager() override;
 
+  void addRecentProjectFile(const QString& recent_file);
+  void clearRecentProjectFiles();
+  [[nodiscard]] QStringList getRecentProjectFiles() const;
+
   template<typename TYPE> void setValue(const QString& key, const TYPE& value);
   template<typename TYPE> [[nodiscard]] TYPE getValue(const QString& key, const TYPE& default_value = TYPE()) const;
 
@@ -28,13 +32,21 @@ public:
 
   [[nodiscard]] QStringList getAllKeys() const;
 
+Q_SIGNALS:
+  void recentProjectFilesChanged();
+
 protected:
   explicit PreferencesManager();
+
+  void load();
+  void save();
 
 private:
   static QScopedPointer<PreferencesManager> m_instance;
 
   QSettings m_settings;
+
+  QStringList m_recent_project_files;
 };
 
 template<typename TYPE>

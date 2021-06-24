@@ -2,6 +2,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
 #include <egnim/editor/project/priv/json_project_serializer_impl.h>
 #include <egnim/editor/project/game_project.h>
@@ -21,10 +22,9 @@ QByteArray JsonProjectSerializerImpl::serializeGameProject(const GameProject& pr
   QJsonArray game_project_documents;
   for(auto& document : project.getDocuments())
   {
-    auto save_game_document = QJsonDocument::fromJson(
-      document_serializer.serialize(*document, DocumentSerializer::Format::Json));
-
-    game_project_documents.append(save_game_document.object());
+    auto document_file_name = document->getFileName();
+    if(QFileInfo::exists(document_file_name))
+      game_project_documents.append(document_file_name);
   }
 
   QJsonObject game_project_object;
@@ -54,10 +54,7 @@ std::unique_ptr<GameProject> JsonProjectSerializerImpl::deserializeGameProject(c
   auto project_documents = project_object["documents"].toArray();
   for(auto project_document : project_documents)
   {
-    QJsonDocument load_document(project_document.toObject());
-    auto document = document_serializer.deserialize(
-      load_document.toJson(QJsonDocument::Compact), DocumentSerializer::Format::Json);
-
+    auto document = Document::load(project_document.toString());
     if(document)
       game_project->addDocument(std::move(document));
   }

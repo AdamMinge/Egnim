@@ -50,8 +50,6 @@ public:
   void saveState();
   void restoreState();
 
-  bool saveDocument(Document* document);
-
   [[nodiscard]] const std::vector<Document*>& getDocuments() const;
 
 Q_SIGNALS:
