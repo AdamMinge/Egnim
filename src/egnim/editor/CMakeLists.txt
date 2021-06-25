@@ -44,7 +44,7 @@ set(sources
         ${source_root}/project/game_editor.cpp
         ${source_root}/project/new_project_dialog.cpp
         ${source_root}/project/open_documents_widget.cpp
-        ${source_root}/project/file_system_dock.cpp
+        ${source_root}/project/open_project_dock.cpp
         ${source_root}/project/undo_dock.cpp
         ${source_root}/project/project_serializer.cpp
         ${source_root}/project/priv/project_serializer_impl.h
@@ -87,7 +87,7 @@ set(includes
         ${include_root}/project/game_editor.h
         ${include_root}/project/new_project_dialog.h
         ${include_root}/project/open_documents_widget.h
-        ${include_root}/project/file_system_dock.h
+        ${include_root}/project/open_project_dock.h
         ${include_root}/project/undo_dock.h
         ${include_root}/project/project_serializer.h
 

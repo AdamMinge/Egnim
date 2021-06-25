@@ -34,18 +34,19 @@ void AddRemoveDocument::addDocument()
 
 void AddRemoveDocument::removeDocument()
 {
-  if(QFileInfo::exists(m_document->getFileName()))
+  auto& project_to_remove = *m_project.getDocuments().back();
+  if(QFileInfo::exists(project_to_remove.getFileName()))
   {
     auto reply = QMessageBox::question(nullptr,
                                        QObject::tr("Delete Document"),
-                                       QObject::tr("Are you sure you want to delete document '%1'").arg(m_document->getFileName()),
+                                       QObject::tr("Are you sure you want to delete document '%1'").arg(project_to_remove.getFileName()),
                                        QMessageBox::Yes | QMessageBox::No);
 
     if(reply == QMessageBox::Yes)
-      QFile::remove(m_document->getFileName());
+      QFile::remove(project_to_remove.getFileName());
   }
 
-  m_document = m_project.removeDocument(*m_project.getDocuments().back());
+  m_document = m_project.removeDocument(project_to_remove);
 }
 
 /* -------------------------------- AddDocument ----------------------------- */
