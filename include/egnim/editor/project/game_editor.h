@@ -13,7 +13,7 @@
 class Document;
 class UndoDock;
 class GameProject;
-class FileSystemDock;
+class OpenProjectDock;
 class OpenDocumentsWidget;
 
 class GameEditor : public ProjectEditor
@@ -55,7 +55,7 @@ private:
 
   OpenDocumentsWidget* m_open_documents_widget;
   UndoDock* m_undo_dock;
-  FileSystemDock* m_file_system_dock;
+  OpenProjectDock* m_file_system_dock;
 
   QScopedPointer<Preferences> m_preferences;
 };

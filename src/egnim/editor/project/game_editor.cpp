@@ -4,7 +4,7 @@
 #include <egnim/editor/project/game_editor.h>
 #include <egnim/editor/project/game_project.h>
 #include <egnim/editor/project/undo_dock.h>
-#include <egnim/editor/project/file_system_dock.h>
+#include <egnim/editor/project/open_project_dock.h>
 #include <egnim/editor/project/open_documents_widget.h>
 #include <egnim/editor/document/scene_editor.h>
 #include <egnim/editor/preferences_manager.h>
@@ -27,7 +27,7 @@ GameEditor::GameEditor(QObject* parent) :
   m_main_window(new QMainWindow()),
   m_open_documents_widget(new OpenDocumentsWidget()),
   m_undo_dock(new UndoDock(m_main_window.data())),
-  m_file_system_dock(new FileSystemDock(m_main_window.data())),
+  m_file_system_dock(new OpenProjectDock(m_main_window.data())),
   m_preferences(new Preferences)
 {
   m_open_documents_widget->addEditor(Document::Type::Scene, std::make_unique<SceneEditor>());

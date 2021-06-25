@@ -1,17 +1,17 @@
-#ifndef FILE_SYSTEM_DOCK_H
-#define FILE_SYSTEM_DOCK_H
+#ifndef OPEN_PROJECT_DOCK_H
+#define OPEN_PROJECT_DOCK_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDockWidget>
 /* -------------------------------------------------------------------------- */
 
-class FileSystemDock final : public QDockWidget
+class OpenProjectDock final : public QDockWidget
 {
   Q_OBJECT
 
 public:
-  explicit FileSystemDock(QWidget* parent = nullptr);
-  ~FileSystemDock() override;
+  explicit OpenProjectDock(QWidget* parent = nullptr);
+  ~OpenProjectDock() override;
 
 protected:
   void changeEvent(QEvent* event) override;
@@ -20,4 +20,4 @@ private:
   void retranslateUi();
 };
 
-#endif //FILE_SYSTEM_DOCK_H
+#endif //OPEN_PROJECT_DOCK_H
