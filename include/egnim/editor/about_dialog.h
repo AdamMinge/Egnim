@@ -15,6 +15,12 @@ public:
   explicit AboutDialog(QWidget* parent = nullptr);
    ~AboutDialog() override;
 
+protected:
+  void changeEvent(QEvent* event) override;
+
+private:
+  void retranslateUi();
+
 private:
   QScopedPointer<Ui::AboutDialog> m_ui;
 };

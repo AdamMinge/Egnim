@@ -2,5 +2,7 @@
     <qresource prefix="/">
         <file>images/64x64/game_project.png</file>
         <file>images/64x64/unknown_project.png</file>
+
+        <file>images/256x256/about_logo.png</file>
     </qresource>
 </RCC>
