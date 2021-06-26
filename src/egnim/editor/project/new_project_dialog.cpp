@@ -41,6 +41,7 @@ NewGameProjectDialog::NewGameProjectDialog(QWidget* parent) :
   connect(m_ui->m_project_name_edit, &QLineEdit::textChanged, this, &NewGameProjectDialog::validate);
   connect(m_ui->m_project_path_edit, &QLineEdit::textChanged, this, &NewGameProjectDialog::validate);
 
+  retranslateUi();
   validate();
 }
 
@@ -60,6 +61,20 @@ std::unique_ptr<Project> NewGameProjectDialog::create()
   new_project->setFileName(project_path);
 
   return new_project;
+}
+
+void NewGameProjectDialog::changeEvent(QEvent* event)
+{
+  QDialog::changeEvent(event);
+
+  switch (event->type())
+  {
+    case QEvent::LanguageChange:
+      retranslateUi();
+      break;
+    default:
+      break;
+  }
 }
 
 void NewGameProjectDialog::onBrowsePressed()
@@ -95,6 +110,11 @@ void NewGameProjectDialog::validate()
 
   m_ui->m_project_name_error_label->setVisible(name_error);
   m_ui->m_project_path_error_label->setVisible(path_error);
+}
+
+void NewGameProjectDialog::retranslateUi()
+{
+  m_ui->retranslateUi(this);
 }
 
 /* ------------------------------ createProject ----------------------------- */

@@ -38,9 +38,15 @@ public:
 
   [[nodiscard]] std::unique_ptr<Document> create() override;
 
+protected:
+  void changeEvent(QEvent* event) override;
+
 private Q_SLOTS:
   void onBrowsePressed();
   void validate();
+
+private:
+  void retranslateUi();
 
 private:
   QScopedPointer<Ui::NewSceneDocumentDialog> m_ui;

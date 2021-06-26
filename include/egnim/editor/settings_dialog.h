@@ -15,6 +15,12 @@ public:
   explicit SettingsDialog(QWidget* parent = nullptr);
   ~SettingsDialog() override;
 
+protected:
+  void changeEvent(QEvent* event) override;
+
+private:
+  void retranslateUi();
+
 private:
   QScopedPointer<Ui::SettingsDialog> m_ui;
 };

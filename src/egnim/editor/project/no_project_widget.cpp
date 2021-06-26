@@ -31,9 +31,25 @@ NoProjectWidget::NoProjectWidget(QWidget* parent) :
   m_projects_delegate->setSpacing(10, 15);
 
   m_search_proxy_model->setFilterRole(ProjectListModel::Role::ProjectNameRole);
+
+  retranslateUi();
 }
 
 NoProjectWidget::~NoProjectWidget() = default;
+
+void NoProjectWidget::changeEvent(QEvent* event)
+{
+  QWidget::changeEvent(event);
+
+  switch (event->type())
+  {
+    case QEvent::LanguageChange:
+      retranslateUi();
+      break;
+    default:
+      break;
+  }
+}
 
 void NoProjectWidget::openProject(const QModelIndex& index)
 {
@@ -44,4 +60,9 @@ void NoProjectWidget::openProject(const QModelIndex& index)
 void NoProjectWidget::searchProject(const QString& search)
 {
   m_search_proxy_model->setFilterWildcard(search);
+}
+
+void NoProjectWidget::retranslateUi()
+{
+  m_ui->retranslateUi(this);
 }

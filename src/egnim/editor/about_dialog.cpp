@@ -32,6 +32,8 @@ void AboutDialog::changeEvent(QEvent* event)
 
 void AboutDialog::retranslateUi()
 {
+  m_ui->retranslateUi(this);
+
   setWindowTitle(tr("About"));
 
   auto about_text = QString(

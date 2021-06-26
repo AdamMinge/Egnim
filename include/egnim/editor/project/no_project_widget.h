@@ -18,9 +18,15 @@ public:
   explicit NoProjectWidget(QWidget* parent = nullptr);
   ~NoProjectWidget() override;
 
+protected:
+  void changeEvent(QEvent* event) override;
+
 private Q_SLOTS:
   void openProject(const QModelIndex& index);
   void searchProject(const QString& search);
+
+private:
+  void retranslateUi();
 
 private:
   QScopedPointer<Ui::NoProjectWidget> m_ui;

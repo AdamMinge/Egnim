@@ -63,6 +63,20 @@ std::unique_ptr<Document> NewSceneDocumentDialog::create()
   return new_document;
 }
 
+void NewSceneDocumentDialog::changeEvent(QEvent* event)
+{
+  QDialog::changeEvent(event);
+
+  switch (event->type())
+  {
+    case QEvent::LanguageChange:
+      retranslateUi();
+      break;
+    default:
+      break;
+  }
+}
+
 void NewSceneDocumentDialog::onBrowsePressed()
 {
   auto file_dialog_options =
@@ -96,6 +110,11 @@ void NewSceneDocumentDialog::validate()
 
   m_ui->m_document_name_error_label->setVisible(name_error);
   m_ui->m_document_path_error_label->setVisible(path_error);
+}
+
+void NewSceneDocumentDialog::retranslateUi()
+{
+  m_ui->retranslateUi(this);
 }
 
 /* ------------------------------ createDocument ---------------------------- */
