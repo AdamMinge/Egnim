@@ -41,6 +41,7 @@ public:
   [[nodiscard]] ProjectEditor *getCurrentEditor() const;
 
   void addProject(std::unique_ptr<Project> project);
+  bool loadProject(const QString& file_name);
   void removeProject(int index);
   void removeAllProjects();
 

@@ -72,6 +72,7 @@ private:
 enum class Project::Type
 {
   Game,
+  Unknown,
 };
 
 #endif //PROJECT_H

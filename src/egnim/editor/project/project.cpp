@@ -147,7 +147,7 @@ QString Project::getProjectFileFilter()
 {
   auto filter = QString{};
 
-  filter.append(tr("Game Project (*%1)").arg(getProjectExtension(Type::Game)));
+  filter.append(tr("Game Project (*.%1)").arg(getProjectExtension(Type::Game)));
 
   return filter;
 }
@@ -162,7 +162,7 @@ QString Project::getProjectExtension(Type type)
   switch(type)
   {
     case Type::Game:
-      return ".egn-game";
+      return "egn-game";
   }
 
   return QString{};

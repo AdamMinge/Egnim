@@ -93,7 +93,7 @@ QString Document::getDocumentFileFilter()
 {
   auto filter = QString{};
 
-  filter.append(tr("Scene Document (*%1)").arg(getDocumentExtension(Type::Scene)));
+  filter.append(tr("Scene Document (*.%1)").arg(getDocumentExtension(Type::Scene)));
 
   return filter;
 }
@@ -109,7 +109,7 @@ QString Document::getDocumentExtension(Type type)
   switch(type)
   {
     case Type::Scene:
-      return ".egn-scene";
+      return "egn-scene";
   }
 
   return QString{};

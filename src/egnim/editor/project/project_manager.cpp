@@ -115,6 +115,25 @@ void ProjectManager::addProject(std::unique_ptr<Project> project)
   switchToProject(project_index);
 }
 
+bool ProjectManager::loadProject(const QString& file_name)
+{
+  if(switchToProject(file_name))
+    return true;
+
+  auto project = Project::load(file_name);
+  if(!project)
+  {
+    QMessageBox::critical(m_widget.get(),
+                          tr("Error Opening File"),
+                          tr("Error opening '%1'").arg(file_name));
+    return false;
+  }
+
+  PreferencesManager::getInstance().addRecentProjectFile(file_name);
+  addProject(std::move(project));
+  return true;
+}
+
 void ProjectManager::removeProject(int index)
 {
   auto project_to_remove = getProject(index);

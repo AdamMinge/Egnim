@@ -399,23 +399,9 @@ void MainWindow::updateRecentProjectFiles() // NOLINT(readability-make-member-fu
   open_recent_project_menu->insertSeparator(clear_recent_projects_action);
 }
 
-bool MainWindow::openProject(const QString& file_name)
+bool MainWindow::openProject(const QString& file_name) // NOLINT(readability-make-member-function-const)
 {
-  if(getProjectManager().switchToProject(file_name))
-    return true;
-
-  auto project = Project::load(file_name);
-  if(!project)
-  {
-    QMessageBox::critical(this,
-                          tr("Error Opening File"),
-                          tr("Error opening '%1'").arg(file_name));
-    return false;
-  }
-
-  getPreferencesManager().addRecentProjectFile(file_name);
-  getProjectManager().addProject(std::move(project));
-  return true;
+  return getProjectManager().loadProject(file_name);
 }
 
 bool MainWindow::confirmSave(Project* project)

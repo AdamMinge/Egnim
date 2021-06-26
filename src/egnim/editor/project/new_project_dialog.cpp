@@ -54,7 +54,7 @@ std::unique_ptr<Project> NewGameProjectDialog::create()
   auto new_project = GameProject::create();
 
   auto project_dir = QDir(m_ui->m_project_path_edit->text());
-  auto project_file_name = m_ui->m_project_name_edit->text() + new_project->getProjectExtension();
+  auto project_file_name = QString("%1.%2").arg(m_ui->m_project_name_edit->text(), new_project->getProjectExtension());
   auto project_path = QDir(project_dir).filePath(project_file_name);
 
   new_project->setFileName(project_path);

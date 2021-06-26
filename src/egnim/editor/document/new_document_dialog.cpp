@@ -54,7 +54,8 @@ std::unique_ptr<Document> NewSceneDocumentDialog::create()
   auto new_document = SceneDocument::create();
 
   auto document_dir = QDir(m_ui->m_document_path_edit->text());
-  auto document_file_name = m_ui->m_document_name_edit->text() + new_document->getDocumentExtension();
+  auto document_file_name = QString("%1.%2").arg(m_ui->m_document_name_edit->text(), new_document->getDocumentExtension());
+
   auto document_path = QDir(document_dir).filePath(document_file_name);
 
   new_document->setFileName(document_path);

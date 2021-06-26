@@ -51,6 +51,7 @@ private:
 enum class Document::Type
 {
   Scene,
+  Unknown,
 };
 
 #endif //DOCUMENT_H

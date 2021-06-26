@@ -47,6 +47,8 @@ set(sources
         ${source_root}/project/open_project_dock.cpp
         ${source_root}/project/undo_dock.cpp
         ${source_root}/project/project_serializer.cpp
+        ${source_root}/project/project_list_model.cpp
+        ${source_root}/project/project_list_delegate.cpp
         ${source_root}/project/priv/project_serializer_impl.h
         ${source_root}/project/priv/project_serializer_impl.cpp
         ${source_root}/project/priv/json_project_serializer_impl.h
@@ -90,6 +92,8 @@ set(includes
         ${include_root}/project/open_project_dock.h
         ${include_root}/project/undo_dock.h
         ${include_root}/project/project_serializer.h
+        ${include_root}/project/project_list_model.h
+        ${include_root}/project/project_list_delegate.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
@@ -97,7 +101,8 @@ set(includes
 
         ${include_root}/widgets/dialog_with_toggle_view.h)
 
-set(resources)
+set(resources
+        ${resources_root}/egnim-images.qrc)
 
 set(uis
         ${uis_root}/main_window.ui
