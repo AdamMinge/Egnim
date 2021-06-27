@@ -3,6 +3,7 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
+#include <QLocale>
 #include <QTranslator>
 #include <QScopedPointer>
 /* -------------------------------------------------------------------------- */
@@ -18,17 +19,19 @@ public:
 public:
   ~LanguageManager() override;
 
-  [[nodiscard]] QStringList getAvailableLanguages() const;
+  [[nodiscard]] QList<QLocale> getAvailableLanguages() const;
   [[nodiscard]] const QString& getTranslationsDir() const;
   [[nodiscard]] const QString& getTranslationsPrefix() const;
 
+  [[nodiscard]] QLocale getCurrentLanguage() const;
+
 public Q_SLOTS:
-  void setLanguage(const QString& language);
+  bool setLanguage(const QLocale& locale);
   void setTranslationsDir(const QString& translations_dir);
   void setTranslationsPrefix(const QString& translations_prefix);
 
 Q_SIGNALS:
-  void languageChanged(const QString& language);
+  void languageChanged(const QLocale& locale);
   void translationsDirChanged(const QString& translations_dir);
   void translationsPrefixChanged(const QString& translations_prefix);
 
@@ -42,6 +45,7 @@ private:
   QString m_translations_prefix;
   QScopedPointer<QTranslator> m_qt_translator;
   QScopedPointer<QTranslator> m_app_translator;
+  QLocale m_current_locale;
 };
 
 #endif //LANGUAGE_MANAGER_H

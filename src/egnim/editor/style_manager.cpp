@@ -41,12 +41,20 @@ QStringList StyleManager::getAvailableStyles() const
   return available_styles;
 }
 
-void StyleManager::setStyle(const QString& style_name)
+QString StyleManager::getCurrentStyle() const
+{
+  return QApplication::style()->objectName();
+}
+
+bool StyleManager::setStyle(const QString& style_name)
 {
   auto style = m_factories.contains(style_name) ? m_factories[style_name]() : nullptr;
   if(!style) style = QStyleFactory::create(style_name);
-  Q_ASSERT(style);
+
+  if(!style)
+    return false;
 
   QApplication::setStyle(style);
   Q_EMIT styleChanged(style_name);
+  return true;
 }

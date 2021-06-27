@@ -28,6 +28,8 @@ struct MainWindow::Preferences
   Preference<QByteArray> main_window_geometry = Preference<QByteArray>("main_window/geometry");
   Preference<QByteArray> main_window_state = Preference<QByteArray>("main_window/state");
   Preference<QString> open_project_start_location = Preference<QString>("project/open_project_start_location", QDir::homePath());
+  Preference<QLocale> application_language = Preference<QLocale>("application/language");
+  Preference<QString> application_style = Preference<QString>("application/style");
 };
 
 /* -------------------------------- MainWindow ------------------------------ */
@@ -437,20 +439,33 @@ void MainWindow::writeSettings()
 {
   m_preferences->main_window_geometry = saveGeometry();
   m_preferences->main_window_state = saveState();
+  m_preferences->application_language = getLanguageManager().getCurrentLanguage();
+  m_preferences->application_style = getStyleManager().getCurrentStyle();
 
   getProjectManager().saveState();
 }
 
 void MainWindow::readSettings()
 {
-  auto main_window_geometry = static_cast<QByteArray>(m_preferences->main_window_geometry);
-  auto main_window_state = static_cast<QByteArray>(m_preferences->main_window_state);
+  auto main_window_geometry = m_preferences->main_window_geometry.get();
+  auto main_window_state = m_preferences->main_window_state.get();
+  auto application_language = m_preferences->application_language.get();
+  auto application_style = m_preferences->application_style.get();
 
   if(!main_window_geometry.isNull())
     restoreGeometry(main_window_geometry);
 
   if(!main_window_state.isNull())
     restoreState(main_window_state);
+
+  auto languages = getLanguageManager().getAvailableLanguages();
+  if(languages.contains(application_language))
+    getLanguageManager().setLanguage(application_language);
+  else if(languages.contains(QLocale::system()))
+    getLanguageManager().setLanguage(QLocale::system());
+
+  if(!application_style.isEmpty())
+    getStyleManager().setStyle(application_style);
 
   getProjectManager().restoreState();
 }
@@ -493,7 +508,7 @@ void MainWindow::registerActions()
   getActionManager().registerAction(m_ui->m_action_about, "about");
 }
 
-void MainWindow::retranslateUi()  // NOLINT(readability-make-member-function-const)
+void MainWindow::retranslateUi() // NOLINT(readability-make-member-function-const)
 {
   m_ui->retranslateUi(this);
 
@@ -527,4 +542,3 @@ void MainWindow::retranslateUi()  // NOLINT(readability-make-member-function-con
   getActionManager().findMenu("help")->setTitle(tr("&Help"));
   getActionManager().findAction("about")->setText(tr("&About..."));
 }
-

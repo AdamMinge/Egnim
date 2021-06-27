@@ -1,6 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>translations/egnim_editor_en.qm</file>
         <file>translations/egnim_editor_pl.qm</file>
+        <file>translations/qt_pl.qm</file>
+
+        <file>translations/egnim_editor_en.qm</file>
+        <file>translations/qt_en.qm</file>
     </qresource>
 </RCC>

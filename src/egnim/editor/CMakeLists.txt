@@ -139,8 +139,8 @@ egnim_add_translations(egnim-editor
         INCLUDES ${include_root}
         SOURCES ${source_root}
         TS_FILES
-        ${resources_root}/translations/egnim_editor_en.ts;
-        ${resources_root}/translations/egnim_editor_pl.ts)
+        ${resources_root}/translations/egnim_editor_pl.ts
+        ${resources_root}/translations/egnim_editor_en.ts)
 
 target_include_directories(egnim-editor
         PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include/egnim/editor>
