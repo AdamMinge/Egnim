@@ -1,8 +1,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/open_documents_widget.h>
-#include <egnim/editor/document/no_document_widget.h>
+#include "project/open_documents_widget.h"
+#include "document/no_document_widget.h"
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------- ProjectContext --------------------------- */

@@ -1,8 +1,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_list_model.h>
-#include <egnim/editor/preferences_manager.h>
+#include "project/project_list_model.h"
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 ProjectListModel::ProjectListModel(QObject* parent) :

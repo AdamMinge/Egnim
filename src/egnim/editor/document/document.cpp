@@ -1,8 +1,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/document/document_serializer.h>
+#include "document/document.h"
+#include "document/document_serializer.h"
 /* -------------------------------------------------------------------------- */
 
 Document::Document(Type type, QObject* parent) :

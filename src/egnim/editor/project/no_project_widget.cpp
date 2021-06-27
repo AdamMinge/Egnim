@@ -1,9 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_manager.h>
-#include <egnim/editor/project/no_project_widget.h>
-#include <egnim/editor/project/project_list_model.h>
-#include <egnim/editor/project/project_list_delegate.h>
-#include <egnim/editor/action_manager.h>
+#include "project/project_manager.h"
+#include "project/no_project_widget.h"
+#include "project/project_list_model.h"
+#include "project/project_list_delegate.h"
+#include "action_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_no_project_widget.h"
 /* -------------------------------------------------------------------------- */

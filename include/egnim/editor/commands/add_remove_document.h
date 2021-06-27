@@ -2,7 +2,7 @@
 #define ADD_REMOVE_DOCUMENT_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/commands/command.h>
+#include "commands/command.h"
 /* -------------------------------------------------------------------------- */
 
 class Document;

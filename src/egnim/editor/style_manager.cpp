@@ -2,7 +2,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/style_manager.h>
+#include "style_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<StyleManager> StyleManager::m_instance = QScopedPointer<StyleManager>(nullptr);

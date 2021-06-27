@@ -2,7 +2,7 @@
 #define SCENE_DOCUMENT_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document.h>
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 class SceneDocument : public Document

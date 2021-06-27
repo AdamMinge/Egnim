@@ -13,8 +13,8 @@
 #include <memory>
 #include <vector>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/project/project_editor.h>
+#include "project/project.h"
+#include "project/project_editor.h"
 /* -------------------------------------------------------------------------- */
 
 class NoProjectWidget;

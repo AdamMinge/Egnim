@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/priv/project_serializer_impl.h>
-#include <egnim/editor/project/game_project.h>
+#include "project/priv/project_serializer_impl.h"
+#include "project/game_project.h"
 /* ----------------------------------- Engine ------------------------------- */
 #include <egnim/engine/core/unique_pointer.h>
 /* -------------------------------------------------------------------------- */

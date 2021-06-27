@@ -3,7 +3,7 @@
 #include <QApplication>
 #include <QDirIterator>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/language_manager.h>
+#include "language_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<LanguageManager> LanguageManager::m_instance = QScopedPointer<LanguageManager>(nullptr);

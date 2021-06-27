@@ -1,9 +1,9 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/new_project_dialog.h>
-#include <egnim/editor/project/game_project.h>
-#include <egnim/editor/preferences_manager.h>
+#include "project/new_project_dialog.h"
+#include "project/game_project.h"
+#include "preferences_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_game_project_dialog.h"
 /* -------------------------------------------------------------------------- */

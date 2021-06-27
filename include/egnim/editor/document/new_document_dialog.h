@@ -4,7 +4,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document.h>
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class NewSceneDocumentDialog; }

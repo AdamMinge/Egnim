@@ -13,8 +13,8 @@
 #include <memory>
 #include <vector>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/document/document_editor.h>
+#include "document/document.h"
+#include "document/document_editor.h"
 /* -------------------------------------------------------------------------- */
 
 class NoDocumentWidget;

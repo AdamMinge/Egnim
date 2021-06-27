@@ -18,6 +18,10 @@ public:
 protected:
   void changeEvent(QEvent* event) override;
 
+private Q_SLOTS:
+  void languageChanged();
+  void styleChanged();
+
 private:
   void retranslateUi();
 

@@ -2,9 +2,9 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_manager.h>
-#include <egnim/editor/project/no_project_widget.h>
-#include <egnim/editor/preferences_manager.h>
+#include "project/project_manager.h"
+#include "project/no_project_widget.h"
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<ProjectManager> ProjectManager::m_instance = QScopedPointer<ProjectManager>(nullptr);
@@ -245,8 +245,7 @@ bool ProjectManager::saveProject(Project* project)
     switchToProject(project);
     QMessageBox::critical(
       m_widget->window(),
-      QCoreApplication::translate("Egnim-ProjectEditor::ProjectManager",
-                                  "Error Saving File"), "Something went wrong");
+      tr("Error Saving File"), "Something went wrong");
     return false;
   }
 

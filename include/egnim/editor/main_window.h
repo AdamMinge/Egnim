@@ -4,8 +4,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/document/document.h>
+#include "project/project.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class MainWindow; }

@@ -3,9 +3,9 @@
 #include <QFileInfo>
 #include <QFile>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/commands/add_remove_document.h>
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/project/project.h>
+#include "commands/add_remove_document.h"
+#include "document/document.h"
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
 /* ----------------------------- AddRemoveDocument -------------------------- */

@@ -7,7 +7,7 @@
 #include <map>
 #include <memory>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_editor.h>
+#include "project/project_editor.h"
 /* -------------------------------------------------------------------------- */
 
 class Document;

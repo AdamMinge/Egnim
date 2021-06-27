@@ -6,7 +6,7 @@
 #include <QStringList>
 #include <QIcon>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
 class ProjectListModel : public QAbstractListModel

@@ -2,7 +2,7 @@
 #include <QAction>
 #include <QActionEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/widgets/dialog_with_toggle_view.h>
+#include "widgets/dialog_with_toggle_view.h"
 /* -------------------------------------------------------------------------- */
 
 DialogWithToggleView::DialogWithToggleView(QWidget* parent) :

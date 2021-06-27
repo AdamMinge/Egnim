@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/about_dialog.h>
-#include <egnim/config.h>
+#include "about_dialog.h"
+#include "../config.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_about_dialog.h"
 /* -------------------------------------------------------------------------- */

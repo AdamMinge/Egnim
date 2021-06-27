@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/priv/document_serializer_impl.h>
-#include <egnim/editor/document/scene_document.h>
+#include "document/priv/document_serializer_impl.h"
+#include "document/scene_document.h"
 /* ----------------------------------- Engine ------------------------------- */
 #include <egnim/engine/core/unique_pointer.h>
 /* -------------------------------------------------------------------------- */

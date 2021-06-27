@@ -1,7 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/open_project_dock.h>
+#include "project/open_project_dock.h"
 /* -------------------------------------------------------------------------- */
 
 OpenProjectDock::OpenProjectDock(QWidget* parent) :

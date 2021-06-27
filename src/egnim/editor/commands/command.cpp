@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/commands/command.h>
+#include "commands/command.h"
 /* -------------------------------------------------------------------------- */
 
 Command::Command(Type type, Command* parent) :

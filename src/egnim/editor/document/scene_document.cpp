@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/scene_document.h>
+#include "document/scene_document.h"
 /* -------------------------------------------------------------------------- */
 
 std::unique_ptr<SceneDocument> SceneDocument::create()

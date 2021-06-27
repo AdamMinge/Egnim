@@ -1,14 +1,14 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/game_editor.h>
-#include <egnim/editor/project/game_project.h>
-#include <egnim/editor/project/undo_dock.h>
-#include <egnim/editor/project/open_project_dock.h>
-#include <egnim/editor/project/open_documents_widget.h>
-#include <egnim/editor/document/scene_editor.h>
-#include <egnim/editor/preferences_manager.h>
-#include <egnim/editor/action_manager.h>
+#include "project/game_editor.h"
+#include "project/game_project.h"
+#include "project/undo_dock.h"
+#include "project/open_project_dock.h"
+#include "project/open_documents_widget.h"
+#include "document/scene_editor.h"
+#include "preferences_manager.h"
+#include "action_manager.h"
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- Preferences ----------------------------- */

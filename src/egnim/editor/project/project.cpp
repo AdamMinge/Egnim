@@ -2,9 +2,9 @@
 #include <QFileInfo>
 #include <QFile>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/project/project_serializer.h>
-#include <egnim/editor/document/document.h>
+#include "project/project.h"
+#include "project/project_serializer.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 Project::Project(Type type, QObject* parent) :

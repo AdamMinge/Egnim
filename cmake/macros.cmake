@@ -114,6 +114,8 @@ macro(egnim_add_application target)
 
 endmacro()
 # -------------------------------------------------------------------------------------------------- #
+# ------------------------- Define a macro that generate documentation ----------------------------- #
+# -------------------------------------------------------------------------------------------------- #
 function(egnim_generate_documentation)
     find_package(Doxygen REQUIRED)
     set(DOXYGEN_IN ${EGNIM_SOURCE_DIR}/docs/Doxyfile.in)
@@ -128,8 +130,55 @@ function(egnim_generate_documentation)
             VERBATIM)
 endfunction()
 # -------------------------------------------------------------------------------------------------- #
+# -------------------------- Define a macro that install documentation ----------------------------- #
+# -------------------------------------------------------------------------------------------------- #
 function(egnim_install_documentation)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/
             DESTINATION docs)
 endfunction()
+# -------------------------------------------------------------------------------------------------- #
+# ----------------------- Define a macro that helps defining translations -------------------------- #
+# -------------------------------------------------------------------------------------------------- #
+macro(egnim_add_translations target)
+
+    cmake_parse_arguments(THIS "" "QM_DIR" "TS_FILES;SOURCES;INCLUDES" ${ARGN})
+    if (NOT "${THIS_UNPARSED_ARGUMENTS}" STREQUAL "")
+        message(FATAL_ERROR "Extra unparsed arguments when calling egnim_add_translations: ${THIS_UNPARSED_ARGUMENTS}")
+    endif()
+
+    add_custom_target(update_all_ts_files ALL)
+    add_custom_target(create_all_qm_files ALL)
+
+    find_file(LUPDATE_PATH lupdate)
+    find_file(LRELEASE_PATH lrelease)
+
+    foreach(TS_FILE ${THIS_TS_FILES})
+
+        get_filename_component(I18N_NAME ${TS_FILE} NAME_WE)
+        set(TS_TARGET_NAME "update_ts_file_${I18N_NAME}")
+
+        if (THIS_INCLUDES)
+            add_custom_target(${TS_TARGET_NAME}
+                    COMMAND ${LUPDATE_PATH} -I ${THIS_INCLUDES} ${THIS_SOURCES} -ts ${TS_FILE}
+                    VERBATIM)
+        else()
+            add_custom_target(${TS_TARGET_NAME}
+                    COMMAND ${LUPDATE_PATH} ${THIS_SOURCES} -ts ${TS_FILE}
+                    VERBATIM)
+        endif()
+
+        add_dependencies(update_all_ts_files ${TS_TARGET_NAME})
+        set(QM_TARGET_NAME "create_qm_file_${I18N_NAME}")
+        set(QM_FILE "${THIS_QM_DIR}/${I18N_NAME}.qm")
+        add_custom_target(${QM_TARGET_NAME}
+                COMMAND ${LRELEASE_PATH} ${TS_FILE} -qm ${QM_FILE}
+                VERBATIM)
+
+        add_dependencies(${QM_TARGET_NAME} ${TS_TARGET_NAME})
+        add_dependencies(create_all_qm_files ${QM_TARGET_NAME})
+    endforeach()
+
+    add_dependencies(${target} create_all_qm_files)
+
+endmacro()
 # -------------------------------------------------------------------------------------------------- #

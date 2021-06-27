@@ -2,7 +2,7 @@
 #define GROUP_COMMAND_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/commands/command.h>
+#include "commands/command.h"
 /* -------------------------------------------------------------------------- */
 
 class GroupCommand : public Command

@@ -2,7 +2,7 @@
 #define GAME_PROJECT_H
 
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
 class GameProject : public Project

@@ -4,7 +4,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class NewGameProjectDialog; }

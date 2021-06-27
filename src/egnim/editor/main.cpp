@@ -1,9 +1,9 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/main_window.h>
-#include <egnim/editor/meta_types.h>
-#include <egnim/config.h>
+#include "main_window.h"
+#include "meta_types.h"
+#include "../config.h"
 /* -------------------------------------------------------------------------- */
 
 

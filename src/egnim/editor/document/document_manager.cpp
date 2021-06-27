@@ -1,8 +1,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document_manager.h>
-#include <egnim/editor/document/no_document_widget.h>
+#include "document/document_manager.h"
+#include "document/no_document_widget.h"
 /* -------------------------------------------------------------------------- */
 
 DocumentManager::DocumentManager() :

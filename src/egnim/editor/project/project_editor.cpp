@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_editor.h>
+#include "project/project_editor.h"
 /* -------------------------------------------------------------------------- */
 
 ProjectEditor::ProjectEditor(QObject* parent) :

@@ -4,10 +4,10 @@
 #include <QJsonArray>
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/priv/json_project_serializer_impl.h>
-#include <egnim/editor/project/game_project.h>
-#include <egnim/editor/document/document_serializer.h>
-#include <egnim/editor/document/document.h>
+#include "project/priv/json_project_serializer_impl.h"
+#include "project/game_project.h"
+#include "document/document_serializer.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace priv {

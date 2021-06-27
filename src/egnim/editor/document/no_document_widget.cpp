@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/no_document_widget.h>
-#include <egnim/editor/action_manager.h>
+#include "document/no_document_widget.h"
+#include "action_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_no_document_widget.h"
 /* -------------------------------------------------------------------------- */

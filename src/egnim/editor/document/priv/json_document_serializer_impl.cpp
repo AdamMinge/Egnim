@@ -1,6 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/priv/json_document_serializer_impl.h>
-#include <egnim/editor/document/scene_document.h>
+#include "document/priv/json_document_serializer_impl.h"
+#include <document/scene_document.h>
 /* -------------------------------------------------------------------------- */
 
 namespace priv {

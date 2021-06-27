@@ -1,9 +1,9 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/new_document_dialog.h>
-#include <egnim/editor/document/scene_document.h>
-#include <egnim/editor/preferences_manager.h>
+#include "document/new_document_dialog.h"
+#include "document/scene_document.h"
+#include "preferences_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_new_scene_document_dialog.h"
 /* -------------------------------------------------------------------------- */

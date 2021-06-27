@@ -2,8 +2,8 @@
 #include <QPainter>
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_list_delegate.h>
-#include <egnim/editor/project/project_list_model.h>
+#include "project/project_list_delegate.h"
+#include "project/project_list_model.h"
 /* -------------------------------------------------------------------------- */
 
 ProjectListDelegate::ProjectListDelegate(QObject* parent) :

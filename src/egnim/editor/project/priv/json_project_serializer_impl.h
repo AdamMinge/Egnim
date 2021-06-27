@@ -2,7 +2,7 @@
 #define JSON_PROJECT_SERIALIZER_IMPL_H
 
 /* ------------------------------------ Local ---------------------------------- */
-#include <egnim/editor/project/priv/project_serializer_impl.h>
+#include "project/priv/project_serializer_impl.h"
 /* -------------------------------------------------------------------------- */
 
 namespace priv

@@ -82,7 +82,7 @@
             <item row="0" column="0">
              <widget class="QLabel" name="m_change_style_label">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Change style</string>
               </property>
              </widget>
             </item>
@@ -113,6 +113,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../resources/egnim-translations.qrc"/>
+ </resources>
  <connections/>
 </ui>

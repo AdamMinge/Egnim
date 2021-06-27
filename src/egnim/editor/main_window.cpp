@@ -3,20 +3,20 @@
 #include <QMessageBox>
 #include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/main_window.h>
-#include <egnim/editor/preferences_manager.h>
-#include <egnim/editor/project/project_manager.h>
-#include <egnim/editor/language_manager.h>
-#include <egnim/editor/action_manager.h>
-#include <egnim/editor/style_manager.h>
-#include <egnim/editor/about_dialog.h>
-#include <egnim/editor/settings_dialog.h>
-#include <egnim/editor/widgets/dialog_with_toggle_view.h>
-#include <egnim/editor/project/new_project_dialog.h>
-#include <egnim/editor/project/game_editor.h>
-#include <egnim/editor/document/new_document_dialog.h>
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/commands/add_remove_document.h>
+#include "main_window.h"
+#include "preferences_manager.h"
+#include "language_manager.h"
+#include "action_manager.h"
+#include "style_manager.h"
+#include "about_dialog.h"
+#include "settings_dialog.h"
+#include "project/project_manager.h"
+#include "project/new_project_dialog.h"
+#include "project/game_editor.h"
+#include "widgets/dialog_with_toggle_view.h"
+#include "document/new_document_dialog.h"
+#include "document/document.h"
+#include "commands/add_remove_document.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
@@ -337,7 +337,7 @@ void MainWindow::updateWindowTitle()
 {
   auto current_project = getProjectManager().getCurrentProject();
 
-  auto project_name = current_project ? tr("[*]%1").arg(current_project->getDisplayName()) : QString();
+  auto project_name = current_project ? QString("[*]%1").arg(current_project->getDisplayName()) : QString();
   auto project_file_path = current_project ? current_project->getFileName() : QString();
   auto project_is_modified = current_project != nullptr && current_project->isModified();
 

@@ -102,7 +102,8 @@ set(includes
         ${include_root}/widgets/dialog_with_toggle_view.h)
 
 set(resources
-        ${resources_root}/egnim-images.qrc)
+        ${resources_root}/egnim-images.qrc
+        ${resources_root}/egnim-translations.qrc)
 
 set(uis
         ${uis_root}/main_window.ui
@@ -133,9 +134,17 @@ egnim_add_application(egnim-editor
         SOURCES ${sources} ${includes} ${uis} ${resources}
         DEPENDS Qt6::Widgets egnim::egnim-engine)
 
+egnim_add_translations(egnim-editor
+        QM_DIR ${resources_root}/translations/
+        INCLUDES ${include_root}
+        SOURCES ${source_root}
+        TS_FILES
+        ${resources_root}/translations/egnim_editor_en.ts;
+        ${resources_root}/translations/egnim_editor_pl.ts)
+
 target_include_directories(egnim-editor
         PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include/egnim/editor>
-        PRIVATE ${PROJECT_SOURCE_DIR}/src)
+        PRIVATE $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/src/egnim/editor>)
 
 set_target_properties(egnim-editor
         PROPERTIES CXX_STANDARD 20)

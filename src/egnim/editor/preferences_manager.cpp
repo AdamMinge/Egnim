@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/preferences_manager.h>
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<PreferencesManager> PreferencesManager::m_instance = QScopedPointer<PreferencesManager>(nullptr);
