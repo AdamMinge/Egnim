@@ -15,6 +15,12 @@ public:
   explicit NoDocumentWidget(QWidget* parent = nullptr);
   ~NoDocumentWidget() override;
 
+protected:
+  void changeEvent(QEvent* event) override;
+
+private:
+  void retranslateUi();
+
 private:
   QScopedPointer<Ui::NoDocumentWidget> m_ui;
 };

@@ -1,7 +1,7 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document_serializer.h>
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/document/priv/json_document_serializer_impl.h>
+#include "document/document_serializer.h"
+#include "document/document.h"
+#include "document/priv/json_document_serializer_impl.h"
 /* -------------------------------------------------------------------------- */
 
 DocumentSerializer::DocumentSerializer() = default;

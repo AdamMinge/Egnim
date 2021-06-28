@@ -1,7 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/scene_dock.h>
+#include "document/scene_dock.h"
 /* -------------------------------------------------------------------------- */
 
 SceneDock::SceneDock(QWidget* parent) :

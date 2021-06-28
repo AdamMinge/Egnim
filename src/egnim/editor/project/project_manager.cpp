@@ -2,8 +2,9 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_manager.h>
-#include <egnim/editor/project/no_project_widget.h>
+#include "project/project_manager.h"
+#include "project/no_project_widget.h"
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<ProjectManager> ProjectManager::m_instance = QScopedPointer<ProjectManager>(nullptr);
@@ -99,6 +100,10 @@ void ProjectManager::addProject(std::unique_ptr<Project> project)
   m_projects.emplace_back(std::move(project));
   m_undo_group->addStack(project_ref.getUndoStack());
 
+  auto editor = getEditor(project_ref.getType());
+  Q_ASSERT(editor);
+  editor->addProject(std::addressof(project_ref));
+
   auto project_index = m_tab_bar->addTab(project_ref.getDisplayName());
   m_tab_bar->setTabToolTip(project_index, project_ref.getFileName());
 
@@ -110,6 +115,25 @@ void ProjectManager::addProject(std::unique_ptr<Project> project)
   switchToProject(project_index);
 }
 
+bool ProjectManager::loadProject(const QString& file_name)
+{
+  if(switchToProject(file_name))
+    return true;
+
+  auto project = Project::load(file_name);
+  if(!project)
+  {
+    QMessageBox::critical(m_widget.get(),
+                          tr("Error Opening File"),
+                          tr("Error opening '%1'").arg(file_name));
+    return false;
+  }
+
+  PreferencesManager::getInstance().addRecentProjectFile(file_name);
+  addProject(std::move(project));
+  return true;
+}
+
 void ProjectManager::removeProject(int index)
 {
   auto project_to_remove = getProject(index);
@@ -117,6 +141,7 @@ void ProjectManager::removeProject(int index)
 
   auto& editor = m_editor_for_project_type[project_to_remove->getType()];
   Q_ASSERT(editor);
+  editor->removeProject(project_to_remove);
 
   if(getCurrentProject() == project_to_remove)
     editor->setCurrentProject(nullptr);
@@ -220,11 +245,11 @@ bool ProjectManager::saveProject(Project* project)
     switchToProject(project);
     QMessageBox::critical(
       m_widget->window(),
-      QCoreApplication::translate("Egnim-ProjectEditor::ProjectManager",
-                                  "Error Saving File"), "Something went wrong");
+      tr("Error Saving File"), "Something went wrong");
     return false;
   }
 
+  PreferencesManager::getInstance().addRecentProjectFile(project->getFileName());
   return true;
 }
 

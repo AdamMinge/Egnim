@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/preferences_manager.h>
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<PreferencesManager> PreferencesManager::m_instance = QScopedPointer<PreferencesManager>(nullptr);
@@ -17,9 +17,44 @@ void PreferencesManager::deleteInstance()
   m_instance.reset(nullptr);
 }
 
-PreferencesManager::PreferencesManager() = default;
+PreferencesManager::PreferencesManager()
+{
+  load();
+}
 
-PreferencesManager::~PreferencesManager() = default;
+PreferencesManager::~PreferencesManager()
+{
+  save();
+}
+
+void PreferencesManager::load()
+{
+  m_recent_project_files = m_settings.value("project/recent_project_files", QStringList{}).toStringList();
+}
+
+void PreferencesManager::save()
+{
+  m_settings.setValue("project/recent_project_files", m_recent_project_files);
+}
+
+void PreferencesManager::addRecentProjectFile(const QString& recent_file)
+{
+  if(!m_recent_project_files.contains(recent_file))
+    m_recent_project_files << recent_file;
+
+  Q_EMIT recentProjectFilesChanged();
+}
+
+void PreferencesManager::clearRecentProjectFiles()
+{
+  m_recent_project_files.clear();
+  Q_EMIT recentProjectFilesChanged();
+}
+
+QStringList PreferencesManager::getRecentProjectFiles() const
+{
+  return m_recent_project_files;
+}
 
 bool PreferencesManager::contains(const QString& key)
 {

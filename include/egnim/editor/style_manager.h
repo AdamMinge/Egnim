@@ -28,9 +28,10 @@ public:
   void unregisterStyle(const QString& style_name);
 
   [[nodiscard]] QStringList getAvailableStyles() const;
+  [[nodiscard]] QString getCurrentStyle() const;
 
 public Q_SLOTS:
-  void setStyle(const QString& style_name);
+  bool setStyle(const QString& style_name);
 
 Q_SIGNALS:
   void styleChanged(const QString& style_name);

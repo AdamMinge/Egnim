@@ -1,7 +1,7 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project_serializer.h>
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/project/priv/json_project_serializer_impl.h>
+#include "project/project_serializer.h"
+#include "project/project.h"
+#include "project/priv/json_project_serializer_impl.h"
 /* -------------------------------------------------------------------------- */
 
 ProjectSerializer::ProjectSerializer() = default;

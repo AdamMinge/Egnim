@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewProjectDialog</class>
- <widget class="QDialog" name="NewProjectDialog">
+ <class>NewSceneDocumentDialog</class>
+ <widget class="QDialog" name="NewSceneDocumentDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>356</width>
-    <height>145</height>
+    <height>161</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,9 +19,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLineEdit" name="m_project_name_edit">
+        <widget class="QLineEdit" name="m_document_name_edit">
          <property name="placeholderText">
-          <string>Project Name</string>
+          <string>Document Name</string>
          </property>
         </widget>
        </item>
@@ -37,9 +37,9 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLineEdit" name="m_project_path_edit">
+        <widget class="QLineEdit" name="m_document_path_edit">
          <property name="placeholderText">
-          <string>Project Path</string>
+          <string>Document Path</string>
          </property>
         </widget>
        </item>
@@ -55,9 +55,9 @@
     </layout>
    </item>
    <item>
-    <widget class="QLabel" name="m_project_name_error_label">
+    <widget class="QLabel" name="m_document_name_error_label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; color:#cc0000;&quot;&gt;Please enter the name of the project&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; color:#cc0000;&quot;&gt;Please enter the unique name of the document&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -65,9 +65,9 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="m_project_path_error_label">
+    <widget class="QLabel" name="m_document_path_error_label">
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; color:#cc0000;&quot;&gt;Please choose an empty folder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:9pt; color:#cc0000;&quot;&gt;Please choose a folder&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

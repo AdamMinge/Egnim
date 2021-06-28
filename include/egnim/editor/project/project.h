@@ -28,15 +28,13 @@ public:
   [[nodiscard]] const QString& getFileName() const;
 
   [[nodiscard]] QString getDisplayName() const;
-
-  void setLastModified(const QDateTime& date_time);
   [[nodiscard]] const QDateTime& getLastModified() const;
 
   [[nodiscard]] bool isModified() const;
   [[nodiscard]] QUndoStack* getUndoStack() const;
 
   void addDocument(std::unique_ptr<Document> document);
-  void removeDocument(const Document& document);
+  std::unique_ptr<Document> removeDocument(const Document& document);
   void removeAllDocuments();
 
   [[nodiscard]] const std::list<std::unique_ptr<Document>>& getDocuments() const;
@@ -61,6 +59,8 @@ Q_SIGNALS:
 protected:
   explicit Project(Type m_type, QObject* parent = nullptr);
 
+  void setLastModified(const QDateTime& date_time);
+
 private:
   Type m_type;
   QString m_file_name;
@@ -72,6 +72,7 @@ private:
 enum class Project::Type
 {
   Game,
+  Unknown,
 };
 
 #endif //PROJECT_H

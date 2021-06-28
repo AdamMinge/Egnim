@@ -1,14 +1,13 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/document.h>
-#include <egnim/editor/document/document_serializer.h>
+#include "document/document.h"
+#include "document/document_serializer.h"
 /* -------------------------------------------------------------------------- */
 
-Document::Document(Type type, QString file_name, QObject* parent) :
+Document::Document(Type type, QObject* parent) :
   QObject(parent),
-  m_type(type),
-  m_file_name(std::move(file_name))
+  m_type(type)
 {
 
 }
@@ -42,17 +41,30 @@ QString Document::getDisplayName() const
   return displayName;
 }
 
+void Document::setLastModified(const QDateTime& date_time)
+{
+  m_last_modified = date_time;
+}
+
+const QDateTime& Document::getLastModified() const
+{
+  return m_last_modified;
+}
+
 bool Document::save(const QString& file_name)
 {
   auto serializer = DocumentSerializer();
   auto bytearray = serializer.serialize(*this);
 
-  auto file = QFile(m_file_name);
+  auto file = QFile(file_name);
   if(!file.open(QIODevice::WriteOnly))
     return false;
 
   file.write(bytearray);
   file.close();
+
+  setLastModified(QFileInfo(getFileName()).lastModified());
+  setFileName(file_name);
 
   Q_EMIT saved();
   return true;
@@ -67,5 +79,38 @@ std::unique_ptr<Document> Document::load(const QString& file_name)
   auto array = file.readAll();
   auto serializer = DocumentSerializer();
 
-  return serializer.deserialize(array);
+  auto document = serializer.deserialize(array);
+  if(document)
+  {
+    document->setFileName(file_name);
+    document->setLastModified(QFileInfo(file_name).lastModified());
+  }
+
+  return document;
+}
+
+QString Document::getDocumentFileFilter()
+{
+  auto filter = QString{};
+
+  filter.append(tr("Scene Document (*.%1)").arg(getDocumentExtension(Type::Scene)));
+
+  return filter;
+}
+
+QString Document::getDocumentExtension() const
+{
+  return getDocumentExtension(m_type);
+}
+
+
+QString Document::getDocumentExtension(Type type)
+{
+  switch(type)
+  {
+    case Type::Scene:
+      return "egn-scene";
+  }
+
+  return QString{};
 }

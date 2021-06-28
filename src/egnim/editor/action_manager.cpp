@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/action_manager.h>
+#include "action_manager.h"
 /* -------------------------------------------------------------------------- */
 
 QScopedPointer<ActionManager> ActionManager::m_instance = QScopedPointer<ActionManager>(nullptr);

@@ -13,8 +13,8 @@
 #include <memory>
 #include <vector>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/project/project_editor.h>
+#include "project/project.h"
+#include "project/project_editor.h"
 /* -------------------------------------------------------------------------- */
 
 class NoProjectWidget;
@@ -41,6 +41,7 @@ public:
   [[nodiscard]] ProjectEditor *getCurrentEditor() const;
 
   void addProject(std::unique_ptr<Project> project);
+  bool loadProject(const QString& file_name);
   void removeProject(int index);
   void removeAllProjects();
 

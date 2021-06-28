@@ -1,20 +1,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/file_system_dock.h>
+#include "project/open_project_dock.h"
 /* -------------------------------------------------------------------------- */
 
-FileSystemDock::FileSystemDock(QWidget* parent) :
+OpenProjectDock::OpenProjectDock(QWidget* parent) :
   QDockWidget(parent)
 {
-  setObjectName(QLatin1String("FileSystem"));
+  setObjectName(QLatin1String("Project"));
 
   retranslateUi();
 }
 
-FileSystemDock::~FileSystemDock() = default;
+OpenProjectDock::~OpenProjectDock() = default;
 
-void FileSystemDock::changeEvent(QEvent* event)
+void OpenProjectDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void FileSystemDock::changeEvent(QEvent* event)
   }
 }
 
-void FileSystemDock::retranslateUi()
+void OpenProjectDock::retranslateUi()
 {
-  setWindowTitle(tr("File System"));
+  setWindowTitle(tr("Project"));
 }
 

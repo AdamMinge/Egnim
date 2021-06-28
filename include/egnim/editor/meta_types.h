@@ -5,7 +5,6 @@
 #include <QMetaType>
 /* -------------------------------------------------------------------------- */
 
-
 void registerMetaTypes();
 
 #endif //META_TYPES_H

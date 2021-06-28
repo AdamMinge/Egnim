@@ -3,9 +3,11 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDialog>
+/* ----------------------------------- Local -------------------------------- */
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
-namespace Ui { class NewProjectDialog; }
+namespace Ui { class NewGameProjectDialog; }
 
 class NewProjectDialog : public QDialog
 {
@@ -15,18 +17,41 @@ private:
   struct Preferences;
 
 public:
-  explicit NewProjectDialog(QWidget* parent = nullptr);
   ~NewProjectDialog() override;
+
+  [[nodiscard]] virtual std::unique_ptr<Project> create() = 0;
+
+protected:
+  explicit NewProjectDialog(QWidget* parent = nullptr);
+
+protected:
+  QScopedPointer<Preferences> m_preferences;
+};
+
+class NewGameProjectDialog : public NewProjectDialog
+{
+  Q_OBJECT
+
+public:
+  explicit NewGameProjectDialog(QWidget* parent = nullptr);
+  ~NewGameProjectDialog() override;
+
+  [[nodiscard]] std::unique_ptr<Project> create() override;
+
+protected:
+  void changeEvent(QEvent* event) override;
 
 private Q_SLOTS:
   void onBrowsePressed();
-  void onCreateAndExitPressed();
-
   void validate();
 
 private:
-  QScopedPointer<Ui::NewProjectDialog> m_ui;
-  QScopedPointer<Preferences> m_preferences;
+  void retranslateUi();
+
+private:
+  QScopedPointer<Ui::NewGameProjectDialog> m_ui;
 };
+
+std::unique_ptr<Project> createProject(Project::Type type);
 
 #endif //NEW_PROJECT_DIALOG_H

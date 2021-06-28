@@ -1,7 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/inspector_dock.h>
+#include "document/inspector_dock.h"
 /* -------------------------------------------------------------------------- */
 
 InspectorDock::InspectorDock(QWidget* parent) :

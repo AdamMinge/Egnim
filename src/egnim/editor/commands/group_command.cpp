@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/commands/group_command.h>
+#include "commands/group_command.h"
 /* -------------------------------------------------------------------------- */
 
 GroupCommand::GroupCommand(Command* parent) :

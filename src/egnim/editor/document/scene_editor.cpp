@@ -1,11 +1,11 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/document/scene_editor.h>
-#include <egnim/editor/document/scene_document.h>
-#include <egnim/editor/document/scene_dock.h>
-#include <egnim/editor/document/inspector_dock.h>
-#include <egnim/editor/preferences_manager.h>
+#include "document/scene_editor.h"
+#include "document/scene_document.h"
+#include "document/scene_dock.h"
+#include "document/inspector_dock.h"
+#include "preferences_manager.h"
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- Preferences ----------------------------- */

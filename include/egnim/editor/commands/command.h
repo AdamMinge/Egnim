@@ -29,6 +29,8 @@ private:
 enum class Command::Type
 {
   GroupCommand,
+  AddDocument,
+  RemoveDocument
 };
 
 #endif //COMMAND_H

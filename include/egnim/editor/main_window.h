@@ -3,6 +3,9 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
+/* ----------------------------------- Local -------------------------------- */
+#include "project/project.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class MainWindow; }
@@ -12,7 +15,6 @@ class LanguageManager;
 class ProjectManager;
 class ActionManager;
 class StyleManager;
-class Project;
 
 class MainWindow final : public QMainWindow
 {
@@ -38,25 +40,35 @@ protected:
   void changeEvent(QEvent *event) override;
 
 private Q_SLOTS:
-  void closeProject(int index);
   void projectChanged(Project* project);
+  void documentChanged(Document* document);
 
   bool confirmSave(Project* project);
   bool confirmAllSave();
 
-  bool saveProject(Project* project);
-  bool saveAllProjects();
-
-  void newProject();
-  void openProject();
-  void clearRecent();
-  void openSettings();
-  void openAbout();
-
   void updateActions();
   void updateWindowTitle();
   void updateViewsAndToolbarsMenu();
+  void updateRecentProjectFiles();
 
+  void newProject(Project::Type type);
+  void openProject();
+  void clearRecent();
+  void closeProject(int index);
+  void openSettings();
+  bool saveProject(Project* project);
+  bool saveAllProjects();
+
+  void newDocument(Document::Type type);
+  void closeDocument();
+
+  void performCut();
+  void performCopy();
+  void performPaste();
+  void performDelete();
+
+  void openAbout();
+  
   bool openProject(const QString& file_name);
 
 private:
@@ -71,7 +83,9 @@ private:
 private:
   QScopedPointer<Ui::MainWindow> m_ui;
   QScopedPointer<Preferences> m_preferences;
+
   Project* m_current_project;
+  Document* m_current_document;
 };
 
 #endif //MAIN_WINDOW_H

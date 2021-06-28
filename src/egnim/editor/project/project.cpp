@@ -2,9 +2,9 @@
 #include <QFileInfo>
 #include <QFile>
 /* ----------------------------------- Local -------------------------------- */
-#include <egnim/editor/project/project.h>
-#include <egnim/editor/project/project_serializer.h>
-#include <egnim/editor/document/document.h>
+#include "project/project.h"
+#include "project/project_serializer.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 Project::Project(Type type, QObject* parent) :
@@ -47,9 +47,9 @@ QString Project::getDisplayName() const
   return displayName;
 }
 
-void Project::setLastModified(const QDateTime& date)
+void Project::setLastModified(const QDateTime& date_time)
 {
-  m_last_modified = date;
+  m_last_modified = date_time;
 }
 
 const QDateTime& Project::getLastModified() const
@@ -70,10 +70,10 @@ QUndoStack* Project::getUndoStack() const
 void Project::addDocument(std::unique_ptr<Document> document)
 {
   m_documents.push_back(std::move(document));
-  Q_EMIT addedDocument(m_documents.front().get());
+  Q_EMIT addedDocument(m_documents.back().get());
 }
 
-void Project::removeDocument(const Document& document)
+std::unique_ptr<Document> Project::removeDocument(const Document& document)
 {
   auto found_document = std::find_if(m_documents.begin(), m_documents.end(),
                                      [document = std::addressof(document)](auto& current_document){
@@ -81,10 +81,13 @@ void Project::removeDocument(const Document& document)
   });
 
   if(found_document == m_documents.end())
-    return;
+    return nullptr;
 
-  Q_EMIT removedDocument((*found_document).get());
+  auto removed_document = std::move(*found_document);
+
+  Q_EMIT removedDocument(removed_document.get());
   m_documents.erase(found_document);
+  return removed_document;
 }
 
 void Project::removeAllDocuments()
@@ -100,6 +103,9 @@ const std::list<std::unique_ptr<Document>>& Project::getDocuments() const
 
 bool Project::save(const QString& file_name)
 {
+  for(auto& document : m_documents)
+    document->save(document->getFileName());
+
   auto serializer = ProjectSerializer();
   auto bytearray = serializer.serialize(*this);
 
@@ -141,7 +147,7 @@ QString Project::getProjectFileFilter()
 {
   auto filter = QString{};
 
-  filter.append(tr("Game Project (*%1)").arg(getProjectExtension(Type::Game)));
+  filter.append(tr("Game Project (*.%1)").arg(getProjectExtension(Type::Game)));
 
   return filter;
 }
@@ -156,7 +162,7 @@ QString Project::getProjectExtension(Type type)
   switch(type)
   {
     case Type::Game:
-      return ".egn-pro";
+      return "egn-game";
   }
 
   return QString{};
