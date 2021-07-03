@@ -4,6 +4,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
 #include <QDateTime>
+#include <QUndoStack>
 /* -------------------------------------------------------------------------- */
 
 class Document : public QObject
@@ -22,7 +23,10 @@ public:
   [[nodiscard]] const QString& getFileName() const;
 
   [[nodiscard]] QString getDisplayName() const;
-  [[nodiscard]] const QDateTime& getLastModified() const;
+  [[nodiscard]] QDateTime getLastModified() const;
+
+  [[nodiscard]] bool isModified() const;
+  [[nodiscard]] QUndoStack* getUndoStack() const;
 
   bool save(const QString& file_name);
   static std::unique_ptr<Document> load(const QString& file_name);
@@ -33,6 +37,7 @@ public:
   static QString getDocumentExtension(Type type);
 
 Q_SIGNALS:
+  void modifiedChanged();
   void fileNameChanged(const QString& new_file_name, const QString& old_file_name);
 
   void saved();
@@ -40,12 +45,10 @@ Q_SIGNALS:
 protected:
   explicit Document(Type type, QObject* parent = nullptr);
 
-  void setLastModified(const QDateTime& date_time);
-
 private:
   Type m_type;
   QString m_file_name;
-  QDateTime m_last_modified;
+  QUndoStack* m_undo_stack;
 };
 
 enum class Document::Type

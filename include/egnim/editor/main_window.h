@@ -3,14 +3,19 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMainWindow>
+#include <QStackedWidget>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project.h"
 #include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class MainWindow; }
+class NoProjectWidget;
+class OpenProjectDock;
+class ConsoleDock;
 
 class PreferencesManager;
+class DocumentManager;
 class LanguageManager;
 class ProjectManager;
 class ActionManager;
@@ -28,22 +33,21 @@ public:
   ~MainWindow() override;
 
   [[nodiscard]] ProjectManager& getProjectManager() const;
+  [[nodiscard]] DocumentManager& getDocumentManager() const;
   [[nodiscard]] LanguageManager& getLanguageManager() const;
   [[nodiscard]] StyleManager& getStyleManager() const;
   [[nodiscard]] ActionManager& getActionManager() const;
   [[nodiscard]] PreferencesManager& getPreferencesManager() const;
-
-  [[nodiscard]] Project* getCurrentProject() const;
 
 protected:
   void closeEvent(QCloseEvent *event) override;
   void changeEvent(QEvent *event) override;
 
 private Q_SLOTS:
-  void projectChanged(Project* project);
   void documentChanged(Document* document);
+  void projectChanged(Project* project);
 
-  bool confirmSave(Project* project);
+  bool confirmSave(Document* document);
   bool confirmAllSave();
 
   void updateActions();
@@ -54,13 +58,15 @@ private Q_SLOTS:
   void newProject(Project::Type type);
   void openProject();
   void clearRecent();
-  void closeProject(int index);
+  void closeProject();
   void openSettings();
-  bool saveProject(Project* project);
-  bool saveAllProjects();
+  bool exportProject();
 
   void newDocument(Document::Type type);
-  void closeDocument();
+  void closeDocument(int index);
+  bool saveDocument(Document* document);
+  bool saveDocumentAs(Document* document);
+  bool saveAllDocuments();
 
   void performCut();
   void performCopy();
@@ -68,8 +74,6 @@ private Q_SLOTS:
   void performDelete();
 
   void openAbout();
-  
-  bool openProject(const QString& file_name);
 
 private:
   void writeSettings();
@@ -77,6 +81,7 @@ private:
 
   void registerMenus();
   void registerActions();
+  void registerConnections();
 
   void retranslateUi();
 
@@ -84,8 +89,12 @@ private:
   QScopedPointer<Ui::MainWindow> m_ui;
   QScopedPointer<Preferences> m_preferences;
 
-  Project* m_current_project;
-  Document* m_current_document;
+  QStackedWidget* m_stacked_widget;
+  NoProjectWidget* m_no_project_widget;
+  QMainWindow* m_project_window;
+
+  OpenProjectDock* m_open_project_dock;
+  ConsoleDock* m_console_dock;
 };
 
 #endif //MAIN_WINDOW_H

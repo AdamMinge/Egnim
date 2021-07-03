@@ -7,6 +7,7 @@
 
 class SceneDocument;
 
+class UndoDock;
 class SceneDock;
 class InspectorDock;
 
@@ -23,6 +24,9 @@ public:
 
   void setCurrentDocument(Document* document) override;
 
+  void addDocument(Document* document) override;
+  void removeDocument(Document* document) override;
+
   [[nodiscard]] Document* getCurrentDocument() const override;
   [[nodiscard]] QWidget* getEditorWidget() const override;
 
@@ -32,10 +36,14 @@ public:
   [[nodiscard]] QList<QDockWidget*> getDockWidgets() const override;
   [[nodiscard]] QList<DialogWithToggleView*> getDialogWidgets() const override;
 
+  void performStandardAction(StandardAction standard_action) override;
+  [[nodiscard]] StandardActions getEnabledStandardActions() const override;
+
 private:
   SceneDocument* m_current_document;
   QScopedPointer<QMainWindow> m_main_window;
 
+  UndoDock* m_undo_dock;
   SceneDock* m_scene_dock;
   InspectorDock* m_inspector_dock;
 

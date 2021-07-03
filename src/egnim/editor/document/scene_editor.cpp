@@ -3,6 +3,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "document/scene_editor.h"
 #include "document/scene_document.h"
+#include "document/undo_dock.h"
 #include "document/scene_dock.h"
 #include "document/inspector_dock.h"
 #include "preferences_manager.h"
@@ -22,12 +23,15 @@ SceneEditor::SceneEditor(QObject* parent) :
   DocumentEditor(parent),
   m_current_document(nullptr),
   m_main_window(new QMainWindow()),
+  m_undo_dock(new UndoDock(m_main_window.data())),
   m_scene_dock(new SceneDock(m_main_window.data())),
   m_inspector_dock(new InspectorDock(m_main_window.data())),
   m_preferences(new Preferences)
 {
   m_main_window->setDockOptions(m_main_window->dockOptions() | QMainWindow::GroupedDragging);
   m_main_window->setDockNestingEnabled(true);
+
+  m_main_window->addDockWidget(Qt::LeftDockWidgetArea, m_undo_dock);
 
   m_main_window->addDockWidget(Qt::RightDockWidgetArea, m_scene_dock);
   m_main_window->addDockWidget(Qt::RightDockWidgetArea, m_inspector_dock);
@@ -40,10 +44,22 @@ void SceneEditor::setCurrentDocument(Document* document)
   if(m_current_document == document)
     return;
 
-  auto game_document = qobject_cast<SceneDocument*>(document);
-  Q_ASSERT(game_document || !document);
+  auto scene_document = qobject_cast<SceneDocument*>(document);
+  Q_ASSERT(scene_document || !document);
 
-  m_current_document = game_document;
+  m_current_document = scene_document;
+
+  m_undo_dock->setStack(scene_document ? scene_document->getUndoStack() : nullptr);
+}
+
+void SceneEditor::addDocument(Document* document)
+{
+
+}
+
+void SceneEditor::removeDocument(Document* document)
+{
+
 }
 
 Document* SceneEditor::getCurrentDocument() const
@@ -76,10 +92,22 @@ void SceneEditor::restoreState()
 
 QList<QDockWidget*> SceneEditor::getDockWidgets() const
 {
-  return QList<QDockWidget*> { m_scene_dock, m_inspector_dock };
+  return QList<QDockWidget*> { m_undo_dock, m_scene_dock, m_inspector_dock };
 }
 
 QList<DialogWithToggleView*> SceneEditor::getDialogWidgets() const
 {
   return QList<DialogWithToggleView*> {};
+}
+
+void SceneEditor::performStandardAction(StandardAction standard_action)
+{
+  // TODO : implementation //
+}
+
+SceneEditor::StandardActions SceneEditor::getEnabledStandardActions() const
+{
+  // TODO : implementation //
+  SceneEditor::StandardActions standard_actions;
+  return standard_actions;
 }

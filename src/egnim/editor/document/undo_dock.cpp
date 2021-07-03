@@ -2,7 +2,7 @@
 #include <QVBoxLayout>
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include "project/undo_dock.h"
+#include "document/undo_dock.h"
 /* -------------------------------------------------------------------------- */
 
 UndoDock::UndoDock(QWidget* parent) :

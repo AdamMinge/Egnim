@@ -7,9 +7,10 @@
 
 Document::Document(Type type, QObject* parent) :
   QObject(parent),
-  m_type(type)
+  m_type(type),
+  m_undo_stack(new QUndoStack(this))
 {
-
+  connect(m_undo_stack, &QUndoStack::cleanChanged, this, &Document::modifiedChanged);
 }
 
 Document::~Document() = default;
@@ -38,17 +39,25 @@ const QString& Document::getFileName() const
 QString Document::getDisplayName() const
 {
   QString displayName = QFileInfo(m_file_name).fileName();
+  if (displayName.isEmpty())
+    displayName = tr("untitled.%1").arg(getDocumentExtension());
+
   return displayName;
 }
 
-void Document::setLastModified(const QDateTime& date_time)
+QDateTime Document::getLastModified() const
 {
-  m_last_modified = date_time;
+  return QFileInfo(m_file_name).lastModified();
 }
 
-const QDateTime& Document::getLastModified() const
+bool Document::isModified() const
 {
-  return m_last_modified;
+  return !m_undo_stack->isClean();
+}
+
+QUndoStack* Document::getUndoStack() const
+{
+  return m_undo_stack;
 }
 
 bool Document::save(const QString& file_name)
@@ -63,7 +72,7 @@ bool Document::save(const QString& file_name)
   file.write(bytearray);
   file.close();
 
-  setLastModified(QFileInfo(getFileName()).lastModified());
+  getUndoStack()->setClean();
   setFileName(file_name);
 
   Q_EMIT saved();
@@ -81,10 +90,7 @@ std::unique_ptr<Document> Document::load(const QString& file_name)
 
   auto document = serializer.deserialize(array);
   if(document)
-  {
     document->setFileName(file_name);
-    document->setLastModified(QFileInfo(file_name).lastModified());
-  }
 
   return document;
 }
