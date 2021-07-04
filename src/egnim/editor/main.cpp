@@ -9,6 +9,8 @@
 
 /* ----------------------------- messagesToConsole -------------------------- */
 
+static const QtMessageHandler QT_DEFAULT_MESSAGE_HANDLER = qInstallMessageHandler(nullptr); // NOLINT(cert-err58-cpp)
+
 static void messagesToConsole(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
   switch (type)
@@ -30,7 +32,6 @@ static void messagesToConsole(QtMsgType type, const QMessageLogContext &context,
       break;
   }
 
-  static const QtMessageHandler QT_DEFAULT_MESSAGE_HANDLER = qInstallMessageHandler(nullptr);
   (*QT_DEFAULT_MESSAGE_HANDLER)(type, context, msg);
 }
 

@@ -26,6 +26,21 @@ NewDocumentDialog::NewDocumentDialog(QWidget* parent) :
 
 NewDocumentDialog::~NewDocumentDialog() = default;
 
+std::unique_ptr<Document> NewDocumentDialog::createDocument(Document::Type type)
+{
+  QScopedPointer<NewDocumentDialog> new_document_dialog(nullptr);
+  switch(type)
+  {
+    case Document::Type::Scene:
+      new_document_dialog.reset(new NewSceneDocumentDialog);
+  }
+
+  if(!new_document_dialog)
+    return nullptr;
+
+  return new_document_dialog->create();
+}
+
 /* -------------------------- NewSceneDocumentDialog ------------------------ */
 
 NewSceneDocumentDialog::NewSceneDocumentDialog(QWidget* parent) :
@@ -115,21 +130,4 @@ void NewSceneDocumentDialog::validate()
 void NewSceneDocumentDialog::retranslateUi()
 {
   m_ui->retranslateUi(this);
-}
-
-/* ------------------------------ createDocument ---------------------------- */
-
-std::unique_ptr<Document> createDocument(Document::Type type)
-{
-  QScopedPointer<NewDocumentDialog> new_document_dialog(nullptr);
-  switch(type)
-  {
-    case Document::Type::Scene:
-      new_document_dialog.reset(new NewSceneDocumentDialog);
-  }
-
-  if(!new_document_dialog)
-    return nullptr;
-
-  return new_document_dialog->create();
 }

@@ -26,6 +26,22 @@ NewProjectDialog::NewProjectDialog(QWidget* parent) :
 
 NewProjectDialog::~NewProjectDialog() = default;
 
+std::unique_ptr<Project> NewProjectDialog::createProject(Project::Type type)
+{
+  QScopedPointer<NewProjectDialog> new_project_dialog(nullptr);
+  switch(type)
+  {
+    case Project::Type::Game:
+      new_project_dialog.reset(new NewGameProjectDialog);
+  }
+
+  if(!new_project_dialog)
+    return nullptr;
+
+  return new_project_dialog->create();
+}
+
+
 /* --------------------------- NewGameProjectDialog ------------------------- */
 
 NewGameProjectDialog::NewGameProjectDialog(QWidget* parent) :
@@ -115,21 +131,4 @@ void NewGameProjectDialog::validate()
 void NewGameProjectDialog::retranslateUi()
 {
   m_ui->retranslateUi(this);
-}
-
-/* ------------------------------ createProject ----------------------------- */
-
-std::unique_ptr<Project> createProject(Project::Type type)
-{
-  QScopedPointer<NewProjectDialog> new_project_dialog(nullptr);
-  switch(type)
-  {
-    case Project::Type::Game:
-      new_project_dialog.reset(new NewGameProjectDialog);
-  }
-
-  if(!new_project_dialog)
-    return nullptr;
-
-  return new_project_dialog->create();
 }

@@ -39,9 +39,10 @@ Project* ProjectManager::getProject() const
 
 bool ProjectManager::newProject(Project::Type type)
 {
-  auto new_project = createProject(type);
+  auto new_project = NewProjectDialog::createProject(type);
   if(new_project && closeProject())
   {
+    new_project->save(new_project->getFileName());
     setProject(std::move(new_project));
     return true;
   }

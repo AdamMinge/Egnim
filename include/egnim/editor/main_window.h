@@ -11,7 +11,7 @@
 
 namespace Ui { class MainWindow; }
 class NoProjectWidget;
-class OpenProjectDock;
+class ProjectDock;
 class ConsoleDock;
 
 class PreferencesManager;
@@ -60,7 +60,7 @@ private Q_SLOTS:
   void clearRecent();
   void closeProject();
   void openSettings();
-  bool exportProject();
+  void exportProject();
 
   void newDocument(Document::Type type);
   void closeDocument(int index);
@@ -93,7 +93,7 @@ private:
   NoProjectWidget* m_no_project_widget;
   QMainWindow* m_project_window;
 
-  OpenProjectDock* m_open_project_dock;
+  ProjectDock* m_open_project_dock;
   ConsoleDock* m_console_dock;
 };
 

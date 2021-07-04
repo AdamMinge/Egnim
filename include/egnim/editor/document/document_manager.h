@@ -58,6 +58,8 @@ public:
   void restoreState();
 
   bool saveDocument(Document *document);
+  bool saveDocumentAs(Document* document);
+
   bool loadDocument(const QString& file_name);
 
   [[nodiscard]] const std::vector<std::unique_ptr<Document>> &getDocuments() const;

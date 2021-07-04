@@ -243,6 +243,11 @@ bool DocumentManager::saveDocument(Document* document)
   return true;
 }
 
+bool DocumentManager::saveDocumentAs(Document* document)
+{
+  Q_ASSERT(document);
+}
+
 const std::vector<std::unique_ptr<Document>>& DocumentManager::getDocuments() const
 {
   return m_documents;

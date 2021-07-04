@@ -21,6 +21,9 @@ public:
 
   [[nodiscard]] virtual std::unique_ptr<Document> create() = 0;
 
+public:
+  static std::unique_ptr<Document> createDocument(Document::Type type);
+
 protected:
   explicit NewDocumentDialog(QWidget* parent = nullptr);
 
@@ -51,7 +54,5 @@ private:
 private:
   QScopedPointer<Ui::NewSceneDocumentDialog> m_ui;
 };
-
-std::unique_ptr<Document> createDocument(Document::Type type);
 
 #endif //NEW_DOCUMENT_DIALOG_H

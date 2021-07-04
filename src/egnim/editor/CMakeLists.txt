@@ -30,7 +30,9 @@ set(sources
         ${source_root}/document/new_document_dialog.cpp
         ${source_root}/document/undo_dock.cpp
         ${source_root}/document/inspector_dock.cpp
-        ${source_root}/document/scene_dock.cpp
+        ${source_root}/document/nodes_dock.cpp
+        ${source_root}/document/nodes_view.cpp
+        ${source_root}/document/nodes_scene.cpp
         ${source_root}/document/no_document_widget.cpp
         ${source_root}/document/document_serializer.cpp
         ${source_root}/document/priv/document_serializer_impl.h
@@ -43,7 +45,7 @@ set(sources
         ${source_root}/project/project_manager.cpp
         ${source_root}/project/game_project.cpp
         ${source_root}/project/new_project_dialog.cpp
-        ${source_root}/project/open_project_dock.cpp
+        ${source_root}/project/project_dock.cpp
         ${source_root}/project/console_dock.cpp
         ${source_root}/project/project_serializer.cpp
         ${source_root}/project/project_list_model.cpp
@@ -78,7 +80,9 @@ set(includes
         ${include_root}/document/new_document_dialog.h
         ${include_root}/document/undo_dock.h
         ${include_root}/document/inspector_dock.h
-        ${include_root}/document/scene_dock.h
+        ${include_root}/document/nodes_dock.h
+        ${include_root}/document/nodes_view.h
+        ${include_root}/document/nodes_scene.h
         ${include_root}/document/no_document_widget.h
         ${include_root}/document/document_serializer.h
 
@@ -87,7 +91,7 @@ set(includes
         ${include_root}/project/project_manager.h
         ${include_root}/project/game_project.h
         ${include_root}/project/new_project_dialog.h
-        ${include_root}/project/open_project_dock.h
+        ${include_root}/project/project_dock.h
         ${include_root}/project/console_dock.h
         ${include_root}/project/project_serializer.h
         ${include_root}/project/project_list_model.h
@@ -113,7 +117,8 @@ set(uis
 
         ${uis_root}/project/no_project_widget.ui
         ${uis_root}/project/new_game_project_dialog.ui
-        ${uis_root}/project/export_project_dialog.ui)
+        ${uis_root}/project/export_project_dialog.ui
+        ${uis_root}/project/project_dock.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

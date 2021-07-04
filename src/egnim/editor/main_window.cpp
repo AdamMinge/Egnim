@@ -12,9 +12,10 @@
 #include "settings_dialog.h"
 #include "project/project_manager.h"
 #include "project/no_project_widget.h"
-#include "project/open_project_dock.h"
+#include "project/project_dock.h"
 #include "project/console_dock.h"
 #include "project/export_project_dialog.h"
+#include "document/new_document_dialog.h"
 #include "document/document_manager.h"
 #include "document/scene_editor.h"
 #include "document/document.h"
@@ -53,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
   setCentralWidget(m_stacked_widget);
   m_no_project_widget = new NoProjectWidget(this);
   m_project_window = new QMainWindow(this);
-  m_open_project_dock = new OpenProjectDock(m_project_window);
+  m_open_project_dock = new ProjectDock(m_project_window);
   m_console_dock = new ConsoleDock(m_project_window);
 
   m_project_window->setCentralWidget(getDocumentManager().getWidget());
@@ -153,6 +154,8 @@ void MainWindow::projectChanged(Project* project)
   m_stacked_widget->setCurrentWidget(project ? static_cast<QWidget*>(m_project_window) : m_no_project_widget);
   getDocumentManager().removeAllDocuments();
 
+  m_open_project_dock->setCurrentProject(project);
+
   updateWindowTitle();
   updateActions();
 }
@@ -211,7 +214,7 @@ void MainWindow::updateActions() // NOLINT(readability-make-member-function-cons
   getActionManager().findAction("paste")->setEnabled(standard_actions & DocumentEditor::PasteAction);
   getActionManager().findAction("delete")->setEnabled(standard_actions & DocumentEditor::DeleteAction);
 
-  getActionManager().findMenu("views_and_toolbars")->setEnabled(current_document);
+  getActionManager().findMenu("views_and_toolbars")->setEnabled(current_project);
 }
 
 void MainWindow::updateWindowTitle()
@@ -229,6 +232,10 @@ void MainWindow::updateViewsAndToolbarsMenu() // NOLINT(readability-make-member-
 {
   auto view_and_toolbars_menu = getActionManager().findMenu("views_and_toolbars");
   view_and_toolbars_menu->clear();
+
+  view_and_toolbars_menu->addAction(m_open_project_dock->toggleViewAction());
+  view_and_toolbars_menu->addAction(m_console_dock->toggleViewAction());
+  view_and_toolbars_menu->addSeparator();
 
   if(auto editor = getDocumentManager().getCurrentEditor())
   {
@@ -316,7 +323,7 @@ void MainWindow::openSettings()
   settings_dialog->show();
 }
 
-bool MainWindow::exportProject()
+void MainWindow::exportProject()
 {
   auto export_project_dialog = new ExportProjectDialog(this);
   export_project_dialog->setAttribute(Qt::WA_DeleteOnClose);
@@ -325,7 +332,12 @@ bool MainWindow::exportProject()
 
 void MainWindow::newDocument(Document::Type type) // NOLINT(readability-make-member-function-const)
 {
-  // TODO : implementation //
+  auto new_document = NewDocumentDialog::createDocument(type);
+  if(new_document)
+  {
+    new_document->save(new_document->getFileName());
+    getDocumentManager().addDocument(std::move(new_document));
+  }
 }
 
 void MainWindow::closeDocument(int index) // NOLINT(readability-make-member-function-const)
@@ -341,9 +353,11 @@ bool MainWindow::saveDocument(Document* document) // NOLINT(readability-make-mem
   return getDocumentManager().saveDocument(document);
 }
 
-bool MainWindow::saveDocumentAs(Document* document)
+bool MainWindow::saveDocumentAs(Document* document) // NOLINT(readability-make-member-function-const)
 {
-  // TODO : implementation //
+  Q_ASSERT(document);
+  getDocumentManager().switchToDocument(document);
+  return getDocumentManager().saveDocumentAs(document);
 }
 
 bool MainWindow::saveAllDocuments()

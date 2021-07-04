@@ -1,20 +1,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include "project/open_project_dock.h"
+#include "document/nodes_dock.h"
 /* -------------------------------------------------------------------------- */
 
-OpenProjectDock::OpenProjectDock(QWidget* parent) :
+NodesDock::NodesDock(QWidget* parent) :
   QDockWidget(parent)
 {
-  setObjectName(QLatin1String("Project"));
+  setObjectName(QLatin1String("Scene"));
 
   retranslateUi();
 }
 
-OpenProjectDock::~OpenProjectDock() = default;
+NodesDock::~NodesDock() = default;
 
-void OpenProjectDock::changeEvent(QEvent* event)
+void NodesDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void OpenProjectDock::changeEvent(QEvent* event)
   }
 }
 
-void OpenProjectDock::retranslateUi()
+void NodesDock::retranslateUi()
 {
-  setWindowTitle(tr("Project"));
+  setWindowTitle(tr("Nodes"));
 }
 

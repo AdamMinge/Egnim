@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>OpenProjectDock</class>
- <widget class="QDockWidget" name="OpenProjectDock">
+ <class>ProjectDock</class>
+ <widget class="QDockWidget" name="ProjectDock">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,6 +45,12 @@
     </item>
     <item>
      <widget class="QTreeView" name="m_project_content_tree_view">
+      <property name="sortingEnabled">
+       <bool>false</bool>
+      </property>
+      <property name="headerHidden">
+       <bool>true</bool>
+      </property>
       <attribute name="headerVisible">
        <bool>false</bool>
       </attribute>
