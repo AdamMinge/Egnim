@@ -43,6 +43,7 @@ bool ProjectManager::newProject(Project::Type type)
   if(new_project && closeProject())
   {
     new_project->save(new_project->getFileName());
+    PreferencesManager::getInstance().addRecentProjectFile(new_project->getFileName());
     setProject(std::move(new_project));
     return true;
   }

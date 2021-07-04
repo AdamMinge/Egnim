@@ -2,7 +2,6 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
-#include <QFileInfo>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/priv/json_project_serializer_impl.h"
 #include "project/game_project.h"

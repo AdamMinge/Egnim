@@ -13,9 +13,6 @@ class NewDocumentDialog : public QDialog
 {
   Q_OBJECT
 
-private:
-  struct Preferences;
-
 public:
   ~NewDocumentDialog() override;
 
@@ -26,9 +23,6 @@ public:
 
 protected:
   explicit NewDocumentDialog(QWidget* parent = nullptr);
-
-protected:
-  QScopedPointer<Preferences> m_preferences;
 };
 
 class NewSceneDocumentDialog : public NewDocumentDialog

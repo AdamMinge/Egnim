@@ -1,5 +1,6 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QToolButton>
+#include <QComboBox>
 #include <QLineEdit>
 #include <QDialogButtonBox>
 #include <QEvent>
@@ -31,11 +32,11 @@ FileDialog::FileDialog(QWidget* parent, const QString& caption, const QString& d
 FileDialog::~FileDialog() = default;
 
 QString FileDialog::getExistingDirectory(QWidget *parent, const QString &caption,
-                                         const QString &dir, QFileDialog::Options options, bool fixedTop)
+                                         const QString &dir, QFileDialog::Options options, const QString& top_dir)
 {
   const QStringList schemes = QStringList(QStringLiteral("file"));
   const QUrl selectedUrl = getExistingDirectoryUrl(
-    parent, caption, QUrl::fromLocalFile(dir), options, schemes, fixedTop);
+    parent, caption, QUrl::fromLocalFile(dir), options, schemes, top_dir);
 
   if (selectedUrl.isLocalFile() || selectedUrl.isEmpty())
     return selectedUrl.toLocalFile();
@@ -44,16 +45,14 @@ QString FileDialog::getExistingDirectory(QWidget *parent, const QString &caption
 }
 
 QUrl FileDialog::getExistingDirectoryUrl(QWidget *parent, const QString &caption, const QUrl &dir,
-                                         QFileDialog::Options options, const QStringList &supportedSchemes, bool fixedTop)
+                                         QFileDialog::Options options, const QStringList &supportedSchemes, const QString& top_dir)
 {
   FileDialog dialog(parent, caption);
   dialog.setDirectoryUrl(dir);
   dialog.setFileMode(FileMode::Directory);
   dialog.setOptions(options);
   dialog.setSupportedSchemes(supportedSchemes);
-
-  if(fixedTop)
-    dialog.setTopDir(dir.toLocalFile());
+  dialog.setTopDir(top_dir);
 
   if (dialog.exec() == QDialog::Accepted)
     return dialog.selectedUrls().value(0);
@@ -65,10 +64,11 @@ void FileDialog::init()
   setOptions(QFileDialog::DontUseNativeDialog);
 
   connect(this, SIGNAL(directoryEntered(QString)), this, SLOT(checkHistory()));
-  connect(this, SIGNAL(directoryEntered(QString)), this, SLOT(checkGoToParent()));
-  connect(findChild<QToolButton*>("backButton"), SIGNAL(clicked()), this, SLOT(checkGoToParent()));
-  connect(findChild<QToolButton*>("forwardButton"), SIGNAL(clicked()), this, SLOT(checkGoToParent()));
+  connect(this, SIGNAL(directoryEntered(QString)), this, SLOT(checkGoToParentAndBack()));
+  connect(findChild<QToolButton*>("backButton"), SIGNAL(clicked()), this, SLOT(checkGoToParentAndBack()));
+  connect(findChild<QToolButton*>("forwardButton"), SIGNAL(clicked()), this, SLOT(checkGoToParentAndBack()));
   connect(findChild<QLineEdit*>("fileNameEdit"), SIGNAL(textChanged(QString)), this, SLOT(checkLineEdit(QString)));
+  connect(findChild<QComboBox *>("lookInCombo"), qOverload<int>(&QComboBox::currentIndexChanged), this, &FileDialog::checkComboBox);
 
   findChild<QLineEdit *>("fileNameEdit")->installEventFilter(this);
   findChild<QWidget *>("listView")->installEventFilter(this);
@@ -106,7 +106,7 @@ void FileDialog::setTopDir(const QString &path)
 
   m_top_dir = (!path.isEmpty() && QFileInfo(path).isDir()) ? path : QString();
 
-  if(!pathFits(path))
+  if(!pathFits(path, true))
   {
     setDirectory(m_top_dir);
     checkHistory();
@@ -118,9 +118,10 @@ void FileDialog::setTopDir(const QString &path)
     line_edit->setText(line_edit->text());
   }
 
-  findChild<QWidget*>("lookInCombo")->setEnabled(m_top_dir.isEmpty());
-  findChild<QWidget*>("sidebar")->setEnabled(m_top_dir.isEmpty());
-  checkGoToParent();
+  if(!m_top_dir.isEmpty())
+    findChild<QWidget*>("sidebar")->hide();
+
+  checkGoToParentAndBack();
 }
 
 QString FileDialog::getTopDir() const
@@ -128,24 +129,32 @@ QString FileDialog::getTopDir() const
   return m_top_dir;
 }
 
-bool FileDialog::pathFits(const QString &path) const
+bool FileDialog::pathFits(const QString &path, bool exact) const
 {
-  return m_top_dir.isEmpty() || (path.startsWith(m_top_dir) && path.length() > m_top_dir.length());
+  return m_top_dir.isEmpty() || (path.startsWith(m_top_dir) &&
+    (exact ? path.length() >= m_top_dir.length() : path.length() > m_top_dir.length()));
 }
 
 void FileDialog::checkHistory()
 {
   QStringList list = history();
-  for (auto i = list.size() - 1; i >= 0; --i)
-    if (!pathFits(list.at(i)))
+  for(auto i = list.size() - 1; i >= 0; --i)
+  {
+    if(!pathFits(list.at(i)))
       list.removeAt(i);
+  }
 
   setHistory(list);
 }
 
-void FileDialog::checkGoToParent()
+void FileDialog::checkGoToParentAndBack()
 {
-  findChild<QToolButton*>("toParentButton")->setEnabled(pathFits(directory().absolutePath()));
+  auto path_fits = pathFits(directory().absolutePath());
+
+  findChild<QToolButton*>("toParentButton")->setEnabled(path_fits);
+
+  if(findChild<QToolButton*>("backButton")->isEnabled())
+    findChild<QToolButton*>("backButton")->setEnabled(path_fits);
 }
 
 void FileDialog::checkLineEdit(const QString &text)
@@ -153,5 +162,21 @@ void FileDialog::checkLineEdit(const QString &text)
   QAbstractButton *btn = findChild<QDialogButtonBox *>("buttonBox")->buttons().first();
   QString path = QDir::cleanPath(directory().absolutePath() + (text.startsWith("/") ? "" : "/") + text);
   bool a = QDir(text).isAbsolute();
-  btn->setEnabled(btn->isEnabled() && ((!a && pathFits(path)) || (a && pathFits(text))));
+  btn->setEnabled(btn->isEnabled() && ((!a && pathFits(path, true)) || (a && pathFits(text, true))));
+}
+
+void FileDialog::checkComboBox(int index)
+{
+  auto cb = findChild<QComboBox *>("lookInCombo");
+  if (index == 0 && cb->model()->rowCount() > 1)
+  {
+    for (auto i = 0; i < cb->model()->rowCount(); ++i)
+    {
+      if (!pathFits(cb->model()->index(i, 0).data().toString() + "/"))
+      {
+        cb->model()->removeRow(i);
+        --i;
+      }
+    }
+  }
 }

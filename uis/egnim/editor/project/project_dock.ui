@@ -31,7 +31,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QLineEdit" name="m_search_project_content_edit">
+     <widget class="QLineEdit" name="m_search_project_files_edit">
       <property name="text">
        <string/>
       </property>
@@ -44,7 +44,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeView" name="m_project_content_tree_view">
+     <widget class="QTreeView" name="m_project_files_tree_view">
+      <property name="dragDropMode">
+       <enum>QAbstractItemView::DragDrop</enum>
+      </property>
+      <property name="defaultDropAction">
+       <enum>Qt::IgnoreAction</enum>
+      </property>
       <property name="sortingEnabled">
        <bool>false</bool>
       </property>

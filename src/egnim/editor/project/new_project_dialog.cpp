@@ -57,6 +57,8 @@ NewGameProjectDialog::NewGameProjectDialog(QWidget* parent) :
   connect(m_ui->m_project_name_edit, &QLineEdit::textChanged, this, &NewGameProjectDialog::validate);
   connect(m_ui->m_project_path_edit, &QLineEdit::textChanged, this, &NewGameProjectDialog::validate);
 
+  m_ui->m_project_path_edit->setText(m_preferences->open_project_start_location.get());
+
   retranslateUi();
   validate();
 }
@@ -103,7 +105,7 @@ void NewGameProjectDialog::onBrowsePressed()
 
   auto dir_path = QFileDialog::getExistingDirectory(this,
                                                     tr("New Project"),
-                                                    m_preferences->open_project_start_location.get(),
+                                                    m_ui->m_project_path_edit->text(),
                                                     file_dialog_options);
 
   if(dir_path.isEmpty())

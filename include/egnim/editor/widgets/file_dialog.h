@@ -17,12 +17,12 @@ public:
 
   static QString getExistingDirectory(QWidget *parent = nullptr, const QString &caption = QString(),
                                       const QString &dir = QString(), QFileDialog::Options options = ShowDirsOnly,
-                                      bool fixedTop = false);
+                                      const QString& top_dir = QString());
 
   static QUrl getExistingDirectoryUrl(QWidget *parent = nullptr, const QString &caption = QString(),
                                       const QUrl &dir = QUrl(), QFileDialog::Options options = ShowDirsOnly,
                                       const QStringList &supportedSchemes = QStringList(),
-                                      bool fixedTop = false);
+                                      const QString& top_dir = QString());
 
   void setTopDir(const QString &path);
   [[nodiscard]] QString getTopDir() const;
@@ -35,12 +35,13 @@ protected:
   void init();
 
 private:
-  [[nodiscard]] bool pathFits(const QString &path) const;
+  [[nodiscard]] bool pathFits(const QString &path, bool exact = false) const;
 
 private Q_SLOTS:
   void checkHistory();
-  void checkGoToParent();
+  void checkGoToParentAndBack();
   void checkLineEdit(const QString &text);
+  void checkComboBox(int index);
 
 private:
   QString m_top_dir;

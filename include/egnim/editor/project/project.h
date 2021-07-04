@@ -2,6 +2,7 @@
 #define PROJECT_H
 
 /* ------------------------------------ Qt ---------------------------------- */
+#include <QDir>
 #include <QObject>
 #include <QDateTime>
 /* --------------------------------- Standard ------------------------------- */
@@ -24,7 +25,8 @@ public:
   [[nodiscard]] Type getType() const;
 
   void setFileName(const QString& file_name);
-  [[nodiscard]] const QString& getFileName() const;
+  [[nodiscard]] QString getFileName() const;
+  [[nodiscard]] QDir getDirectory() const;
 
   [[nodiscard]] QString getDisplayName() const;
   [[nodiscard]] QDateTime getLastModified() const;

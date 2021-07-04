@@ -38,6 +38,9 @@
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
         <widget class="QLineEdit" name="m_document_path_edit">
+         <property name="readOnly">
+          <bool>true</bool>
+         </property>
          <property name="placeholderText">
           <string>Document Path</string>
          </property>

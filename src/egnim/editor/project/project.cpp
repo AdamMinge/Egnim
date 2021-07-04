@@ -32,9 +32,14 @@ void Project::setFileName(const QString& file_name)
   Q_EMIT fileNameChanged(file_name, old_file_name);
 }
 
-const QString& Project::getFileName() const
+QString Project::getFileName() const
 {
   return m_file_name;
+}
+
+QDir Project::getDirectory() const
+{
+  return QFileInfo(m_file_name).absoluteDir();
 }
 
 QString Project::getDisplayName() const

@@ -31,7 +31,7 @@ void Document::setFileName(const QString& file_name)
   Q_EMIT fileNameChanged(file_name, old_file_name);
 }
 
-const QString& Document::getFileName() const
+QString Document::getFileName() const
 {
   return m_file_name;
 }
@@ -119,4 +119,13 @@ QString Document::getDocumentExtension(Type type)
   }
 
   return QString{};
+}
+
+QStringList Document::getDocumentExtensions()
+{
+  auto extensions = QStringList();
+
+  extensions << getDocumentExtension(Type::Scene);
+
+  return extensions;
 }

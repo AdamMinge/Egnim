@@ -20,7 +20,7 @@ public:
   [[nodiscard]] Type getType() const;
 
   void setFileName(const QString& file_name);
-  [[nodiscard]] const QString& getFileName() const;
+  [[nodiscard]] QString getFileName() const;
 
   [[nodiscard]] QString getDisplayName() const;
   [[nodiscard]] QDateTime getLastModified() const;
@@ -35,6 +35,7 @@ public:
 
   [[nodiscard]] QString getDocumentExtension() const;
   static QString getDocumentExtension(Type type);
+  static QStringList getDocumentExtensions();
 
 Q_SIGNALS:
   void modifiedChanged();

@@ -249,7 +249,7 @@
 <context>
     <name>NewGameProjectDialog</name>
     <message>
-        <location filename="../../src/egnim/editor/project/new_project_dialog.cpp" line="105"/>
+        <location filename="../../src/egnim/editor/project/new_project_dialog.cpp" line="107"/>
         <source>New Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -257,7 +257,7 @@
 <context>
     <name>NewSceneDocumentDialog</name>
     <message>
-        <location filename="../../src/egnim/editor/document/new_document_dialog.cpp" line="103"/>
+        <location filename="../../src/egnim/editor/document/new_document_dialog.cpp" line="102"/>
         <source>New Document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,12 +273,12 @@
 <context>
     <name>Project</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project.cpp" line="44"/>
+        <location filename="../../src/egnim/editor/project/project.cpp" line="49"/>
         <source>untitled.%1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project.cpp" line="92"/>
+        <location filename="../../src/egnim/editor/project/project.cpp" line="97"/>
         <source>Game Project (*.%1)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,7 +286,7 @@
 <context>
     <name>ProjectDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="66"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="97"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,22 +294,22 @@
 <context>
     <name>ProjectManager</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="62"/>
+        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="63"/>
         <source>Error Opening File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="63"/>
+        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="64"/>
         <source>Error opening &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="83"/>
+        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="84"/>
         <source>Close Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="84"/>
+        <location filename="../../src/egnim/editor/project/project_manager.cpp" line="85"/>
         <source>There is already open project. Are you sure you want to close?</source>
         <translation type="unfinished"></translation>
     </message>
