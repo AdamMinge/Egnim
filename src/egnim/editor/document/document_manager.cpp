@@ -1,15 +1,32 @@
 /* ------------------------------------ Qt ---------------------------------- */
+#include <QMessageBox>
 #include <QCoreApplication>
 /* ----------------------------------- Local -------------------------------- */
 #include "document/document_manager.h"
 #include "document/no_document_widget.h"
 /* -------------------------------------------------------------------------- */
 
+QScopedPointer<DocumentManager> DocumentManager::m_instance = QScopedPointer<DocumentManager>(nullptr);
+
+DocumentManager& DocumentManager::getInstance()
+{
+  if(m_instance.isNull())
+    m_instance.reset(new DocumentManager);
+
+  return *m_instance;
+}
+
+void DocumentManager::deleteInstance()
+{
+  m_instance.reset(nullptr);
+}
+
 DocumentManager::DocumentManager() :
   m_widget(new QWidget()),
   m_tab_bar(new QTabBar(m_widget.data())),
   m_editor_stack(new QStackedLayout()),
-  m_no_document_widget(new NoDocumentWidget())
+  m_no_document_widget(new NoDocumentWidget()),
+  m_undo_group(new QUndoGroup(this))
 {
   m_tab_bar->setExpanding(false);
   m_tab_bar->setDocumentMode(true);
@@ -73,21 +90,40 @@ DocumentEditor* DocumentManager::getCurrentEditor() const
   return current_document ? getEditor(current_document->getType()) : nullptr;
 }
 
-void DocumentManager::addDocument(Document* document)
+void DocumentManager::addDocument(std::unique_ptr<Document> document)
 {
   Q_ASSERT(document);
 
-  auto& document_ref = *document;
+  auto document_ptr = document.get();
+  m_documents.emplace_back(std::move(document));
+  m_undo_group->addStack(document_ptr->getUndoStack());
 
-  m_documents.emplace_back(document);
+  auto editor = getEditor(document_ptr->getType());
+  Q_ASSERT(editor);
+  editor->addDocument(document_ptr);
 
-  auto document_index = m_tab_bar->addTab(document_ref.getDisplayName());
-  m_tab_bar->setTabToolTip(document_index, document_ref.getFileName());
-
-  connect(std::addressof(document_ref), &Document::fileNameChanged, this,
-          [this, document = std::addressof(document_ref)] { updateDocumentTab(document); });
+  auto document_index = m_tab_bar->addTab(document_ptr->getDisplayName());
+  m_tab_bar->setTabToolTip(document_index, document_ptr->getFileName());
 
   switchToDocument(document_index);
+}
+
+bool DocumentManager::loadDocument(const QString& file_name)
+{
+  if(switchToDocument(file_name))
+    return true;
+
+  auto document = Document::load(file_name);
+  if(!document)
+  {
+    QMessageBox::critical(m_widget.get(),
+                          tr("Error Opening File"),
+                          tr("Error opening '%1'").arg(file_name));
+    return false;
+  }
+
+  addDocument(std::move(document));
+  return true;
 }
 
 void DocumentManager::removeDocument(int index)
@@ -103,9 +139,10 @@ void DocumentManager::removeDocument(int index)
 
   auto removed_document_iter = std::remove_if(
     m_documents.begin(), m_documents.end(), [&document_to_remove](auto&& document){
-    return document == document_to_remove;
-  });
+      return document.get() == document_to_remove;
+    });
 
+  m_undo_group->removeStack(document_to_remove->getUndoStack());
   m_tab_bar->removeTab(index);
 
   m_documents.erase(removed_document_iter, m_documents.end());
@@ -120,7 +157,7 @@ void DocumentManager::removeAllDocuments()
 Document* DocumentManager::getDocument(int index) const
 {
   if(index < m_documents.size() && index >= 0)
-    return m_documents.at(index);
+    return m_documents.at(index).get();
 
   return nullptr;
 }
@@ -134,7 +171,7 @@ Document* DocumentManager::getCurrentDocument() const
 int DocumentManager::findDocument(Document *document) const
 {
   auto found = std::find_if(m_documents.begin(), m_documents.end(), [document](auto& current_document){
-    return current_document == document;
+    return current_document.get() == document;
   });
 
   if(found == m_documents.end())
@@ -151,12 +188,31 @@ void DocumentManager::switchToDocument(int index)
 void DocumentManager::switchToDocument(Document* document)
 {
   auto found_iter = std::find_if(m_documents.begin(), m_documents.end(), [&document](auto&& current_document){
-    return current_document == document;
+    return current_document.get() == document;
   });
 
   Q_ASSERT(found_iter != m_documents.end());
   auto index = std::distance(m_documents.begin(), found_iter);
   switchToDocument(static_cast<int>(index));
+}
+
+bool DocumentManager::switchToDocument(const QString& file_name)
+{
+  auto found_iter = std::find_if(m_documents.begin(), m_documents.end(), [&file_name](auto&& current_document){
+    return current_document->getFileName() == file_name;
+  });
+
+  if(found_iter == m_documents.end())
+    return false;
+
+  auto index = std::distance(m_documents.begin(), found_iter);
+  switchToDocument(static_cast<int>(index));
+  return true;
+}
+
+QUndoGroup* DocumentManager::getUndoGroup() const
+{
+  return m_undo_group;
 }
 
 void DocumentManager::saveState()
@@ -171,7 +227,28 @@ void DocumentManager::restoreState()
     editor->restoreState();
 }
 
-const std::vector<Document*>& DocumentManager::getDocuments() const
+bool DocumentManager::saveDocument(Document* document)
+{
+  Q_ASSERT(document);
+
+  if(!document->save(document->getFileName()))
+  {
+    switchToDocument(document);
+    QMessageBox::critical(
+      m_widget->window(),
+      tr("Error Saving File"), "Something went wrong");
+    return false;
+  }
+
+  return true;
+}
+
+bool DocumentManager::saveDocumentAs(Document* document)
+{
+  Q_ASSERT(document);
+}
+
+const std::vector<std::unique_ptr<Document>>& DocumentManager::getDocuments() const
 {
   return m_documents;
 }
@@ -180,6 +257,9 @@ void DocumentManager::currentIndexChanged()
 {
   auto document = getCurrentDocument();
   auto editor = getCurrentEditor();
+
+  if(document)
+    m_undo_group->setActiveStack(document->getUndoStack());
 
   if(editor)
   {
@@ -206,12 +286,4 @@ void DocumentManager::documentTabMoved(int from, int to)
                 m_documents.begin() + to + 1);
 }
 
-void DocumentManager::updateDocumentTab(Document* document)
-{
-  const int index = findDocument(document);
-  if (index == -1)
-    return;
 
-  m_tab_bar->setTabText(index, document->getDisplayName());
-  m_tab_bar->setTabToolTip(index, document->getFileName());
-}

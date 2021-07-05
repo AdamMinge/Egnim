@@ -1,10 +1,10 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 /* ----------------------------------- Local -------------------------------- */
-#include "document/scene_dock.h"
+#include "project/console_dock.h"
 /* -------------------------------------------------------------------------- */
 
-SceneDock::SceneDock(QWidget* parent) :
+ConsoleDock::ConsoleDock(QWidget* parent) :
   QDockWidget(parent)
 {
   setObjectName(QLatin1String("Scene"));
@@ -12,9 +12,9 @@ SceneDock::SceneDock(QWidget* parent) :
   retranslateUi();
 }
 
-SceneDock::~SceneDock() = default;
+ConsoleDock::~ConsoleDock() = default;
 
-void SceneDock::changeEvent(QEvent* event)
+void ConsoleDock::changeEvent(QEvent* event)
 {
   QDockWidget::changeEvent(event);
 
@@ -28,8 +28,8 @@ void SceneDock::changeEvent(QEvent* event)
   }
 }
 
-void SceneDock::retranslateUi()
+void ConsoleDock::retranslateUi()
 {
-  setWindowTitle(tr("Scene"));
+  setWindowTitle(tr("Console"));
 }
 

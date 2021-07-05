@@ -1,17 +1,17 @@
-#ifndef SCENE_DOCK_H
-#define SCENE_DOCK_H
+#ifndef NODES_DOCK_H
+#define NODES_DOCK_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDockWidget>
 /* -------------------------------------------------------------------------- */
 
-class SceneDock final : public QDockWidget
+class NodesDock final : public QDockWidget
 {
 Q_OBJECT
 
 public:
-  explicit SceneDock(QWidget* parent = nullptr);
-  ~SceneDock() override;
+  explicit NodesDock(QWidget* parent = nullptr);
+  ~NodesDock() override;
 
 protected:
   void changeEvent(QEvent* event) override;
@@ -20,4 +20,4 @@ private:
   void retranslateUi();
 };
 
-#endif //SCENE_DOCK_H
+#endif //NODES_DOCK_H

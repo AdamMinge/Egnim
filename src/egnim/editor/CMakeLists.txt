@@ -18,6 +18,7 @@ set(sources
         ${source_root}/style_manager.cpp
         ${source_root}/action_manager.cpp
         ${source_root}/preferences_manager.cpp
+        ${source_root}/logging_manager.cpp
         ${source_root}/about_dialog.cpp
         ${source_root}/settings_dialog.cpp
 
@@ -27,8 +28,11 @@ set(sources
         ${source_root}/document/scene_document.cpp
         ${source_root}/document/scene_editor.cpp
         ${source_root}/document/new_document_dialog.cpp
+        ${source_root}/document/undo_dock.cpp
         ${source_root}/document/inspector_dock.cpp
-        ${source_root}/document/scene_dock.cpp
+        ${source_root}/document/nodes_dock.cpp
+        ${source_root}/document/nodes_view.cpp
+        ${source_root}/document/nodes_scene.cpp
         ${source_root}/document/no_document_widget.cpp
         ${source_root}/document/document_serializer.cpp
         ${source_root}/document/priv/document_serializer_impl.h
@@ -37,18 +41,16 @@ set(sources
         ${source_root}/document/priv/json_document_serializer_impl.cpp
 
         ${source_root}/project/project.cpp
-        ${source_root}/project/project_editor.cpp
         ${source_root}/project/no_project_widget.cpp
         ${source_root}/project/project_manager.cpp
         ${source_root}/project/game_project.cpp
-        ${source_root}/project/game_editor.cpp
         ${source_root}/project/new_project_dialog.cpp
-        ${source_root}/project/open_documents_widget.cpp
-        ${source_root}/project/open_project_dock.cpp
-        ${source_root}/project/undo_dock.cpp
+        ${source_root}/project/project_dock.cpp
+        ${source_root}/project/console_dock.cpp
         ${source_root}/project/project_serializer.cpp
         ${source_root}/project/project_list_model.cpp
         ${source_root}/project/project_list_delegate.cpp
+        ${source_root}/project/export_project_dialog.cpp
         ${source_root}/project/priv/project_serializer_impl.h
         ${source_root}/project/priv/project_serializer_impl.cpp
         ${source_root}/project/priv/json_project_serializer_impl.h
@@ -56,9 +58,11 @@ set(sources
 
         ${source_root}/commands/command.cpp
         ${source_root}/commands/group_command.cpp
-        ${source_root}/commands/add_remove_document.cpp
 
-        ${source_root}/widgets/dialog_with_toggle_view.cpp)
+        ${source_root}/models/file_system_proxy_model.cpp
+
+        ${source_root}/widgets/dialog_with_toggle_view.cpp
+        ${source_root}/widgets/file_dialog.cpp)
 
 set(includes
         ${include_root}/meta_types.h
@@ -67,6 +71,7 @@ set(includes
         ${include_root}/style_manager.h
         ${include_root}/action_manager.h
         ${include_root}/preferences_manager.h
+        ${include_root}/logging_manager.h
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
 
@@ -76,30 +81,33 @@ set(includes
         ${include_root}/document/scene_document.h
         ${include_root}/document/scene_editor.h
         ${include_root}/document/new_document_dialog.h
+        ${include_root}/document/undo_dock.h
         ${include_root}/document/inspector_dock.h
-        ${include_root}/document/scene_dock.h
+        ${include_root}/document/nodes_dock.h
+        ${include_root}/document/nodes_view.h
+        ${include_root}/document/nodes_scene.h
         ${include_root}/document/no_document_widget.h
         ${include_root}/document/document_serializer.h
 
         ${include_root}/project/project.h
-        ${include_root}/project/project_editor.h
         ${include_root}/project/no_project_widget.h
         ${include_root}/project/project_manager.h
         ${include_root}/project/game_project.h
-        ${include_root}/project/game_editor.h
         ${include_root}/project/new_project_dialog.h
-        ${include_root}/project/open_documents_widget.h
-        ${include_root}/project/open_project_dock.h
-        ${include_root}/project/undo_dock.h
+        ${include_root}/project/project_dock.h
+        ${include_root}/project/console_dock.h
         ${include_root}/project/project_serializer.h
         ${include_root}/project/project_list_model.h
         ${include_root}/project/project_list_delegate.h
+        ${include_root}/project/export_project_dialog.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
-        ${include_root}/commands/add_remove_document.h
 
-        ${include_root}/widgets/dialog_with_toggle_view.h)
+        ${include_root}/models/file_system_proxy_model.h
+
+        ${include_root}/widgets/dialog_with_toggle_view.h
+        ${include_root}/widgets/file_dialog.h)
 
 set(resources
         ${resources_root}/egnim-images.qrc
@@ -114,7 +122,9 @@ set(uis
         ${uis_root}/document/new_scene_document_dialog.ui
 
         ${uis_root}/project/no_project_widget.ui
-        ${uis_root}/project/new_game_project_dialog.ui)
+        ${uis_root}/project/new_game_project_dialog.ui
+        ${uis_root}/project/export_project_dialog.ui
+        ${uis_root}/project/project_dock.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

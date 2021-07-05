@@ -21,6 +21,9 @@ public:
 
   [[nodiscard]] virtual std::unique_ptr<Project> create() = 0;
 
+public:
+  static std::unique_ptr<Project> createProject(Project::Type type);
+
 protected:
   explicit NewProjectDialog(QWidget* parent = nullptr);
 
@@ -51,7 +54,5 @@ private:
 private:
   QScopedPointer<Ui::NewGameProjectDialog> m_ui;
 };
-
-std::unique_ptr<Project> createProject(Project::Type type);
 
 #endif //NEW_PROJECT_DIALOG_H

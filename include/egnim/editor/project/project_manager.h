@@ -2,22 +2,13 @@
 #define PROJECT_MANAGER_H
 
 /* ------------------------------------ Qt ---------------------------------- */
-#include <QStackedLayout>
 #include <QScopedPointer>
-#include <QUndoGroup>
 #include <QObject>
-#include <QTabBar>
-#include <QHash>
 /* --------------------------------- Standard ------------------------------- */
-#include <unordered_map>
 #include <memory>
-#include <vector>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project.h"
-#include "project/project_editor.h"
 /* -------------------------------------------------------------------------- */
-
-class NoProjectWidget;
 
 class ProjectManager : public QObject
 {
@@ -28,62 +19,25 @@ public:
   static void deleteInstance();
 
 public:
-  explicit ProjectManager();
   ~ProjectManager() override;
 
-  [[nodiscard]] QWidget *getWidget() const;
+  void setProject(std::unique_ptr<Project> project);
+  [[nodiscard]] Project *getProject() const;
 
-  void addEditor(Project::Type project_type, std::unique_ptr<ProjectEditor> editor);
-  void removeEditor(Project::Type project_type);
-  void removeAllEditors();
-
-  [[nodiscard]] ProjectEditor *getEditor(Project::Type project_type) const;
-  [[nodiscard]] ProjectEditor *getCurrentEditor() const;
-
-  void addProject(std::unique_ptr<Project> project);
+  bool newProject(Project::Type type);
   bool loadProject(const QString& file_name);
-  void removeProject(int index);
-  void removeAllProjects();
-
-  [[nodiscard]] Project *getProject(int index) const;
-  [[nodiscard]] Project *getCurrentProject() const;
-
-  [[nodiscard]] int findProject(Project *project) const;
-
-  void switchToProject(int index);
-  void switchToProject(Project *project);
-  bool switchToProject(const QString& file_name);
-
-  [[nodiscard]] QUndoGroup* getUndoGroup() const;
-
-  void saveState();
-  void restoreState();
-
-  bool saveProject(Project *project);
-
-  [[nodiscard]] const std::vector<std::unique_ptr<Project>> &getProjects() const;
+  bool closeProject();
 
 Q_SIGNALS:
-  void currentProjectChanged(Project *project);
-  void projectCloseRequested(int index);
+  void currentProjectChanged(Project* project);
 
-private Q_SLOTS:
-  void currentIndexChanged();
-  void projectTabMoved(int from, int to);
-  void updateProjectTab(Project *project);
+protected:
+  explicit ProjectManager();
 
 private:
   static QScopedPointer<ProjectManager> m_instance;
 
-  std::vector<std::unique_ptr<Project>> m_projects;
-  std::unordered_map<Project::Type, std::unique_ptr<ProjectEditor>> m_editor_for_project_type;
-
-  QScopedPointer<QWidget> m_widget;
-  QScopedPointer<NoProjectWidget> m_no_project_widget;
-  QTabBar *m_tab_bar;
-  QStackedLayout *m_editor_stack;
-
-  QUndoGroup* m_undo_group;
+  std::unique_ptr<Project> m_projects;
 };
 
 #endif //PROJECT_MANAGER_H

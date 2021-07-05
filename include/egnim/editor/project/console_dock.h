@@ -1,17 +1,17 @@
-#ifndef OPEN_PROJECT_DOCK_H
-#define OPEN_PROJECT_DOCK_H
+#ifndef CONSOLE_DOCK_H
+#define CONSOLE_DOCK_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDockWidget>
 /* -------------------------------------------------------------------------- */
 
-class OpenProjectDock final : public QDockWidget
+class ConsoleDock final : public QDockWidget
 {
-  Q_OBJECT
+Q_OBJECT
 
 public:
-  explicit OpenProjectDock(QWidget* parent = nullptr);
-  ~OpenProjectDock() override;
+  explicit ConsoleDock(QWidget* parent = nullptr);
+  ~ConsoleDock() override;
 
 protected:
   void changeEvent(QEvent* event) override;
@@ -20,4 +20,4 @@ private:
   void retranslateUi();
 };
 
-#endif //OPEN_PROJECT_DOCK_H
+#endif //CONSOLE_DOCK_H

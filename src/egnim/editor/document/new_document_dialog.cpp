@@ -1,30 +1,36 @@
-/* ------------------------------------ Qt ---------------------------------- */
-#include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
 #include "document/new_document_dialog.h"
 #include "document/scene_document.h"
-#include "preferences_manager.h"
+#include "widgets/file_dialog.h"
+#include "project/project_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_new_scene_document_dialog.h"
 /* -------------------------------------------------------------------------- */
 
-/* -------------------------------- Preferences ----------------------------- */
-
-struct NewDocumentDialog::Preferences
-{
-  Preference<QString> open_document_start_location = Preference<QString>("document/open_document_start_location", QDir::homePath());
-};
-
 /* ----------------------------- NewDocumentDialog -------------------------- */
 
 NewDocumentDialog::NewDocumentDialog(QWidget* parent) :
-  QDialog(parent),
-  m_preferences(new Preferences)
+  QDialog(parent)
 {
 
 }
 
 NewDocumentDialog::~NewDocumentDialog() = default;
+
+std::unique_ptr<Document> NewDocumentDialog::createDocument(Document::Type type)
+{
+  QScopedPointer<NewDocumentDialog> new_document_dialog(nullptr);
+  switch(type)
+  {
+    case Document::Type::Scene:
+      new_document_dialog.reset(new NewSceneDocumentDialog);
+  }
+
+  if(!new_document_dialog)
+    return nullptr;
+
+  return new_document_dialog->create();
+}
 
 /* -------------------------- NewSceneDocumentDialog ------------------------ */
 
@@ -41,6 +47,11 @@ NewSceneDocumentDialog::NewSceneDocumentDialog(QWidget* parent) :
   connect(m_ui->m_document_name_edit, &QLineEdit::textChanged, this, &NewSceneDocumentDialog::validate);
   connect(m_ui->m_document_path_edit, &QLineEdit::textChanged, this, &NewSceneDocumentDialog::validate);
 
+  auto current_project = ProjectManager::getInstance().getProject();
+  Q_ASSERT(current_project);
+  m_ui->m_document_path_edit->setText(current_project->getDirectory().absolutePath());
+
+  retranslateUi();
   validate();
 }
 
@@ -84,15 +95,17 @@ void NewSceneDocumentDialog::onBrowsePressed()
     QFileDialog::Option::DontUseNativeDialog |
     QFileDialog::Option::ShowDirsOnly;
 
-  auto dir_path = QFileDialog::getExistingDirectory(this,
-                                                    tr("New Document"),
-                                                    m_preferences->open_document_start_location.get(),
-                                                    file_dialog_options);
+  auto current_project = ProjectManager::getInstance().getProject();
+  Q_ASSERT(current_project);
+
+  auto dir_path = FileDialog::getExistingDirectory(this,
+                                                   tr("New Document"),
+                                                   m_ui->m_document_path_edit->text(),
+                                                   file_dialog_options,
+                                                   current_project->getDirectory().absolutePath());
 
   if(dir_path.isEmpty())
     return;
-
-  m_preferences->open_document_start_location = dir_path;
 
   m_ui->m_document_path_edit->setText(dir_path);
 }
@@ -115,21 +128,4 @@ void NewSceneDocumentDialog::validate()
 void NewSceneDocumentDialog::retranslateUi()
 {
   m_ui->retranslateUi(this);
-}
-
-/* ------------------------------ createDocument ---------------------------- */
-
-std::unique_ptr<Document> createDocument(Document::Type type)
-{
-  QScopedPointer<NewDocumentDialog> new_document_dialog(nullptr);
-  switch(type)
-  {
-    case Document::Type::Scene:
-      new_document_dialog.reset(new NewSceneDocumentDialog);
-  }
-
-  if(!new_document_dialog)
-    return nullptr;
-
-  return new_document_dialog->create();
 }

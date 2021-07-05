@@ -13,19 +13,16 @@ class NewDocumentDialog : public QDialog
 {
   Q_OBJECT
 
-private:
-  struct Preferences;
-
 public:
   ~NewDocumentDialog() override;
 
   [[nodiscard]] virtual std::unique_ptr<Document> create() = 0;
 
-protected:
-  explicit NewDocumentDialog(QWidget* parent = nullptr);
+public:
+  static std::unique_ptr<Document> createDocument(Document::Type type);
 
 protected:
-  QScopedPointer<Preferences> m_preferences;
+  explicit NewDocumentDialog(QWidget* parent = nullptr);
 };
 
 class NewSceneDocumentDialog : public NewDocumentDialog
@@ -51,7 +48,5 @@ private:
 private:
   QScopedPointer<Ui::NewSceneDocumentDialog> m_ui;
 };
-
-std::unique_ptr<Document> createDocument(Document::Type type);
 
 #endif //NEW_DOCUMENT_DIALOG_H
