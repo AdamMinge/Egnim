@@ -35,7 +35,7 @@ protected:
 
 private Q_SLOTS:
   void searchProjectFiles(const QString& search);
-  void fileDoubleClicked(const QModelIndex& index);
+  void onDoubleClicked(const QModelIndex& index);
 
 private:
   void retranslateUi();
@@ -44,6 +44,7 @@ private:
   QScopedPointer<Ui::ProjectDock> m_ui;
   QScopedPointer<QFileSystemModel> m_files_model;
   QScopedPointer<FileSystemProxyModel> m_proxy_model;
+
   Project* m_current_project;
 };
 

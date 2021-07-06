@@ -2,7 +2,10 @@
 #define CONSOLE_DOCK_H
 
 /* ------------------------------------ Qt ---------------------------------- */
+#include <QLineEdit>
 #include <QDockWidget>
+#include <QPushButton>
+#include <QPlainTextEdit>
 /* -------------------------------------------------------------------------- */
 
 class ConsoleDock final : public QDockWidget
@@ -18,6 +21,11 @@ protected:
 
 private:
   void retranslateUi();
+
+private:
+  QPlainTextEdit* m_plain_text_edit;
+  QLineEdit* m_line_edit;
+  QPushButton* m_clear_button;
 };
 
 #endif //CONSOLE_DOCK_H

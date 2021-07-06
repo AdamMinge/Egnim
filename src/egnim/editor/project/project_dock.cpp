@@ -1,10 +1,12 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
+#include <QMenu>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project_dock.h"
 #include "project/project_manager.h"
 #include "document/document_manager.h"
 #include "models/file_system_proxy_model.h"
+#include "action_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_project_dock.h"
 /* -------------------------------------------------------------------------- */
@@ -21,6 +23,7 @@ ProjectDock::ProjectDock(QWidget* parent) :
 
   m_proxy_model->setSourceModel(m_files_model.get());
   m_ui->m_project_files_tree_view->setModel(m_proxy_model.get());
+  m_ui->m_project_files_tree_view->setContextMenuPolicy(Qt::CustomContextMenu);
 
   m_ui->m_project_files_tree_view->setColumnHidden(Column_Size, true);
   m_ui->m_project_files_tree_view->setColumnHidden(Column_Type, true);
@@ -30,7 +33,7 @@ ProjectDock::ProjectDock(QWidget* parent) :
 
   connect(m_ui->m_search_project_files_edit, &QLineEdit::textChanged, this, &ProjectDock::searchProjectFiles);
 
-  connect(m_ui->m_project_files_tree_view, &QTreeView::doubleClicked, this, &ProjectDock::fileDoubleClicked);
+  connect(m_ui->m_project_files_tree_view, &QTreeView::doubleClicked, this, &ProjectDock::onDoubleClicked);
 
   retranslateUi();
 }
@@ -75,7 +78,7 @@ void ProjectDock::searchProjectFiles(const QString& search)
   m_files_model->setNameFilters(QStringList() << search_wildcard);
 }
 
-void ProjectDock::fileDoubleClicked(const QModelIndex& index)
+void ProjectDock::onDoubleClicked(const QModelIndex& index)
 {
   auto source_index = m_proxy_model->mapToSource(index);
   auto file_path = source_index.data(QFileSystemModel::FilePathRole).toString();

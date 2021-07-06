@@ -47,8 +47,21 @@
 <context>
     <name>ConsoleDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="33"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="38"/>
+        <source>Clear Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="84"/>
         <source>Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleOutputWidget</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="26"/>
+        <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -286,7 +299,7 @@
 <context>
     <name>ProjectDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="97"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="100"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
