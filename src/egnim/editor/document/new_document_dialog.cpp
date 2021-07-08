@@ -17,13 +17,13 @@ NewDocumentDialog::NewDocumentDialog(QWidget* parent) :
 
 NewDocumentDialog::~NewDocumentDialog() = default;
 
-std::unique_ptr<Document> NewDocumentDialog::createDocument(Document::Type type)
+std::unique_ptr<Document> NewDocumentDialog::createDocument(Document::Type type, const QString& dir_path)
 {
   QScopedPointer<NewDocumentDialog> new_document_dialog(nullptr);
   switch(type)
   {
     case Document::Type::Scene:
-      new_document_dialog.reset(new NewSceneDocumentDialog);
+      new_document_dialog.reset(new NewSceneDocumentDialog(dir_path));
   }
 
   if(!new_document_dialog)
@@ -34,7 +34,7 @@ std::unique_ptr<Document> NewDocumentDialog::createDocument(Document::Type type)
 
 /* -------------------------- NewSceneDocumentDialog ------------------------ */
 
-NewSceneDocumentDialog::NewSceneDocumentDialog(QWidget* parent) :
+NewSceneDocumentDialog::NewSceneDocumentDialog(const QString& dir_path, QWidget* parent) :
   NewDocumentDialog(parent),
   m_ui(new Ui::NewSceneDocumentDialog())
 {
@@ -49,7 +49,9 @@ NewSceneDocumentDialog::NewSceneDocumentDialog(QWidget* parent) :
 
   auto current_project = ProjectManager::getInstance().getProject();
   Q_ASSERT(current_project);
-  m_ui->m_document_path_edit->setText(current_project->getDirectory().absolutePath());
+  auto path = dir_path.isEmpty() ? current_project->getDirectory().absolutePath() : dir_path;
+
+  m_ui->m_document_path_edit->setText(path);
 
   retranslateUi();
   validate();

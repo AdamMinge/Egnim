@@ -54,11 +54,11 @@ MainWindow::MainWindow(QWidget *parent) :
   setCentralWidget(m_stacked_widget);
   m_no_project_widget = new NoProjectWidget(this);
   m_project_window = new QMainWindow(this);
-  m_open_project_dock = new ProjectDock(m_project_window);
+  m_project_dock = new ProjectDock(m_project_window);
   m_console_dock = new ConsoleDock(m_project_window);
 
   m_project_window->setCentralWidget(getDocumentManager().getWidget());
-  m_project_window->addDockWidget(Qt::LeftDockWidgetArea, m_open_project_dock);
+  m_project_window->addDockWidget(Qt::LeftDockWidgetArea, m_project_dock);
   m_project_window->addDockWidget(Qt::BottomDockWidgetArea, m_console_dock);
 
   m_stacked_widget->addWidget(m_project_window);
@@ -154,7 +154,7 @@ void MainWindow::projectChanged(Project* project)
   m_stacked_widget->setCurrentWidget(project ? static_cast<QWidget*>(m_project_window) : m_no_project_widget);
   getDocumentManager().removeAllDocuments();
 
-  m_open_project_dock->setCurrentProject(project);
+  m_project_dock->setCurrentProject(project);
 
   updateWindowTitle();
   updateActions();
@@ -233,7 +233,7 @@ void MainWindow::updateViewsAndToolbarsMenu() // NOLINT(readability-make-member-
   auto view_and_toolbars_menu = getActionManager().findMenu("views_and_toolbars");
   view_and_toolbars_menu->clear();
 
-  view_and_toolbars_menu->addAction(m_open_project_dock->toggleViewAction());
+  view_and_toolbars_menu->addAction(m_project_dock->toggleViewAction());
   view_and_toolbars_menu->addAction(m_console_dock->toggleViewAction());
   view_and_toolbars_menu->addSeparator();
 
@@ -330,14 +330,9 @@ void MainWindow::exportProject()
   export_project_dialog->show();
 }
 
-void MainWindow::newDocument(Document::Type type) // NOLINT(readability-make-member-function-const)
+void MainWindow::newDocument(Document::Type type)
 {
-  auto new_document = NewDocumentDialog::createDocument(type);
-  if(new_document)
-  {
-    new_document->save(new_document->getFileName());
-    getDocumentManager().addDocument(std::move(new_document));
-  }
+  m_project_dock->newDocument(type);
 }
 
 void MainWindow::closeDocument(int index) // NOLINT(readability-make-member-function-const)

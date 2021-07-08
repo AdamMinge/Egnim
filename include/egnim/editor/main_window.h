@@ -93,7 +93,7 @@ private:
   NoProjectWidget* m_no_project_widget;
   QMainWindow* m_project_window;
 
-  ProjectDock* m_open_project_dock;
+  ProjectDock* m_project_dock;
   ConsoleDock* m_console_dock;
 };
 

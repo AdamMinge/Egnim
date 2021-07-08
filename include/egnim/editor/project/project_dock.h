@@ -4,6 +4,8 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDockWidget>
 #include <QFileSystemModel>
+/* ----------------------------------- Local -------------------------------- */
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace Ui { class ProjectDock; }
@@ -30,12 +32,19 @@ public:
   void setCurrentProject(Project* project);
   [[nodiscard]] Project* getCurrentProject() const;
 
+  void newDocument(Document::Type type);
+  void newDirectory();
+
 protected:
   void changeEvent(QEvent* event) override;
+  void onContextMenu(const QPoint& pos);
 
 private Q_SLOTS:
   void searchProjectFiles(const QString& search);
-  void onDoubleClicked(const QModelIndex& index);
+  void openProjectFile(const QModelIndex& index);
+
+  void open(const QModelIndex& index);
+  void remove(const QModelIndex& index);
 
 private:
   void retranslateUi();

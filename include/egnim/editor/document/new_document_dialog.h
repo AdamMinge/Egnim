@@ -19,7 +19,7 @@ public:
   [[nodiscard]] virtual std::unique_ptr<Document> create() = 0;
 
 public:
-  static std::unique_ptr<Document> createDocument(Document::Type type);
+  static std::unique_ptr<Document> createDocument(Document::Type type, const QString& dir_path = QString());
 
 protected:
   explicit NewDocumentDialog(QWidget* parent = nullptr);
@@ -30,7 +30,7 @@ class NewSceneDocumentDialog : public NewDocumentDialog
   Q_OBJECT
 
 public:
-  explicit NewSceneDocumentDialog(QWidget* parent = nullptr);
+  explicit NewSceneDocumentDialog(const QString& dir_path = QString(), QWidget* parent = nullptr);
   ~NewSceneDocumentDialog() override;
 
   [[nodiscard]] std::unique_ptr<Document> create() override;

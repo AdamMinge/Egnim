@@ -21,6 +21,7 @@ set(sources
         ${source_root}/logging_manager.cpp
         ${source_root}/about_dialog.cpp
         ${source_root}/settings_dialog.cpp
+        ${source_root}/utils.cpp
 
         ${source_root}/document/document.cpp
         ${source_root}/document/document_manager.cpp
@@ -62,7 +63,8 @@ set(sources
         ${source_root}/models/file_system_proxy_model.cpp
 
         ${source_root}/widgets/dialog_with_toggle_view.cpp
-        ${source_root}/widgets/file_dialog.cpp)
+        ${source_root}/widgets/file_dialog.cpp
+        ${source_root}/widgets/deselectable_tree_view.cpp)
 
 set(includes
         ${include_root}/meta_types.h
@@ -74,6 +76,7 @@ set(includes
         ${include_root}/logging_manager.h
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
+        ${include_root}/utils.h
 
         ${include_root}/document/document.h
         ${include_root}/document/document_manager.h
@@ -107,7 +110,8 @@ set(includes
         ${include_root}/models/file_system_proxy_model.h
 
         ${include_root}/widgets/dialog_with_toggle_view.h
-        ${include_root}/widgets/file_dialog.h)
+        ${include_root}/widgets/file_dialog.h
+        ${include_root}/widgets/deselectable_tree_view.h)
 
 set(resources
         ${resources_root}/egnim-images.qrc
