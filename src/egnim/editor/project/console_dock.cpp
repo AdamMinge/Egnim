@@ -9,15 +9,6 @@
 
 /* ---------------------------- ConsoleOutputWidget ------------------------- */
 
-class ConsoleOutputWidget : public QPlainTextEdit
-{
-public:
-  using QPlainTextEdit::QPlainTextEdit;
-
-protected:
-  void contextMenuEvent(QContextMenuEvent *event) override;
-};
-
 void ConsoleOutputWidget::contextMenuEvent(QContextMenuEvent *event)
 {
   std::unique_ptr<QMenu> menu { createStandardContextMenu(event->pos()) };

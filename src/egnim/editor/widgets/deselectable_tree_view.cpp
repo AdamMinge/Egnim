@@ -14,16 +14,14 @@ DeselectableTreeView::~DeselectableTreeView() = default;
 
 void DeselectableTreeView::mousePressEvent(QMouseEvent *event)
 {
-  if(event->buttons() == Qt::LeftButton)
-  {
-    auto item = indexAt(event->pos());
-    auto selected = selectionModel()->isSelected(indexAt(event->pos()));
-    QTreeView::mousePressEvent(event);
+  auto item = indexAt(event->pos());
+  auto selected = selectionModel()->isSelected(indexAt(event->pos()));
 
-    if ((item.row() == -1 && item.column() == -1) || selected)
-    {
-      clearSelection();
-      selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::Select);
-    }
+  if ((item.row() == -1 && item.column() == -1) || selected)
+  {
+    clearSelection();
+    selectionModel()->setCurrentIndex(QModelIndex(), QItemSelectionModel::Select);
   }
+
+  QTreeView::mousePressEvent(event);
 }

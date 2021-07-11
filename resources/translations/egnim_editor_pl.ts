@@ -47,12 +47,12 @@
 <context>
     <name>ConsoleDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="39"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="30"/>
         <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="85"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="76"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,7 +60,7 @@
 <context>
     <name>ConsoleOutputWidget</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="27"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="18"/>
         <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -260,6 +260,14 @@
     </message>
 </context>
 <context>
+    <name>NewDirectoryDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/new_directory_dialog.cpp" line="73"/>
+        <source>New Document</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>NewGameProjectDialog</name>
     <message>
         <location filename="../../src/egnim/editor/project/new_project_dialog.cpp" line="107"/>
@@ -305,16 +313,26 @@
     </message>
     <message>
         <location filename="../../src/egnim/editor/project/project_dock.cpp" line="118"/>
+        <source>&amp;Refactor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="119"/>
         <source>&amp;Open In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="122"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="123"/>
         <source>&amp;Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="134"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="132"/>
+        <source>&amp;Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="137"/>
         <source>&amp;Files</source>
         <translation type="unfinished"></translation>
     </message>
@@ -324,12 +342,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="146"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="134"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="195"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="210"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -354,6 +372,22 @@
     <message>
         <location filename="../../src/egnim/editor/project/project_manager.cpp" line="85"/>
         <source>There is already open project. Are you sure you want to close?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RenameDirectoryDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/rename_directory_dialog.cpp" line="76"/>
+        <source>Rename directory &apos;%1&apos; and its usages to:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RenameFileDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/rename_file_dialog.cpp" line="77"/>
+        <source>Rename file &apos;%1&apos; and its usages to:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

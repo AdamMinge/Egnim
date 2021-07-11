@@ -6,10 +6,14 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project_dock.h"
 #include "project/project_manager.h"
+#include "project/new_directory_dialog.h"
+#include "project/rename_file_dialog.h"
+#include "project/rename_directory_dialog.h"
 #include "document/document_manager.h"
 #include "document/new_document_dialog.h"
 #include "models/file_system_proxy_model.h"
 #include "action_manager.h"
+#include "utils.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_project_dock.h"
 /* -------------------------------------------------------------------------- */
@@ -34,12 +38,16 @@ ProjectDock::ProjectDock(QWidget* parent) :
   m_ui->m_project_files_tree_view->setDragEnabled(true);
   m_ui->m_project_files_tree_view->setAcceptDrops(true);
   m_ui->m_project_files_tree_view->setDropIndicatorShown(true);
-  m_ui->m_project_files_tree_view->setDragDropMode(QAbstractItemView::DragDrop);
+  m_ui->m_project_files_tree_view->setDragDropMode(QAbstractItemView::InternalMove);
   m_ui->m_project_files_tree_view->setEditTriggers(QAbstractItemView::NoEditTriggers);
   m_ui->m_project_files_tree_view->setContextMenuPolicy(Qt::CustomContextMenu);
 
+  m_proxy_model->setRecursiveFilteringEnabled(true);
+  m_proxy_model->setFilterRole(QFileSystemModel::FileNameRole);
+
   m_files_model->setNameFilterDisables(false);
   m_files_model->setReadOnly(false);
+  m_files_model->setNameFilters(utils::projectSupportedFormats());
 
   connect(m_ui->m_search_project_files_edit, &QLineEdit::textChanged, this, &ProjectDock::searchProjectFiles);
 
@@ -71,20 +79,7 @@ Project* ProjectDock::getCurrentProject() const
 
 void ProjectDock::newDocument(Document::Type type)
 {
-  auto selected_indexes = m_ui->m_project_files_tree_view->selectionModel()->selectedRows();
-  auto dir_path = m_current_project->getDirectory().absolutePath();
-
-  if(selected_indexes.size() == 1)
-  {
-    auto index = selected_indexes.front();
-    Q_ASSERT(index.isValid());
-
-    const auto file_path = index.data(QFileSystemModel::FilePathRole).toString();
-    const auto directory_index = QFileInfo(file_path).isFile() ? index.parent() : index;
-    dir_path = directory_index.data(QFileSystemModel::FilePathRole).toString();
-  }
-
-  auto new_document = NewDocumentDialog::createDocument(type, dir_path);
+  auto new_document = NewDocumentDialog::createDocument(type, getCurrentDirectory());
   if(new_document)
   {
     new_document->save(new_document->getFileName());
@@ -94,7 +89,8 @@ void ProjectDock::newDocument(Document::Type type)
 
 void ProjectDock::newDirectory()
 {
-
+  NewDirectoryDialog new_directory_dialog(getCurrentDirectory());
+  new_directory_dialog.create();
 }
 
 void ProjectDock::changeEvent(QEvent* event)
@@ -113,52 +109,49 @@ void ProjectDock::changeEvent(QEvent* event)
 
 void ProjectDock::onContextMenu(const QPoint& pos)
 {
+  const auto index = m_ui->m_project_files_tree_view->indexAt(pos);
+  const auto file_path = index.data(QFileSystemModel::FilePathRole).toString();
+  const auto directory_index = QFileInfo(file_path).isFile() ? index.parent() : index;
+
   QMenu menu;
   QMenu new_menu(tr("&New"));
+  QMenu refactor_menu(tr("&Refactor"));
   QMenu open_in_menu(tr("&Open In"));
 
   new_menu.addAction(ActionManager::getInstance().findAction("new_scene_document"));
   new_menu.addSeparator();
-  new_menu.addAction(tr("&Directory"), [this](){
-    newDirectory();
-  });
+  new_menu.addAction(tr("&Directory"), [this](){ newDirectory(); });
 
-  menu.addMenu(&new_menu);
-
-  auto index = m_ui->m_project_files_tree_view->indexAt(pos);
   if(index.isValid())
   {
-    const auto file_path = index.data(QFileSystemModel::FilePathRole).toString();
-    const auto directory_index = QFileInfo(file_path).isFile() ? index.parent() : index;
+    auto source_root_index = m_files_model->setRootPath(m_current_project->getDirectory().absolutePath());
+    auto root_index = m_proxy_model->mapFromSource(source_root_index);
 
-    open_in_menu.addAction(tr("&Files"), [this, directory_index](){
-      open(directory_index);
-    });
-
-    if(QFileInfo(file_path).isFile())
+    if(index != root_index)
     {
-      open_in_menu.addAction(tr("&System Editor"), [this, index](){
-        open(index);
-      });
+      refactor_menu.addAction(tr("&Rename"), [this, index](){ rename(index); });
+      refactor_menu.addSeparator();
+      refactor_menu.addAction(tr("&Delete"), [this, index](){ remove(index); });
     }
 
-    menu.addSeparator();
-    menu.addAction(tr("&Delete"), [this, index](){
-      remove(index);
-    });
+    open_in_menu.addAction(tr("&Files"), [this, directory_index](){ open(directory_index); });
 
-    menu.addSeparator();
-    menu.addMenu(&open_in_menu);
+    if(QFileInfo(file_path).isFile())
+      open_in_menu.addAction(tr("&System Editor"), [this, index](){ open(index); });
   }
 
-  if(!menu.isEmpty())
-    menu.exec(m_ui->m_project_files_tree_view->mapToGlobal(pos));
+  if(!new_menu.isEmpty())       menu.addMenu(&new_menu);
+  menu.addSeparator();
+  if(!refactor_menu.isEmpty())  menu.addMenu(&refactor_menu);
+  menu.addSeparator();
+  if(!open_in_menu.isEmpty())   menu.addMenu(&open_in_menu);
+
+  menu.exec(m_ui->m_project_files_tree_view->mapToGlobal(pos));
 }
 
 void ProjectDock::searchProjectFiles(const QString& search)
 {
-  auto search_wildcard = QString("*%1*").arg(search);
-  m_files_model->setNameFilters(QStringList() << search_wildcard);
+  m_proxy_model->setFilterWildcard(search);
 }
 
 void ProjectDock::openProjectFile(const QModelIndex& index)
@@ -185,7 +178,29 @@ void ProjectDock::open(const QModelIndex& index)
 
 void ProjectDock::remove(const QModelIndex& index)
 {
+  const auto path = index.data(QFileSystemModel::FilePathRole).toString();
 
+  if(QFileInfo(path).isFile())
+    QFile(path).remove();
+  else
+    QDir(path).removeRecursively();
+}
+
+void ProjectDock::rename(const QModelIndex& index)
+{
+  Q_ASSERT(index.isValid());
+  const auto path = index.data(QFileSystemModel::FilePathRole).toString();
+
+  if(QFileInfo(path).isFile())
+  {
+    RenameFileDialog rename_file_dialog(path);
+    rename_file_dialog.rename();
+  }
+  else
+  {
+    RenameDirectoryDialog rename_directory_dialog(path);
+    rename_directory_dialog.rename();
+  }
 }
 
 void ProjectDock::retranslateUi()
@@ -193,5 +208,23 @@ void ProjectDock::retranslateUi()
   m_ui->retranslateUi(this);
 
   setWindowTitle(tr("Project"));
+}
+
+QString ProjectDock::getCurrentDirectory() const
+{
+  auto selected_indexes = m_ui->m_project_files_tree_view->selectionModel()->selectedRows();
+  auto dir_path = m_current_project->getDirectory().absolutePath();
+
+  if(selected_indexes.size() == 1)
+  {
+    auto index = selected_indexes.front();
+    Q_ASSERT(index.isValid());
+
+    const auto file_path = index.data(QFileSystemModel::FilePathRole).toString();
+    const auto directory_index = QFileInfo(file_path).isFile() ? index.parent() : index;
+    dir_path = directory_index.data(QFileSystemModel::FilePathRole).toString();
+  }
+
+  return dir_path;
 }
 

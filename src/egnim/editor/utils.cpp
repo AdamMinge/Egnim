@@ -1,8 +1,10 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QGuiApplication>
+#include <QImageReader>
 #include <QScreen>
 /* ----------------------------------- Local -------------------------------- */
-#include <utils.h>
+#include "utils.h"
+#include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 namespace utils {
@@ -67,6 +69,24 @@ QRectF dpiScaled(const QRectF& value)
                 dpiScaled(value.y()),
                 dpiScaled(value.width()),
                 dpiScaled(value.height()));
+}
+
+QStringList projectSupportedFormats()
+{
+  auto supported_formats = QStringList();
+
+  auto documents_extensions = Document::getDocumentExtensions();
+  std::transform(documents_extensions.begin(), documents_extensions.end(), documents_extensions.begin(),
+                 [](auto& extension){ return QString("*.%1").arg(extension); });
+
+  auto image_extensions = QStringList();
+  for(auto& extension : QImageReader::supportedImageFormats())
+    image_extensions.append(QString("*.%1").arg(QString::fromLocal8Bit(extension)));
+
+  supported_formats << documents_extensions
+                    << image_extensions;
+
+  return supported_formats;
 }
 
 } // namespace utils

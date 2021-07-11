@@ -8,9 +8,20 @@
 #include <QPlainTextEdit>
 /* -------------------------------------------------------------------------- */
 
+class ConsoleOutputWidget : public QPlainTextEdit
+{
+  Q_OBJECT
+
+public:
+  using QPlainTextEdit::QPlainTextEdit;
+
+protected:
+  void contextMenuEvent(QContextMenuEvent *event) override;
+};
+
 class ConsoleDock final : public QDockWidget
 {
-Q_OBJECT
+  Q_OBJECT
 
 public:
   explicit ConsoleDock(QWidget* parent = nullptr);

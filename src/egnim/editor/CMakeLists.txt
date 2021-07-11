@@ -46,6 +46,9 @@ set(sources
         ${source_root}/project/project_manager.cpp
         ${source_root}/project/game_project.cpp
         ${source_root}/project/new_project_dialog.cpp
+        ${source_root}/project/new_directory_dialog.cpp
+        ${source_root}/project/rename_file_dialog.cpp
+        ${source_root}/project/rename_directory_dialog.cpp
         ${source_root}/project/project_dock.cpp
         ${source_root}/project/console_dock.cpp
         ${source_root}/project/project_serializer.cpp
@@ -97,6 +100,9 @@ set(includes
         ${include_root}/project/project_manager.h
         ${include_root}/project/game_project.h
         ${include_root}/project/new_project_dialog.h
+        ${include_root}/project/new_directory_dialog.h
+        ${include_root}/project/rename_file_dialog.h
+        ${include_root}/project/rename_directory_dialog.h
         ${include_root}/project/project_dock.h
         ${include_root}/project/console_dock.h
         ${include_root}/project/project_serializer.h
@@ -127,6 +133,9 @@ set(uis
 
         ${uis_root}/project/no_project_widget.ui
         ${uis_root}/project/new_game_project_dialog.ui
+        ${uis_root}/project/new_directory_dialog.ui
+        ${uis_root}/project/rename_directory_dialog.ui
+        ${uis_root}/project/rename_file_dialog.ui
         ${uis_root}/project/export_project_dialog.ui
         ${uis_root}/project/project_dock.ui)
 # -------------------------------------------------------------------------------------------------- #

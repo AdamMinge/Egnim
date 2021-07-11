@@ -20,6 +20,8 @@ namespace utils
   QPoint dpiScaled(const QPoint& value);
   QRectF dpiScaled(const QRectF& value);
 
+  QStringList projectSupportedFormats();
+
 } // namespace utils
 
 #endif //UTILS_H

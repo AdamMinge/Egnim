@@ -45,9 +45,12 @@ private Q_SLOTS:
 
   void open(const QModelIndex& index);
   void remove(const QModelIndex& index);
+  void rename(const QModelIndex& index);
 
 private:
   void retranslateUi();
+
+  [[nodiscard]] QString getCurrentDirectory() const;
 
 private:
   QScopedPointer<Ui::ProjectDock> m_ui;

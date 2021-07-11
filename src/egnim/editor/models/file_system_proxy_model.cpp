@@ -33,16 +33,17 @@ bool FileSystemProxyModel::dropMimeData(const QMimeData* data, Qt::DropAction ac
 
 bool FileSystemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
+  if(!QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent))
+    return false;
+
   auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel());
   if(source_model)
   {
     auto root_path = source_model->rootPath();
-    auto root_index = source_model->index(root_path).parent();
-    if(root_index == source_parent)
-    {
-      auto index = source_model->index(source_row, 0, source_parent);
-      return index.data(QFileSystemModel::FilePathRole) == root_path;
-    }
+    auto source_index = source_model->index(source_row, 0, source_parent);
+    auto source_path =  source_index.data(QFileSystemModel::FilePathRole).toString();
+
+    return root_path.size() < source_path.size() ? source_path.startsWith(root_path) : root_path.startsWith(source_path);
   }
 
   return true;
