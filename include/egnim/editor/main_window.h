@@ -58,7 +58,7 @@ private Q_SLOTS:
   void newProject(Project::Type type);
   void openProject();
   void clearRecent();
-  void closeProject();
+  bool closeProject();
   void openSettings();
   void exportProject();
 

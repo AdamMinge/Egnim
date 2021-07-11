@@ -1,5 +1,5 @@
 /* ------------------------------------ Qt ---------------------------------- */
-#include <QCoreApplication>
+#include <QApplication>
 #include <QMessageBox>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project_manager.h"
@@ -59,7 +59,7 @@ bool ProjectManager::loadProject(const QString& file_name)
   auto project = Project::load(file_name);
   if(!project)
   {
-    QMessageBox::critical(nullptr,
+    QMessageBox::critical(QApplication::activeWindow(),
                           tr("Error Opening File"),
                           tr("Error opening '%1'").arg(file_name));
     return false;
@@ -81,7 +81,7 @@ bool ProjectManager::closeProject()
     return true;
 
   auto ret = QMessageBox::question(
-    nullptr, tr("Close Project"),
+    QApplication::activeWindow(), tr("Close Project"),
     tr("There is already open project. Are you sure you want to close?"),
     QMessageBox::Yes | QMessageBox::Cancel);
 

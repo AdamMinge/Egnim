@@ -120,7 +120,7 @@ PreferencesManager& MainWindow::getPreferencesManager() const
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-  if (confirmAllSave())
+  if (confirmAllSave() && closeProject())
   {
     writeSettings();
     event->accept();
@@ -311,9 +311,9 @@ void MainWindow::clearRecent() // NOLINT(readability-make-member-function-const)
   getPreferencesManager().clearRecentProjectFiles();
 }
 
-void MainWindow::closeProject() // NOLINT(readability-make-member-function-const)
+bool MainWindow::closeProject() // NOLINT(readability-make-member-function-const)
 {
-  getProjectManager().closeProject();
+  return getProjectManager().closeProject();
 }
 
 void MainWindow::openSettings()
