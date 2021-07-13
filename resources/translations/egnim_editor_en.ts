@@ -47,8 +47,21 @@
 <context>
     <name>ConsoleDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="33"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="30"/>
+        <source>Clear Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="76"/>
         <source>Console</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>ConsoleOutputWidget</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="18"/>
+        <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -94,14 +107,14 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="488"/>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="562"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="483"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="557"/>
         <source>&amp;Undo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="489"/>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="563"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="484"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="558"/>
         <source>&amp;Redo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -121,128 +134,136 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="543"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="538"/>
         <source>&amp;Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="544"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="539"/>
         <source>Open &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="546"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="541"/>
         <source>&amp;Open...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="547"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="542"/>
         <source>Clear &amp;Recent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="548"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="543"/>
         <source>&amp;Close Project</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="549"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="544"/>
         <source>&amp;Settings...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="557"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="552"/>
         <source>&amp;Save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="551"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="546"/>
         <source>&amp;Exit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="553"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="548"/>
         <source>&amp;Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="554"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="549"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="545"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="540"/>
         <source>&amp;New...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="550"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="545"/>
         <source>&amp;Export...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="555"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="550"/>
         <source>&amp;Scene...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="556"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="551"/>
         <source>&amp;Close Document</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="558"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="553"/>
         <source>Save &amp;As</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="559"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="554"/>
         <source>Save All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="561"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="556"/>
         <source>&amp;Edit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="564"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="559"/>
         <source>&amp;Cut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="565"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="560"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="566"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="561"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="567"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="562"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="569"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="564"/>
         <source>&amp;View</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="570"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="565"/>
         <source>Views and &amp;Toolbars</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="572"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="567"/>
         <source>&amp;Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/main_window.cpp" line="573"/>
+        <location filename="../../src/egnim/editor/main_window.cpp" line="568"/>
         <source>&amp;About...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewDirectoryDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/new_directory_dialog.cpp" line="73"/>
+        <source>New Document</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -257,7 +278,7 @@
 <context>
     <name>NewSceneDocumentDialog</name>
     <message>
-        <location filename="../../src/egnim/editor/document/new_document_dialog.cpp" line="102"/>
+        <location filename="../../src/egnim/editor/document/new_document_dialog.cpp" line="104"/>
         <source>New Document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -286,7 +307,47 @@
 <context>
     <name>ProjectDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="97"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="117"/>
+        <source>&amp;New</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="118"/>
+        <source>&amp;Refactor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="119"/>
+        <source>&amp;Open In</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="123"/>
+        <source>&amp;Directory</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="132"/>
+        <source>&amp;Rename</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="137"/>
+        <source>&amp;Files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="140"/>
+        <source>&amp;System Editor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="134"/>
+        <source>&amp;Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="210"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>
@@ -311,6 +372,22 @@
     <message>
         <location filename="../../src/egnim/editor/project/project_manager.cpp" line="85"/>
         <source>There is already open project. Are you sure you want to close?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RenameDirectoryDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/rename_directory_dialog.cpp" line="76"/>
+        <source>Rename directory &apos;%1&apos; and its usages to:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>RenameFileDialog</name>
+    <message>
+        <location filename="../../src/egnim/editor/project/rename_file_dialog.cpp" line="77"/>
+        <source>Rename file &apos;%1&apos; and its usages to:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

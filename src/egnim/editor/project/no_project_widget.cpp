@@ -19,7 +19,7 @@ NoProjectWidget::NoProjectWidget(QWidget* parent) :
 
   connect(m_ui->m_new_project_button, &QPushButton::pressed, ActionManager::getInstance().findAction("new_project"), &QAction::trigger);
   connect(m_ui->m_open_button, &QPushButton::pressed, ActionManager::getInstance().findAction("open_project"), &QAction::trigger);
-  connect(m_ui->m_projects_list_view, &QListView::doubleClicked, this, &NoProjectWidget::openProject);
+  connect(m_ui->m_projects_list_view, &QListView::activated, this, &NoProjectWidget::openProject);
   connect(m_ui->m_search_project_edit, &QLineEdit::textChanged, this, &NoProjectWidget::searchProject);
 
   m_search_proxy_model->setSourceModel(m_projects_model.get());

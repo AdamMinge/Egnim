@@ -44,12 +44,24 @@
      </widget>
     </item>
     <item>
-     <widget class="QTreeView" name="m_project_files_tree_view">
+     <widget class="DeselectableTreeView" name="m_project_files_tree_view">
+      <property name="editTriggers">
+       <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+      </property>
+      <property name="dragEnabled">
+       <bool>true</bool>
+      </property>
       <property name="dragDropMode">
        <enum>QAbstractItemView::DragDrop</enum>
       </property>
       <property name="defaultDropAction">
        <enum>Qt::IgnoreAction</enum>
+      </property>
+      <property name="selectionMode">
+       <enum>QAbstractItemView::SingleSelection</enum>
+      </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
       </property>
       <property name="sortingEnabled">
        <bool>false</bool>
@@ -65,6 +77,13 @@
    </layout>
   </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>DeselectableTreeView</class>
+   <extends>QTreeView</extends>
+   <header>widgets/deselectable_tree_view.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
