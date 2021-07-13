@@ -18,6 +18,7 @@
 /* -------------------------------------------------------------------------- */
 
 class NoDocumentWidget;
+class FileSystemWatcher;
 
 class DocumentManager : public QObject
 {
@@ -40,6 +41,8 @@ public:
   [[nodiscard]] DocumentEditor *getCurrentEditor() const;
 
   void addDocument(std::unique_ptr<Document> document);
+  void insertDocument(int index, std::unique_ptr<Document> document);
+
   void removeDocument(int index);
   void removeAllDocuments();
 
@@ -47,6 +50,7 @@ public:
   [[nodiscard]] Document *getCurrentDocument() const;
 
   [[nodiscard]] int findDocument(Document *document) const;
+  [[nodiscard]] int findDocument(const QString& file_name) const;
 
   void switchToDocument(int index);
   void switchToDocument(Document *document);
@@ -60,6 +64,7 @@ public:
   bool saveDocument(Document *document);
   bool saveDocumentAs(Document* document);
 
+  bool reloadDocumentAt(int index);
   bool loadDocument(const QString& file_name);
 
   [[nodiscard]] const std::vector<std::unique_ptr<Document>> &getDocuments() const;
@@ -75,6 +80,10 @@ private Q_SLOTS:
   void currentIndexChanged();
   void documentTabMoved(int from, int to);
 
+  void filesChanged(const QStringList &file_names);
+  void fileNameChanged(const QString& new_file_name, const QString& old_file_name);
+  void updateDocumentTab(Document *document);
+
 private:
   static QScopedPointer<DocumentManager> m_instance;
 
@@ -86,6 +95,7 @@ private:
   QTabBar *m_tab_bar;
   QStackedLayout *m_editor_stack;
 
+  QScopedPointer<FileSystemWatcher> m_file_system_watcher;
   QUndoGroup* m_undo_group;
 };
 

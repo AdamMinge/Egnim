@@ -21,6 +21,7 @@ set(sources
         ${source_root}/logging_manager.cpp
         ${source_root}/about_dialog.cpp
         ${source_root}/settings_dialog.cpp
+        ${source_root}/file_system_watcher.cpp
         ${source_root}/utils.cpp
 
         ${source_root}/document/document.cpp
@@ -79,6 +80,7 @@ set(includes
         ${include_root}/logging_manager.h
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
+        ${include_root}/file_system_watcher.h
         ${include_root}/utils.h
 
         ${include_root}/document/document.h

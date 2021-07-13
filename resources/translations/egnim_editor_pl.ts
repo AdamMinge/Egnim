@@ -81,17 +81,19 @@
 <context>
     <name>DocumentManager</name>
     <message>
-        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="120"/>
+        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="132"/>
+        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="152"/>
         <source>Error Opening File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="121"/>
+        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="133"/>
+        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="153"/>
         <source>Error opening &apos;%1&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="239"/>
+        <location filename="../../src/egnim/editor/document/document_manager.cpp" line="283"/>
         <source>Error Saving File</source>
         <translation type="unfinished"></translation>
     </message>
