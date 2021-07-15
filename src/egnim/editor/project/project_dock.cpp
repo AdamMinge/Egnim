@@ -1,5 +1,6 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QDesktopServices>
+#include <QMessageBox>
 #include <QEvent>
 #include <QMenu>
 #include <QUrl>
@@ -179,11 +180,36 @@ void ProjectDock::open(const QModelIndex& index)
 void ProjectDock::remove(const QModelIndex& index)
 {
   const auto path = index.data(QFileSystemModel::FilePathRole).toString();
+  const auto is_file = QFileInfo(path).isFile();
 
-  if(QFileInfo(path).isFile())
-    QFile(path).remove();
+  if(is_file)
+  {
+    auto ret = QMessageBox::question(
+      this, tr("Delete File"),
+      tr("Are you sure that you want to permanently delete this file?"),
+      QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+    if (ret == QMessageBox::Yes)
+    {
+      if(!QFile(path).remove())
+        QMessageBox::information(this, tr("Delete File"),
+                                 tr("Failed to delete the file!"));
+    }
+  }
   else
-    QDir(path).removeRecursively();
+  {
+    auto ret = QMessageBox::question(
+      this, tr("Delete Directory"),
+      tr("Are you sure that you want to permanently delete this directory and all its contents?"),
+      QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+    if (ret == QMessageBox::Yes)
+    {
+      if(!QDir(path).removeRecursively())
+        QMessageBox::information(this, tr("Delete Directory"),
+                                 tr("Failed to delete the directory!"));
+    }
+  }
 }
 
 void ProjectDock::rename(const QModelIndex& index)

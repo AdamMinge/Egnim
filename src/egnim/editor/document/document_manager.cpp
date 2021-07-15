@@ -129,8 +129,8 @@ bool DocumentManager::reloadDocumentAt(int index)
   if(!new_document)
   {
     QMessageBox::critical(m_widget.get(),
-                          tr("Error Opening File"),
-                          tr("Error opening '%1'").arg(new_document->getFileName()));
+                          tr("Error Reloading File"),
+                          tr("Error reloading '%1'").arg(document->getFileName()));
     return false;
   }
 

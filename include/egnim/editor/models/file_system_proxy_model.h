@@ -15,6 +15,8 @@ public:
 
   bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 
+  void setSourceModel(QAbstractItemModel* model) override;
+
 protected:
   [[nodiscard]] bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 };
