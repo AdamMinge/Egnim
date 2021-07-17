@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>ExportProjectDialog</class>
  <widget class="QDialog" name="ExportProjectDialog">
+  <property name="windowModality">
+   <enum>Qt::NonModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -12,6 +15,9 @@
   </property>
   <property name="windowTitle">
    <string>Export Project</string>
+  </property>
+  <property name="modal">
+   <bool>false</bool>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

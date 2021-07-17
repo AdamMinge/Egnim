@@ -2,6 +2,7 @@
 #define MAIN_WINDOW_H
 
 /* ------------------------------------ Qt ---------------------------------- */
+#include <QPointer>
 #include <QMainWindow>
 #include <QStackedWidget>
 /* ----------------------------------- Local -------------------------------- */
@@ -13,6 +14,10 @@ namespace Ui { class MainWindow; }
 class NoProjectWidget;
 class ProjectDock;
 class ConsoleDock;
+
+class AboutDialog;
+class ExportProjectDialog;
+class SettingsDialog;
 
 class PreferencesManager;
 class DocumentManager;
@@ -95,6 +100,10 @@ private:
 
   ProjectDock* m_project_dock;
   ConsoleDock* m_console_dock;
+
+  QPointer<AboutDialog> m_about_dialog;
+  QPointer<ExportProjectDialog> m_external_project_dialog;
+  QPointer<SettingsDialog> m_settings_dialog;
 };
 
 #endif //MAIN_WINDOW_H

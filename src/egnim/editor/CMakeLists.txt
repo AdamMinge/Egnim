@@ -58,6 +58,7 @@ set(sources
         ${source_root}/project/export_project_dialog.cpp
         ${source_root}/project/export_preset_widget.cpp
         ${source_root}/project/export_preset.cpp
+        ${source_root}/project/export_preset_list_model.cpp
         ${source_root}/project/priv/project_serializer_impl.h
         ${source_root}/project/priv/project_serializer_impl.cpp
         ${source_root}/project/priv/json_project_serializer_impl.h
@@ -115,6 +116,7 @@ set(includes
         ${include_root}/project/export_project_dialog.h
         ${include_root}/project/export_preset_widget.h
         ${include_root}/project/export_preset.h
+        ${include_root}/project/export_preset_list_model.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
@@ -143,7 +145,10 @@ set(uis
         ${uis_root}/project/rename_directory_dialog.ui
         ${uis_root}/project/rename_file_dialog.ui
         ${uis_root}/project/export_project_dialog.ui
-        ${uis_root}/project/project_dock.ui)
+        ${uis_root}/project/project_dock.ui
+        ${uis_root}/project/linux_export_preset_widget.ui
+        ${uis_root}/project/macos_export_preset_widget.ui
+        ${uis_root}/project/windows_export_preset_widget.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

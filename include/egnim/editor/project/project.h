@@ -10,7 +10,7 @@
 #include <list>
 /* -------------------------------------------------------------------------- */
 
-class Document;
+class ExportPresetListModel;
 
 class Project : public QObject
 {
@@ -39,6 +39,8 @@ public:
   [[nodiscard]] QString getProjectExtension() const;
   static QString getProjectExtension(Type type);
 
+  [[nodiscard]] ExportPresetListModel* getExportPresetModel() const;
+
 Q_SIGNALS:
   void modifiedChanged();
   void fileNameChanged(const QString& new_file_name, const QString& old_file_name);
@@ -51,6 +53,7 @@ protected:
 private:
   Type m_type;
   QString m_file_name;
+  ExportPresetListModel* m_export_preset_model;
 };
 
 enum class Project::Type

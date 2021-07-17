@@ -1,21 +1,34 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMenu>
 /* ----------------------------------- Local -------------------------------- */
-#include "project/export_project_dialog.h"
+#include "project/project_manager.h"
 #include "project/export_preset_widget.h"
+#include "project/export_project_dialog.h"
+#include "project/export_preset_list_model.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_project_dialog.h"
 /* -------------------------------------------------------------------------- */
 
 ExportProjectDialog::ExportProjectDialog(QWidget* parent) :
   QDialog(parent),
-  m_ui(new Ui::ExportProjectDialog())
+  m_current_preset(nullptr),
+  m_ui(new Ui::ExportProjectDialog()),
+  m_export_preset_model(ProjectManager::getInstance().getProject()->getExportPresetModel())
 {
   m_ui->setupUi(this);
+
+  Q_ASSERT(m_export_preset_model);
+  m_ui->m_presets_list_view->setModel(m_export_preset_model);
 
   addEditor(ExportPreset::Type::Windows, std::make_unique<WindowsExportPresetWidget>());
   addEditor(ExportPreset::Type::Linux, std::make_unique<LinuxExportPresetWidget>());
   addEditor(ExportPreset::Type::MacOS, std::make_unique<MacOSExportPresetWidget>());
+  addEditor(ExportPreset::Type::Unknown, std::make_unique<UnknownExportPresetWidget>());
+
+  m_ui->m_presets_stacked_widget->setCurrentWidget(getEditor(ExportPreset::Type::Unknown));
+
+  connect(m_ui->m_presets_list_view->selectionModel(), &QItemSelectionModel::currentChanged,
+          this, &ExportProjectDialog::currentPresetChanged);
 
   connect(m_ui->m_cancel_button, &QPushButton::pressed, this, &QDialog::close);
   connect(m_ui->m_export_button, &QPushButton::pressed, this, &ExportProjectDialog::exportWithCurrentPreset);
@@ -35,6 +48,7 @@ ExportProjectDialog::ExportProjectDialog(QWidget* parent) :
   connect(m_ui->m_remove_button, &QToolButton::pressed, this, &ExportProjectDialog::removePreset);
 
   retranslateUi();
+  updateActions();
 }
 
 ExportProjectDialog::~ExportProjectDialog()
@@ -68,22 +82,72 @@ void ExportProjectDialog::exportWithAllPresets()
 
 void ExportProjectDialog::addPreset(ExportPreset::Type preset_type)
 {
+  switch(preset_type)
+  {
+    case ExportPreset::Type::Windows:
+      m_export_preset_model->appendExportPreset(
+        std::make_unique<WindowsExportPreset>(tr("Windows")));
+      break;
 
+    case ExportPreset::Type::Linux:
+      m_export_preset_model->appendExportPreset(
+        std::make_unique<LinuxExportPreset>(tr("Linux")));
+      break;
+
+    case ExportPreset::Type::MacOS:
+      m_export_preset_model->appendExportPreset(
+        std::make_unique<MacOSExportPreset>(tr("MacOS")));
+      break;
+
+    case ExportPreset::Type::Unknown:
+      break;
+  }
 }
 
 void ExportProjectDialog::copyPreset()
 {
+  auto index = m_ui->m_presets_list_view->selectionModel()->currentIndex();
+  Q_ASSERT(index.isValid());
 
+  auto export_preset = m_export_preset_model->getExportPreset(index);
+  auto copy_export_preset = export_preset->clone();
+
+  copy_export_preset->setName(QString("%1 Copy").arg(copy_export_preset->getName()));
+  m_export_preset_model->appendExportPreset(std::move(copy_export_preset));
 }
 
 void ExportProjectDialog::removePreset()
 {
+  auto index = m_ui->m_presets_list_view->selectionModel()->currentIndex();
+  Q_ASSERT(index.isValid());
+  m_export_preset_model->removeExportPreset(index);
+}
 
+void ExportProjectDialog::currentPresetChanged(const QModelIndex& index)
+{
+  m_current_preset = m_export_preset_model->getExportPreset(index);
+
+  auto current_preset_editor = m_current_preset ? getEditor(m_current_preset->getType()) : nullptr;
+  auto editor = current_preset_editor ? current_preset_editor : getEditor(ExportPreset::Type::Unknown);
+
+  m_ui->m_presets_stacked_widget->setCurrentWidget(editor);
+
+  editor->setCurrentPreset(m_current_preset);
+
+  updateActions();
 }
 
 void ExportProjectDialog::retranslateUi()
 {
   m_ui->retranslateUi(this);
+}
+
+void ExportProjectDialog::updateActions()
+{
+  m_ui->m_export_button->setEnabled(m_current_preset);
+  m_ui->m_export_all_button->setEnabled(m_current_preset);
+  m_ui->m_copy_button->setEnabled(m_current_preset);
+  m_ui->m_remove_button->setEnabled(m_current_preset);
 }
 
 void ExportProjectDialog::addEditor(ExportPreset::Type preset_type, std::unique_ptr<ExportPresetWidget> editor)
@@ -119,6 +183,8 @@ ExportPresetWidget* ExportProjectDialog::getEditor(ExportPreset::Type preset_typ
 
 ExportPresetWidget* ExportProjectDialog::getCurrentEditor() const
 {
-  // TODO implementation
-  return nullptr;
+  auto export_preset_widget = dynamic_cast<ExportPresetWidget*>(m_ui->m_presets_stacked_widget->currentWidget());
+  Q_ASSERT(export_preset_widget);
+
+  return export_preset_widget;
 }

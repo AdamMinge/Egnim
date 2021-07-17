@@ -4,12 +4,14 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project.h"
 #include "project/project_serializer.h"
+#include "project/export_preset_list_model.h"
 #include "document/document.h"
 /* -------------------------------------------------------------------------- */
 
 Project::Project(Type type, QObject* parent) :
   QObject(parent),
-  m_type(type)
+  m_type(type),
+  m_export_preset_model(new ExportPresetListModel(this))
 {
 
 }
@@ -113,4 +115,9 @@ QString Project::getProjectExtension(Type type)
   }
 
   return QString{};
+}
+
+ExportPresetListModel* Project::getExportPresetModel() const
+{
+  return m_export_preset_model;
 }

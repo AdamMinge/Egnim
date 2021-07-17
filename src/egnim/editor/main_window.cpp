@@ -318,16 +318,24 @@ bool MainWindow::closeProject() // NOLINT(readability-make-member-function-const
 
 void MainWindow::openSettings()
 {
-  auto settings_dialog = new SettingsDialog(this);
-  settings_dialog->setAttribute(Qt::WA_DeleteOnClose);
-  settings_dialog->show();
+  if(!m_settings_dialog)
+  {
+    m_settings_dialog = new SettingsDialog();
+    m_settings_dialog->setAttribute(Qt::WA_DeleteOnClose);
+  }
+
+  m_settings_dialog->exec();
 }
 
 void MainWindow::exportProject()
 {
-  auto export_project_dialog = new ExportProjectDialog(this);
-  export_project_dialog->setAttribute(Qt::WA_DeleteOnClose);
-  export_project_dialog->show();
+  if(!m_external_project_dialog)
+  {
+    m_external_project_dialog = new ExportProjectDialog();
+    m_external_project_dialog->setAttribute(Qt::WA_DeleteOnClose);
+  }
+
+  m_external_project_dialog->exec();
 }
 
 void MainWindow::newDocument(Document::Type type)
@@ -389,9 +397,15 @@ void MainWindow::performDelete() // NOLINT(readability-make-member-function-cons
 
 void MainWindow::openAbout()
 {
-  auto about_dialog = new AboutDialog(this);
-  about_dialog->setAttribute(Qt::WA_DeleteOnClose);
-  about_dialog->show();
+  if(!m_about_dialog)
+  {
+    m_about_dialog = new AboutDialog(this);
+    m_about_dialog->setAttribute(Qt::WA_DeleteOnClose);
+  }
+
+  m_about_dialog->show();
+  m_about_dialog->activateWindow();
+  m_about_dialog->raise();
 }
 
 void MainWindow::writeSettings()

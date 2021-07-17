@@ -15,7 +15,7 @@ class ExportPresetWidget;
 
 class ExportProjectDialog : public QDialog
 {
-Q_OBJECT
+  Q_OBJECT
 
 public:
   explicit ExportProjectDialog(QWidget* parent = nullptr);
@@ -32,8 +32,11 @@ private Q_SLOTS:
   void copyPreset();
   void removePreset();
 
+  void currentPresetChanged(const QModelIndex& index);
+
 private:
   void retranslateUi();
+  void updateActions();
 
   void addEditor(ExportPreset::Type preset_type, std::unique_ptr<ExportPresetWidget> editor);
   void removeEditor(ExportPreset::Type preset_type);
@@ -44,6 +47,8 @@ private:
 
 private:
   QScopedPointer<Ui::ExportProjectDialog> m_ui;
+  ExportPreset* m_current_preset;
+  ExportPresetListModel* m_export_preset_model;
   std::unordered_map<ExportPreset::Type, std::unique_ptr<ExportPresetWidget>> m_preset_editors;
 };
 
