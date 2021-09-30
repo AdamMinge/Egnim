@@ -41,6 +41,12 @@ WindowsExportPresetWidget::WindowsExportPresetWidget(QWidget* parent) :
   m_ui(new Ui::WindowsExportPresetWidget())
 {
   m_ui->setupUi(this);
+
+  connect(m_ui->m_name_edit, &QLineEdit::textChanged, this, [this](auto&& name){
+    if(m_export_preset) m_export_preset->setName(std::forward<decltype(name)>(name));});
+
+  connect(m_ui->m_export_path_edit, &QLineEdit::textChanged, this, [this](auto&& path){
+    if(m_export_preset) m_export_preset->setExportPath(std::forward<decltype(path)>(path));});
 }
 
 WindowsExportPresetWidget::~WindowsExportPresetWidget() = default;
@@ -56,6 +62,9 @@ void WindowsExportPresetWidget::setCurrentPreset(ExportPreset* export_preset)
   Q_ASSERT(current_export_preset || !export_preset);
 
   m_export_preset = current_export_preset;
+
+  m_ui->m_name_edit->setText(m_export_preset ? m_export_preset->getName() : QString{});
+  m_ui->m_export_path_edit->setText(m_export_preset ? m_export_preset->getExportPath() : QString{});
 }
 
 ExportPreset* WindowsExportPresetWidget::getCurrentPreset() const
@@ -71,6 +80,12 @@ LinuxExportPresetWidget::LinuxExportPresetWidget(QWidget* parent) :
   m_ui(new Ui::LinuxExportPresetWidget())
 {
   m_ui->setupUi(this);
+
+  connect(m_ui->m_name_edit, &QLineEdit::textChanged, this, [this](auto&& name){
+    if(m_export_preset) m_export_preset->setName(std::forward<decltype(name)>(name));});
+
+  connect(m_ui->m_export_path_edit, &QLineEdit::textChanged, this, [this](auto&& path){
+    if(m_export_preset) m_export_preset->setExportPath(std::forward<decltype(path)>(path));});
 }
 
 LinuxExportPresetWidget::~LinuxExportPresetWidget() = default;
@@ -86,6 +101,9 @@ void LinuxExportPresetWidget::setCurrentPreset(ExportPreset* export_preset)
   Q_ASSERT(current_export_preset || !export_preset);
 
   m_export_preset = current_export_preset;
+
+  m_ui->m_name_edit->setText(m_export_preset ? m_export_preset->getName() : QString{});
+  m_ui->m_export_path_edit->setText(m_export_preset ? m_export_preset->getExportPath() : QString{});
 }
 
 ExportPreset* LinuxExportPresetWidget::getCurrentPreset() const
@@ -101,6 +119,12 @@ MacOSExportPresetWidget::MacOSExportPresetWidget(QWidget* parent) :
   m_ui(new Ui::MacOSExportPresetWidget())
 {
   m_ui->setupUi(this);
+
+  connect(m_ui->m_name_edit, &QLineEdit::textChanged, this, [this](auto&& name){
+    if(m_export_preset) m_export_preset->setName(std::forward<decltype(name)>(name));});
+
+  connect(m_ui->m_export_path_edit, &QLineEdit::textChanged, this, [this](auto&& path){
+    if(m_export_preset) m_export_preset->setExportPath(std::forward<decltype(path)>(path));});
 }
 
 MacOSExportPresetWidget::~MacOSExportPresetWidget() = default;
@@ -116,6 +140,9 @@ void MacOSExportPresetWidget::setCurrentPreset(ExportPreset* export_preset)
   Q_ASSERT(current_export_preset || !export_preset);
 
   m_export_preset = current_export_preset;
+
+  m_ui->m_name_edit->setText(m_export_preset ? m_export_preset->getName() : QString{});
+  m_ui->m_export_path_edit->setText(m_export_preset ? m_export_preset->getExportPath() : QString{});
 }
 
 ExportPreset* MacOSExportPresetWidget::getCurrentPreset() const

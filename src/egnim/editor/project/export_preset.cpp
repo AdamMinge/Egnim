@@ -4,10 +4,11 @@
 
 /* -------------------------------- ExportPreset ---------------------------- */
 
-ExportPreset::ExportPreset(Type type, QString name, QObject* parent) :
+ExportPreset::ExportPreset(Type type, QString name, QString export_path, QObject* parent) :
   QObject(parent),
   m_type(type),
-  m_name(std::move(name))
+  m_name(std::move(name)),
+  m_export_path(std::move(export_path))
 {
 
 }
@@ -30,6 +31,17 @@ QString ExportPreset::getName() const
   return m_name;
 }
 
+void ExportPreset::setExportPath(QString path)
+{
+  m_export_path = std::move(path);
+  Q_EMIT exportPathChanged(m_name);
+}
+
+QString ExportPreset::getExportPath() const
+{
+  return m_export_path;
+}
+
 void ExportPreset::initializeClone(ExportPreset& export_preset) const
 {
 
@@ -37,8 +49,8 @@ void ExportPreset::initializeClone(ExportPreset& export_preset) const
 
 /* ---------------------------- WindowsExportPreset ------------------------- */
 
-WindowsExportPreset::WindowsExportPreset(QString name, QObject* parent) :
-  ExportPreset(Type::Windows, std::move(name), parent)
+WindowsExportPreset::WindowsExportPreset(QString name, QString export_path, QObject* parent) :
+  ExportPreset(Type::Windows, std::move(name), std::move(export_path), parent)
 {
 
 }
@@ -47,7 +59,7 @@ WindowsExportPreset::~WindowsExportPreset() = default;
 
 std::unique_ptr<ExportPreset> WindowsExportPreset::clone() const
 {
-  auto windows_export_preset = std::make_unique<WindowsExportPreset>(getName());
+  auto windows_export_preset = std::make_unique<WindowsExportPreset>(getName(), getExportPath());
   ExportPreset::initializeClone(*windows_export_preset);
 
   return windows_export_preset;
@@ -55,8 +67,8 @@ std::unique_ptr<ExportPreset> WindowsExportPreset::clone() const
 
 /* ------------------------------ LinuxExportPreset ------------------------- */
 
-LinuxExportPreset::LinuxExportPreset(QString name, QObject* parent) :
-  ExportPreset(Type::Linux, std::move(name), parent)
+LinuxExportPreset::LinuxExportPreset(QString name, QString export_path, QObject* parent) :
+  ExportPreset(Type::Linux, std::move(name), std::move(export_path), parent)
 {
 
 }
@@ -65,7 +77,7 @@ LinuxExportPreset::~LinuxExportPreset() = default;
 
 std::unique_ptr<ExportPreset> LinuxExportPreset::clone() const
 {
-  auto linux_export_preset = std::make_unique<LinuxExportPreset>(getName());
+  auto linux_export_preset = std::make_unique<LinuxExportPreset>(getName(), getExportPath());
   ExportPreset::initializeClone(*linux_export_preset);
 
   return linux_export_preset;
@@ -73,8 +85,8 @@ std::unique_ptr<ExportPreset> LinuxExportPreset::clone() const
 
 /* ------------------------------ MacOSExportPreset ------------------------- */
 
-MacOSExportPreset::MacOSExportPreset(QString name, QObject* parent) :
-  ExportPreset(Type::MacOS, std::move(name), parent)
+MacOSExportPreset::MacOSExportPreset(QString name, QString export_path, QObject* parent) :
+  ExportPreset(Type::MacOS, std::move(name), std::move(export_path), parent)
 {
 
 }
@@ -83,7 +95,7 @@ MacOSExportPreset::~MacOSExportPreset() = default;
 
 std::unique_ptr<ExportPreset> MacOSExportPreset::clone() const
 {
-  auto macos_export_preset = std::make_unique<MacOSExportPreset>(getName());
+  auto macos_export_preset = std::make_unique<MacOSExportPreset>(getName(), getExportPath());
   ExportPreset::initializeClone(*macos_export_preset);
 
   return macos_export_preset;

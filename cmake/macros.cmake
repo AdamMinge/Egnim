@@ -26,7 +26,7 @@ macro(egnim_add_library target)
         set_target_properties(${target} PROPERTIES RELEASE_POSTFIX -s)
     endif()
 
-    set_target_properties(${target} PROPERTIES COMPILE_FEATURES cxx_std_17)
+    set_target_properties(${target} PROPERTIES COMPILE_FEATURES cxx_std_20)
 
     install(TARGETS ${target} EXPORT egnimConfigExport
             RUNTIME DESTINATION bin

@@ -73,6 +73,8 @@ QModelIndex ExportPresetListModel::insertExportPreset(const QModelIndex& index, 
   auto row = index.isValid() ? index.row() : rowCount(QModelIndex());
   auto insert_iter = m_export_presets.begin() + row;
 
+  connect(export_preset.get(), &ExportPreset::nameChanged, this, &ExportPresetListModel::nameChanged);
+
   beginInsertRows(QModelIndex(), row, row);
   m_export_presets.insert(insert_iter, std::move(export_preset));
   endInsertRows();
@@ -88,6 +90,12 @@ void ExportPresetListModel::removeExportPreset(const QModelIndex& index)
   beginRemoveRows(QModelIndex(), index.row(), index.row());
   m_export_presets.erase(insert_iter);
   endRemoveRows();
+}
+
+void ExportPresetListModel::nameChanged()
+{
+  auto preset = qobject_cast<ExportPreset*>(sender());
+  dataChanged(getIndex(preset), getIndex(preset), {Qt::DisplayRole});
 }
 
 const QIcon& ExportPresetListModel::getProjectIcon(const QModelIndex& index) const

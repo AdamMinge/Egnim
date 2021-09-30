@@ -156,7 +156,7 @@ set(includes
         ${include_root}/events/mouse_event.h
         ${include_root}/events/keyboard_event.h
         ${include_root}/events/window_event.h
-        ${include_root}/events/joystick_event
+        ${include_root}/events/joystick_event.h
         ${include_root}/events/event_listener.h
         ${include_root}/events/contact_event_listener.h
         ${include_root}/events/mouse_event_listener.h
@@ -183,7 +183,7 @@ find_package(nlohmann_json REQUIRED)
 egnim_add_library(egnim-engine
         SOURCES ${sources} ${includes} ${resources}
         DEPENDS sfml-graphics sfml-audio sfml-system
-                box2d nlohmann_json::nlohmann_json)
+                box2d::box2d nlohmann_json::nlohmann_json)
 
 set_target_properties(egnim-engine
         PROPERTIES CXX_STANDARD 20)

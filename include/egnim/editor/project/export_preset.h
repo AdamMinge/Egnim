@@ -13,7 +13,7 @@ public:
   enum class Type;
 
 public:
-  explicit ExportPreset(Type type, QString name, QObject* parent = nullptr);
+  explicit ExportPreset(Type type, QString name, QString export_path, QObject* parent = nullptr);
   ~ExportPreset() override;
 
   [[nodiscard]] Type getType() const;
@@ -21,10 +21,14 @@ public:
   void setName(QString name);
   [[nodiscard]] QString getName() const;
 
+  void setExportPath(QString path);
+  [[nodiscard]] QString getExportPath() const;
+
   [[nodiscard]] virtual std::unique_ptr<ExportPreset> clone() const = 0;
 
 Q_SIGNALS:
   void nameChanged(const QString& name);
+  void exportPathChanged(const QString& name);
 
 protected:
   void initializeClone(ExportPreset& export_preset) const;
@@ -32,6 +36,7 @@ protected:
 private:
   Type m_type;
   QString m_name;
+  QString m_export_path;
 };
 
 class WindowsExportPreset : public ExportPreset
@@ -39,7 +44,7 @@ class WindowsExportPreset : public ExportPreset
   Q_OBJECT
 
 public:
-  explicit WindowsExportPreset(QString name, QObject* parent = nullptr);
+  explicit WindowsExportPreset(QString name, QString export_path = QString{}, QObject* parent = nullptr);
   ~WindowsExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
@@ -50,7 +55,7 @@ class LinuxExportPreset : public ExportPreset
   Q_OBJECT
 
 public:
-  explicit LinuxExportPreset(QString name, QObject* parent = nullptr);
+  explicit LinuxExportPreset(QString name, QString export_path = QString{}, QObject* parent = nullptr);
   ~LinuxExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
@@ -61,7 +66,7 @@ class MacOSExportPreset : public ExportPreset
   Q_OBJECT
 
 public:
-  explicit MacOSExportPreset(QString name, QObject* parent = nullptr);
+  explicit MacOSExportPreset(QString name, QString export_path = QString{}, QObject* parent = nullptr);
   ~MacOSExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;

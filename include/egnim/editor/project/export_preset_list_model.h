@@ -30,6 +30,9 @@ public:
 
   void removeExportPreset(const QModelIndex& index);
 
+private Q_SLOTS:
+  void nameChanged();
+
 private:
   [[nodiscard]] const QIcon& getProjectIcon(const QModelIndex& index) const;
 
