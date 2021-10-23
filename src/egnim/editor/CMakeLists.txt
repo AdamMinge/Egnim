@@ -68,6 +68,7 @@ set(sources
         ${source_root}/commands/group_command.cpp
 
         ${source_root}/models/file_system_proxy_model.cpp
+        ${source_root}/models/file_system_model.cpp
 
         ${source_root}/widgets/dialog_with_toggle_view.cpp
         ${source_root}/widgets/file_dialog.cpp
@@ -122,6 +123,7 @@ set(includes
         ${include_root}/commands/group_command.h
 
         ${include_root}/models/file_system_proxy_model.h
+        ${include_root}/models/file_system_model.h
 
         ${include_root}/widgets/dialog_with_toggle_view.h
         ${include_root}/widgets/file_dialog.h

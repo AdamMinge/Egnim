@@ -335,79 +335,79 @@
 <context>
     <name>ProjectDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="118"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="119"/>
         <source>&amp;New</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="119"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="120"/>
         <source>&amp;Refactor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="120"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="121"/>
         <source>&amp;Open In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="124"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="125"/>
         <source>&amp;Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="133"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="134"/>
         <source>&amp;Rename</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="138"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="139"/>
         <source>&amp;Files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="141"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="142"/>
         <source>&amp;System Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="135"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="136"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="188"/>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="195"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="189"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="196"/>
         <source>Delete File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="189"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="190"/>
         <source>Are you sure that you want to permanently delete this file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="196"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="197"/>
         <source>Failed to delete the file!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="202"/>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="209"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="203"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="210"/>
         <source>Delete Directory</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="203"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="204"/>
         <source>Are you sure that you want to permanently delete this directory and all its contents?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="210"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="211"/>
         <source>Failed to delete the directory!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="236"/>
+        <location filename="../../src/egnim/editor/project/project_dock.cpp" line="237"/>
         <source>Project</source>
         <translation type="unfinished"></translation>
     </message>

@@ -13,6 +13,7 @@
 #include "document/document_manager.h"
 #include "document/new_document_dialog.h"
 #include "models/file_system_proxy_model.h"
+#include "models/file_system_model.h"
 #include "action_manager.h"
 #include "utils.h"
 /* ------------------------------------ Ui ---------------------------------- */
@@ -22,7 +23,7 @@
 ProjectDock::ProjectDock(QWidget* parent) :
   QDockWidget(parent),
   m_ui(new Ui::ProjectDock()),
-  m_files_model(new QFileSystemModel()),
+  m_files_model(new FileSystemModel()),
   m_proxy_model(new FileSystemProxyModel()),
   m_current_project(nullptr)
 {
@@ -125,7 +126,7 @@ void ProjectDock::onContextMenu(const QPoint& pos)
 
   if(index.isValid())
   {
-    auto source_root_index = m_files_model->setRootPath(m_current_project->getDirectory().absolutePath());
+    auto source_root_index = m_files_model->index(m_current_project->getDirectory().absolutePath());
     auto root_index = m_proxy_model->mapFromSource(source_root_index);
 
     if(index != root_index)

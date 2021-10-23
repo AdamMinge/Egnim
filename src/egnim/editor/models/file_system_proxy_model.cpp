@@ -1,7 +1,7 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileSystemModel>
 /* ----------------------------------- Local -------------------------------- */
-#include "models//file_system_proxy_model.h"
+#include "models/file_system_proxy_model.h"
 /* -------------------------------------------------------------------------- */
 
 FileSystemProxyModel::FileSystemProxyModel(QObject* parent) :
@@ -12,50 +12,18 @@ FileSystemProxyModel::FileSystemProxyModel(QObject* parent) :
 
 FileSystemProxyModel::~FileSystemProxyModel() = default;
 
-bool FileSystemProxyModel::dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent)
-{
-  auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel());
-  if(source_model)
-  {
-    auto root_path = source_model->rootPath();
-    auto root_index = source_model->index(root_path).parent();
-    auto source_parent = mapToSource(parent);
-
-    if(root_index == source_parent)
-    {
-      auto new_parent = mapFromSource(source_model->index(root_path));
-      return QSortFilterProxyModel::dropMimeData(data, action, row, column, new_parent);
-    }
-  }
-
-  return QSortFilterProxyModel::dropMimeData(data, action, row, column, parent);
-}
-
-void FileSystemProxyModel::setSourceModel(QAbstractItemModel* model)
-{
-  if(auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel()))
-    disconnect(source_model);
-
-  QSortFilterProxyModel::setSourceModel(model);
-
-  if(auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel()))
-    connect(source_model, &QFileSystemModel::rootPathChanged, [this](){ beginResetModel(); endResetModel(); });
-}
-
 bool FileSystemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
-  if(!QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent))
-    return false;
-
   auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel());
   if(source_model)
   {
     auto root_path = source_model->rootPath();
     auto source_index = source_model->index(source_row, 0, source_parent);
-    auto source_path =  source_index.data(QFileSystemModel::FilePathRole).toString();
+    auto source_path = source_index.data(QFileSystemModel::FilePathRole).toString();
 
-    return root_path.size() < source_path.size() ? source_path.startsWith(root_path) : root_path.startsWith(source_path);
+    if (root_path == source_path)                                         return true;
+    else if(!source_path.startsWith(root_path + QDir::separator()))    return false;
   }
 
-  return true;
+  return QSortFilterProxyModel::filterAcceptsRow(source_row, source_parent);
 }
