@@ -13,6 +13,10 @@ macro(egnim_add_library target)
 
     if(THIS_DEPENDS)
         target_link_libraries(${target} ${THIS_DEPENDS})
+
+        foreach(target_depends ${THIS_DEPENDS})
+            install(TARGETS ${target_depends} EXPORT ${target}ConfigExport)
+        endforeach()
     endif()
 
     string(REPLACE "-" "_" NAME_UPPER "${target}")
@@ -28,7 +32,7 @@ macro(egnim_add_library target)
 
     set_target_properties(${target} PROPERTIES COMPILE_FEATURES cxx_std_20)
 
-    install(TARGETS ${target} EXPORT egnimConfigExport
+    install(TARGETS ${target} EXPORT ${target}ConfigExport
             RUNTIME DESTINATION bin
             LIBRARY DESTINATION lib
             ARCHIVE DESTINATION lib)
@@ -46,7 +50,7 @@ endmacro()
 # -------------------------------------------------------------------------------------------------- #
 # -------------------------- Define a macro that helps export targets ------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-function(egnim_export_targets)
+function(egnim_export_targets target)
 
     if (BUILD_SHARED_LIBS)
         set(config_name "shared")
@@ -63,7 +67,7 @@ function(egnim_export_targets)
                                      VERSION ${EGNIM_VERSION_MAJOR}.${EGNIM_VERSION_MINOR}
                                      COMPATIBILITY SameMajorVersion)
 
-    export(EXPORT egnimConfigExport
+    export(EXPORT ${target}ConfigExport
            FILE "${CMAKE_CURRENT_BINARY_DIR}/${targets_config_filename}")
 
     configure_package_config_file("${current_dir}/egnim-config.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/egnim-config.cmake"
@@ -71,7 +75,7 @@ function(egnim_export_targets)
     configure_package_config_file("${current_dir}/egnim-config-dependencies.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/egnim-config-dependencies.cmake"
                                     INSTALL_DESTINATION "${config_package_location}")
 
-    install(EXPORT egnimConfigExport
+    install(EXPORT ${target}ConfigExport
             FILE ${targets_config_filename}
             NAMESPACE egnim::
             DESTINATION ${config_package_location})

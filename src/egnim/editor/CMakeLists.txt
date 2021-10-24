@@ -59,6 +59,9 @@ set(sources
         ${source_root}/project/export_preset_widget.cpp
         ${source_root}/project/export_preset.cpp
         ${source_root}/project/export_preset_list_model.cpp
+        ${source_root}/project/export_manager.cpp
+        ${source_root}/project/export_template.cpp
+        ${source_root}/project/export_template_list_model.cpp
         ${source_root}/project/priv/project_serializer_impl.h
         ${source_root}/project/priv/project_serializer_impl.cpp
         ${source_root}/project/priv/json_project_serializer_impl.h
@@ -118,6 +121,9 @@ set(includes
         ${include_root}/project/export_preset_widget.h
         ${include_root}/project/export_preset.h
         ${include_root}/project/export_preset_list_model.h
+        ${include_root}/project/export_manager.h
+        ${include_root}/project/export_template.h
+        ${include_root}/project/export_template_list_model.h
 
         ${include_root}/commands/command.h
         ${include_root}/commands/group_command.h
