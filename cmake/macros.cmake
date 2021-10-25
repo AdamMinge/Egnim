@@ -3,7 +3,7 @@
 # -------------------------------------------------------------------------------------------------- #
 macro(egnim_add_library target)
 
-    cmake_parse_arguments(THIS "" "" "SOURCES;DEPENDS" ${ARGN})
+    cmake_parse_arguments(THIS "" "" "SOURCES;DEPENDS;DEPENDS_PRIVATE" ${ARGN})
     if (NOT "${THIS_UNPARSED_ARGUMENTS}" STREQUAL "")
         message(FATAL_ERROR "Extra unparsed arguments when calling egnim_add_library: ${THIS_UNPARSED_ARGUMENTS}")
     endif()
@@ -12,12 +12,16 @@ macro(egnim_add_library target)
     add_library(egnim::${target} ALIAS ${target})
 
     if(THIS_DEPENDS)
-        target_link_libraries(${target} ${THIS_DEPENDS})
-
-        foreach(target_depends ${THIS_DEPENDS})
-            install(TARGETS ${target_depends} EXPORT ${target}ConfigExport)
-        endforeach()
+        target_link_libraries(${target} PUBLIC ${THIS_DEPENDS})
     endif()
+
+    if(THIS_DEPENDS_PRIVATE)
+        target_link_libraries(${target} PRIVATE ${THIS_DEPENDS_PRIVATE})
+    endif()
+
+    foreach(target_depends ${THIS_DEPENDS} ${THIS_DEPENDS_PRIVATE})
+        install(TARGETS ${target_depends} EXPORT ${target}ConfigExport)
+    endforeach()
 
     string(REPLACE "-" "_" NAME_UPPER "${target}")
     string(TOUPPER "${NAME_UPPER}" NAME_UPPER)
@@ -33,9 +37,9 @@ macro(egnim_add_library target)
     set_target_properties(${target} PROPERTIES COMPILE_FEATURES cxx_std_20)
 
     install(TARGETS ${target} EXPORT ${target}ConfigExport
-            RUNTIME DESTINATION bin
-            LIBRARY DESTINATION lib
-            ARCHIVE DESTINATION lib)
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bin
+            LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT lib
+            ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT lib)
 
     target_include_directories(${target}
                                PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include>
@@ -60,7 +64,7 @@ function(egnim_export_targets target)
 
     set(current_dir "${EGNIM_SOURCE_DIR}/cmake")
     set(targets_config_filename "egnim-${config_name}-targets.cmake")
-    set(config_package_location lib/cmake/egnim)
+    set(config_package_location ${CMAKE_INSTALL_LIBDIR}/cmake/egnim)
 
     include(CMakePackageConfigHelpers)
     write_basic_package_version_file("${CMAKE_CURRENT_BINARY_DIR}/egnim-config-version.cmake"
@@ -91,7 +95,7 @@ endfunction()
 # -------------------------------------------------------------------------------------------------- #
 macro(egnim_add_application target)
 
-    cmake_parse_arguments(THIS "" "RESOURCES_DIR" "SOURCES;DEPENDS" ${ARGN})
+    cmake_parse_arguments(THIS "" "RESOURCES_DIR" "SOURCES;DEPENDS;DEPENDS_PRIVATE" ${ARGN})
     if (NOT "${THIS_UNPARSED_ARGUMENTS}" STREQUAL "")
         message(FATAL_ERROR "Extra unparsed arguments when calling egnim_add_application: ${THIS_UNPARSED_ARGUMENTS}")
     endif()
@@ -100,11 +104,15 @@ macro(egnim_add_application target)
     set_target_properties(${target} PROPERTIES DEBUG_POSTFIX -d)
 
     if(THIS_DEPENDS)
-        target_link_libraries(${target} PRIVATE ${THIS_DEPENDS})
+        target_link_libraries(${target} PUBLIC ${THIS_DEPENDS})
+    endif()
+
+    if(THIS_DEPENDS_PRIVATE)
+        target_link_libraries(${target} PRIVATE ${THIS_DEPENDS_PRIVATE})
     endif()
 
     install(TARGETS ${target}
-            RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin/${target})
+            RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT bin)
 
     if (THIS_RESOURCES_DIR)
         get_filename_component(THIS_RESOURCES_DIR "${THIS_RESOURCES_DIR}" ABSOLUTE)
@@ -138,7 +146,7 @@ endfunction()
 # -------------------------------------------------------------------------------------------------- #
 function(egnim_install_documentation)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/doc_doxygen/
-            DESTINATION docs)
+            DESTINATION ${CMAKE_INSTALL_PREFIX}/docs)
 endfunction()
 # -------------------------------------------------------------------------------------------------- #
 # ----------------------- Define a macro that helps defining translations -------------------------- #

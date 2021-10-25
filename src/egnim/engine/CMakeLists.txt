@@ -177,7 +177,7 @@ set(resources)
 egnim_add_library(egnim-engine
         SOURCES ${sources} ${includes} ${resources}
         DEPENDS sfml-graphics sfml-audio sfml-system
-        box2d nlohmann_json)
+        DEPENDS_PRIVATE box2d nlohmann_json)
 
 set_target_properties(egnim-engine
         PROPERTIES CXX_STANDARD 20)

@@ -13,23 +13,15 @@ set(sources
 
 set(includes)
 # -------------------------------------------------------------------------------------------------- #
-# --------------------------------- Define the abovo-test target ----------------------------------- #
+# ---------------------------------- Create application target ------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-add_executable(egnim-core-test ${sources} ${includes})
-# -------------------------------------------------------------------------------------------------- #
-# -------------------------------- Define the abovo-test features ---------------------------------- #
-# -------------------------------------------------------------------------------------------------- #
-set_target_properties(egnim-core-test PROPERTIES COMPILE_FEATURES cxx_std_20)
-# -------------------------------------------------------------------------------------------------- #
-# ----------------------------------- Setup include directories ------------------------------------ #
-# -------------------------------------------------------------------------------------------------- #
+egnim_add_application(egnim-core-test
+        SOURCES ${sources} ${includes}
+        DEPENDS egnim::egnim-engine GTest::gtest GTest::gmock)
+
 target_include_directories(egnim-core-test
-                           PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/tests/core/include>)
-# -------------------------------------------------------------------------------------------------- #
-# -------------------------------------- Setup dependencies ---------------------------------------- #
-# -------------------------------------------------------------------------------------------------- #
-target_link_libraries(egnim-core-test
-                      PUBLIC egnim::egnim-engine
-                      PRIVATE GTest::gtest
-                      PRIVATE GTest::gmock)
+        PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/tests/core/include>)
+
+set_target_properties(egnim-core-test
+        PROPERTIES CXX_STANDARD 20)
 # -------------------------------------------------------------------------------------------------- #

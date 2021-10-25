@@ -17,21 +17,15 @@ set(includes
     ${include_root}/example_game.h
     ${include_root}/boxes_state.h)
 # -------------------------------------------------------------------------------------------------- #
-# --------------------------------- Define the abovo-test target ----------------------------------- #
+# ---------------------------------- Create application target ------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-add_executable(egnim-example-physics_scenes ${sources} ${includes})
-# -------------------------------------------------------------------------------------------------- #
-# -------------------------------- Define the abovo-test features ---------------------------------- #
-# -------------------------------------------------------------------------------------------------- #
-set_target_properties(egnim-example-physics_scenes PROPERTIES COMPILE_FEATURES cxx_std_20)
-# -------------------------------------------------------------------------------------------------- #
-# ----------------------------------- Setup include directories ------------------------------------ #
-# -------------------------------------------------------------------------------------------------- #
+egnim_add_application(egnim-example-physics_scenes
+        SOURCES ${sources} ${includes}
+        DEPENDS egnim::egnim-engine)
+
 target_include_directories(egnim-example-physics_scenes
-                           PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/examples/physics_scenes/include>)
-# -------------------------------------------------------------------------------------------------- #
-# -------------------------------------- Setup dependencies ---------------------------------------- #
-# -------------------------------------------------------------------------------------------------- #
-target_link_libraries(egnim-example-physics_scenes
-                      PUBLIC egnim::egnim-engine)
+        PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/examples/physics_scenes/include>)
+
+set_target_properties(egnim-example-physics_scenes
+        PROPERTIES CXX_STANDARD 20)
 # -------------------------------------------------------------------------------------------------- #
