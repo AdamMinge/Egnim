@@ -81,13 +81,17 @@ function(egnim_export_targets target)
 
     install(EXPORT ${target}ConfigExport
             FILE ${targets_config_filename}
-            NAMESPACE egnim::
             DESTINATION ${config_package_location})
 
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/egnim-config.cmake
             ${CMAKE_CURRENT_BINARY_DIR}/egnim-config-dependencies.cmake
             ${CMAKE_CURRENT_BINARY_DIR}/egnim-config-version.cmake
             DESTINATION ${config_package_location})
+
+    install(DIRECTORY ${EGNIM_SOURCE_DIR}/include
+            DESTINATION .
+            COMPONENT devel
+            FILES_MATCHING PATTERN "*.hpp" PATTERN "*.inl" PATTERN "*.h")
 
 endfunction()
 # -------------------------------------------------------------------------------------------------- #

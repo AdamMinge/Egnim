@@ -31,7 +31,6 @@ set(egnim_FOUND TRUE)
 
 if(EXISTS ${targets_config_file})
     include(${targets_config_file})
-    include("${CMAKE_CURRENT_LIST_DIR}/egnim-config-dependencies.cmake")
 
     if (egnim_FOUND)
         foreach (component ${egnim_FIND_COMPONENTS})
