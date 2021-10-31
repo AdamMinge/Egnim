@@ -6,7 +6,30 @@
 #include "utils/zip_file.h"
 /* -------------------------------------------------------------------------- */
 
-#define SAFE_EXECUTE(executor) do { if(auto v = (executor); v < 0) { qDebug() << "v = " << v; return false; } } while(0);
+#define SAFE_EXECUTE(executor) do { if((executor) < 0) return false; } while(0);
+
+static bool is_zip_valid(const QString& file_name, int compression_level, char mode)
+{
+  auto zip = zip_open(file_name.toStdString().c_str(), compression_level, mode);
+  auto success = static_cast<bool>(zip);
+  zip_close(zip);
+
+  return success;
+}
+
+std::unique_ptr<ZipFile> ZipFile::load(QString file_name, int compression_level)
+{
+  if(is_zip_valid(file_name, compression_level, 'r'))
+    return std::unique_ptr<ZipFile>(new ZipFile(std::move(file_name), compression_level));
+  return nullptr;
+}
+
+std::unique_ptr<ZipFile> ZipFile::create(QString file_name, int compression_level)
+{
+  if(is_zip_valid(file_name, compression_level, 'w'))
+    return std::unique_ptr<ZipFile>(new ZipFile(std::move(file_name), compression_level));
+  return nullptr;
+}
 
 ZipFile::ZipFile(QString file_name, int compression_level) :
   m_file_name(std::move(file_name)),
@@ -116,6 +139,21 @@ QStringList ZipFile::getEntryNames() const
   });
 
   return entryNames;
+}
+
+QString ZipFile::getFileName() const
+{
+  return m_file_name;
+}
+
+int ZipFile::getCompressionLevel() const
+{
+  return m_compression_level;
+}
+
+bool ZipFile::hasEntryName(const QString& name) const
+{
+  return getEntryNames().contains(name);
 }
 
 bool ZipFile::execute(char mode, const std::function<bool(zip_t* zip)>& function) const

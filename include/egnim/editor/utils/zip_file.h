@@ -4,8 +4,9 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QObject>
 #include <QString>
-#include <QIODevice>
 #include <QStringList>
+/* --------------------------------- Standard ------------------------------- */
+#include <memory>
 /* -------------------------------------------------------------------------- */
 
 struct zip_t;
@@ -15,7 +16,10 @@ class ZipFile : public QObject
   Q_OBJECT
 
 public:
-  explicit ZipFile(QString file_name, int compression_level = 6);
+  static std::unique_ptr<ZipFile> load(QString file_name, int compression_level = 6);
+  static std::unique_ptr<ZipFile> create(QString file_name, int compression_level = 6);
+
+public:
   ~ZipFile() override;
 
   bool append_entry(const QString& entry_name);
@@ -30,6 +34,13 @@ public:
   bool extract(const QStringList& entry_names, const QString& extract_dir);
 
   [[nodiscard]] QStringList getEntryNames() const;
+  [[nodiscard]] QString getFileName() const;
+  [[nodiscard]] int getCompressionLevel() const;
+
+  [[nodiscard]] bool hasEntryName(const QString& name) const;
+
+protected:
+  explicit ZipFile(QString file_name, int compression_level = 6);
 
 private:
   bool execute(char mode, const std::function<bool(zip_t* zip)>& function) const;
