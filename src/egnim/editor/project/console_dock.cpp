@@ -4,7 +4,7 @@
 #include <QVBoxLayout>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/console_dock.h"
-#include "utils.h"
+#include "utils/dpi_info.h"
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------- ConsoleOutputWidget ------------------------- */
@@ -43,7 +43,7 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
 
   bottomBar->addWidget(m_line_edit);
   bottomBar->addWidget(m_clear_button);
-  bottomBar->setSpacing(utils::dpiScaled(2));
+  bottomBar->setSpacing(DpiInfo::dpiScaled(2));
 
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);

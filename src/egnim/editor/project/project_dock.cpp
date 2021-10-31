@@ -15,7 +15,6 @@
 #include "models/file_system_proxy_model.h"
 #include "models/file_system_model.h"
 #include "action_manager.h"
-#include "utils.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_project_dock.h"
 /* -------------------------------------------------------------------------- */
@@ -49,7 +48,7 @@ ProjectDock::ProjectDock(QWidget* parent) :
 
   m_files_model->setNameFilterDisables(false);
   m_files_model->setReadOnly(false);
-  m_files_model->setNameFilters(utils::projectSupportedFormats());
+  m_files_model->setNameFilters(Project::projectSupportedFormats());
 
   connect(m_ui->m_search_project_files_edit, &QLineEdit::textChanged, this, &ProjectDock::searchProjectFiles);
 

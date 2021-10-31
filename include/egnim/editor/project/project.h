@@ -35,6 +35,7 @@ public:
   static std::unique_ptr<Project> load(const QString& file_name);
 
   static QString getProjectFileFilter();
+  static QStringList projectSupportedFormats();
 
   [[nodiscard]] QString getProjectExtension() const;
   static QString getProjectExtension(Type type);
