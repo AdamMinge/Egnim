@@ -22,6 +22,7 @@ initialize_submodule(box2d)
 initialize_submodule(gtest)
 initialize_submodule(json)
 initialize_submodule(sfml)
+initialize_submodule(zip)
 # -------------------------------------------------------------------------------------------------- #
 # -------------------------------------- Add subdirectories ---------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
@@ -29,4 +30,5 @@ add_subdirectory(box2d EXCLUDE_FROM_ALL)
 add_subdirectory(gtest EXCLUDE_FROM_ALL)
 add_subdirectory(json EXCLUDE_FROM_ALL)
 add_subdirectory(sfml EXCLUDE_FROM_ALL)
+add_subdirectory(zip EXCLUDE_FROM_ALL)
 # -------------------------------------------------------------------------------------------------- #

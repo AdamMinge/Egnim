@@ -22,7 +22,9 @@ set(sources
         ${source_root}/about_dialog.cpp
         ${source_root}/settings_dialog.cpp
         ${source_root}/file_system_watcher.cpp
-        ${source_root}/utils.cpp
+
+        ${source_root}/utils/dpi_info.cpp
+        ${source_root}/utils/zip_file.cpp
 
         ${source_root}/document/document.cpp
         ${source_root}/document/document_manager.cpp
@@ -88,7 +90,9 @@ set(includes
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
         ${include_root}/file_system_watcher.h
-        ${include_root}/utils.h
+
+        ${include_root}/utils/dpi_info.h
+        ${include_root}/utils/zip_file.h
 
         ${include_root}/document/document.h
         ${include_root}/document/document_manager.h
@@ -174,7 +178,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 # -------------------------------------------------------------------------------------------------- #
 egnim_add_application(egnim-editor
         SOURCES ${sources} ${includes} ${uis} ${resources}
-        DEPENDS Qt6::Widgets egnim::egnim-engine)
+        DEPENDS Qt6::Widgets egnim::egnim-engine zip::zip)
 
 egnim_add_translations(egnim-editor
         QM_DIR ${resources_root}/translations/

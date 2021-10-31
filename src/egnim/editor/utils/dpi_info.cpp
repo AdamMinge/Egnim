@@ -1,15 +1,11 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QGuiApplication>
-#include <QImageReader>
 #include <QScreen>
 /* ----------------------------------- Local -------------------------------- */
-#include "utils.h"
-#include "document/document.h"
+#include "utils/dpi_info.h"
 /* -------------------------------------------------------------------------- */
 
-namespace utils {
-
-int defaultDpi()
+int DpiInfo::defaultDpi()
 {
   static auto dpi = []{
     if(const auto screen = QGuiApplication::primaryScreen())
@@ -25,7 +21,7 @@ int defaultDpi()
   return dpi;
 }
 
-qreal defaultDpiScale()
+qreal DpiInfo::defaultDpiScale()
 {
   static auto dpi = []{
     if(const auto screen = QGuiApplication::primaryScreen())
@@ -36,12 +32,12 @@ qreal defaultDpiScale()
   return dpi;
 }
 
-int dpiScaled(int value)
+int DpiInfo::dpiScaled(int value)
 {
   return qRound(dpiScaled(static_cast<qreal>(value)));
 }
 
-qreal dpiScaled(qreal value)
+qreal DpiInfo::dpiScaled(qreal value)
 {
 #ifdef Q_OS_MAC
   return value;
@@ -51,42 +47,22 @@ qreal dpiScaled(qreal value)
 #endif
 }
 
-QSize dpiScaled(const QSize& value)
+QSize DpiInfo::dpiScaled(const QSize& value)
 {
   return QSize(dpiScaled(value.width()),
                dpiScaled(value.height()));
 }
 
-QPoint dpiScaled(const QPoint& value)
+QPoint DpiInfo::dpiScaled(const QPoint& value)
 {
   return QPoint(dpiScaled(value.x()),
                 dpiScaled(value.y()));
 }
 
-QRectF dpiScaled(const QRectF& value)
+QRectF DpiInfo::dpiScaled(const QRectF& value)
 {
   return QRectF(dpiScaled(value.x()),
                 dpiScaled(value.y()),
                 dpiScaled(value.width()),
                 dpiScaled(value.height()));
 }
-
-QStringList projectSupportedFormats()
-{
-  auto supported_formats = QStringList();
-
-  auto documents_extensions = Document::getDocumentExtensions();
-  std::transform(documents_extensions.begin(), documents_extensions.end(), documents_extensions.begin(),
-                 [](auto& extension){ return QString("*.%1").arg(extension); });
-
-  auto image_extensions = QStringList();
-  for(auto& extension : QImageReader::supportedImageFormats())
-    image_extensions.append(QString("*.%1").arg(QString::fromLocal8Bit(extension)));
-
-  supported_formats << documents_extensions
-                    << image_extensions;
-
-  return supported_formats;
-}
-
-} // namespace utils
