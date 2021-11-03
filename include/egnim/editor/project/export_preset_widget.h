@@ -10,12 +10,7 @@ class WindowsExportPreset;
 class LinuxExportPreset;
 class MacOSExportPreset;
 
-namespace Ui
-{
-  class WindowsExportPresetWidget;
-  class LinuxExportPresetWidget;
-  class MacOSExportPresetWidget;
-}
+namespace Ui { class ExportPresetWidget; }
 
 class ExportPresetWidget : public QWidget
 {
@@ -27,15 +22,30 @@ public:
 
   virtual void setCurrentPreset(ExportPreset* export_preset) = 0;
   [[nodiscard]] virtual ExportPreset* getCurrentPreset() const = 0;
+};
+
+class BaseExportPresetWidget : public ExportPresetWidget
+{
+  Q_OBJECT
+
+public:
+  explicit BaseExportPresetWidget(QWidget* parent = nullptr);
+  ~BaseExportPresetWidget() override;
+
+  void setCurrentPreset(ExportPreset* export_preset) override = 0;
+  [[nodiscard]] ExportPreset* getCurrentPreset() const override = 0;
 
 protected:
   void changeEvent(QEvent* event) override;
 
+protected:
+  QScopedPointer<Ui::ExportPresetWidget> m_ui;
+
 private:
-  virtual void retranslateUi() = 0;
+  void retranslateUi();
 };
 
-class WindowsExportPresetWidget : public ExportPresetWidget
+class WindowsExportPresetWidget : public BaseExportPresetWidget
 {
   Q_OBJECT
 
@@ -47,14 +57,10 @@ public:
   [[nodiscard]] ExportPreset* getCurrentPreset() const override;
 
 private:
-  void retranslateUi() override;
-
-private:
-  QScopedPointer<Ui::WindowsExportPresetWidget> m_ui;
   WindowsExportPreset* m_export_preset;
 };
 
-class LinuxExportPresetWidget : public ExportPresetWidget
+class LinuxExportPresetWidget : public BaseExportPresetWidget
 {
   Q_OBJECT
 
@@ -66,14 +72,10 @@ public:
   [[nodiscard]] ExportPreset* getCurrentPreset() const override;
 
 private:
-  void retranslateUi() override;
-
-private:
-  QScopedPointer<Ui::LinuxExportPresetWidget> m_ui;
   LinuxExportPreset* m_export_preset;
 };
 
-class MacOSExportPresetWidget : public ExportPresetWidget
+class MacOSExportPresetWidget : public BaseExportPresetWidget
 {
   Q_OBJECT
 
@@ -85,10 +87,6 @@ public:
   [[nodiscard]] ExportPreset* getCurrentPreset() const override;
 
 private:
-  void retranslateUi() override;
-
-private:
-  QScopedPointer<Ui::MacOSExportPresetWidget> m_ui;
   MacOSExportPreset* m_export_preset;
 };
 
@@ -102,9 +100,6 @@ public:
 
   void setCurrentPreset(ExportPreset* export_preset) override;
   [[nodiscard]] ExportPreset* getCurrentPreset() const override;
-
-private:
-  void retranslateUi() override;
 
 private:
   ExportPreset* m_export_preset;

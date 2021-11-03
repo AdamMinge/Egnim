@@ -6,11 +6,11 @@
 #include <QString>
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
-/* ----------------------------------- Local -------------------------------- */
-#include "project/export_preset.h"
 /* -------------------------------------------------------------------------- */
 
 class ZipFile;
+class Project;
+class ExportPreset;
 
 class ExportTemplate : public QObject
 {
@@ -25,8 +25,8 @@ public:
   [[nodiscard]] QString getFileName() const;
   [[nodiscard]] QString getDisplayName() const;
 
-  [[nodiscard]] bool canExportTemplate(ExportPreset::Type type, ExportPreset::Version version);
-  bool exportTemplate(ExportPreset::Type type, ExportPreset::Version version, const QString& dir);
+  [[nodiscard]] bool canExportTemplate(const ExportPreset& export_preset) const;
+  bool exportTemplate(const ExportPreset& export_preset) const; // NOLINT(modernize-use-nodiscard)
 
 protected:
   explicit ExportTemplate();

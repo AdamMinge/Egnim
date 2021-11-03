@@ -158,9 +158,7 @@ set(uis
         ${uis_root}/project/rename_file_dialog.ui
         ${uis_root}/project/export_project_dialog.ui
         ${uis_root}/project/project_dock.ui
-        ${uis_root}/project/linux_export_preset_widget.ui
-        ${uis_root}/project/macos_export_preset_widget.ui
-        ${uis_root}/project/windows_export_preset_widget.ui)
+        ${uis_root}/project/export_preset_widget.ui)
 # -------------------------------------------------------------------------------------------------- #
 # ---------------------------------- Qt libraries configuration ------------------------------------ #
 # -------------------------------------------------------------------------------------------------- #

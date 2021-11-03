@@ -15,7 +15,7 @@
 #include "project/project_dock.h"
 #include "project/console_dock.h"
 #include "project/export_project_dialog.h"
-#include "document/new_document_dialog.h"
+#include "project/export_manager.h"
 #include "document/document_manager.h"
 #include "document/scene_editor.h"
 #include "document/document.h"
@@ -86,6 +86,7 @@ MainWindow::~MainWindow()
   ActionManager::deleteInstance();
   StyleManager::deleteInstance();
   PreferencesManager::deleteInstance();
+  ExportManager::deleteInstance();
 }
 
 ProjectManager& MainWindow::getProjectManager() const

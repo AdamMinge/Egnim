@@ -3,10 +3,12 @@
 #include <QDir>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/export_template.h"
+#include "project/export_preset.h"
+#include "project/project.h"
 #include "utils/zip_file.h"
 /* -------------------------------------------------------------------------- */
 
-static QString ExportToEntryName(ExportPreset::Type type, ExportPreset::Version version)
+static QString ExportToEntryName(const ExportPreset& export_preset)
 {
   constexpr auto str_types = std::array{
       std::pair{"windows", ".exe"},
@@ -20,6 +22,9 @@ static QString ExportToEntryName(ExportPreset::Type type, ExportPreset::Version 
       "x64_debug",
       "x64_release"
   };
+
+  const auto type = export_preset.getType();
+  const auto version = export_preset.getVersion();
 
   Q_ASSERT(static_cast<int>(type) >= 0 && static_cast<int>(type) < str_types.size());
   Q_ASSERT(static_cast<int>(version) >= 0 && static_cast<int>(version) < str_versions.size());
@@ -61,16 +66,21 @@ QString ExportTemplate::getDisplayName() const
   return QFileInfo(getFileName()).fileName();
 }
 
-bool ExportTemplate::canExportTemplate(ExportPreset::Type type, ExportPreset::Version version)
+bool ExportTemplate::canExportTemplate(const ExportPreset& export_preset) const
 {
   Q_ASSERT(m_zip);
-  return m_zip->hasEntryName(ExportToEntryName(type, version));
+
+  const auto entry_name = ExportToEntryName(export_preset);
+  return m_zip->hasEntryName(entry_name);
 }
 
-bool ExportTemplate::exportTemplate(ExportPreset::Type type, ExportPreset::Version version, const QString& dir)
+bool ExportTemplate::exportTemplate(const ExportPreset& export_preset) const
 {
-  if(!canExportTemplate(type, version))
+  if(!canExportTemplate(export_preset))
     return false;
 
-  return m_zip->extract(ExportToEntryName(type, version), dir);
+  const auto entry_name = ExportToEntryName(export_preset);
+  const auto export_path = export_preset.getExportPath();
+
+  return m_zip->extract(entry_name, export_path);
 }

@@ -5,6 +5,8 @@
 #include <QObject>
 /* -------------------------------------------------------------------------- */
 
+class Project;
+
 class ExportPreset : public QObject
 {
   Q_OBJECT
@@ -42,6 +44,8 @@ public:
   void setExportPath(QString path);
   [[nodiscard]] QString getExportPath() const;
 
+  bool exportProject(const Project& project) const; // NOLINT(modernize-use-nodiscard)
+
   [[nodiscard]] virtual std::unique_ptr<ExportPreset> clone() const = 0;
 
 Q_SIGNALS:
@@ -50,6 +54,8 @@ Q_SIGNALS:
 
 protected:
   void initializeClone(ExportPreset& export_preset) const;
+
+  virtual bool extendedProjectExport(const Project& project) const; // NOLINT(modernize-use-nodiscard)
 
 private:
   Type m_type;
@@ -68,6 +74,9 @@ public:
   ~WindowsExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
+
+protected:
+  bool extendedProjectExport(const Project& project) const override; // NOLINT(modernize-use-nodiscard)
 };
 
 class LinuxExportPreset : public ExportPreset
@@ -93,5 +102,8 @@ public:
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
 };
+
+template<typename TYPE>
+concept IsExportPreset = std::derived_from<std::decay_t<TYPE>, ExportPreset>;
 
 #endif //EXPORT_PRESET_H

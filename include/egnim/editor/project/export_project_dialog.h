@@ -25,6 +25,7 @@ protected:
   void changeEvent(QEvent* event) override;
 
 private Q_SLOTS:
+  void exportWithPresets(const ExportPreset& export_preset);
   void exportWithCurrentPreset();
   void exportWithAllPresets();
 

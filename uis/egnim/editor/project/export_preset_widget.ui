@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MacOSExportPresetWidget</class>
- <widget class="QWidget" name="MacOSExportPresetWidget">
+ <class>ExportPresetWidget</class>
+ <widget class="QWidget" name="ExportPresetWidget">
   <property name="geometry">
    <rect>
     <x>0</x>

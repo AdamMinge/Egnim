@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 
 ExportTemplateListModel::ExportTemplateListModel(QObject* parent) :
-    QAbstractListModel(parent)
+  QAbstractListModel(parent)
 {
 
 }

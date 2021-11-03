@@ -1,5 +1,6 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "project/export_preset.h"
+#include "project/project.h"
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------- ExportPreset ---------------------------- */
@@ -53,6 +54,17 @@ QString ExportPreset::getExportPath() const
   return m_export_path;
 }
 
+bool ExportPreset::exportProject(const Project& project) const
+{
+  // TODO Implementation
+  return extendedProjectExport(project);
+}
+
+bool ExportPreset::extendedProjectExport(const Project& project) const
+{
+  return true;
+}
+
 void ExportPreset::initializeClone(ExportPreset& export_preset) const
 {
 
@@ -74,6 +86,12 @@ std::unique_ptr<ExportPreset> WindowsExportPreset::clone() const
   ExportPreset::initializeClone(*windows_export_preset);
 
   return windows_export_preset;
+}
+
+bool WindowsExportPreset::extendedProjectExport(const Project& project) const
+{
+  // TODO Implementation
+  return true;
 }
 
 /* ------------------------------ LinuxExportPreset ------------------------- */

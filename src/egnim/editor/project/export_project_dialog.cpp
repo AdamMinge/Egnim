@@ -1,13 +1,32 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMenu>
+#include <QMessageBox>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project_manager.h"
 #include "project/export_preset_widget.h"
 #include "project/export_project_dialog.h"
 #include "project/export_preset_list_model.h"
+#include "project/export_manager.h"
+#include "project/project.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_project_dialog.h"
 /* -------------------------------------------------------------------------- */
+
+static QString exportResultToMessage(ExportManager::ExportResult result)
+{
+  switch(result)
+  {
+    case ExportManager::ExportResult::FAIL_MISSING_TEMPLATE:
+      return QObject::tr("Error occurred while trying find template");
+    case ExportManager::ExportResult::FAIL_EXPORT_PROJECT:
+      return QObject::tr("Error occurred while trying export project");
+    case ExportManager::ExportResult::FAIL_EXPORT_TEMPLATE:
+      return QObject::tr("Error occurred while trying export template");
+
+    default:
+      return "";
+  }
+}
 
 ExportProjectDialog::ExportProjectDialog(QWidget* parent) :
   QDialog(parent),
@@ -29,6 +48,10 @@ ExportProjectDialog::ExportProjectDialog(QWidget* parent) :
 
   connect(m_ui->m_presets_list_view->selectionModel(), &QItemSelectionModel::currentChanged,
           this, &ExportProjectDialog::currentPresetChanged);
+  connect(m_export_preset_model, &ExportPresetListModel::rowsInserted,
+          this, &ExportProjectDialog::updateActions);
+  connect(m_export_preset_model, &ExportPresetListModel::rowsRemoved,
+          this, &ExportProjectDialog::updateActions);
 
   connect(m_ui->m_cancel_button, &QPushButton::pressed, this, &QDialog::close);
   connect(m_ui->m_export_button, &QPushButton::pressed, this, &ExportProjectDialog::exportWithCurrentPreset);
@@ -70,14 +93,35 @@ void ExportProjectDialog::changeEvent(QEvent* event)
   }
 }
 
+void ExportProjectDialog::exportWithPresets(const ExportPreset& export_preset)
+{
+  auto project = ProjectManager::getInstance().getProject();
+  Q_ASSERT(project != nullptr);
+
+  auto export_result = ExportManager::getInstance().exportProject(*project, export_preset);
+  if(export_result != ExportManager::ExportResult::SUCCESS)
+  {
+    QMessageBox::critical(this,
+                          tr("Error Export Project [ %1 ]").arg(export_preset.getName()),
+                          exportResultToMessage(export_result));
+  }
+}
+
 void ExportProjectDialog::exportWithCurrentPreset()
 {
-
+  Q_ASSERT(m_current_preset != nullptr);
+  exportWithPresets(*m_current_preset);
 }
 
 void ExportProjectDialog::exportWithAllPresets()
 {
-
+  auto row_count = m_export_preset_model->rowCount(QModelIndex());
+  for(auto row = 0; row < row_count; ++row)
+  {
+    auto current_preset = m_export_preset_model->getExportPreset(m_export_preset_model->index(row));
+    Q_ASSERT(current_preset != nullptr);
+    exportWithPresets(*current_preset);
+  }
 }
 
 void ExportProjectDialog::addPreset(ExportPreset::Type preset_type)
@@ -144,10 +188,13 @@ void ExportProjectDialog::retranslateUi()
 
 void ExportProjectDialog::updateActions()
 {
-  m_ui->m_export_button->setEnabled(m_current_preset);
-  m_ui->m_export_all_button->setEnabled(m_current_preset);
-  m_ui->m_copy_button->setEnabled(m_current_preset);
-  m_ui->m_remove_button->setEnabled(m_current_preset);
+  const auto selected_preset = m_current_preset != nullptr;
+  const auto any_preset_on_list = m_export_preset_model->rowCount(QModelIndex()) > 0;
+
+  m_ui->m_export_button->setEnabled(selected_preset);
+  m_ui->m_export_all_button->setEnabled(any_preset_on_list);
+  m_ui->m_copy_button->setEnabled(selected_preset);
+  m_ui->m_remove_button->setEnabled(selected_preset);
 }
 
 void ExportProjectDialog::addEditor(ExportPreset::Type preset_type, std::unique_ptr<ExportPresetWidget> editor)
