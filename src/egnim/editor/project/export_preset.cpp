@@ -54,6 +54,24 @@ QString ExportPreset::getExportPath() const
   return m_export_path;
 }
 
+QString ExportPreset::getExecutableExtension() const
+{
+  return getExecutableExtension(m_type);
+}
+
+QString ExportPreset::getExecutableExtension(Type type)
+{
+  switch(type)
+  {
+    case Type::Windows: return {".exe"};
+    case Type::Linux:   return {""};
+    case Type::MacOS:   return {".app"};
+
+    default:
+      return {""};
+  }
+}
+
 bool ExportPreset::exportProject(const Project& project) const
 {
   // TODO Implementation

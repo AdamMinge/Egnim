@@ -1,8 +1,7 @@
-/* ------------------------------------ Qt ---------------------------------- */
-#include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/new_project_dialog.h"
 #include "project/game_project.h"
+#include "widgets/file_dialog.h"
 #include "preferences_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_game_project_dialog.h"
@@ -102,11 +101,10 @@ void NewGameProjectDialog::onBrowsePressed()
     QFileDialog::Option::DontUseNativeDialog |
     QFileDialog::Option::ShowDirsOnly;
 
-
-  auto dir_path = QFileDialog::getExistingDirectory(this,
-                                                    tr("New Project"),
-                                                    m_ui->m_project_path_edit->text(),
-                                                    file_dialog_options);
+  auto dir_path = FileDialog::getExistingDirectory(this,
+                                                   tr("New Project"),
+                                                   m_ui->m_project_path_edit->text(),
+                                                   file_dialog_options);
 
   if(dir_path.isEmpty())
     return;

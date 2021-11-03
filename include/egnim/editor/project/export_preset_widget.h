@@ -41,6 +41,9 @@ protected:
 protected:
   QScopedPointer<Ui::ExportPresetWidget> m_ui;
 
+private Q_SLOTS:
+  void onBrowsePressed();
+
 private:
   void retranslateUi();
 };

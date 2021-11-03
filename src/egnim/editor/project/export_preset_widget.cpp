@@ -3,6 +3,7 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "project/export_preset_widget.h"
 #include "project/export_preset.h"
+#include "widgets/file_dialog.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_preset_widget.h"
 /* -------------------------------------------------------------------------- */
@@ -30,6 +31,8 @@ BaseExportPresetWidget::BaseExportPresetWidget(QWidget* parent) :
 
   connect(m_ui->m_export_path_edit, &QLineEdit::textChanged, this, [this](auto&& path){
     if(getCurrentPreset()) getCurrentPreset()->setExportPath(std::forward<decltype(path)>(path));});
+
+  connect(m_ui->m_browse_button, &QPushButton::pressed, this, &BaseExportPresetWidget::onBrowsePressed);
 }
 
 BaseExportPresetWidget::~BaseExportPresetWidget() = default;
@@ -52,6 +55,26 @@ void BaseExportPresetWidget::changeEvent(QEvent* event)
     default:
       break;
   }
+}
+
+void BaseExportPresetWidget::onBrowsePressed()
+{
+  const auto file_dialog_options =
+      QFileDialog::Options() |
+      QFileDialog::Option::DontUseNativeDialog;
+
+  auto filter = QString("Project Executable (*%1)").arg(getCurrentPreset()->getExecutableExtension());
+  auto dir_path = FileDialog::getSaveFileName(this,
+                                             tr("Export Project"),
+                                              m_ui->m_export_path_edit->text(),
+                                              filter,
+                                              &filter,
+                                              file_dialog_options);
+
+  if(dir_path.isEmpty())
+    return;
+
+  m_ui->m_export_path_edit->setText(dir_path);
 }
 
 void BaseExportPresetWidget::retranslateUi()

@@ -126,21 +126,31 @@ void ExportProjectDialog::exportWithAllPresets()
 
 void ExportProjectDialog::addPreset(ExportPreset::Type preset_type)
 {
+  auto project = ProjectManager::getInstance().getProject();
+  Q_ASSERT(project != nullptr);
+
+  const auto export_path = QString("%1%2").arg(
+      project->getDirectory().filePath(QFileInfo(project->getDisplayName()).baseName()),
+      ExportPreset::getExecutableExtension(preset_type));
+
   switch(preset_type)
   {
     case ExportPreset::Type::Windows:
       m_export_preset_model->appendExportPreset(
-        std::make_unique<WindowsExportPreset>(tr("Windows")));
+        std::make_unique<WindowsExportPreset>(
+            tr("Windows"), export_path));
       break;
 
     case ExportPreset::Type::Linux:
       m_export_preset_model->appendExportPreset(
-        std::make_unique<LinuxExportPreset>(tr("Linux")));
+        std::make_unique<LinuxExportPreset>(
+            tr("Linux"), export_path));
       break;
 
     case ExportPreset::Type::MacOS:
       m_export_preset_model->appendExportPreset(
-        std::make_unique<MacOSExportPreset>(tr("MacOS")));
+        std::make_unique<MacOSExportPreset>(
+            tr("MacOS"), export_path));
       break;
 
     case ExportPreset::Type::Unknown:

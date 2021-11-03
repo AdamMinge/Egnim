@@ -44,6 +44,9 @@ public:
   void setExportPath(QString path);
   [[nodiscard]] QString getExportPath() const;
 
+  [[nodiscard]] QString getExecutableExtension() const;
+  [[nodiscard]] static QString getExecutableExtension(Type type);
+
   bool exportProject(const Project& project) const; // NOLINT(modernize-use-nodiscard)
 
   [[nodiscard]] virtual std::unique_ptr<ExportPreset> clone() const = 0;

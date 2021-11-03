@@ -11,9 +11,9 @@
 static QString ExportToEntryName(const ExportPreset& export_preset)
 {
   constexpr auto str_types = std::array{
-      std::pair{"windows", ".exe"},
-      std::pair{"linux", ""},
-      std::pair{"mac", ".app"}
+      "windows",
+      "linux",
+      "mac",
   };
 
   constexpr auto str_versions = std::array{
@@ -30,9 +30,9 @@ static QString ExportToEntryName(const ExportPreset& export_preset)
   Q_ASSERT(static_cast<int>(version) >= 0 && static_cast<int>(version) < str_versions.size());
 
   return QString("%1_%2%3").arg(
-      std::get<0>(str_types[static_cast<int>(type)]),
+      str_types[static_cast<int>(type)],
       str_versions[static_cast<int>(version)],
-      std::get<1>(str_types[static_cast<int>(type)]));
+      export_preset.getExecutableExtension());
 }
 
 std::unique_ptr<ExportTemplate> ExportTemplate::load(const QString& path)

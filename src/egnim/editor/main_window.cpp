@@ -1,7 +1,6 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QCloseEvent>
 #include <QMessageBox>
-#include <QFileDialog>
 /* ----------------------------------- Local -------------------------------- */
 #include "main_window.h"
 #include "preferences_manager.h"
@@ -20,6 +19,7 @@
 #include "document/scene_editor.h"
 #include "document/document.h"
 #include "widgets/dialog_with_toggle_view.h"
+#include "widgets/file_dialog.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
@@ -293,13 +293,17 @@ void MainWindow::newProject(Project::Type type) // NOLINT(readability-make-membe
 
 void MainWindow::openProject()
 {
-  auto file_name = QFileDialog::getOpenFileName(
+  auto file_dialog_options =
+      QFileDialog::Options() |
+      QFileDialog::Option::DontUseNativeDialog;
+
+  auto file_name = FileDialog::getOpenFileName(
     this,
     tr("Open Project"),
     m_preferences->open_project_start_location.get(),
     Project::getProjectFileFilter(),
     nullptr,
-    QFileDialog::Options() | QFileDialog::Option::DontUseNativeDialog);
+    file_dialog_options);
 
   if(file_name.isEmpty())
     return;
