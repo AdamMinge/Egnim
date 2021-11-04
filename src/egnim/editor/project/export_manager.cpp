@@ -23,10 +23,7 @@ ExportManager::ExportManager() :
   m_export_template_model(new ExportTemplateListModel(this)),
   m_current_export_template(nullptr)
 {
-  /// TO REMOVE
-  auto temp = ExportTemplate::load("exec.zip");
-  m_export_template_model->appendExportTemplate(std::move(temp));
-  m_current_export_template = m_export_template_model->getExportTemplate(m_export_template_model->index(0));
+
 }
 
 ExportManager::~ExportManager() = default;

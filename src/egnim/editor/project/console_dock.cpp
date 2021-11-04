@@ -52,6 +52,8 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
 
   setWidget(widget);
 
+  connect(m_clear_button, &QPushButton::pressed, m_plain_text_edit, &QPlainTextEdit::clear);
+
   auto& logging_manager = LoggingManager::getInstance();
   connect(&logging_manager, &LoggingManager::onInfoIssueReport, this, &ConsoleDock::onInfoIssueReport);
   connect(&logging_manager, &LoggingManager::onWarningIssueReport, this, &ConsoleDock::onWarningIssueReport);

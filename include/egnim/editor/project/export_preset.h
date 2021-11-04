@@ -47,6 +47,9 @@ public:
   [[nodiscard]] QString getExecutableExtension() const;
   [[nodiscard]] static QString getExecutableExtension(Type type);
 
+  [[nodiscard]] QString getExportExecutableName() const;
+  [[nodiscard]] static QString getExportExecutableName(Type type, Version version);
+
   bool exportProject(const Project& project) const; // NOLINT(modernize-use-nodiscard)
 
   [[nodiscard]] virtual std::unique_ptr<ExportPreset> clone() const = 0;

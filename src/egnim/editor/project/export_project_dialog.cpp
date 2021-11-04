@@ -1,6 +1,5 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QMenu>
-#include <QMessageBox>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/project_manager.h"
 #include "project/export_preset_widget.h"
@@ -8,25 +7,10 @@
 #include "project/export_preset_list_model.h"
 #include "project/export_manager.h"
 #include "project/project.h"
+#include "logging_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_project_dialog.h"
 /* -------------------------------------------------------------------------- */
-
-static QString exportResultToMessage(ExportManager::ExportResult result)
-{
-  switch(result)
-  {
-    case ExportManager::ExportResult::FAIL_MISSING_TEMPLATE:
-      return QObject::tr("Error occurred while trying find template");
-    case ExportManager::ExportResult::FAIL_EXPORT_PROJECT:
-      return QObject::tr("Error occurred while trying export project");
-    case ExportManager::ExportResult::FAIL_EXPORT_TEMPLATE:
-      return QObject::tr("Error occurred while trying export template");
-
-    default:
-      return "";
-  }
-}
 
 ExportProjectDialog::ExportProjectDialog(QWidget* parent) :
   QDialog(parent),
@@ -93,17 +77,30 @@ void ExportProjectDialog::changeEvent(QEvent* event)
   }
 }
 
-void ExportProjectDialog::exportWithPresets(const ExportPreset& export_preset)
+void ExportProjectDialog::exportWithPresets(const ExportPreset& export_preset) // NOLINT(readability-convert-member-functions-to-static)
 {
   auto project = ProjectManager::getInstance().getProject();
   Q_ASSERT(project != nullptr);
 
+  INFO(QObject::tr("[EXPORT] Exporting project '%1' using preset '%2'").arg(
+      project->getDisplayName(), export_preset.getName()));
+
   auto export_result = ExportManager::getInstance().exportProject(*project, export_preset);
-  if(export_result != ExportManager::ExportResult::SUCCESS)
+  switch(export_result)
   {
-    QMessageBox::critical(this,
-                          tr("Error Export Project [ %1 ]").arg(export_preset.getName()),
-                          exportResultToMessage(export_result));
+    case ExportManager::ExportResult::FAIL_MISSING_TEMPLATE:
+      ERROR(QObject::tr("[EXPORT] Error occurred while trying find template"));
+      break;
+    case ExportManager::ExportResult::FAIL_EXPORT_PROJECT:
+      ERROR(QObject::tr("[EXPORT] Error occurred while trying export project"));
+      break;
+    case ExportManager::ExportResult::FAIL_EXPORT_TEMPLATE:
+      ERROR(QObject::tr("[EXPORT] Error occurred while trying export template"));
+      break;
+    case ExportManager::ExportResult::SUCCESS:
+      INFO(QObject::tr("[EXPORT] Export project '%1' using preset '%2' finished").arg(
+          project->getDisplayName(), export_preset.getName()));
+      break;
   }
 }
 

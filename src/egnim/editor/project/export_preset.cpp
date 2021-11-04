@@ -61,15 +61,44 @@ QString ExportPreset::getExecutableExtension() const
 
 QString ExportPreset::getExecutableExtension(Type type)
 {
-  switch(type)
-  {
-    case Type::Windows: return {".exe"};
-    case Type::Linux:   return {""};
-    case Type::MacOS:   return {".app"};
+  Q_ASSERT(type != Type::Unknown);
 
-    default:
-      return {""};
-  }
+  constexpr auto str_types = std::array{
+      ".exe",
+      "",
+      ".app"
+  };
+
+  return str_types[static_cast<int>(type)];
+}
+
+QString ExportPreset::getExportExecutableName() const
+{
+  return getExportExecutableName(m_type, m_version);
+}
+
+QString ExportPreset::getExportExecutableName(Type type, Version version)
+{
+  Q_ASSERT(type != Type::Unknown);
+  Q_ASSERT(version != Version::Unknown);
+
+  constexpr auto str_types = std::array{
+      "windows",
+      "linux",
+      "mac",
+  };
+
+  constexpr auto str_versions = std::array{
+      "x32_debug",
+      "x32_release",
+      "x64_debug",
+      "x64_release"
+  };
+
+  return QString("%1_%2%3").arg(
+      str_types[static_cast<int>(type)],
+      str_versions[static_cast<int>(version)],
+      getExecutableExtension(type));
 }
 
 bool ExportPreset::exportProject(const Project& project) const

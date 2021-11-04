@@ -60,7 +60,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="105"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="107"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -117,22 +117,17 @@
 <context>
     <name>ExportProjectDialog</name>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="105"/>
-        <source>Error Export Project [ %1 ]</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="141"/>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="138"/>
         <source>Windows</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="147"/>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="144"/>
         <source>Linux</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="153"/>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="150"/>
         <source>MacOS</source>
         <translation type="unfinished"></translation>
     </message>
@@ -451,18 +446,28 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="20"/>
-        <source>Error occurred while trying find template</source>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="85"/>
+        <source>[EXPORT] Exporting project &apos;%1&apos; using preset &apos;%2&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="22"/>
-        <source>Error occurred while trying export project</source>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="92"/>
+        <source>[EXPORT] Error occurred while trying find template</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="24"/>
-        <source>Error occurred while trying export template</source>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="95"/>
+        <source>[EXPORT] Error occurred while trying export project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="98"/>
+        <source>[EXPORT] Error occurred while trying export template</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/editor/project/export_project_dialog.cpp" line="101"/>
+        <source>[EXPORT] Export project &apos;%1&apos; using preset &apos;%2&apos; finished</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
