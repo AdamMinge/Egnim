@@ -8,6 +8,8 @@
 #include <QPlainTextEdit>
 /* -------------------------------------------------------------------------- */
 
+class Issue;
+
 class ConsoleOutputWidget : public QPlainTextEdit
 {
   Q_OBJECT
@@ -29,6 +31,11 @@ public:
 
 protected:
   void changeEvent(QEvent* event) override;
+
+private Q_SLOTS:
+  void onInfoIssueReport(const Issue& issue);
+  void onWarningIssueReport(const Issue& issue);
+  void onErrorIssueReport(const Issue& issue);
 
 private:
   void retranslateUi();

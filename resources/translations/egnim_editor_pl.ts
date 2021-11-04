@@ -55,12 +55,12 @@
 <context>
     <name>ConsoleDock</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="29"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="30"/>
         <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="75"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="105"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -68,7 +68,7 @@
 <context>
     <name>ConsoleOutputWidget</name>
     <message>
-        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="17"/>
+        <location filename="../../src/egnim/editor/project/console_dock.cpp" line="18"/>
         <source>Clear Console</source>
         <translation type="unfinished"></translation>
     </message>
