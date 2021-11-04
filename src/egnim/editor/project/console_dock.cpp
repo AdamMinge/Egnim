@@ -13,9 +13,8 @@ void ConsoleOutputWidget::contextMenuEvent(QContextMenuEvent *event)
 {
   std::unique_ptr<QMenu> menu { createStandardContextMenu(event->pos()) };
 
-  auto clearIcon = QIcon::fromTheme(QStringLiteral("edit-clear"));
   menu->addSeparator();
-  menu->addAction(clearIcon,tr("Clear Console"),
+  menu->addAction(tr("Clear Console"),
                   this, &QPlainTextEdit::clear);
 
   menu->exec(event->globalPos());

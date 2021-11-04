@@ -19,6 +19,7 @@ set(sources
         ${source_root}/action_manager.cpp
         ${source_root}/preferences_manager.cpp
         ${source_root}/logging_manager.cpp
+        ${source_root}/issue.cpp
         ${source_root}/about_dialog.cpp
         ${source_root}/settings_dialog.cpp
         ${source_root}/file_system_watcher.cpp
@@ -87,6 +88,7 @@ set(includes
         ${include_root}/action_manager.h
         ${include_root}/preferences_manager.h
         ${include_root}/logging_manager.h
+        ${include_root}/issue.h
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
         ${include_root}/file_system_watcher.h
