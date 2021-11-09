@@ -1,10 +1,12 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QEvent>
 #include <QMenu>
+#include <QShortcut>
 #include <QVBoxLayout>
 /* ----------------------------------- Local -------------------------------- */
 #include "project/console_dock.h"
 #include "utils/dpi_info.h"
+#include "widgets/line_edit_with_history.h"
 #include "logging_manager.h"
 /* -------------------------------------------------------------------------- */
 
@@ -26,7 +28,7 @@ void ConsoleOutputWidget::contextMenuEvent(QContextMenuEvent *event)
 ConsoleDock::ConsoleDock(QWidget* parent) :
   QDockWidget(parent),
   m_plain_text_edit(new ConsoleOutputWidget()),
-  m_line_edit(new QLineEdit()),
+  m_line_edit_with_history(new LineEditWithHistory()),
   m_clear_button(new QPushButton(tr("Clear Console")))
 {
   setObjectName(QLatin1String("Scene"));
@@ -41,7 +43,7 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
   auto layout = new QVBoxLayout(widget);
   auto bottomBar = new QHBoxLayout();
 
-  bottomBar->addWidget(m_line_edit);
+  bottomBar->addWidget(m_line_edit_with_history);
   bottomBar->addWidget(m_clear_button);
   bottomBar->setSpacing(DpiInfo::dpiScaled(2));
 
@@ -52,6 +54,14 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
 
   setWidget(widget);
 
+  auto prev_shortcut = new QShortcut(Qt::Key_Up, m_line_edit_with_history,
+                                     nullptr, nullptr, Qt::WidgetShortcut);
+  auto next_shortcut = new QShortcut(Qt::Key_Down, m_line_edit_with_history,
+                                     nullptr, nullptr, Qt::WidgetShortcut);
+
+  connect(m_line_edit_with_history, &QLineEdit::returnPressed, this, &ConsoleDock::executeScript);
+  connect(prev_shortcut, &QShortcut::activated, m_line_edit_with_history, &LineEditWithHistory::movePrev);
+  connect(next_shortcut, &QShortcut::activated, m_line_edit_with_history, &LineEditWithHistory::moveNext);
   connect(m_clear_button, &QPushButton::pressed, m_plain_text_edit, &QPlainTextEdit::clear);
 
   auto& logging_manager = LoggingManager::getInstance();
@@ -102,8 +112,13 @@ void ConsoleDock::onErrorIssueReport(const Issue& issue)
       QLatin1String("</pre>"));
 }
 
+void ConsoleDock::executeScript()
+{
+  // TODO : implementation //
+  m_line_edit_with_history->appendToHistory(m_line_edit_with_history->text());
+}
+
 void ConsoleDock::retranslateUi()
 {
   setWindowTitle(tr("Console"));
 }
-

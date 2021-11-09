@@ -9,6 +9,7 @@
 /* -------------------------------------------------------------------------- */
 
 class Issue;
+class LineEditWithHistory;
 
 class ConsoleOutputWidget : public QPlainTextEdit
 {
@@ -37,12 +38,14 @@ private Q_SLOTS:
   void onWarningIssueReport(const Issue& issue);
   void onErrorIssueReport(const Issue& issue);
 
+  void executeScript();
+
 private:
   void retranslateUi();
 
 private:
   QPlainTextEdit* m_plain_text_edit;
-  QLineEdit* m_line_edit;
+  LineEditWithHistory* m_line_edit_with_history;
   QPushButton* m_clear_button;
 };
 

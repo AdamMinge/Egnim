@@ -14,6 +14,7 @@ namespace Ui { class MainWindow; }
 class NoProjectWidget;
 class ProjectDock;
 class ConsoleDock;
+class IssueDock;
 
 class AboutDialog;
 class ExportProjectDialog;
@@ -100,6 +101,7 @@ private:
 
   ProjectDock* m_project_dock;
   ConsoleDock* m_console_dock;
+  IssueDock* m_issue_dock;
 
   QPointer<AboutDialog> m_about_dialog;
   QPointer<ExportProjectDialog> m_external_project_dialog;

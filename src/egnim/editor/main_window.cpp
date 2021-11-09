@@ -13,6 +13,7 @@
 #include "project/no_project_widget.h"
 #include "project/project_dock.h"
 #include "project/console_dock.h"
+#include "project/issue_dock.h"
 #include "project/export_project_dialog.h"
 #include "project/export_manager.h"
 #include "document/document_manager.h"
@@ -56,10 +57,18 @@ MainWindow::MainWindow(QWidget *parent) :
   m_project_window = new QMainWindow(this);
   m_project_dock = new ProjectDock(m_project_window);
   m_console_dock = new ConsoleDock(m_project_window);
+  m_issue_dock = new IssueDock(m_project_window);
 
   m_project_window->setCentralWidget(getDocumentManager().getWidget());
+
+  m_project_window->setDockOptions(m_project_window->dockOptions() | QMainWindow::GroupedDragging);
+  m_project_window->setDockNestingEnabled(true);
+
   m_project_window->addDockWidget(Qt::LeftDockWidgetArea, m_project_dock);
   m_project_window->addDockWidget(Qt::BottomDockWidgetArea, m_console_dock);
+  m_project_window->addDockWidget(Qt::BottomDockWidgetArea, m_issue_dock);
+
+  m_project_window->tabifyDockWidget(m_issue_dock, m_console_dock);
 
   m_stacked_widget->addWidget(m_project_window);
   m_stacked_widget->addWidget(m_no_project_widget);
@@ -236,6 +245,7 @@ void MainWindow::updateViewsAndToolbarsMenu() // NOLINT(readability-make-member-
 
   view_and_toolbars_menu->addAction(m_project_dock->toggleViewAction());
   view_and_toolbars_menu->addAction(m_console_dock->toggleViewAction());
+  view_and_toolbars_menu->addAction(m_issue_dock->toggleViewAction());
   view_and_toolbars_menu->addSeparator();
 
   if(auto editor = getDocumentManager().getCurrentEditor())

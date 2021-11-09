@@ -55,6 +55,7 @@ set(sources
         ${source_root}/project/rename_directory_dialog.cpp
         ${source_root}/project/project_dock.cpp
         ${source_root}/project/console_dock.cpp
+        ${source_root}/project/issue_dock.cpp
         ${source_root}/project/project_serializer.cpp
         ${source_root}/project/project_list_model.cpp
         ${source_root}/project/project_list_delegate.cpp
@@ -78,7 +79,8 @@ set(sources
 
         ${source_root}/widgets/dialog_with_toggle_view.cpp
         ${source_root}/widgets/file_dialog.cpp
-        ${source_root}/widgets/deselectable_tree_view.cpp)
+        ${source_root}/widgets/deselectable_tree_view.cpp
+        ${source_root}/widgets/line_edit_with_history.cpp)
 
 set(includes
         ${include_root}/meta_types.h
@@ -120,6 +122,7 @@ set(includes
         ${include_root}/project/rename_directory_dialog.h
         ${include_root}/project/project_dock.h
         ${include_root}/project/console_dock.h
+        ${include_root}/project/issue_dock.h
         ${include_root}/project/project_serializer.h
         ${include_root}/project/project_list_model.h
         ${include_root}/project/project_list_delegate.h
@@ -139,7 +142,8 @@ set(includes
 
         ${include_root}/widgets/dialog_with_toggle_view.h
         ${include_root}/widgets/file_dialog.h
-        ${include_root}/widgets/deselectable_tree_view.h)
+        ${include_root}/widgets/deselectable_tree_view.h
+        ${include_root}/widgets/line_edit_with_history.h)
 
 set(resources
         ${resources_root}/egnim-images.qrc
