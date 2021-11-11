@@ -29,7 +29,7 @@ void ConsoleOutputWidget::contextMenuEvent(QContextMenuEvent *event)
 ConsoleDock::ConsoleDock(QWidget* parent) :
   QDockWidget(parent),
   m_plain_text_edit(new ConsoleOutputWidget()),
-  m_line_edit_with_history(new QLineEditWithHistory()),
+  m_line_edit_with_history(new tools::QLineEditWithHistory()),
   m_clear_button(new QPushButton(tr("Clear Console")))
 {
   setObjectName(QLatin1String("Scene"));
@@ -61,8 +61,8 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
                                      nullptr, nullptr, Qt::WidgetShortcut);
 
   connect(m_line_edit_with_history, &QLineEdit::returnPressed, this, &ConsoleDock::executeScript);
-  connect(prev_shortcut, &QShortcut::activated, m_line_edit_with_history, &QLineEditWithHistory::movePrev);
-  connect(next_shortcut, &QShortcut::activated, m_line_edit_with_history, &QLineEditWithHistory::moveNext);
+  connect(prev_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QLineEditWithHistory::movePrev);
+  connect(next_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QLineEditWithHistory::moveNext);
   connect(m_clear_button, &QPushButton::pressed, m_plain_text_edit, &QPlainTextEdit::clear);
 
   auto& logging_manager = LoggingManager::getInstance();

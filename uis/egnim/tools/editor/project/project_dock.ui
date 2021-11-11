@@ -44,7 +44,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QUnselectableTreeView" name="m_project_files_tree_view">
+     <widget class="tools::QUnselectableTreeView" name="m_project_files_tree_view">
       <property name="editTriggers">
        <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
       </property>
@@ -79,7 +79,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QUnselectableTreeView</class>
+   <class>tools::QUnselectableTreeView</class>
    <extends>QTreeView</extends>
    <header location="global">egnim/tools/shared/unselectable_view.h</header>
   </customwidget>

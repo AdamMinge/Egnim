@@ -5,6 +5,8 @@
 #include <egnim/tools/shared/dialog_with_toggle_view.h>
 /* -------------------------------------------------------------------------- */
 
+namespace tools {
+
 QDialogWithToggleView::QDialogWithToggleView(QWidget* parent) :
   QDialog(parent),
   m_toggle_view(new QAction(this))
@@ -33,3 +35,5 @@ void QDialogWithToggleView::titleChanged(const QString& title)
 {
   m_toggle_view->setText(title);
 }
+
+} // namespace tools

@@ -2,6 +2,8 @@
 #include "egnim/tools/shared/line_edit_with_history.h"
 /* -------------------------------------------------------------------------- */
 
+namespace tools {
+
 QLineEditWithHistory::QLineEditWithHistory(QWidget* parent) :
   QLineEdit(parent),
   m_history({}),
@@ -54,3 +56,5 @@ void QLineEditWithHistory::movePrev()
 {
   move(-1);
 }
+
+} // namespace tools
