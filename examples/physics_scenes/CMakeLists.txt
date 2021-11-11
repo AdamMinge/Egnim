@@ -17,15 +17,9 @@ set(includes
     ${include_root}/example_game.h
     ${include_root}/boxes_state.h)
 # -------------------------------------------------------------------------------------------------- #
-# ---------------------------------- Create application target ------------------------------------- #
+# ------------------------------ Create engine for physics_scenes ---------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-egnim_add_application(egnim-example-physics_scenes
+egnim_add_example(egnim-example-physics_scenes
         SOURCES ${sources} ${includes}
-        DEPENDS egnim::egnim-engine)
-
-target_include_directories(egnim-example-physics_scenes
-        PUBLIC $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/examples/physics_scenes/include>)
-
-set_target_properties(egnim-example-physics_scenes
-        PROPERTIES CXX_STANDARD 20)
+        DEPENDS engine::egnim-engine)
 # -------------------------------------------------------------------------------------------------- #

@@ -3,17 +3,19 @@
 # -------------------------------------------------------------------------------------------------- #
 cmake_minimum_required(VERSION 3.11)
 # -------------------------------------------------------------------------------------------------- #
-# -------------------------------------- Generate headers ------------------------------------------ #
+# --------------------------- Generate headers and set files variable ------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-set(include_root ${EGNIM_SOURCE_DIR}/include/egnim)
+set(source_root ${EGNIM_SOURCE_DIR}/tests/engine/core/src)
+set(include_root ${EGNIM_SOURCE_DIR}/tests/engine/core/include)
 
-configure_file(
-        ${include_root}/config.h.in
-        ${include_root}/config.h)
+set(sources
+    ${source_root}/main.cpp)
+
+set(includes)
 # -------------------------------------------------------------------------------------------------- #
-# -------------------------------------- Add subdirectories ---------------------------------------- #
+# ----------------------------------- Create engine core test -------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-add_subdirectory(engine)
-add_subdirectory(tools)
-add_subdirectory(client)
+egnim_add_test(egnim-core-test
+        SOURCES ${sources} ${includes}
+        DEPENDS engine::egnim-engine)
 # -------------------------------------------------------------------------------------------------- #
