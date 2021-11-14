@@ -2,7 +2,7 @@
 #include <QAction>
 #include <QActionEvent>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/dialog_with_toggle_view.h>
+#include "egnim/tools/shared/dialog_with_toggle_view.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools {

@@ -5,10 +5,10 @@
 #include <QVBoxLayout>
 /* ----------------------------------- Local -------------------------------- */
 #include "egnim/tools/editor/project/console_dock.h"
-#include "egnim/tools/editor/utils/dpi_info.h"
 #include "egnim/tools/editor/logging_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
 #include <egnim/tools/shared/line_edit_with_history.h>
+#include <egnim/tools/shared/dpi_info.h>
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------- ConsoleOutputWidget ------------------------- */
@@ -46,7 +46,7 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
 
   bottomBar->addWidget(m_line_edit_with_history);
   bottomBar->addWidget(m_clear_button);
-  bottomBar->setSpacing(DpiInfo::dpiScaled(2));
+  bottomBar->setSpacing(tools::DpiInfo::dpiScaled(2));
 
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);

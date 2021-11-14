@@ -24,9 +24,6 @@ set(sources
         ${source_root}/settings_dialog.cpp
         ${source_root}/file_system_watcher.cpp
 
-        ${source_root}/utils/dpi_info.cpp
-        ${source_root}/utils/zip_file.cpp
-
         ${source_root}/document/document.cpp
         ${source_root}/document/document_manager.cpp
         ${source_root}/document/document_editor.cpp
@@ -75,9 +72,7 @@ set(sources
         ${source_root}/commands/group_command.cpp
 
         ${source_root}/models/file_system_proxy_model.cpp
-        ${source_root}/models/file_system_model.cpp
-
-        ${source_root}/widgets/file_dialog.cpp)
+        ${source_root}/models/file_system_model.cpp)
 
 set(includes
         ${include_root}/meta_types.h
@@ -91,9 +86,6 @@ set(includes
         ${include_root}/about_dialog.h
         ${include_root}/settings_dialog.h
         ${include_root}/file_system_watcher.h
-
-        ${include_root}/utils/dpi_info.h
-        ${include_root}/utils/zip_file.h
 
         ${include_root}/document/document.h
         ${include_root}/document/document_manager.h
@@ -135,9 +127,7 @@ set(includes
         ${include_root}/commands/group_command.h
 
         ${include_root}/models/file_system_proxy_model.h
-        ${include_root}/models/file_system_model.h
-
-        ${include_root}/widgets/file_dialog.h)
+        ${include_root}/models/file_system_model.h)
 
 set(resources
         ${resources_root}/egnim-images.qrc
@@ -176,7 +166,7 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 # -------------------------------------------------------------------------------------------------- #
 egnim_add_tool(egnim-tools-editor
         SOURCES ${sources} ${includes} ${uis} ${resources}
-        DEPENDS Qt6::Widgets engine::egnim-engine zip::zip tool::shared)
+        DEPENDS Qt6::Widgets engine::egnim-engine tool::tools-shared)
 
 egnim_add_translations(egnim-tools-editor
         QM_DIR ${resources_root}/translations/

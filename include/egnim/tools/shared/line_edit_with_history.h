@@ -1,15 +1,17 @@
-#ifndef EGNIM_LINE_EDIT_WITH_HISTORY_H
-#define EGNIM_LINE_EDIT_WITH_HISTORY_H
+#ifndef EGNIM_TOOLS_LINE_EDIT_WITH_HISTORY_H
+#define EGNIM_TOOLS_LINE_EDIT_WITH_HISTORY_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QLineEdit>
 #include <QStringList>
+/* -------------------------------- Tools Shared ---------------------------- */
+#include <egnim/tools/shared/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace tools
 {
 
-  class QLineEditWithHistory : public QLineEdit
+  class TOOLS_SHARED_API QLineEditWithHistory : public QLineEdit
   {
   Q_OBJECT
 
@@ -34,4 +36,4 @@ namespace tools
 
 } // namespace tools
 
-#endif //EGNIM_LINE_EDIT_WITH_HISTORY_H
+#endif //EGNIM_TOOLS_LINE_EDIT_WITH_HISTORY_H

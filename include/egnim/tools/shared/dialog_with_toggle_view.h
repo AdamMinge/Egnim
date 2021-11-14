@@ -1,14 +1,17 @@
-#ifndef DIALOG_WITH_TOGGLE_VIEW_H
-#define DIALOG_WITH_TOGGLE_VIEW_H
+#ifndef EGNIM_TOOLS_DIALOG_WITH_TOGGLE_VIEW_H
+#define EGNIM_TOOLS_DIALOG_WITH_TOGGLE_VIEW_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include "QDialog"
+/* -------------------------------- Tools Shared ---------------------------- */
+#include <egnim/tools/shared/export.h>
 /* -------------------------------------------------------------------------- */
+
 
 namespace tools
 {
 
-  class QDialogWithToggleView : public QDialog
+  class TOOLS_SHARED_API QDialogWithToggleView : public QDialog
   {
   Q_OBJECT
 
@@ -31,4 +34,4 @@ namespace tools
 } // namespace tools
 
 
-#endif //DIALOG_WITH_TOGGLE_VIEW_H
+#endif //EGNIM_TOOLS_DIALOG_WITH_TOGGLE_VIEW_H

@@ -12,12 +12,19 @@ set(resources_root ${EGNIM_SOURCE_DIR}/resources)
 
 set(sources
         ${source_root}/dialog_with_toggle_view.cpp
-        ${source_root}/line_edit_with_history.cpp)
+        ${source_root}/line_edit_with_history.cpp
+        ${source_root}/extended_file_dialog.cpp
+        ${source_root}/dpi_info.cpp
+        ${source_root}/zip_file.cpp)
 
 set(includes
+        ${include_root}/export.h
         ${include_root}/dialog_with_toggle_view.h
         ${include_root}/line_edit_with_history.h
-        ${include_root}/unselectable_view.h)
+        ${include_root}/unselectable_view.h
+        ${include_root}/extended_file_dialog.h
+        ${include_root}/dpi_info.h
+        ${include_root}/zip_file.h)
 
 set(resources)
 
@@ -37,7 +44,8 @@ find_package(Qt6 REQUIRED COMPONENTS Widgets)
 # -------------------------------------------------------------------------------------------------- #
 # ------------------------------------ Create tool shared lib -------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
-egnim_add_tool_lib(shared
+egnim_add_tool_lib(tools-shared
         SOURCES ${sources} ${includes} ${uis} ${resources}
-        DEPENDS Qt6::Widgets)
+        DEPENDS Qt6::Widgets
+        DEPENDS_PRIVATE zip::zip)
 # -------------------------------------------------------------------------------------------------- #

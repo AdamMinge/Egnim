@@ -3,7 +3,8 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "egnim/tools/editor/project/export_preset_widget.h"
 #include "egnim/tools/editor/project/export_preset.h"
-#include "egnim/tools/editor/widgets/file_dialog.h"
+/* -------------------------------- Tools Shared ---------------------------- */
+#include <egnim/tools/shared/extended_file_dialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_preset_widget.h"
 /* -------------------------------------------------------------------------- */
@@ -64,12 +65,9 @@ void BaseExportPresetWidget::onBrowsePressed()
       QFileDialog::Option::DontUseNativeDialog;
 
   auto filter = QString("Project Executable (*%1)").arg(getCurrentPreset()->getExecutableExtension());
-  auto dir_path = FileDialog::getSaveFileName(this,
-                                             tr("Export Project"),
-                                              m_ui->m_export_path_edit->text(),
-                                              filter,
-                                              &filter,
-                                              file_dialog_options);
+  auto dir_path = tools::QExtendedFileDialog::getSaveFileName(
+      this, tr("Export Project"), m_ui->m_export_path_edit->text(),
+      filter, &filter, file_dialog_options);
 
   if(dir_path.isEmpty())
     return;

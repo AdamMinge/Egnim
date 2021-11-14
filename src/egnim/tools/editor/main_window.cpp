@@ -19,9 +19,9 @@
 #include "egnim/tools/editor/document/document_manager.h"
 #include "egnim/tools/editor/document/scene_editor.h"
 #include "egnim/tools/editor/document/document.h"
-#include "egnim/tools/editor/widgets/file_dialog.h"
 /* -------------------------------- Tools Shared ---------------------------- */
 #include <egnim/tools/shared/dialog_with_toggle_view.h>
+#include <egnim/tools/shared/extended_file_dialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */
@@ -308,13 +308,9 @@ void MainWindow::openProject()
       QFileDialog::Options() |
       QFileDialog::Option::DontUseNativeDialog;
 
-  auto file_name = FileDialog::getOpenFileName(
-    this,
-    tr("Open Project"),
-    m_preferences->open_project_start_location.get(),
-    Project::getProjectFileFilter(),
-    nullptr,
-    file_dialog_options);
+  auto file_name = tools::QExtendedFileDialog::getOpenFileName(
+    this, tr("Open Project"), m_preferences->open_project_start_location.get(),
+    Project::getProjectFileFilter(), nullptr, file_dialog_options);
 
   if(file_name.isEmpty())
     return;

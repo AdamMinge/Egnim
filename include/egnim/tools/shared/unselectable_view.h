@@ -1,5 +1,5 @@
-#ifndef UNSELECTABLE_VIEW_H
-#define UNSELECTABLE_VIEW_H
+#ifndef EGNIM_TOOLS_UNSELECTABLE_VIEW_H
+#define EGNIM_TOOLS_UNSELECTABLE_VIEW_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QAbstractItemView>
@@ -9,6 +9,8 @@
 #include <QMouseEvent>
 /* --------------------------------- Standard ------------------------------- */
 #include <concepts>
+/* -------------------------------- Tools Shared ---------------------------- */
+#include <egnim/tools/shared/export.h>
 /* -------------------------------------------------------------------------- */
 
 namespace tools
@@ -16,7 +18,7 @@ namespace tools
 
   template<typename VIEW>
   requires std::derived_from<VIEW, QAbstractItemView>
-  class [[maybe_unused]] QUnselectableView : public VIEW
+  class TOOLS_SHARED_API QUnselectableView : public VIEW
   {
   public:
     explicit QUnselectableView(QWidget *parent = nullptr);
@@ -60,4 +62,4 @@ namespace tools
 
 } // namespace tools
 
-#endif //UNSELECTABLE_VIEW_H
+#endif //EGNIM_TOOLS_UNSELECTABLE_VIEW_H

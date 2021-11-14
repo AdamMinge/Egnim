@@ -1,9 +1,11 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QGuiApplication>
 #include <QScreen>
-/* ----------------------------------- Local -------------------------------- */
-#include "egnim/tools/editor/utils/dpi_info.h"
+/* -------------------------------- Tools Shared ---------------------------- */
+#include "egnim/tools/shared/dpi_info.h"
 /* -------------------------------------------------------------------------- */
+
+namespace tools {
 
 int DpiInfo::defaultDpi()
 {
@@ -66,3 +68,5 @@ QRectF DpiInfo::dpiScaled(const QRectF& value)
                 dpiScaled(value.width()),
                 dpiScaled(value.height()));
 }
+
+} // namespace tools

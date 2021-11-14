@@ -2,9 +2,11 @@
 #include <QDir>
 /* ------------------------------------ Zip --------------------------------- */
 #include <zip.h>
-/* ----------------------------------- Local -------------------------------- */
-#include "egnim/tools/editor/utils/zip_file.h"
+/* -------------------------------- Tools Shared ---------------------------- */
+#include "egnim/tools/shared/zip_file.h"
 /* -------------------------------------------------------------------------- */
+
+namespace tools {
 
 #define SAFE_EXECUTE(executor) do { if((executor) < 0) return false; } while(0);
 
@@ -165,3 +167,5 @@ bool ZipFile::execute(char mode, const std::function<bool(zip_t* zip)>& function
 
   return success;
 }
+
+} // namespace tools

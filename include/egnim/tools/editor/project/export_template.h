@@ -8,9 +8,9 @@
 #include <memory>
 /* -------------------------------------------------------------------------- */
 
-class ZipFile;
 class Project;
 class ExportPreset;
+namespace tools { class ZipFile; }
 
 class ExportTemplate : public QObject
 {
@@ -34,7 +34,7 @@ protected:
   bool init(const QString& path);
 
 private:
-  std::unique_ptr<ZipFile> m_zip;
+  std::unique_ptr<tools::ZipFile> m_zip;
 };
 
 #endif //EGNIM_EXPORT_TEMPLATE_H

@@ -1,8 +1,9 @@
 /* ----------------------------------- Local -------------------------------- */
 #include "egnim/tools/editor/document/new_document_dialog.h"
 #include "egnim/tools/editor/document/scene_document.h"
-#include "egnim/tools/editor/widgets/file_dialog.h"
 #include "egnim/tools/editor/project/project_manager.h"
+/* -------------------------------- Tools Shared ---------------------------- */
+#include <egnim/tools/shared/extended_file_dialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_new_scene_document_dialog.h"
 /* -------------------------------------------------------------------------- */
@@ -100,11 +101,9 @@ void NewSceneDocumentDialog::onBrowsePressed()
   auto current_project = ProjectManager::getInstance().getProject();
   Q_ASSERT(current_project);
 
-  auto dir_path = FileDialog::getExistingDirectory(this,
-                                                   tr("New Document"),
-                                                   m_ui->m_document_path_edit->text(),
-                                                   file_dialog_options,
-                                                   current_project->getDirectory().absolutePath());
+  auto dir_path = tools::QExtendedFileDialog::getExistingDirectory(
+      this, tr("New Document"), m_ui->m_document_path_edit->text(),
+      file_dialog_options, current_project->getDirectory().absolutePath());
 
   if(dir_path.isEmpty())
     return;
