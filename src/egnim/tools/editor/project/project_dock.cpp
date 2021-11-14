@@ -12,8 +12,8 @@
 #include "egnim/tools/editor/project/rename_directory_dialog.h"
 #include "egnim/tools/editor/document/document_manager.h"
 #include "egnim/tools/editor/document/new_document_dialog.h"
-#include "egnim/tools/editor/models/file_system_proxy_model.h"
-#include "egnim/tools/editor/models/file_system_model.h"
+#include "egnim/tools/editor/project/project_file_system_proxy_model.h"
+#include "egnim/tools/editor/project/project_file_system_model.h"
 #include "egnim/tools/editor/action_manager.h"
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_project_dock.h"
@@ -22,8 +22,8 @@
 ProjectDock::ProjectDock(QWidget* parent) :
   QDockWidget(parent),
   m_ui(new Ui::ProjectDock()),
-  m_files_model(new FileSystemModel()),
-  m_proxy_model(new FileSystemProxyModel()),
+  m_files_model(new ProjectFileSystemModel()),
+  m_proxy_model(new ProjectFileSystemProxyModel()),
   m_current_project(nullptr)
 {
   m_ui->setupUi(this);

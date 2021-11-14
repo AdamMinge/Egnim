@@ -50,6 +50,8 @@ set(sources
         ${source_root}/project/new_directory_dialog.cpp
         ${source_root}/project/rename_file_dialog.cpp
         ${source_root}/project/rename_directory_dialog.cpp
+        ${source_root}/project/project_file_system_proxy_model.cpp
+        ${source_root}/project/project_file_system_model.cpp
         ${source_root}/project/project_dock.cpp
         ${source_root}/project/console_dock.cpp
         ${source_root}/project/issue_dock.cpp
@@ -69,10 +71,7 @@ set(sources
         ${source_root}/project/priv/json_project_serializer_impl.cpp
 
         ${source_root}/commands/command.cpp
-        ${source_root}/commands/group_command.cpp
-
-        ${source_root}/models/file_system_proxy_model.cpp
-        ${source_root}/models/file_system_model.cpp)
+        ${source_root}/commands/group_command.cpp)
 
 set(includes
         ${include_root}/meta_types.h
@@ -109,6 +108,8 @@ set(includes
         ${include_root}/project/new_directory_dialog.h
         ${include_root}/project/rename_file_dialog.h
         ${include_root}/project/rename_directory_dialog.h
+        ${include_root}/project/project_file_system_proxy_model.h
+        ${include_root}/project/project_file_system_model.h
         ${include_root}/project/project_dock.h
         ${include_root}/project/console_dock.h
         ${include_root}/project/issue_dock.h
@@ -124,10 +125,7 @@ set(includes
         ${include_root}/project/export_template_list_model.h
 
         ${include_root}/commands/command.h
-        ${include_root}/commands/group_command.h
-
-        ${include_root}/models/file_system_proxy_model.h
-        ${include_root}/models/file_system_model.h)
+        ${include_root}/commands/group_command.h)
 
 set(resources
         ${resources_root}/egnim-images.qrc

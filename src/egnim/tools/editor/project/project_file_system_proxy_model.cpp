@@ -1,18 +1,18 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileSystemModel>
 /* ----------------------------------- Local -------------------------------- */
-#include "egnim/tools/editor/models/file_system_proxy_model.h"
+#include "egnim/tools/editor/project/project_file_system_proxy_model.h"
 /* -------------------------------------------------------------------------- */
 
-FileSystemProxyModel::FileSystemProxyModel(QObject* parent) :
+ProjectFileSystemProxyModel::ProjectFileSystemProxyModel(QObject* parent) :
   QSortFilterProxyModel(parent)
 {
 
 }
 
-FileSystemProxyModel::~FileSystemProxyModel() = default;
+ProjectFileSystemProxyModel::~ProjectFileSystemProxyModel() = default;
 
-bool FileSystemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
+bool ProjectFileSystemProxyModel::filterAcceptsRow(int source_row, const QModelIndex &source_parent) const
 {
   auto source_model = dynamic_cast<QFileSystemModel*>(sourceModel());
   if(source_model)

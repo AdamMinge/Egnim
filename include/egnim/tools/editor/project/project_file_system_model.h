@@ -1,17 +1,17 @@
-#ifndef FILE_SYSTEM_MODEL_H
-#define FILE_SYSTEM_MODEL_H
+#ifndef PROJECT_FILE_SYSTEM_MODEL_H
+#define PROJECT_FILE_SYSTEM_MODEL_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileSystemModel>
 /* -------------------------------------------------------------------------- */
 
-class FileSystemModel : public QFileSystemModel
+class ProjectFileSystemModel : public QFileSystemModel
 {
 public:
-  explicit FileSystemModel(QObject* parent = nullptr);
-  ~FileSystemModel() override;
+  explicit ProjectFileSystemModel(QObject* parent = nullptr);
+  ~ProjectFileSystemModel() override;
 
   bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 };
 
-#endif //FILE_SYSTEM_MODEL_H
+#endif //PROJECT_FILE_SYSTEM_MODEL_H

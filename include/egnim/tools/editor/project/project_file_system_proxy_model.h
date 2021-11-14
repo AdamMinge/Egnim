@@ -1,22 +1,22 @@
-#ifndef FILE_SYSTEM_PROXY_MODEL_H
-#define FILE_SYSTEM_PROXY_MODEL_H
+#ifndef PROJECT_FILE_SYSTEM_PROXY_MODEL_H
+#define PROJECT_FILE_SYSTEM_PROXY_MODEL_H
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QSortFilterProxyModel>
 #include <QFileSystemModel>
 /* -------------------------------------------------------------------------- */
 
-class FileSystemProxyModel : public QSortFilterProxyModel
+class ProjectFileSystemProxyModel : public QSortFilterProxyModel
 {
   Q_OBJECT
 
 public:
-  explicit FileSystemProxyModel(QObject* parent = nullptr);
-  ~FileSystemProxyModel() override;
+  explicit ProjectFileSystemProxyModel(QObject* parent = nullptr);
+  ~ProjectFileSystemProxyModel() override;
 
 protected:
   [[nodiscard]] bool filterAcceptsRow(int source_row, const QModelIndex &source_parent) const override;
 };
 
 
-#endif //FILE_SYSTEM_PROXY_MODEL_H
+#endif //PROJECT_FILE_SYSTEM_PROXY_MODEL_H

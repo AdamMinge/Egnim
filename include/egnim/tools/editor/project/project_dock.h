@@ -10,7 +10,7 @@
 
 namespace Ui { class ProjectDock; }
 class Project;
-class FileSystemProxyModel;
+class ProjectFileSystemProxyModel;
 
 class ProjectDock final : public QDockWidget
 {
@@ -55,7 +55,7 @@ private:
 private:
   QScopedPointer<Ui::ProjectDock> m_ui;
   QScopedPointer<QFileSystemModel> m_files_model;
-  QScopedPointer<FileSystemProxyModel> m_proxy_model;
+  QScopedPointer<ProjectFileSystemProxyModel> m_proxy_model;
 
   Project* m_current_project;
 };
