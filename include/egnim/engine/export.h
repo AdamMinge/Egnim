@@ -5,7 +5,7 @@
 #include <egnim/config.h>
 
 
-#if defined(EGNIM_UTILITY_EXPORTS)
+#if defined(EGNIM_ENGINE_EXPORTS)
   #define EGNIM_UTILITY_API EGNIM_API_EXPORT
 #else
   #define EGNIM_UTILITY_API EGNIM_API_IMPORT

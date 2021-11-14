@@ -27,8 +27,6 @@ macro(egnim_add_module target)
     string(TOUPPER "${NAME_UPPER}" NAME_UPPER)
     set_target_properties(${target} PROPERTIES DEFINE_SYMBOL ${NAME_UPPER}_EXPORTS)
 
-    message(egnim_add_module = ${NAME_UPPER}_EXPORTS)
-
     if(BUILD_SHARED_LIBS)
         set_target_properties(${target} PROPERTIES DEBUG_POSTFIX -d)
     else()
@@ -219,8 +217,6 @@ macro(egnim_add_tool_lib target)
     string(REPLACE "-" "_" NAME_UPPER "${target}")
     string(TOUPPER "${NAME_UPPER}" NAME_UPPER)
     set_target_properties(${target} PROPERTIES DEFINE_SYMBOL ${NAME_UPPER}_EXPORTS)
-
-    message(egnim_add_tool_lib = ${NAME_UPPER}_EXPORTS)
 
     if(BUILD_SHARED_LIBS)
         set_target_properties(${target} PROPERTIES DEBUG_POSTFIX -d)
