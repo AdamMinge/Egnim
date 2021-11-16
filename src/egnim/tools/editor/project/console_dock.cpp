@@ -7,8 +7,8 @@
 #include "egnim/tools/editor/project/console_dock.h"
 #include "egnim/tools/editor/logging_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/qlineedit/qlineeditwithhistory.h>
-#include <egnim/tools/shared/qdpi/qdpiinfo.h>
+#include <egnim/tools/shared/qtlineedit/qtlineeditwithhistory.h>
+#include <egnim/tools/shared/qtdpi/qtdpiinfo.h>
 /* -------------------------------------------------------------------------- */
 
 /* ---------------------------- ConsoleOutputWidget ------------------------- */
@@ -29,7 +29,7 @@ void ConsoleOutputWidget::contextMenuEvent(QContextMenuEvent *event)
 ConsoleDock::ConsoleDock(QWidget* parent) :
   QDockWidget(parent),
   m_plain_text_edit(new ConsoleOutputWidget()),
-  m_line_edit_with_history(new tools::QLineEditWithHistory()),
+  m_line_edit_with_history(new tools::QtLineEditWithHistory()),
   m_clear_button(new QPushButton(tr("Clear Console")))
 {
   setObjectName(QLatin1String("Scene"));
@@ -46,7 +46,7 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
 
   bottomBar->addWidget(m_line_edit_with_history);
   bottomBar->addWidget(m_clear_button);
-  bottomBar->setSpacing(tools::QDpiInfo::dpiScaled(2));
+  bottomBar->setSpacing(tools::QtDpiInfo::dpiScaled(2));
 
   layout->setContentsMargins(0, 0, 0, 0);
   layout->setSpacing(0);
@@ -61,8 +61,8 @@ ConsoleDock::ConsoleDock(QWidget* parent) :
                                      nullptr, nullptr, Qt::WidgetShortcut);
 
   connect(m_line_edit_with_history, &QLineEdit::returnPressed, this, &ConsoleDock::executeScript);
-  connect(prev_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QLineEditWithHistory::movePrev);
-  connect(next_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QLineEditWithHistory::moveNext);
+  connect(prev_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QtLineEditWithHistory::movePrev);
+  connect(next_shortcut, &QShortcut::activated, m_line_edit_with_history, &tools::QtLineEditWithHistory::moveNext);
   connect(m_clear_button, &QPushButton::pressed, m_plain_text_edit, &QPlainTextEdit::clear);
 
   auto& logging_manager = LoggingManager::getInstance();

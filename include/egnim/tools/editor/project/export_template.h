@@ -10,7 +10,7 @@
 
 class Project;
 class ExportPreset;
-namespace tools { class QZipFile; }
+namespace tools { class QtZipFile; }
 
 class ExportTemplate : public QObject
 {
@@ -34,7 +34,7 @@ protected:
   bool init(const QString& path);
 
 private:
-  std::unique_ptr<tools::QZipFile> m_zip;
+  std::unique_ptr<tools::QtZipFile> m_zip;
 };
 
 #endif //EGNIM_EXPORT_TEMPLATE_H

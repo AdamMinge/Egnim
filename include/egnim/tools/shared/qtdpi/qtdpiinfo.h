@@ -7,13 +7,13 @@
 #include <QRectF>
 #include <QSize>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/export.h>
+#include "egnim/tools/shared/export.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools
 {
 
-  class TOOLS_SHARED_API QDpiInfo
+  class TOOLS_SHARED_API QtDpiInfo
   {
   public:
     [[nodiscard]] static int defaultDpi();
@@ -26,7 +26,7 @@ namespace tools
     [[nodiscard]] static QRectF dpiScaled(const QRectF& value);
 
   private:
-    QDpiInfo() = default;
+    QtDpiInfo() = default;
   };
 
 } // namespace tools

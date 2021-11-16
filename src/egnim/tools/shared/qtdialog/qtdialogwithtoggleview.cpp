@@ -2,28 +2,28 @@
 #include <QAction>
 #include <QActionEvent>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include "egnim/tools/shared/qdialog/qdialogwithtoggleview.h"
+#include "egnim/tools/shared/qtdialog/qtdialogwithtoggleview.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools {
 
-QDialogWithToggleView::QDialogWithToggleView(QWidget* parent) :
+QtDialogWithToggleView::QtDialogWithToggleView(QWidget* parent) :
   QDialog(parent),
   m_toggle_view(new QAction(this))
 {
   m_toggle_view->setCheckable(true);
 
-  connect(m_toggle_view, &QAction::toggled, this, &QDialogWithToggleView::setVisible);
-  connect(this, &QDialogWithToggleView::windowTitleChanged, this, &QDialogWithToggleView::titleChanged);
+  connect(m_toggle_view, &QAction::toggled, this, &QtDialogWithToggleView::setVisible);
+  connect(this, &QtDialogWithToggleView::windowTitleChanged, this, &QtDialogWithToggleView::titleChanged);
 }
-QDialogWithToggleView::~QDialogWithToggleView() = default;
+QtDialogWithToggleView::~QtDialogWithToggleView() = default;
 
-QAction* QDialogWithToggleView::toggleViewAction() const
+QAction* QtDialogWithToggleView::toggleViewAction() const
 {
   return m_toggle_view;
 }
 
-void QDialogWithToggleView::closeEvent(QCloseEvent* event)
+void QtDialogWithToggleView::closeEvent(QCloseEvent* event)
 {
   QDialog::closeEvent(event);
 
@@ -31,7 +31,7 @@ void QDialogWithToggleView::closeEvent(QCloseEvent* event)
     m_toggle_view->setChecked(false);
 }
 
-void QDialogWithToggleView::titleChanged(const QString& title)
+void QtDialogWithToggleView::titleChanged(const QString& title)
 {
   m_toggle_view->setText(title);
 }

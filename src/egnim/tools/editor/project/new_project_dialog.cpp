@@ -3,7 +3,7 @@
 #include "egnim/tools/editor/project/game_project.h"
 #include "egnim/tools/editor/preferences_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
+#include <egnim/tools/shared/qtdialog/qtextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_game_project_dialog.h"
 /* -------------------------------------------------------------------------- */
@@ -102,7 +102,7 @@ void NewGameProjectDialog::onBrowsePressed()
     QFileDialog::Option::DontUseNativeDialog |
     QFileDialog::Option::ShowDirsOnly;
 
-  auto dir_path = tools::QExtendedFileDialog::getExistingDirectory(
+  auto dir_path = tools::QtExtendedFileDialog::getExistingDirectory(
       this, tr("New Project"), m_ui->m_project_path_edit->text(), file_dialog_options);
 
   if(dir_path.isEmpty())

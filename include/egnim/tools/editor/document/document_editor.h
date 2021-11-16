@@ -7,7 +7,7 @@
 /* -------------------------------------------------------------------------- */
 
 class Document;
-namespace tools { class QDialogWithToggleView; }
+namespace tools { class QtDialogWithToggleView; }
 
 class DocumentEditor : public QObject
 {
@@ -38,7 +38,7 @@ public:
   virtual void restoreState() = 0;
 
   [[nodiscard]] virtual QList<QDockWidget*> getDockWidgets() const = 0;
-  [[nodiscard]] virtual QList<tools::QDialogWithToggleView*> getDialogWidgets() const = 0;
+  [[nodiscard]] virtual QList<tools::QtDialogWithToggleView*> getDialogWidgets() const = 0;
 
   virtual void performStandardAction(StandardAction standard_action) = 0;
   [[nodiscard]] virtual StandardActions getEnabledStandardActions() const = 0;

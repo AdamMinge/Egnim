@@ -8,7 +8,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <memory>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/export.h>
+#include "egnim/tools/shared/export.h"
 /* -------------------------------------------------------------------------- */
 
 struct zip_t;
@@ -16,16 +16,16 @@ struct zip_t;
 namespace tools
 {
 
-  class TOOLS_SHARED_API QZipFile : public QObject
+  class TOOLS_SHARED_API QtZipFile : public QObject
   {
     Q_OBJECT
 
   public:
-    static std::unique_ptr<QZipFile> load(QString file_name, int compression_level = 6);
-    static std::unique_ptr<QZipFile> create(QString file_name, int compression_level = 6);
+    static std::unique_ptr<QtZipFile> load(QString file_name, int compression_level = 6);
+    static std::unique_ptr<QtZipFile> create(QString file_name, int compression_level = 6);
 
   public:
-    ~QZipFile() override;
+    ~QtZipFile() override;
 
     bool append_entry(const QString& entry_name);
     bool append_entry(const QString& entry_name, const QStringList& entry_names_to_merge);
@@ -45,7 +45,7 @@ namespace tools
     [[nodiscard]] bool hasEntryName(const QString& name) const;
 
   protected:
-    explicit QZipFile(QString file_name, int compression_level = 6);
+    explicit QtZipFile(QString file_name, int compression_level = 6);
 
   private:
     bool execute(char mode, const std::function<bool(zip_t* zip)>& function) const;

@@ -4,21 +4,21 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QFileDialog>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/export.h>
+#include "egnim/tools/shared/export.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools
 {
 
-  class TOOLS_SHARED_API QExtendedFileDialog : public QFileDialog
+  class TOOLS_SHARED_API QtExtendedFileDialog : public QFileDialog
   {
     Q_OBJECT
 
   public:
-    explicit QExtendedFileDialog(QWidget* parent, Qt::WindowFlags flags);
-    explicit QExtendedFileDialog(QWidget* parent = nullptr, const QString& caption = QString(),
-               const QString& directory = QString(), const QString& filter = QString());
-    ~QExtendedFileDialog() override;
+    explicit QtExtendedFileDialog(QWidget* parent, Qt::WindowFlags flags);
+    explicit QtExtendedFileDialog(QWidget* parent = nullptr, const QString& caption = QString(),
+                                  const QString& directory = QString(), const QString& filter = QString());
+    ~QtExtendedFileDialog() override;
 
     static QString getExistingDirectory(
         QWidget *parent = nullptr, const QString &caption = QString(),
@@ -38,7 +38,7 @@ namespace tools
     bool eventFilter(QObject *object, QEvent *event) override;
 
   protected:
-    explicit QExtendedFileDialog(const QFileDialogArgs &args);
+    explicit QtExtendedFileDialog(const QFileDialogArgs &args);
     void init();
 
   private:

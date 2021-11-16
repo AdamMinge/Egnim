@@ -119,9 +119,9 @@ QList<QDockWidget*> SceneEditor::getDockWidgets() const
   return QList<QDockWidget*> { m_undo_dock, m_scene_dock, m_inspector_dock };
 }
 
-QList<tools::QDialogWithToggleView*> SceneEditor::getDialogWidgets() const
+QList<tools::QtDialogWithToggleView*> SceneEditor::getDialogWidgets() const
 {
-  return QList<tools::QDialogWithToggleView*> {};
+  return QList<tools::QtDialogWithToggleView*> {};
 }
 
 void SceneEditor::performStandardAction(StandardAction standard_action)

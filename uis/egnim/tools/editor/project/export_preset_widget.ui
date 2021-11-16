@@ -57,7 +57,11 @@
       <attribute name="title">
        <string>Options</string>
       </attribute>
-      <layout class="QVBoxLayout" name="verticalLayout_2"/>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="tools::QtTreePropertyBrowser" name="m_property_browser" native="true"/>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="m_resources_tab">
       <attribute name="title">
@@ -68,6 +72,14 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tools::QtTreePropertyBrowser</class>
+   <extends>QWidget</extends>
+   <header location="global">egnim/tools/shared/qtpropertybrowser/qttreepropertybrowser.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

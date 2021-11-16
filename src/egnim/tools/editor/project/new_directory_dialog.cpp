@@ -2,7 +2,7 @@
 #include "egnim/tools/editor/project/project_manager.h"
 #include "egnim/tools/editor/project/new_directory_dialog.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
+#include <egnim/tools/shared/qtdialog/qtextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_directory_dialog.h"
 /* -------------------------------------------------------------------------- */
@@ -70,7 +70,7 @@ void NewDirectoryDialog::onBrowsePressed()
   auto current_project = ProjectManager::getInstance().getProject();
   Q_ASSERT(current_project);
 
-  auto dir_path = tools::QExtendedFileDialog::getExistingDirectory(
+  auto dir_path = tools::QtExtendedFileDialog::getExistingDirectory(
       this, tr("New Document"), m_ui->m_directory_path_edit->text(),
       file_dialog_options, current_project->getDirectory().absolutePath());
 

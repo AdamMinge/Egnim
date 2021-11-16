@@ -2,12 +2,12 @@
 #include <QGuiApplication>
 #include <QScreen>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include "egnim/tools/shared/qdpi/qdpiinfo.h"
+#include "egnim/tools/shared/qtdpi/qtdpiinfo.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools {
 
-int QDpiInfo::defaultDpi()
+int QtDpiInfo::defaultDpi()
 {
   static auto dpi = []{
     if(const auto screen = QGuiApplication::primaryScreen())
@@ -23,7 +23,7 @@ int QDpiInfo::defaultDpi()
   return dpi;
 }
 
-qreal QDpiInfo::defaultDpiScale()
+qreal QtDpiInfo::defaultDpiScale()
 {
   static auto dpi = []{
     if(const auto screen = QGuiApplication::primaryScreen())
@@ -34,12 +34,12 @@ qreal QDpiInfo::defaultDpiScale()
   return dpi;
 }
 
-int QDpiInfo::dpiScaled(int value)
+int QtDpiInfo::dpiScaled(int value)
 {
   return qRound(dpiScaled(static_cast<qreal>(value)));
 }
 
-qreal QDpiInfo::dpiScaled(qreal value)
+qreal QtDpiInfo::dpiScaled(qreal value)
 {
 #ifdef Q_OS_MAC
   return value;
@@ -49,19 +49,19 @@ qreal QDpiInfo::dpiScaled(qreal value)
 #endif
 }
 
-QSize QDpiInfo::dpiScaled(const QSize& value)
+QSize QtDpiInfo::dpiScaled(const QSize& value)
 {
   return QSize(dpiScaled(value.width()),
                dpiScaled(value.height()));
 }
 
-QPoint QDpiInfo::dpiScaled(const QPoint& value)
+QPoint QtDpiInfo::dpiScaled(const QPoint& value)
 {
   return QPoint(dpiScaled(value.x()),
                 dpiScaled(value.y()));
 }
 
-QRectF QDpiInfo::dpiScaled(const QRectF& value)
+QRectF QtDpiInfo::dpiScaled(const QRectF& value)
 {
   return QRectF(dpiScaled(value.x()),
                 dpiScaled(value.y()),

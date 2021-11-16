@@ -3,7 +3,7 @@
 #include "egnim/tools/editor/document/scene_document.h"
 #include "egnim/tools/editor/project/project_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
+#include <egnim/tools/shared/qtdialog/qtextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_new_scene_document_dialog.h"
 /* -------------------------------------------------------------------------- */
@@ -101,7 +101,7 @@ void NewSceneDocumentDialog::onBrowsePressed()
   auto current_project = ProjectManager::getInstance().getProject();
   Q_ASSERT(current_project);
 
-  auto dir_path = tools::QExtendedFileDialog::getExistingDirectory(
+  auto dir_path = tools::QtExtendedFileDialog::getExistingDirectory(
       this, tr("New Document"), m_ui->m_document_path_edit->text(),
       file_dialog_options, current_project->getDirectory().absolutePath());
 

@@ -4,20 +4,20 @@
 /* ------------------------------------ Qt ---------------------------------- */
 #include "QDialog"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/export.h>
+#include "egnim/tools/shared/export.h"
 /* -------------------------------------------------------------------------- */
 
 
 namespace tools
 {
 
-  class TOOLS_SHARED_API QDialogWithToggleView : public QDialog
+  class TOOLS_SHARED_API QtDialogWithToggleView : public QDialog
   {
   Q_OBJECT
 
   public:
-    explicit QDialogWithToggleView(QWidget* parent = nullptr);
-    ~QDialogWithToggleView() override;
+    explicit QtDialogWithToggleView(QWidget* parent = nullptr);
+    ~QtDialogWithToggleView() override;
 
     [[nodiscard]] QAction* toggleViewAction() const;
 

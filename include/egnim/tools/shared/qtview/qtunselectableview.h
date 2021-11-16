@@ -10,7 +10,7 @@
 /* --------------------------------- Standard ------------------------------- */
 #include <concepts>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/export.h>
+#include "egnim/tools/shared/export.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools
@@ -18,11 +18,11 @@ namespace tools
 
   template<typename VIEW>
   requires std::derived_from<VIEW, QAbstractItemView>
-  class TOOLS_SHARED_API QUnselectableView : public VIEW
+  class TOOLS_SHARED_API QtUnselectableView : public VIEW
   {
   public:
-    explicit QUnselectableView(QWidget *parent = nullptr);
-    ~QUnselectableView() override;
+    explicit QtUnselectableView(QWidget *parent = nullptr);
+    ~QtUnselectableView() override;
 
   private:
     void mousePressEvent(QMouseEvent *event) override;
@@ -30,7 +30,7 @@ namespace tools
 
   template<typename VIEW>
   requires std::derived_from<VIEW, QAbstractItemView>
-  QUnselectableView<VIEW>::QUnselectableView(QWidget *parent) :
+  QtUnselectableView<VIEW>::QtUnselectableView(QWidget *parent) :
       VIEW(parent)
   {
 
@@ -38,11 +38,11 @@ namespace tools
 
   template<typename VIEW>
   requires std::derived_from<VIEW, QAbstractItemView>
-  QUnselectableView<VIEW>::~QUnselectableView() = default;
+  QtUnselectableView<VIEW>::~QtUnselectableView() = default;
 
   template<typename VIEW>
   requires std::derived_from<VIEW, QAbstractItemView>
-  void QUnselectableView<VIEW>::mousePressEvent(QMouseEvent *event)
+  void QtUnselectableView<VIEW>::mousePressEvent(QMouseEvent *event)
   {
     auto item = VIEW::indexAt(event->pos());
     auto selected = VIEW::selectionModel()->isSelected(VIEW::indexAt(event->pos()));
@@ -56,9 +56,9 @@ namespace tools
     VIEW::mousePressEvent(event);
   }
 
-  using QUnselectableTreeView = QUnselectableView<QTreeView>;
-  using QUnselectableListView = QUnselectableView<QListView>;
-  using QUnselectableTableView = QUnselectableView<QTableView>;
+  using QtUnselectableTreeView = QtUnselectableView<QTreeView>;
+  using QtUnselectableListView = QtUnselectableView<QListView>;
+  using QtUnselectableTableView = QtUnselectableView<QTableView>;
 
 } // namespace tools
 

@@ -11,28 +11,46 @@ set(uis_root ${EGNIM_SOURCE_DIR}/uis/egnim/tools/shared)
 set(resources_root ${EGNIM_SOURCE_DIR}/resources)
 
 set(sources
-        ${source_root}/qdialog/qdialogwithtoggleview.cpp
-        ${source_root}/qdialog/qextendedfiledialog.cpp
+        ${source_root}/qtpropertybrowser/qtbuttonpropertybrowser.cpp
+        ${source_root}/qtpropertybrowser/qteditorfactory.cpp
+        ${source_root}/qtpropertybrowser/qtgroupboxpropertybrowser.cpp
+        ${source_root}/qtpropertybrowser/qtpropertybrowser.cpp
+        ${source_root}/qtpropertybrowser/qtpropertybrowserutils.cpp
+        ${source_root}/qtpropertybrowser/qtpropertymanager.cpp
+        ${source_root}/qtpropertybrowser/qttreepropertybrowser.cpp
+        ${source_root}/qtpropertybrowser/qtvariantproperty.cpp
+        ${source_root}/qtpropertybrowser/priv/qtpropertybrowserutils_p.h
 
-        ${source_root}/qlineedit/qlineeditwithhistory.cpp
+        ${source_root}/qtdialog/qtdialogwithtoggleview.cpp
+        ${source_root}/qtdialog/qtextendedfiledialog.cpp
 
-        ${source_root}/qdpi/qdpiinfo.cpp
+        ${source_root}/qtlineedit/qtlineeditwithhistory.cpp
 
-        ${source_root}/qzip/qzipfile.cpp)
+        ${source_root}/qtdpi/qtdpiinfo.cpp
+
+        ${source_root}/qtzip/qtzipfile.cpp)
 
 set(includes
         ${include_root}/export.h
 
-        ${include_root}/qdialog/qdialogwithtoggleview.h
-        ${include_root}/qdialog/qextendedfiledialog.h
+        ${include_root}/qtpropertybrowser/qtbuttonpropertybrowser.h
+        ${include_root}/qtpropertybrowser/qteditorfactory.h
+        ${include_root}/qtpropertybrowser/qtgroupboxpropertybrowser.h
+        ${include_root}/qtpropertybrowser/qtpropertybrowser.h
+        ${include_root}/qtpropertybrowser/qtpropertymanager.h
+        ${include_root}/qtpropertybrowser/qttreepropertybrowser.h
+        ${include_root}/qtpropertybrowser/qtvariantproperty.h
 
-        ${include_root}/qlineedit/qlineeditwithhistory.h
+        ${include_root}/qtdialog/qtdialogwithtoggleview.h
+        ${include_root}/qtdialog/qtextendedfiledialog.h
 
-        ${include_root}/qview/qunselectableview.h
+        ${include_root}/qtlineedit/qtlineeditwithhistory.h
 
-        ${include_root}/qdpi/qdpiinfo.h
+        ${include_root}/qtview/qtunselectableview.h
 
-        ${include_root}/qzip/qzipfile.h)
+        ${include_root}/qtdpi/qtdpiinfo.h
+
+        ${include_root}/qtzip/qtzipfile.h)
 
 set(resources)
 
