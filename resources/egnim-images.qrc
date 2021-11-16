@@ -1,7 +1,15 @@
 <RCC>
     <qresource prefix="/">
+        <file>images/32x32/add_file.png</file>
+        <file>images/32x32/copy_file.png</file>
+        <file>images/32x32/remove_file.png</file>
+
         <file>images/64x64/game_project.png</file>
         <file>images/64x64/unknown_project.png</file>
+        <file>images/64x64/linux.png</file>
+        <file>images/64x64/windows.png</file>
+        <file>images/64x64/macos.png</file>
+        <file>images/64x64/unknown_os.png</file>
 
         <file>images/256x256/about_logo.png</file>
     </qresource>

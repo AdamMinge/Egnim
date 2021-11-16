@@ -13,18 +13,12 @@ set(sources
 
 set(includes)
 # -------------------------------------------------------------------------------------------------- #
-# ---------------------------------- create application target ------------------------------------- #
+# ------------------------------------- create engine client --------------------------------------- #
 # -------------------------------------------------------------------------------------------------- #
 egnim_add_application(egnim-client
         SOURCES ${sources} ${includes}
-        DEPENDS egnim::egnim-engine)
+        DEPENDS engine::egnim-engine)
 
 target_include_directories(egnim-client PUBLIC
         $<BUILD_INTERFACE:${EGNIM_SOURCE_DIR}/include/egnim/client>)
-
-set_target_properties(egnim-client
-        PROPERTIES CXX_STANDARD 20)
-
-target_compile_definitions(egnim-client
-        PUBLIC QT_NO_KEYWORDS)
 # -------------------------------------------------------------------------------------------------- #

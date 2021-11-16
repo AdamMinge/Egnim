@@ -1,0 +1,20 @@
+[submodule "dependencies/sfml"]
+	path = dependencies/sfml
+	url = https://github.com/SFML/SFML.git
+	branch = 2.5.x
+[submodule "dependencies/box2d"]
+	path = dependencies/box2d
+	url = https://github.com/erincatto/box2d.git
+	branch = master
+[submodule "dependencies/gtest"]
+	path = dependencies/gtest
+	url = https://github.com/google/googletest.git
+	branch = master
+[submodule "dependencies/json"]
+	path = dependencies/json
+	url = https://github.com/nlohmann/json.git
+	branch = release/3.10.4
+[submodule "dependencies/zip"]
+	path = dependencies/zip
+	url = https://github.com/kuba--/zip.git
+	branch = master
