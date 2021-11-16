@@ -2,7 +2,7 @@
 #include "egnim/tools/editor/project/project_manager.h"
 #include "egnim/tools/editor/project/new_directory_dialog.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/extended_file_dialog.h>
+#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_directory_dialog.h"
 /* -------------------------------------------------------------------------- */

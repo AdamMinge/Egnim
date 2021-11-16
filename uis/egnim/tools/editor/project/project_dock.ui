@@ -81,7 +81,7 @@
   <customwidget>
    <class>tools::QUnselectableTreeView</class>
    <extends>QTreeView</extends>
-   <header location="global">egnim/tools/shared/unselectable_view.h</header>
+   <header location="global">egnim/tools/shared/qview/qunselectableview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

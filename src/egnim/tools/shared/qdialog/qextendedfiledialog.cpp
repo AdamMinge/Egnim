@@ -8,7 +8,7 @@
 #include <QCompleter>
 #include <QAbstractItemView>
 /* -------------------------------- Tools Shared ---------------------------- */
-#include "egnim/tools/shared/extended_file_dialog.h"
+#include "egnim/tools/shared/qdialog/qextendedfiledialog.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools {

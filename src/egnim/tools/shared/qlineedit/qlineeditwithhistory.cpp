@@ -1,5 +1,5 @@
 /* -------------------------------- Tools Shared ---------------------------- */
-#include "egnim/tools/shared/line_edit_with_history.h"
+#include "egnim/tools/shared/qlineedit/qlineeditwithhistory.h"
 /* -------------------------------------------------------------------------- */
 
 namespace tools {

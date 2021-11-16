@@ -20,8 +20,8 @@
 #include "egnim/tools/editor/document/scene_editor.h"
 #include "egnim/tools/editor/document/document.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/dialog_with_toggle_view.h>
-#include <egnim/tools/shared/extended_file_dialog.h>
+#include <egnim/tools/shared/qdialog/qdialogwithtoggleview.h>
+#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "ui_main_window.h"
 /* -------------------------------------------------------------------------- */

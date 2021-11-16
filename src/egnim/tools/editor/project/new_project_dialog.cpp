@@ -3,7 +3,7 @@
 #include "egnim/tools/editor/project/game_project.h"
 #include "egnim/tools/editor/preferences_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/extended_file_dialog.h>
+#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_new_game_project_dialog.h"
 /* -------------------------------------------------------------------------- */

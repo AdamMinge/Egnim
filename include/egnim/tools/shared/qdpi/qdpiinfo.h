@@ -13,7 +13,7 @@
 namespace tools
 {
 
-  class TOOLS_SHARED_API DpiInfo
+  class TOOLS_SHARED_API QDpiInfo
   {
   public:
     [[nodiscard]] static int defaultDpi();
@@ -26,7 +26,7 @@ namespace tools
     [[nodiscard]] static QRectF dpiScaled(const QRectF& value);
 
   private:
-    DpiInfo() = default;
+    QDpiInfo() = default;
   };
 
 } // namespace tools

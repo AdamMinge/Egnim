@@ -3,7 +3,7 @@
 #include "egnim/tools/editor/document/scene_document.h"
 #include "egnim/tools/editor/project/project_manager.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/extended_file_dialog.h>
+#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "document/ui_new_scene_document_dialog.h"
 /* -------------------------------------------------------------------------- */

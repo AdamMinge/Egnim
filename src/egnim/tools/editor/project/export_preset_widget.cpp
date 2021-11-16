@@ -4,7 +4,7 @@
 #include "egnim/tools/editor/project/export_preset_widget.h"
 #include "egnim/tools/editor/project/export_preset.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/extended_file_dialog.h>
+#include <egnim/tools/shared/qdialog/qextendedfiledialog.h>
 /* ------------------------------------ Ui ---------------------------------- */
 #include "project/ui_export_preset_widget.h"
 /* -------------------------------------------------------------------------- */

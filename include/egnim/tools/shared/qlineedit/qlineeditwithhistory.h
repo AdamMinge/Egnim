@@ -23,7 +23,7 @@ namespace tools
     void appendToHistory(QString text);
 
     void setHistory(QStringList history);
-    QStringList getHistory() const;
+    [[nodiscard]] QStringList getHistory() const;
 
     void move(qsizetype direction);
     void moveNext();

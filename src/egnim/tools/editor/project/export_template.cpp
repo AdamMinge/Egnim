@@ -6,7 +6,7 @@
 #include "egnim/tools/editor/project/export_preset.h"
 #include "egnim/tools/editor/project/project.h"
 /* -------------------------------- Tools Shared ---------------------------- */
-#include <egnim/tools/shared/zip_file.h>
+#include <egnim/tools/shared/qzip/qzipfile.h>
 /* -------------------------------------------------------------------------- */
 
 std::unique_ptr<ExportTemplate> ExportTemplate::load(const QString& path)
@@ -25,7 +25,7 @@ ExportTemplate::ExportTemplate() = default;
 
 bool ExportTemplate::init(const QString& path)
 {
-  m_zip = tools::ZipFile::load(path);
+  m_zip = tools::QZipFile::load(path);
   return static_cast<bool>(m_zip);
 }
 

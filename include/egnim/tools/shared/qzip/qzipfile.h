@@ -16,16 +16,16 @@ struct zip_t;
 namespace tools
 {
 
-  class TOOLS_SHARED_API ZipFile : public QObject
+  class TOOLS_SHARED_API QZipFile : public QObject
   {
     Q_OBJECT
 
   public:
-    static std::unique_ptr<ZipFile> load(QString file_name, int compression_level = 6);
-    static std::unique_ptr<ZipFile> create(QString file_name, int compression_level = 6);
+    static std::unique_ptr<QZipFile> load(QString file_name, int compression_level = 6);
+    static std::unique_ptr<QZipFile> create(QString file_name, int compression_level = 6);
 
   public:
-    ~ZipFile() override;
+    ~QZipFile() override;
 
     bool append_entry(const QString& entry_name);
     bool append_entry(const QString& entry_name, const QStringList& entry_names_to_merge);
@@ -45,7 +45,7 @@ namespace tools
     [[nodiscard]] bool hasEntryName(const QString& name) const;
 
   protected:
-    explicit ZipFile(QString file_name, int compression_level = 6);
+    explicit QZipFile(QString file_name, int compression_level = 6);
 
   private:
     bool execute(char mode, const std::function<bool(zip_t* zip)>& function) const;
