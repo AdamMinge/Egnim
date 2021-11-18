@@ -7,7 +7,7 @@
 #include <egnim/engine/scene/scene_node.h>
 #include <egnim/engine/scene/camera_manager.h>
 /* ----------------------------------- Local -------------------------------- */
-#include "boxes_state.h"
+#include "physics_scenes/boxes_state.h"
 /* -------------------------------------------------------------------------- */
 
 BoxesState::BoxesState(egnim::core::StateStack& state_stack, egnim::core::Context& context) :

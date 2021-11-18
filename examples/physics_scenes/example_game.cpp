@@ -3,8 +3,8 @@
 #include <egnim/engine/core/state_stack.h>
 #include <egnim/engine/events/event_dispatcher.h>
 /* ----------------------------------- Local -------------------------------- */
-#include "example_game.h"
-#include "boxes_state.h"
+#include "physics_scenes/example_game.h"
+#include "physics_scenes/boxes_state.h"
 /* -------------------------------------------------------------------------- */
 
 ExampleGame::ExampleGame(unsigned window_width, unsigned window_height, std::string window_title) :

@@ -5,8 +5,8 @@ cmake_minimum_required(VERSION 3.11)
 # -------------------------------------------------------------------------------------------------- #
 # --------------------------- Generate headers and set files variable ------------------------------ #
 # -------------------------------------------------------------------------------------------------- #
-set(source_root ${EGNIM_SOURCE_DIR}/tests/engine/core/src)
-set(include_root ${EGNIM_SOURCE_DIR}/tests/engine/core/include)
+set(source_root ${EGNIM_SOURCE_DIR}/tests/engine/core)
+set(include_root ${EGNIM_SOURCE_DIR}/tests/engine/core)
 
 set(sources
     ${source_root}/main.cpp)

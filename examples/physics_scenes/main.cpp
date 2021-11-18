@@ -1,5 +1,5 @@
 /* ----------------------------------- Local -------------------------------- */
-#include "example_game.h"
+#include "physics_scenes/example_game.h"
 /* -------------------------------------------------------------------------- */
 
 int main(int argc, char** argv)
