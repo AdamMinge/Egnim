@@ -3,6 +3,8 @@
 
 /* ------------------------------------ Qt ---------------------------------- */
 #include <QWidget>
+/* --------------------------------- Standard ------------------------------- */
+#include <map>
 /* -------------------------------------------------------------------------- */
 
 class ExportPreset;
@@ -11,6 +13,14 @@ class LinuxExportPreset;
 class MacOSExportPreset;
 
 namespace Ui { class ExportPresetWidget; }
+namespace tools
+{
+  class QtProperty;
+
+  class QtVariantProperty;
+  class QtVariantPropertyManager;
+  class QtGroupPropertyManager;
+}
 
 class ExportPresetWidget : public QWidget
 {
@@ -32,20 +42,51 @@ public:
   explicit BaseExportPresetWidget(QWidget* parent = nullptr);
   ~BaseExportPresetWidget() override;
 
-  void setCurrentPreset(ExportPreset* export_preset) override = 0;
+  void setCurrentPreset(ExportPreset* export_preset) override;
   [[nodiscard]] ExportPreset* getCurrentPreset() const override = 0;
 
 protected:
+  enum class PropertyId;
+
+protected:
   void changeEvent(QEvent* event) override;
+
+  tools::QtVariantProperty* addProperty(
+      PropertyId property_id, int type, const QString& name, tools::QtProperty* parent = nullptr);
+  tools::QtVariantProperty* addEnumProperty(
+      PropertyId property_id, const QStringList& values, const QString& name, tools::QtProperty* parent = nullptr);
+  tools::QtProperty* addGroupProperty(
+      const QString& name, tools::QtProperty* parent = nullptr);
+
+  virtual void addPlatformProperties();
+  virtual void onPlatformPropertyChanged(tools::QtProperty *property, const QVariant &val);
 
 protected:
   QScopedPointer<Ui::ExportPresetWidget> m_ui;
 
 private Q_SLOTS:
   void onBrowsePressed();
+  void onPropertyChanged(tools::QtProperty *property, const QVariant &val);
 
 private:
   void retranslateUi();
+  void addProperties();
+
+private:
+  tools::QtVariantPropertyManager* m_variant_property_manager;
+  tools::QtGroupPropertyManager* m_group_property_manager;
+
+  std::map<PropertyId, tools::QtVariantProperty*> m_id_to_property;
+  std::map<tools::QtProperty*, PropertyId> m_property_to_id;
+
+  const QStringList m_build_type_names;
+  const QStringList m_build_version_names;
+};
+
+enum class BaseExportPresetWidget::PropertyId
+{
+  BuildType,
+  BuildVersion,
 };
 
 class WindowsExportPresetWidget : public BaseExportPresetWidget
@@ -58,6 +99,10 @@ public:
 
   void setCurrentPreset(ExportPreset* export_preset) override;
   [[nodiscard]] ExportPreset* getCurrentPreset() const override;
+
+protected:
+  void addPlatformProperties() override;
+  void onPlatformPropertyChanged(tools::QtProperty *property, const QVariant &val) override;
 
 private:
   WindowsExportPreset* m_export_preset;

@@ -20,23 +20,30 @@ public:
     Unknown
   };
 
-  enum class Version
+  enum class BuildType
   {
-    x32_Debug,
-    x32_Release,
-    x64_Debug,
-    x64_Release,
-    Unknown
+    Debug,
+    Release
+  };
+
+  enum class BuildVersion
+  {
+    x32,
+    x64
   };
 
 public:
-  explicit ExportPreset(Type type, Version version, QString name, QString export_path, QObject* parent = nullptr);
+  explicit ExportPreset(Type type, BuildType build_type, BuildVersion build_version,
+                        QString name, QString export_path, QObject* parent = nullptr);
   ~ExportPreset() override;
 
   [[nodiscard]] Type getType() const;
 
-  void setVersion(Version version);
-  [[nodiscard]] Version getVersion() const;
+  void setBuildType(BuildType build_type);
+  [[nodiscard]] BuildType getBuildType() const;
+
+  void setBuildVersion(BuildVersion build_version);
+  [[nodiscard]] BuildVersion getBuildVersion() const;
 
   void setName(QString name);
   [[nodiscard]] QString getName() const;
@@ -48,7 +55,7 @@ public:
   [[nodiscard]] static QString getExecutableExtension(Type type);
 
   [[nodiscard]] QString getExportExecutableName() const;
-  [[nodiscard]] static QString getExportExecutableName(Type type, Version version);
+  [[nodiscard]] static QString getExportExecutableName(Type type, BuildType build_type, BuildVersion build_version);
 
   bool exportProject(const Project& project) const; // NOLINT(modernize-use-nodiscard)
 
@@ -65,7 +72,8 @@ protected:
 
 private:
   Type m_type;
-  Version m_version;
+  BuildType m_build_type;
+  BuildVersion m_build_version;
   QString m_name;
   QString m_export_path;
 };
@@ -76,7 +84,9 @@ class WindowsExportPreset : public ExportPreset
 
 public:
   explicit WindowsExportPreset(QString name, QString export_path = QString{},
-                               Version version = Version::x64_Release, QObject* parent = nullptr);
+                               BuildType build_type = BuildType::Release,
+                               BuildVersion build_version = BuildVersion::x64,
+                               QObject* parent = nullptr);
   ~WindowsExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
@@ -91,7 +101,9 @@ class LinuxExportPreset : public ExportPreset
 
 public:
   explicit LinuxExportPreset(QString name, QString export_path = QString{},
-                             Version version = Version::x64_Release, QObject* parent = nullptr);
+                             BuildType build_type = BuildType::Release,
+                             BuildVersion build_version = BuildVersion::x64,
+                             QObject* parent = nullptr);
   ~LinuxExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;
@@ -103,7 +115,9 @@ class MacOSExportPreset : public ExportPreset
 
 public:
   explicit MacOSExportPreset(QString name, QString export_path = QString{},
-                             Version version = Version::x64_Release, QObject* parent = nullptr);
+                             BuildType build_type = BuildType::Release,
+                             BuildVersion build_version = BuildVersion::x64,
+                             QObject* parent = nullptr);
   ~MacOSExportPreset() override;
 
   [[nodiscard]] std::unique_ptr<ExportPreset> clone() const override;

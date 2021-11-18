@@ -47,8 +47,23 @@
 <context>
     <name>BaseExportPresetWidget</name>
     <message>
-        <location filename="../../src/egnim/tools/editor/project/export_preset_widget.cpp" line="69"/>
+        <location filename="../../src/egnim/tools/editor/project/export_preset_widget.cpp" line="131"/>
         <source>Export Project</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/tools/editor/project/export_preset_widget.cpp" line="173"/>
+        <source>Build</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/tools/editor/project/export_preset_widget.cpp" line="175"/>
+        <source>type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/egnim/tools/editor/project/export_preset_widget.cpp" line="177"/>
+        <source>version</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
