@@ -561,6 +561,8 @@ void MainWindow::retranslateUi() // NOLINT(readability-make-member-function-cons
 {
   m_ui->retranslateUi(this);
 
+  updateWindowTitle();
+
   getActionManager().findMenu("project")->setTitle(tr("&Project"));
   getActionManager().findMenu("open_recent_project")->setTitle(tr("Open &Recent"));
   getActionManager().findAction("new_project")->setText(tr("&New..."));
